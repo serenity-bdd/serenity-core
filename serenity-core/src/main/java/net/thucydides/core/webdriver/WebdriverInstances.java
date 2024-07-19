@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import org.openqa.selenium.WebDriver;
 
 import java.util.*;
@@ -224,7 +224,7 @@ public class WebdriverInstances {
                     .map(entry -> entry.getValue())
                     .collect(Collectors.toList());
         } else {
-            return Arrays.asList(currentActiveDriver);
+            return List.of(currentActiveDriver);
         }
     }
 

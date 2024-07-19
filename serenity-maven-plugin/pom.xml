@@ -6,17 +6,17 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.1.21-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <description>Serenity BDD Maven Plugin</description>
+    <name>Serenity BDD Maven Plugin</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.core.version>3.9.0</maven.core.version>
         <maven.reporting.version>3.1.1</maven.reporting.version>
-        <maven.plugin.version>3.8.1</maven.plugin.version>
+        <maven.plugin.version>3.9.0</maven.plugin.version>
     </properties>
 
     <build>
@@ -143,7 +143,10 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>

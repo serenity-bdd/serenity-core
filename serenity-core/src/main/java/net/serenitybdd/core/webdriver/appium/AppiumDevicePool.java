@@ -1,15 +1,15 @@
 package net.serenitybdd.core.webdriver.appium;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.APPIUM_DEVICE_NAME;
-import static net.thucydides.core.ThucydidesSystemProperty.APPIUM_DEVICE_NAMES;
+import static net.thucydides.model.ThucydidesSystemProperty.APPIUM_DEVICE_NAME;
+import static net.thucydides.model.ThucydidesSystemProperty.APPIUM_DEVICE_NAMES;
 
 /**
  * Manage Appium servers for multiple devices.

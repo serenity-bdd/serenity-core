@@ -1,7 +1,7 @@
 package net.serenitybdd.core.photography;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.screenshots.BlurLevel;
+import net.serenitybdd.annotations.BlurLevel;
 import java.nio.file.Path;
 
 public class PhotoSessionBooking {

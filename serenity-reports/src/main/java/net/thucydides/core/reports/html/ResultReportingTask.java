@@ -1,9 +1,10 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,9 +75,8 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ResultReportingTask{");
-        sb.append("reportName='").append(reportName).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "ResultReportingTask{" + "reportName='" + reportName + '\'' +
+                '}';
+        return sb;
     }
 }

@@ -1,14 +1,14 @@
 package net.serenitybdd.cli.reporters;
 
-import net.serenitybdd.core.SerenitySystemProperties;
-import net.thucydides.core.reports.JiraUpdaterService;
+import net.serenitybdd.model.SerenitySystemProperties;
+import net.thucydides.model.reports.JiraUpdaterService;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ServiceLoader;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_JIRA_WORKFLOW;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_JIRA_WORKFLOW_ACTIVE;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_JIRA_WORKFLOW;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_JIRA_WORKFLOW_ACTIVE;
 
 public class CLIIssueTrackerUpdater implements CLIReportGenerator  {
     public CLIIssueTrackerUpdater(String jiraWorkflow, String jiraWorkflowActive) {

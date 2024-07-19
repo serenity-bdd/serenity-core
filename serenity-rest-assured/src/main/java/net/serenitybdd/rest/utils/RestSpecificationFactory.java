@@ -11,7 +11,9 @@ import io.restassured.specification.RequestSenderOptions;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.VisibilityBridgeStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.serenitybdd.rest.SerenityRest;
@@ -47,7 +49,8 @@ public class RestSpecificationFactory {
 
     static {
 
-        ByteBuddy byteBuddy = new ByteBuddy();
+        ByteBuddy byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED )
+                .with(VisibilityBridgeStrategy.Default.NEVER);
 
         Class<?>  requestSpecificationDecoratedClass = byteBuddy
                 .subclass(RequestSpecificationDecorated.class)

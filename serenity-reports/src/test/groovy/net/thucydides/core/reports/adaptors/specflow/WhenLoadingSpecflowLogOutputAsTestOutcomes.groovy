@@ -1,14 +1,15 @@
 package net.thucydides.core.reports.adaptors.specflow
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor
+import net.thucydides.model.reports.adaptors.specflow.SpecflowAdaptor
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.thucydides.core.util.TestResources.fileInClasspathCalled
+import static net.thucydides.model.util.TestResources.fileInClasspathCalled
 
 /**
  * We want to convert Specflow log outputs (possibly with some extra optional data) to TestOutcomes
@@ -232,7 +233,7 @@ class WhenLoadingSpecflowLogOutputAsTestOutcomes extends Specification {
 
     def setup() {
         tmp = Files.createTempDirectory("serenity-tmp").toFile()
-        tmp.deleteOnExit();
+        tmp.deleteOnExit()
     }
 
 

@@ -1,16 +1,16 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestType;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestType;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class RequirementCounts {
-    private RequirementsOutcomes outcomes;
+    private final RequirementsOutcomes outcomes;
 
     public RequirementCounts(RequirementsOutcomes outcomes) {
         this.outcomes = outcomes;

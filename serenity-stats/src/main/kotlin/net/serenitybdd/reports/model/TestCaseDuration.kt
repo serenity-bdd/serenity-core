@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
 
 class TestCaseDuration(val title: String,
                        val duration: Long,
@@ -13,9 +13,7 @@ class TestCaseDuration(val title: String,
         other as TestCaseDuration
 
         if (title != other.title) return false
-        if (testOutcome != other.testOutcome) return false
-
-        return true
+        return testOutcome == other.testOutcome
     }
 
     override fun hashCode(): Int {

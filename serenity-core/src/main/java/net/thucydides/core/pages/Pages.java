@@ -1,12 +1,12 @@
 package net.thucydides.core.pages;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.steps.EnclosingClass;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ public class Pages implements Serializable {
 
     private final Configuration configuration;
 
-    private WebdriverProxyFactory proxyFactory;
+    private final WebdriverProxyFactory proxyFactory;
 
     private transient boolean usePreviousPage = false;
 
@@ -69,7 +69,10 @@ public class Pages implements Serializable {
     }
 
     public WebDriver getDriver() {
-        return (driver != null) ? driver : Serenity.getWebdriverManager().getWebdriver();
+        if (driver == null) {
+            driver = Serenity.getWebdriverManager().getWebdriver();
+        }
+        return driver;
     }
 
     protected WebdriverProxyFactory getProxyFactory() {
@@ -238,7 +241,7 @@ public class Pages implements Serializable {
                 newPage = (T) constructor.newInstance();
                 newPage.setDriver(getDriver());
             } else if (hasOuterClassConstructor(pageObjectClass)) {
-                Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(new Class[] {pageObjectClass.getEnclosingClass()});
+                Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(pageObjectClass.getEnclosingClass());
                 constructor.setAccessible(true);
                 newPage = (T) constructor.newInstance(EnclosingClass.of(pageObjectClass).newInstance());
                 newPage.setDriver(getDriver());

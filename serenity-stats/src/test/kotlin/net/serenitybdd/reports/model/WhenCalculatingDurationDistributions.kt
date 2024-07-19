@@ -1,9 +1,9 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -50,6 +50,6 @@ class WhenCalculatingDurationDistributions {
 
     fun testOutcomesIn(directory: String) : TestOutcomes {
         val outcomeDir = Paths.get(javaClass.getResource(directory).toURI()).toFile()
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir)
     }
 }

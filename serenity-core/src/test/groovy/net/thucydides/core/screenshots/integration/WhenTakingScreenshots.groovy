@@ -3,13 +3,13 @@ package net.thucydides.core.screenshots.integration
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
@@ -25,7 +25,7 @@ class WhenTakingScreenshots extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
-    @Shared DriverServicePool driverService;
+    @Shared DriverServicePool driverService
     WebDriver driver
 
     def setupSpec() {
@@ -41,12 +41,12 @@ class WhenTakingScreenshots extends Specification {
 
     def cleanup() {
         if (driver) {
-            driver.quit();
+            driver.quit()
         }
     }
 
-    String staticSite;
-    File temporaryDirectory;
+    String staticSite
+    File temporaryDirectory
 
     def setup() {
         temporaryDirectory = Files.createTempDirectory("tmp").toFile()
@@ -54,16 +54,16 @@ class WhenTakingScreenshots extends Specification {
 
         StepEventBus.eventBus.clear()
 
-        def desiredCapabilities = DesiredCapabilities.chrome();
-        def chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+        def desiredCapabilities = DesiredCapabilities.chrome()
+        def chromeOptions = new ChromeOptions()
+        chromeOptions.addArguments("--headless")
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions)
 
-        driver = driverService.newDriver(desiredCapabilities);
+        driver = driverService.newDriver(desiredCapabilities)
 
         ThucydidesWebDriverSupport.useDriver(driver)
 
-        staticSite = "file://" + fileInClasspathCalled("static-site/static-index.html").getAbsolutePath();
+        staticSite = "file://" + fileInClasspathCalled("static-site/static-index.html").getAbsolutePath()
 
     }
 
@@ -87,8 +87,8 @@ class WhenTakingScreenshots extends Specification {
         stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
         stepListener.stepFinished()
         then:
-        TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
-        ScreenshotAndHtmlSource screenshot = firstStep.getScreenshots().get(0);
+        TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0)
+        ScreenshotAndHtmlSource screenshot = firstStep.getScreenshots().get(0)
         !screenshot.getHtmlSource().isPresent()
     }
 

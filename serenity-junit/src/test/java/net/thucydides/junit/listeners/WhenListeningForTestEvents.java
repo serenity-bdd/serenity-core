@@ -1,7 +1,7 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Story;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Story;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepFactory;

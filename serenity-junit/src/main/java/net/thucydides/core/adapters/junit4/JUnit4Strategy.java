@@ -1,10 +1,10 @@
 package net.thucydides.core.adapters.junit4;
 
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.adapters.JUnitStrategy;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.tags.Taggable;
+import net.serenitybdd.annotations.*;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.adapters.JUnitStrategy;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.tags.Taggable;
 import org.junit.runner.RunWith;
 
 import java.lang.annotation.Annotation;
@@ -52,7 +52,7 @@ class JUnit4Strategy implements JUnitStrategy {
 
     @Override
     public boolean isAssumptionViolatedException(final Throwable throwable) {
-        return (throwable instanceof org.junit.internal.AssumptionViolatedException);
+        return (throwable instanceof org.junit.AssumptionViolatedException);
     }
 
     @Override

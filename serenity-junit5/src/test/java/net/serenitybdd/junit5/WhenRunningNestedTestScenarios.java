@@ -1,9 +1,9 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.junit5.samples.integration.JUnit5NestedExample;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.jupiter.api.BeforeEach;

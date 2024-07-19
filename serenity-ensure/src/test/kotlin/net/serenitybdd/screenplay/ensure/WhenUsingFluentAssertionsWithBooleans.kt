@@ -26,16 +26,16 @@ class WhenUsingFluentAssertionsWithBooleans {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a value that is true
-                                     |But got: false"""
+                shouldFailWithMessage("""|Expected: a value that is true
+                                     |Actual:   false"""
                         .trimMargin())
                         .whenChecking(that(false).isTrue())
             }
 
             @Test
             fun `for false positive cases`() {
-                shouldFailWithMessage("""|Expecting a value that is true
-                                     |But got: false"""
+                shouldFailWithMessage("""|Expected: a value that is true
+                                         |Actual:   false"""
                         .trimMargin())
                         .whenChecking(that(false).isTrue())
             }

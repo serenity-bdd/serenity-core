@@ -1,14 +1,14 @@
 package net.serenitybdd.core.sessions;
 
 import net.serenitybdd.core.SessionMap;
-import net.serenitybdd.core.collect.NewMap;
+import net.serenitybdd.model.collect.NewMap;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TestSessionVariables extends ConcurrentHashMap implements SessionMap {
+public class TestSessionVariables<K,V> extends ConcurrentHashMap<K,V> implements SessionMap<K,V> {
 
-    private final Map<String, String> metadata = new ConcurrentHashMap();
+    private final Map<String, String> metadata = new ConcurrentHashMap<>();
 
     @Override
     public void shouldContainKey(Object key) {
@@ -20,7 +20,7 @@ public class TestSessionVariables extends ConcurrentHashMap implements SessionMa
 
 
     @Override
-    public Object put(Object key, Object value) {
+    public V put(K key, V value) {
         if (value == null) {
             return remove(key);
         } else {

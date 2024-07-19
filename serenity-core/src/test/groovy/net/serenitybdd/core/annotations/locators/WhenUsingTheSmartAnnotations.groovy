@@ -1,6 +1,6 @@
 package net.serenitybdd.core.annotations.locators
 
-import io.appium.java_client.MobileBy
+import io.appium.java_client.AppiumBy
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService
@@ -168,11 +168,9 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byJQuery")             | net.serenitybdd.core.annotations.findby.By.ByjQuerySelector
         AnnotatedPageSample.class.getField("bySCLocator")          | net.serenitybdd.core.annotations.findby.By.ByScLocator
         AnnotatedPageSample.class.getField("byNgModelName")        | By.ByCssSelector
-        AnnotatedPageSample.class.getField("byAccessibilityId")    | MobileBy.ByAccessibilityId
-//        AnnotatedPageSample.class.getField("byIOSUIAutomation")    | MobileBy.ByIosUIAutomation
-        AnnotatedPageSample.class.getField("byAndroidUIAutomator") | MobileBy.ByAndroidUIAutomator
+        AnnotatedPageSample.class.getField("byAccessibilityId")    | AppiumBy.ByAccessibilityId
+        AnnotatedPageSample.class.getField("byAndroidUIAutomator") | AppiumBy.ByAndroidUIAutomator
     }
-
 
     def "should find the correct By class using long ID"() {
 
@@ -195,9 +193,9 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byTagnameLong")            | By.ByTagName
         AnnotatedPageSample.class.getField("byJQueryLong")             | net.serenitybdd.core.annotations.findby.By.ByjQuerySelector
         AnnotatedPageSample.class.getField("bySCLocatorLong")          | net.serenitybdd.core.annotations.findby.By.ByScLocator
-        AnnotatedPageSample.class.getField("byAccessibilityIdLong")    | MobileBy.ByAccessibilityId
+        AnnotatedPageSample.class.getField("byAccessibilityIdLong")    | AppiumBy.ByAccessibilityId
 //        AnnotatedPageSample.class.getField("byIOSUIAutomationLong")    | MobileBy.ByIosUIAutomation
-        AnnotatedPageSample.class.getField("byAndroidUIAutomatorLong") | MobileBy.ByAndroidUIAutomator
+        AnnotatedPageSample.class.getField("byAndroidUIAutomatorLong") | AppiumBy.ByAndroidUIAutomator
     }
 
     def "should find the correct cutom By class"() {

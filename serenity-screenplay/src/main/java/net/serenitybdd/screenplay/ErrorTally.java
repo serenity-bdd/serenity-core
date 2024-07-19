@@ -12,7 +12,7 @@ class ErrorTally {
 
     private final EventBusInterface eventBusInterface;
 
-    private List<FailedConsequence> errors;
+    private final List<FailedConsequence> errors;
 
     ErrorTally(EventBusInterface eventBusInterface) {
         this.eventBusInterface = eventBusInterface;

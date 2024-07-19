@@ -2,7 +2,7 @@ package net.serenitybdd.screenplay.questions
 
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
-import net.thucydides.core.model.Story
+import net.thucydides.model.domain.Story
 import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
@@ -12,9 +12,9 @@ import static org.hamcrest.Matchers.equalTo
 class WhenRememberingAnswers extends Specification {
 
     def setup() {
-        Serenity.initialize(this);
-        StepEventBus.getEventBus().testSuiteStarted(Story.called("sample story"));
-        StepEventBus.getEventBus().testStarted("sample test");
+        Serenity.initialize(this)
+        StepEventBus.getEventBus().testSuiteStarted(Story.called("sample story"))
+        StepEventBus.getEventBus().testStarted("sample test")
     }
 
     def "should be able to make assertions about values previously remembered"() {

@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver
 
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SupportedWebDriver
 import net.thucydides.core.webdriver.WebDriverFactory
@@ -23,20 +23,20 @@ import static org.mockito.Mockito.*
 class WhenUsingWebDriverFacade extends Specification {
 
     @Mock
-    def RemoteWebDriver remote
+    RemoteWebDriver remote
 
     @Mock
     SessionId session
 
-    def EnvironmentVariables environmentVariables
+    EnvironmentVariables environmentVariables
 
     def configuration
 
     @Mock
-    def WebDriverFactory webDriverFactory
+    WebDriverFactory webDriverFactory
 
     def setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this)
         environmentVariables = new MockEnvironmentVariables()
         configuration = new WebDriverConfiguration(environmentVariables)
     }
@@ -45,13 +45,13 @@ class WhenUsingWebDriverFacade extends Specification {
         given:
             when(remote.getSessionId()).thenReturn(session)
             when(webDriverFactory.newInstanceOf(any(SupportedWebDriver.class))).thenReturn(remote)
-            def manager = new SerenityWebdriverManager(webDriverFactory, configuration);
+            def manager = new SerenityWebdriverManager(webDriverFactory, configuration)
         when:
             manager.registerDriver(remote)
             manager.getSessionId()
         then:
             session == manager.getSessionId()
-            null == verify(remote, atLeast(2)).getSessionId();
+            null == verify(remote, atLeast(2)).getSessionId()
 
     }
 }

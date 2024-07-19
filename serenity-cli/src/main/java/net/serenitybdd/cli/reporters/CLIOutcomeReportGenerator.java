@@ -1,10 +1,10 @@
 package net.serenitybdd.cli.reporters;
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomeStream;
+import net.serenitybdd.model.time.Stopwatch;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.requirements.Requirements;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.TestOutcomeStream;
+import net.thucydides.model.requirements.Requirements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +51,7 @@ public class CLIOutcomeReportGenerator implements CLIReportGenerator {
     @Override
     public void generateReportsFrom(Path sourceDirectory) throws IOException {
 
-        Requirements requirements = RequirementsStrategy.forDirectory(requirementsDirectory);
+        Requirements requirements = RequirementsStrategy.forJSONOutputsIn(sourceDirectory).andFeatureFilesIn(requirementsDirectory);
         final HtmlAcceptanceTestReporter reporter = new HtmlAcceptanceTestReporter(requirements.getRequirementsService());
         reporter.setSourceDirectory(sourceDirectory.toFile());
         reporter.setOutputDirectory(destinationDirectory.toFile());

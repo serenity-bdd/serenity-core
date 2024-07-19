@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.model.time.SystemClock;
 
 public class WaitForBuilder<T> {
         private final int duration;
@@ -28,32 +28,32 @@ public class WaitForBuilder<T> {
         }
 
         public T second() {
-            clock.pauseFor(duration * MILLISECONDS_IN_A_SECOND);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_A_SECOND);
             return parent;
         }
 
         public T seconds() {
-            clock.pauseFor(duration * MILLISECONDS_IN_A_SECOND);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_A_SECOND);
             return parent;
         }
 
         public T minute() {
-            clock.pauseFor(duration * MILLISECONDS_IN_A_MINUTE);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_A_MINUTE);
             return parent;
         }
 
         public T minutes() {
-            clock.pauseFor(duration * MILLISECONDS_IN_A_MINUTE);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_A_MINUTE);
             return parent;
         }
 
         public T hour() {
-            clock.pauseFor(duration * MILLISECONDS_IN_AN_HOUR);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_AN_HOUR);
             return parent;
         }
 
         public T hours() {
-            clock.pauseFor(duration * MILLISECONDS_IN_AN_HOUR);
+            clock.pauseFor((long) duration * MILLISECONDS_IN_AN_HOUR);
             return parent;
         }
     }

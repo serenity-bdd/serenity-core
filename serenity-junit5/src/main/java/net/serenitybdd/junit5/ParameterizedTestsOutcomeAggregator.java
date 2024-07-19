@@ -1,16 +1,18 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.model.*;
+import net.thucydides.model.domain.*;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParameterizedTestsOutcomeAggregator {
 
-    private List<TestOutcome> allTestOutcomes;
+    private final List<TestOutcome> allTestOutcomes;
 
     public ParameterizedTestsOutcomeAggregator() {
         BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
@@ -41,7 +43,7 @@ public class ParameterizedTestsOutcomeAggregator {
 
         for(int testOutcomeNumber = 0; testOutcomeNumber < allOutcomes.size(); testOutcomeNumber++) {
             TestOutcome testOutcome = allOutcomes.get(testOutcomeNumber);
-            final String normalizedMethodName = baseMethodName(testOutcome);
+            final String normalizedMethodName = normalizedMethodName(testOutcome);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
@@ -65,6 +67,11 @@ public class ParameterizedTestsOutcomeAggregator {
                     scenarioOutcome.addDataFrom(testOutcome.getDataTable());
                 }
                 scenarioOutcome.updateDataTableResult(testOutcomeNumber, testOutcome.getResult());
+                if (testOutcome.getTestOutlineName() != null) {
+                    scenarioOutcome.setTitle(testOutcome.getTestOutlineName());
+                } else {
+                    scenarioOutcome.setTitle(Inflector.getInstance().humanize(testOutcome.getMethodName()));
+                }
             }
         }
 
@@ -147,32 +154,52 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private String baseMethodName(TestOutcome testOutcome) {
-        return testOutcome.getMethodName();
+        return testOutcome.getName(); //Updated the baseMethodName so that we can effectively handle display names, display name generators, and methods without JUnit custom display names.
+    }
+
+    private String normalizedMethodName(TestOutcome testOutcome) {
+        return testOutcome.isDataDriven() ? testOutcome.getMethodName() : testOutcome.getName();
     }
 
     private String alternativeMethodName(TestOutcome testOutcome) {
+        // Any parameterized test name attributes overrides the qualified name
+        if (hasParameterizedTestName(testOutcome)) {
+            return testOutcome.getTitle();
+        }
+
         Optional<String> qualifier = testOutcome.getQualifier();
         if (qualifier != null && qualifier.isPresent()) {
-            return testOutcome.getTitle(false) + " " +
-                    testOutcome.getQualifier().get();
+            return testOutcome.getTitle(false) + " " + testOutcome.getQualifier().get();
         } else {
             return testOutcome.getTitle();
         }
     }
 
+    private boolean hasParameterizedTestName(TestOutcome testOutcome) {
+        if (testOutcome.getTestCase() == null) {
+            return false;
+        }
+        String parameterizedTestName = Arrays.stream(testOutcome.getTestCase().getDeclaredMethods())
+                .filter(method -> method.getName().equals(testOutcome.getMethodName()))
+                .filter(method -> method.isAnnotationPresent(ParameterizedTest.class))
+                .map(method -> method.getAnnotation(ParameterizedTest.class).name())
+                .findFirst()
+                .orElse("");
+
+        return (!parameterizedTestName.isEmpty());
+    }
+
     public List<TestOutcome> getTestOutcomesForAllParameterSets() {
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
-            //if (!testOutcomes.contains(testOutcome)) {
             testOutcomes.add(withParentStepsMerged(testOutcome));
-            //testOutcomes.add(testOutcome);
-            //}
         }
         return testOutcomes;
     }
 
     private static TestOutcome withParentStepsMerged(TestOutcome testOutcome) {
         if ( (testOutcome.getTestSteps().size() == 1) && testOutcome.getTestSteps().get(0).getDescription().startsWith("Example ") ){
+            // Give the example a title based on the data used for this example
             String testStepQualifier = testOutcome.getTestSteps().get(0).getDescription().replaceAll("Example \\d+:","");
             List<TestStep> childSteps = testOutcome.getTestSteps().get(0).getChildren();
             return testOutcome.withQualifier(testStepQualifier).withSteps(childSteps);

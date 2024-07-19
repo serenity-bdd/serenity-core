@@ -8,7 +8,7 @@ import net.poc.ui.NotesWelcomePage;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 import java.util.ArrayList;
 import java.util.Collection;

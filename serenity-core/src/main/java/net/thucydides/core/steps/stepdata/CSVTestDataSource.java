@@ -1,13 +1,14 @@
 package net.thucydides.core.steps.stepdata;
 
+import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.configuration.FilePathParser;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.configuration.FilePathParser;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -66,15 +67,15 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path) throws IOException {
-        this(NewList.of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final List<String> paths, final char separatorValue) throws IOException {
-        this(paths, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(paths, separatorValue, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
-        this(NewList.of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), separatorValue, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {

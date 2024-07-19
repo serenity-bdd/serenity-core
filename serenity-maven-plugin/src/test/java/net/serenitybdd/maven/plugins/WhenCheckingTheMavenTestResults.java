@@ -1,7 +1,7 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.reports.ResultChecker;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.reports.ResultChecker;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +65,7 @@ public class WhenCheckingTheMavenTestResults {
         plugin.execute();
     }
 
+    @Test
     public void should_report_successful_results_without_an_exception() throws Exception {
 
         when(resultChecker.checkTestResults()).thenReturn(TestResult.SUCCESS);

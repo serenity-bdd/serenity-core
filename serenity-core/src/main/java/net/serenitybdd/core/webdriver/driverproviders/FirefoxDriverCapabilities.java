@@ -2,9 +2,9 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.configuration.FilePathParser;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.configuration.FilePathParser;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
@@ -94,13 +94,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         List<String> argValues = Arrays.asList(options.split(";"));
         firefoxOptions.addArguments(argValues);
         registeredArguments.addAll(argValues);
-
-        //
-        // Special case for the headless mode
-        //
-        if(registeredArguments.contains("headless")) {
-            firefoxOptions.setHeadless(true);
-        }
 
         firefoxCapabilities.forEach(
                 (key, value) -> {

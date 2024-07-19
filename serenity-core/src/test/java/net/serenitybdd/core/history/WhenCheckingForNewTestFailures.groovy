@@ -1,11 +1,15 @@
 package net.serenitybdd.core.history
 
-import net.thucydides.core.model.Story
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.steps.TestFailureCause
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.serenitybdd.model.history.HistoricalFlagProvider
+import net.serenitybdd.model.history.NewFailure
+import net.serenitybdd.model.history.PreviousTestOutcome
+import net.serenitybdd.model.history.TestOutcomeSummaryRecorder
+import net.thucydides.model.domain.Story
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.steps.TestFailureCause
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriverException
 import spock.lang.Specification
 
@@ -15,14 +19,14 @@ class WhenCheckingForNewTestFailures extends Specification {
         given:
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
-            TestOutcomeSummaryRecorder recorder = Mock(TestOutcomeSummaryRecorder)
+        TestOutcomeSummaryRecorder recorder = Mock(TestOutcomeSummaryRecorder)
 
-            PreviousTestOutcome previousTestOutcome1 = new PreviousTestOutcome("some story:some test","a test",TestResult.SUCCESS,"")
+        PreviousTestOutcome previousTestOutcome1 = new PreviousTestOutcome("some story:some test","a test",TestResult.SUCCESS,"")
             PreviousTestOutcome previousTestOutcome2 = new PreviousTestOutcome("some story:another test","a test",TestResult.SUCCESS,"")
             recorder.loadSummaries() >> [previousTestOutcome1, previousTestOutcome2]
         and:
             environmentVariables.setProperty("show.history.flags","true")
-            HistoricalFlagProvider flagProvider = new HistoricalFlagProvider(environmentVariables,recorder)
+        HistoricalFlagProvider flagProvider = new HistoricalFlagProvider(environmentVariables,recorder)
         when:
             TestOutcome testOutcome1 = TestOutcome.forTestInStory("some test", Story.called("some story"))
             TestOutcome testOutcome2 = TestOutcome.forTestInStory("another test", Story.called("some story"))

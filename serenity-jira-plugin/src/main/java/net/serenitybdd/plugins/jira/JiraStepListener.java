@@ -1,35 +1,31 @@
 package net.serenitybdd.plugins.jira;
 
 
-import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
-import net.thucydides.core.model.*;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.steps.StepListenerAdapter;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Updates JIRA issues referenced in a story with a link to the corresponding story report.
  */
-public class JiraStepListener implements StepListener {
+public class JiraStepListener extends StepListenerAdapter {
 
-    private TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-    private Set<String> testSuiteIssues = new CopyOnWriteArraySet();
-//    private static TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-//    private static Set<String> testSuiteIssues = new CopyOnWriteArraySet();
-    private JiraUpdater jiraUpdater;
+    private final TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
+    private final Set<String> testSuiteIssues = new CopyOnWriteArraySet<>();
+    private final JiraUpdater jiraUpdater;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JiraStepListener.class);
 
     
     public JiraStepListener(IssueTracker issueTracker,
@@ -52,21 +48,12 @@ public class JiraStepListener implements StepListener {
         testSuiteIssues.clear();
     }
 
-    public void testStarted(final String testName) {
-    }
 
     @Override
-    public void testStarted(String description, String id) {
-
-    }
-
-    @Override
-    public void testStarted(String description, String id, ZonedDateTime startTime) {
-
-    }
-
     public void testFinished(TestOutcome result) {
-        if (jiraUpdater.shouldUpdateIssues()) {
+        boolean shouldUpdateIssues = jiraUpdater.shouldUpdateIssues();
+        LOGGER.info("TestFinished updateIssues=" + shouldUpdateIssues);
+        if (shouldUpdateIssues) {
             List<String> issues = jiraUpdater.getPrefixedIssuesWithoutHashes(new TestOutcomeSummary(result));
             tallyResults(new TestOutcomeSummary(result), issues);
             testSuiteIssues.addAll(issues);
@@ -75,7 +62,12 @@ public class JiraStepListener implements StepListener {
 
     @Override
     public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
+        testFinished(result);
+    }
 
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest) {
+        testFinished(result);
     }
 
     private void tallyResults(TestOutcomeSummary result, List<String> issues) {
@@ -89,82 +81,6 @@ public class JiraStepListener implements StepListener {
             jiraUpdater.updateIssueStatus(testSuiteIssues, resultTally);
         }
     }
-
-    public void testRetried() {}
-
-    public void stepStarted(ExecutedStepDescription executedStepDescription) {}
-
-    public void skippedStepStarted(ExecutedStepDescription description) {}
-
-    public void stepFailed(StepFailure stepFailure) {}
-
-    @Override
-    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
-
-    }
-
-    public void lastStepFailed(StepFailure stepFailure) {}
-
-    public void stepIgnored() {}
-
-    public void stepIgnored(String s) {}
-
-    public void stepPending() {}
-
-    public void stepPending(String s) {}
-
-    public void assumptionViolated(String s) {}
-
-    public void testRunFinished() {
-    }
-
-    @Override
-    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
-
-    }
-
-    @Override
-    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
-
-    }
-
-    public void stepFinished() {}
-
-    @Override
-    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
-
-    }
-
-    @Override
-    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
-
-    }
-
-    public void testFailed(TestOutcome testOutcome, Throwable cause) {}
-
-    public void testIgnored() {}
-
-    @Override
-    public void testSkipped() {}
-
-    @Override
-    public void testPending() {}
-
-    @Override
-    public void testIsManual() {}
-
-    public void notifyScreenChange() {}
-
-    public void useExamplesFrom(DataTable dataTable) {}
-
-    @Override
-    public void addNewExamplesFrom(DataTable dataTable) {}
-
-    public void exampleStarted(Map<String, String> stringStringMap) {}
-
-    public void exampleStarted() {}
-
-    public void exampleFinished() {}
 
     public TestResultTally getTestResultTally(){
         return resultTally;

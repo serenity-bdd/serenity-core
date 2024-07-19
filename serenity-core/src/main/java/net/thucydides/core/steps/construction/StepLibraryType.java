@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.construction;
 
-import net.serenitybdd.core.collect.NewSet;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.model.collect.NewSet;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
 import java.lang.reflect.Constructor;

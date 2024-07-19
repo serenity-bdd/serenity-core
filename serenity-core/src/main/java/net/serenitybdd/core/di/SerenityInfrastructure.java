@@ -2,32 +2,32 @@ package net.serenitybdd.core.di;
 
 import net.serenitybdd.core.annotations.findby.di.ClasspathCustomFindByAnnotationProviderService;
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.model.buildinfo.PropertyBasedDriverCapabilityRecord;
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.time.SystemClock;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
 import net.thucydides.core.annotations.locators.SmartWidgetProxyCreator;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.batches.BatchStrategy;
-import net.thucydides.core.batches.SystemVariableBasedBatchManager;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.batches.BatchManager;
+import net.thucydides.model.batches.BatchStrategy;
+import net.thucydides.model.batches.SystemVariableBasedBatchManager;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.logging.ConsoleLoggingListener;
+import net.thucydides.model.logging.ConsoleLoggingListener;
 import net.thucydides.core.reports.html.Formatter;
-import net.thucydides.core.statistics.AtomicTestCount;
-import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
-import net.thucydides.core.steps.di.DependencyInjectorService;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.statistics.AtomicTestCount;
+import net.thucydides.model.statistics.TestCount;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.di.ClasspathDependencyInjectorService;
+import net.thucydides.model.steps.di.DependencyInjectorService;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
+import net.thucydides.model.webdriver.Configuration;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
@@ -48,9 +48,11 @@ public class SerenityInfrastructure {
 
     private static final FixtureProviderService fixtureProviderService = new ClasspathFixtureProviderService();
 
-    private static final ThreadLocal<ConsoleLoggingListener> consoleLoggingListener = ThreadLocal.withInitial(() -> new ConsoleLoggingListener(getEnvironmentVariables()));
+//    private static final ThreadLocal<ConsoleLoggingListener> consoleLoggingListener = ThreadLocal.withInitial(() -> new ConsoleLoggingListener(getEnvironmentVariables()));
+    private static ConsoleLoggingListener consoleLoggingListener;
 
-    private static final ThreadLocal<Formatter> formatter = ThreadLocal.withInitial(() -> new Formatter(getEnvironmentVariables()));
+//    private static final ThreadLocal<Formatter> formatter = ThreadLocal.withInitial(() -> new Formatter(getEnvironmentVariables()));
+    private static Formatter formatter;
 
     private static final ElementProxyCreator elementProxyCreator = new SmartElementProxyCreator();
 
@@ -108,7 +110,10 @@ public class SerenityInfrastructure {
     }
 
     public static StepListener getLoggingListener() {
-        return consoleLoggingListener.get();
+        if (consoleLoggingListener == null) {
+            consoleLoggingListener = new ConsoleLoggingListener(getEnvironmentVariables());
+        }
+        return consoleLoggingListener;
     }
 
     public static ElementProxyCreator getElementProxyCreator() {
@@ -124,7 +129,10 @@ public class SerenityInfrastructure {
     }
 
     public static Formatter getFormatter() {
-        return formatter.get();
+        if (formatter == null) {
+            formatter = new Formatter(getEnvironmentVariables());
+        }
+        return formatter;
     }
 
     public static BatchManager getBatchManager() {

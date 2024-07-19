@@ -120,6 +120,10 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
 
     String getTextContent();
 
+    String getAriaLabel();
+
+    String getRole();
+
     boolean isDisabled();
 
     <T extends WebElementFacade> T waitUntilEnabled();

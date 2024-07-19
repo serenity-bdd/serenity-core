@@ -1,14 +1,14 @@
 package net.thucydides.core.matchers.dates;
 
 
-import net.serenitybdd.core.collect.NewSet;
+import net.serenitybdd.model.collect.NewSet;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Set;
 
-import static net.thucydides.core.matchers.dates.DateMatchers.*;
+import static net.thucydides.model.matchers.dates.DateMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 

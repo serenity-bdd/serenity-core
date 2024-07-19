@@ -1,32 +1,41 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.IgnoredStepException;
+import net.serenitybdd.model.PendingStepException;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.core.configurers.WebDriverConfigurer;
-import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.reports.ReportDataSaver;
 import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.reflection.StackTraceAnalyser;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.steps.di.DependencyInjectorService;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.di.DependencyInjectorService;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.serenitybdd.core.di.SerenityInfrastructure.getWebDriverFactory;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.NEVER;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.configuredIn;
 
@@ -39,6 +48,7 @@ public class Serenity {
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = ThreadLocal.withInitial(TestSessionVariables::new);
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<Boolean> throwExceptionsImmediately = ThreadLocal.withInitial(() -> false);
 
     /**
      * Initialize Serenity-related fields in the specified object.
@@ -98,7 +108,7 @@ public class Serenity {
      *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
+    public static void initializeWithNoStepListener(final Object testCase) {
         setupWebdriverManager();
 
         ThucydidesWebDriverSupport.initialize();
@@ -108,8 +118,6 @@ public class Serenity {
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
         injectDependenciesInto(testCase);
-
-        return new SerenityConfigurer();
     }
 
 
@@ -193,6 +201,23 @@ public class Serenity {
     }
 
     public static WebDriver getDriver() {
+        return getWebdriverManager().getWebdriver();
+    }
+
+    /**
+     * Return the actual WebDriver instance used by Serenity
+     */
+    public static WebDriver getProxiedDriver() {
+        return ((WebDriverFacade)getWebdriverManager().getWebdriver()).getProxiedDriver();
+    }
+
+    /**
+     * A convenience method that allows you to set your own driver for Serenity to use.
+     * The driver will be used whenever the default driver for the current thread is requested.
+     */
+    public static WebDriver useDriver(WebDriver driver) {
+        WebDriverFacade driverFacade = new WebDriverFacade(driver, getWebDriverFactory());
+        getWebdriverManager().setCurrentDriver(driverFacade);
         return getWebdriverManager().getWebdriver();
     }
 
@@ -316,21 +341,14 @@ public class Serenity {
         return null;
     }
 
-    private static boolean throwExceptionsImmediately = false;
-
     public static void throwExceptionsImmediately() {
-        throwExceptionsImmediately = true;
+        throwExceptionsImmediately.set(true);
     }
 
     public static boolean shouldThrowErrorsImmediately() {
-        return throwExceptionsImmediately;
-    }
-
-    public static class SerenityConfigurer {
-        public SerenityConfigurer throwExceptionsImmediately() {
-            Serenity.throwExceptionsImmediately();
-            return this;
-        }
+        // Throw errors immediately if this is a Cucumber test
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        return Arrays.stream(stackTrace).anyMatch(element -> element.getClassName().contains("io.cucumber.core"));
     }
 
     public static WebDriverConfigurer webdriver() {
@@ -357,5 +375,11 @@ public class Serenity {
             return TestSession.getTestSessionContext().getStepEventBus();
         }
         return StepEventBus.getParallelEventBus();
+    }
+
+    private static final LocalDateTime TEST_SUITE_START_TIME = LocalDateTime.now();
+
+    public static LocalDateTime getTestSuiteStartTime() {
+        return TEST_SUITE_START_TIME;
     }
 }

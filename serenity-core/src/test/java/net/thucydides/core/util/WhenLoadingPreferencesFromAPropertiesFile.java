@@ -1,6 +1,6 @@
 package net.thucydides.core.util;
 
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.PropertiesLocalPreferences;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

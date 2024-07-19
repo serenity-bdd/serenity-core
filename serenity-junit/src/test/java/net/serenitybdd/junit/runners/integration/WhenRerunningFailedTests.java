@@ -2,13 +2,13 @@ package net.serenitybdd.junit.runners.integration;
 
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.SampleNonWebScenarioWithError;

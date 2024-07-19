@@ -20,21 +20,28 @@ import net.serenitybdd.core.SerenityReports;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.events.SetTestManualEvent;
+import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.*;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.requirements.FeatureFilePath;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.Rule;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.requirements.FeatureFilePath;
+import net.thucydides.model.requirements.model.cucumber.InvalidFeatureFileException;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.Inflector;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.TestSourceType;
+import net.thucydides.model.util.Inflector;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -44,12 +51,12 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
@@ -71,7 +78,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private static final String SCENARIO_OUTLINE_NOT_KNOWN_YET = "";
 
-    private Configuration systemConfiguration;
+    private final Configuration systemConfiguration;
 
     private final static String FEATURES_ROOT_PATH = "/features/";
     private final static String FEATURES_CLASSPATH_ROOT_PATH = ":features/";
@@ -108,7 +115,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         this.systemConfiguration = systemConfiguration;
     }
 
-    private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
+    private final FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
 
     private StepEventBus getStepEventBus(URI featurePath) {
         URI prefixedPath = featurePathFormatter.featurePathWithPrefixIfNecessary(featurePath);
@@ -130,14 +137,14 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).addBaseStepListener(listeners.getBaseStepListener());
     }
 
-    private EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
-    private EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
-    private EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
-    private EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
-    private EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
-    private EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
-    private EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
-    private EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
+    private final EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
+    private final EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
+    private final EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
+    private final EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
+    private final EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
+    private final EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
+    private final EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
+    private final EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
     private void handleTestRunStarted(TestRunStarted event) {
         LOGGER.debug("SRP:handleTestRunStarted {} ", Thread.currentThread());
@@ -179,11 +186,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         boolean useDecodedURI = systemConfiguration.getEnvironmentVariables().getPropertyAsBoolean("use.decoded.url", false);
         String pathURIAsString;
         if (useDecodedURI) {
-            try {
-                pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                pathURIAsString = fullPathUri.toString();
-            }
+            pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8);
         } else {
             pathURIAsString = fullPathUri.toString();
         }
@@ -272,6 +275,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                 if (newScenario) {
                     configureDriver(currentFeature.get(), event.getTestCase().getUri());
                     if (!currentScenarioDefinition.getExamples().isEmpty()) {
+                        TestSession.getTestSessionContext().setInDataDrivenTest(true);
                         context.startNewExample(scenarioId);
                         LOGGER.debug("SRP:startNewExample {} {} {} at line {} ", event.getTestCase().getUri(), Thread.currentThread(),
                                 event.getTestCase().getId(), event.getTestCase().getLocation().getLine());
@@ -287,7 +291,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                         startProcessingExampleLine(scenarioId, featurePath, event.getTestCase(), Long.valueOf(event.getTestCase().getLocation().getLine()), scenarioName);
                     }
                 }
-                final String scenarioIdForBackground =  scenarioId;
+                final String scenarioIdForBackground = scenarioId;
                 TestSourcesModel.getBackgroundForTestCase(astNode).ifPresent(background -> handleBackground(featurePath, scenarioIdForBackground, background));
                 //
                 // Check for tags
@@ -351,7 +355,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         String scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(currentScenarioDefinition.getName()));
 
         if (getContext(featurePath).examplesAreRunning(scenarioId)) {
-            handleResult(scenarioId, featurePath, event.getTestCase(), event.getResult());
+            handleResult(scenarioId, featurePath, event.getTestCase(), event.getResult(), true);
             finishProcessingExampleLine(scenarioId, featurePath, event.getTestCase());
         }
 
@@ -365,15 +369,47 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             getContext(featurePath).addStepEventBusEvent(
                     new TestFinishedEvent(scenarioId, getContext(featurePath).examplesAreRunning(scenarioId))
             );
-            //getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(),event.getTestCase());
         }
         getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(), event.getTestCase());
         getContext(featurePath).clearStepQueue(event.getTestCase());
         getContext(featurePath).stepEventBus().clear();
 
+        // We don't have the TestOutcome object ready yet, so we need to create a temporary one based on the event
+        // The feature name is the first part of getContext(featurePath).getCurrentScenario(scenarioId) up to the first semicolon
+        // The scenario name is the second part of getContext(featurePath).getCurrentScenario(scenarioId) after the first semicolon
+        String featureName = getContext(featurePath).getCurrentScenario(scenarioId).split(";")[0];
+        TestOutcome testOutcome = TestOutcome.forTestInStory(event.getTestCase().getName(),
+                Story.called(featureName));
+        testOutcome.setResult(serenityTestResultFrom(event.getResult().getStatus()));
+        if (event.getResult().getError() != null) {
+            testOutcome.testFailedWith(event.getResult().getError());
+        }
         // We need to close the driver here to avoid wasting resources and causing timeouts with Selenium Grid services
-        getContext(featurePath).stepEventBus().getBaseStepListener().cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven());
+        getContext(featurePath)
+                .stepEventBus()
+                .getBaseStepListener()
+                .cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven(), testOutcome);
 
+        // Update external links cache
+        String key = featureName + "/" + testOutcome.getName();
+        if (testOutcome.getExternalLink() != null) {
+            EXTERNAL_LINK_CACHE.put(key, testOutcome.getExternalLink());
+        }
+        if (testOutcome.getSessionId() != null) {
+            SESSION_ID_CACHE.put(key, testOutcome.getSessionId());
+        }
+    }
+
+    private static final Map<Status, TestResult> TEST_RESULT_MAP = Map.of(
+            Status.PASSED, TestResult.SUCCESS,
+            Status.FAILED, TestResult.FAILURE, Status.SKIPPED, TestResult.SKIPPED,
+            Status.PENDING, TestResult.PENDING,
+            Status.UNDEFINED, TestResult.UNDEFINED,
+            Status.AMBIGUOUS, TestResult.UNDEFINED);
+
+    private TestResult serenityTestResultFrom(Status status) {
+        // Use a map to convert the Status enum to a Serenity TestResult value
+        return TEST_RESULT_MAP.get(status);
     }
 
     private Status eventStatusFor(TestCaseFinished event) {
@@ -400,7 +436,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
     private boolean noAnnotatedResultIdDefinedFor(TestCaseFinished event) {
-        //BaseStepListener baseStepListener = getStepEventBus(event.getTestCase().getUri()).getBaseStepListener();
         BaseStepListener baseStepListener = getStepEventBus(event.getTestCase().getUri()).getBaseStepListener();
         return (baseStepListener.getTestOutcomes().isEmpty() || (latestOf(baseStepListener.getTestOutcomes()).getAnnotatedResult() == null));
     }
@@ -415,11 +450,12 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         TestSourcesModel.AstNode mainAstNode = featureLoader.getAstNode(featurePath, event.getTestCase().getLocation().getLine());
         Scenario currentScenarioDefinition = TestSourcesModel.getScenarioDefinition(mainAstNode);
         Optional<Feature> currentFeature = featureFrom(featurePath);
+        if (currentFeature.isEmpty()) {
+            throw new InvalidFeatureFileException("Unable to run scenario '" + event.getTestCase().getName() + "': No feature name found in " + featurePath);
+        }
         String scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(currentScenarioDefinition.getName()));
         LOGGER.debug("SRP:handleTestStepStarted " + " " + event.getTestCase().getUri() + " " + Thread.currentThread()
                 + " " + event.getTestCase().getId() + " at line " + event.getTestCase().getLocation().getLine());
-
-        // Broadcaster.getEventBus().register();
 
         StepDefinitionAnnotations.setScreenshotPreferencesTo(
                 StepDefinitionAnnotationReader
@@ -446,7 +482,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                     io.cucumber.messages.types.Step currentStep = getContext(featurePath).getCurrentStep(event.getTestCase());
                     String stepTitle = stepTitleFrom(currentStep, pickleTestStep);
                     getContext(featurePath).addStepEventBusEvent(
-                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle),startTime));
+                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle), startTime));
                     getContext(featurePath).addStepEventBusEvent(
                             new UpdateCurrentStepTitleEvent(normalized(stepTitle)));
                 }
@@ -473,7 +509,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             if ((astNode != null) && currentFeature.isPresent()) {
                 Scenario currentScenarioDefinition = TestSourcesModel.getScenarioDefinition(astNode);
                 scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(currentScenarioDefinition.getName()));
-                handleResult(scenarioId, event.getTestCase().getUri(), event.getTestCase(), event.getResult());
+                handleResult(scenarioId, event.getTestCase().getUri(), event.getTestCase(), event.getResult(), false);
             }
             StepDefinitionAnnotations.clear();
         }
@@ -482,13 +518,11 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void handleTestRunFinished(TestRunFinished event) {
         LOGGER.debug("SRP:handleTestRunFinished " + Thread.currentThread() + " " + contextURISet);
-        try {
-            contextURISet.forEach(featurePath -> {
-                getContext(featurePath).playAllTestEvents();
-            });
-        } catch (Throwable th) {
-            th.printStackTrace();
+
+        for (URI featurePath : contextURISet) {
+            getContext(featurePath).playAllTestEvents();
         }
+        enrichOutcomes();
         generateReports();
         assureTestSuiteFinished();
     }
@@ -751,7 +785,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         LOGGER.debug("SRP:startScenario" + " " + featurePath + " "
                 + Thread.currentThread() + " " + testCase.getId() + " at line " + testCase.getLocation().getLine());
 
-        reinitializeRemoteWebDriver();
+        RestartBrowserForEach restartBrowserForEach = RestartBrowserForEach.configuredIn(SerenityInfrastructure.getEnvironmentVariables());
+        if (restartBrowserForEach.restartBrowserForANew(RestartBrowserForEach.SCENARIO)) {
+            reinitializeRemoteWebDriver();
+        }
 
         context.addHighPriorityStepEventBusEvent(scenarioId,
                 new TestStartedEvent(scenarioId,
@@ -890,7 +927,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).addStepEventBusEvent(
                 new ClearStepFailuresEvent());
 
-        reinitializeRemoteWebDriver();
+        RestartBrowserForEach restartBrowserForEach = RestartBrowserForEach.configuredIn(SerenityInfrastructure.getEnvironmentVariables());
+        if (restartBrowserForEach.restartBrowserForANew(RestartBrowserForEach.EXAMPLE)) {
+            reinitializeRemoteWebDriver();
+        }
 
         getContext(featurePath).addStepEventBusEvent(
                 new ExampleStartedEvent(data, scenarioName));
@@ -903,7 +943,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void reinitializeRemoteWebDriver() {
         WebDriver webDriver = SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
-        if ((webDriver !=  null) && (webDriver instanceof WebDriverFacade)) {
+        if ((webDriver != null) && (webDriver instanceof WebDriverFacade)) {
             ((WebDriverFacade) webDriver).reinitializeRemoteWebDriver();
         }
     }
@@ -933,8 +973,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
 
-    private void handleBackground(URI featurePath,String scenarioId,  Background background) {
-        getContext(featurePath).setWaitingToProcessBackgroundSteps(scenarioId,true);
+    private void handleBackground(URI featurePath, String scenarioId, Background background) {
+        getContext(featurePath).setWaitingToProcessBackgroundSteps(scenarioId, true);
         String backgroundName = background.getName();
         if (backgroundName != null) {
             getContext(featurePath).addStepEventBusEvent(
@@ -971,25 +1011,25 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         StepEventBus.clearEventBusFor(uri);
     }
 
-    private void handleResult(String scenarioId, URI featurePath, TestCase testCase, Result result) {
+    private void handleResult(String scenarioId, URI featurePath, TestCase testCase, Result result, boolean isInDataDrivenTest) {
         io.cucumber.messages.types.Step currentStep = getContext(featurePath).nextStep(testCase);
         TestStep currentTestStep = getContext(featurePath).nextTestStep(testCase);
-        recordStepResult(featurePath, testCase, result, currentStep, currentTestStep);
+        recordStepResult(featurePath, result, currentStep, currentTestStep, isInDataDrivenTest);
         if (getContext(featurePath).noStepsAreQueued(testCase)) {
             recordFinalResult(scenarioId, featurePath, testCase);
         }
     }
 
-    private void recordStepResult(URI featurePath, TestCase testCase, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep) {
+    private void recordStepResult(URI featurePath, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep, boolean isInDataDrivenTest) {
         ZonedDateTime endTime = ZonedDateTime.now();
         List<ScreenshotAndHtmlSource> screenshotList = getContext(featurePath).stepEventBus().takeScreenshots();
-        getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime));
+        getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime, isInDataDrivenTest));
     }
 
     private void recordFinalResult(String scenarioId, URI featurePath, TestCase testCase) {
         ScenarioContextParallel context = getContext(featurePath);
         if (context.isWaitingToProcessBackgroundSteps(scenarioId)) {
-            context.setWaitingToProcessBackgroundSteps(scenarioId,false);
+            context.setWaitingToProcessBackgroundSteps(scenarioId, false);
         } else {
             updateResultFromTags(scenarioId, featurePath, testCase, context.getScenarioTags(scenarioId));
         }
@@ -1041,7 +1081,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         return "";
     }
 
-
     private static String convertToTextTable(List<Map<String, Object>> rows) {
         StringBuilder textTable = new StringBuilder();
         textTable.append(System.lineSeparator());
@@ -1057,6 +1096,23 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             }
         }
         return textTable.toString();
+    }
+
+    public static final Map<String, ExternalLink> EXTERNAL_LINK_CACHE = new ConcurrentHashMap<>();
+    public static final Map<String, String> SESSION_ID_CACHE = new ConcurrentHashMap<>();
+
+    private void enrichOutcomes() {
+        getAllTestOutcomes().forEach(
+                outcome -> {
+                    String key = outcome.getUserStory().getName() + "/" + outcome.getName();
+                    if (EXTERNAL_LINK_CACHE.containsKey(key)) {
+                        outcome.setLink(EXTERNAL_LINK_CACHE.get(key));
+                    }
+                    if (SESSION_ID_CACHE.containsKey(key)) {
+                        outcome.setSessionId(SESSION_ID_CACHE.get(key));
+                    }
+                }
+        );
     }
 
     private void generateReports() {

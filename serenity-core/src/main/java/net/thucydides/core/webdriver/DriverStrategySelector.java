@@ -1,13 +1,13 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
+import static net.thucydides.model.ThucydidesSystemProperty.SAUCELABS_URL;
 
 /**
  * Created by john on 25/06/2016.

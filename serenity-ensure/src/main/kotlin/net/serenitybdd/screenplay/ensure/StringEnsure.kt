@@ -6,7 +6,6 @@ import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualNotNull
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNoNullElementsIn
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNotEmpty
 import net.thucydides.core.steps.StepEventBus
-import org.assertj.core.internal.InputStreamsException
 import java.io.IOException
 import java.io.LineNumberReader
 import java.io.StringReader
@@ -501,7 +500,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                         while (reader.readLine() != null);
                     } catch (e: IOException) {
                         StepEventBus.getEventBus().takeScreenshot()
-                        throw InputStreamsException("Unable to count lines in $actual", e)
+                        throw AssertionError("Unable to count lines in $actual", e)
                     }
                     return reader.lineNumber == expected
                 }

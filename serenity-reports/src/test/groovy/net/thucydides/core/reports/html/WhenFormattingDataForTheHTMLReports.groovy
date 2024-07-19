@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.html
 
 import com.google.common.collect.ImmutableList
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -14,7 +14,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should display foreign characters as HTML entities"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatible(foreignWord) == formattedWord
         where:
         foreignWord         | formattedWord
@@ -26,7 +26,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render XML tags for error messages"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.messageBody(message) == formattedMessage
         where:
         message                       | formattedMessage
@@ -36,7 +36,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render JSON queries"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.restQuery(message) == formattedMessage
         where:
         message                                               | formattedMessage
@@ -46,7 +46,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render story titles with foreign characters"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
         foreignWord                           | formattedWord
@@ -57,7 +57,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should remove markdown formatting"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
         foreignWord         | formattedWord
@@ -84,7 +84,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         expect:
         def environmentVariables = new MockEnvironmentVariables()
         environmentVariables.setProperty("enable.markdown", "not_enabled")
-        def formatter = new Formatter(environmentVariables);
+        def formatter = new Formatter(environmentVariables)
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
         foreignWord                             | formattedWord
@@ -95,7 +95,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render simple titles with foreign characters"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatible(foreignWord) == formattedWord
         where:
         foreignWord           | formattedWord
@@ -108,7 +108,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         expect:
         def environmentVariables = new MockEnvironmentVariables()
         environmentVariables.setProperty("enable.markdown", "not_enabled")
-        def formatter = new Formatter(environmentVariables);
+        def formatter = new Formatter(environmentVariables)
         formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
         where:
         foreignWord                             | formattedWord
@@ -119,7 +119,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render scenario titles with foreign characters and markdown"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
         where:
         foreignWord                             | formattedWord
@@ -130,7 +130,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should change double quotes to single and compress new lines for HTML attribute-compatible messages"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlAttributeCompatible(message) == formattedMessage
         where:
         message                       | formattedMessage
@@ -142,7 +142,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should work with classic JUnit assertion messages"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlAttributeCompatible(message) == formattedMessage
         where:
         message                                                                                               | formattedMessage
@@ -154,7 +154,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should abbreviate HTML messages if requested"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlAttributeCompatible(message, 15) == formattedMessage
         where:
         message                       | formattedMessage
@@ -166,7 +166,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should display objects in string form"() {
         expect:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         formatter.htmlCompatible(object) == formattedObject
         where:
         object                          | formattedObject
@@ -182,7 +182,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     | Jill  | 100000 | 800           |
     | Joe   | 50000  | 50            |]"""
         and:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
@@ -203,7 +203,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     | Jane   | 50000  | 50            |]
     """
         and:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
@@ -222,7 +222,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     | Jill  | 100000 | 800          |
     | Joe   | 50000  | 50           |"""
         and:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
@@ -234,7 +234,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     def "should format single cell table"() {
         given:
         def singleCellTable = "[|value|]"
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -245,7 +245,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "[|heading|]"
         def environmentVariables = new MockEnvironmentVariables()
-        def formatter = new Formatter(environmentVariables);
+        def formatter = new Formatter(environmentVariables)
         when:
         environmentVariables.setProperty("ignore.embedded.tables", "true")
         and:
@@ -256,7 +256,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
 
     def "should cope with pipe that is not in a table"() {
         given:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def noEmbeddedTable = formatter.convertAnyTables("fdg|dsf")
         then:
@@ -266,7 +266,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     def "should format single row table"() {
         given:
         def singleCellTable = "[|heading1  |heading2  |]"
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -278,7 +278,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def singleCellTable = """[| owner | points |
                                       | Joe   | 50000  |]"""
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -291,7 +291,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
                                   | Jane  | 80000  |
                                   | Joe   | 50000  |]"""
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -302,7 +302,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "A table like this:\n[| owner | points |\n| Jane  | 80000  |\n| Joe   | 50000  |]"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -315,7 +315,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "A table like this:${UNICODE_NL}[| owner | points |${UNICODE_NL}| Jane  | 80000  |${UNICODE_NL}| Joe   | 50000  |]"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -326,7 +326,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "A table like this:\r[| owner | points |\r| Jane  | 80000  |\r| Joe   | 50000  |]"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -338,7 +338,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def table = "I have the following document:\r␤|CSV|\r␤|HEADERS|\r␤|values|"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
@@ -349,7 +349,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def table = "I have the following document:\u2029|CSV|\u2029|HEADERS|\u2029|values|"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
@@ -360,7 +360,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def table = "I have the following document:\n|CSV|\n\n|HEADERS|\n|values|"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
@@ -371,7 +371,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "A table like this:\r\n[| owner | points |\r\n| Jane  | 80000  |\r\n| Joe   | 50000  |]"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -386,7 +386,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def singleCellTable = "A table like this:\r\n${LEFT_BRACKET}| owner | points |\r\n| Jane  | 80000  |\r\n| Joe   | 50000  |${RIGHT_BRACKET}"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -397,7 +397,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         given:
         def tableText = "Given a Transmission with the following details: ␤{trim=false} ␤|record| ␤|ABC-123 SOMEBANK, SYDNEY 2000 ADDATE PAGE 1 | ␤|0 GST 8.56- | ␤|lots of filler text | ␤|0 SUB-TOTAL BILLER VALUE 1,962 486,941.32 934.32- 486,007.00| ␤|0 GST 93.56-| ␤|more filler text |"
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(tableText)
         then:
@@ -416,7 +416,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     |999990065001306259999                                                                                                                      |
     |9999930625092002002814462000000000100019999SUNNY5000 XXX   032916000000000000000099999XXXXXXX Exchange Settlement        NN                |"""
 
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         when:
         def embeddedTable = formatter.convertAnyTables(tableText)
         then:
@@ -427,7 +427,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render test outcomes as Font Awesome icons"() {
         when:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         then:
         formatter.resultIcon().forResult(result).contains(expectedIcon)
         where:
@@ -440,7 +440,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render large test outcomes as large Font Awesome icons"() {
         when:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         then:
         formatter.resultIcon().inLarge().forResult(result).contains(expectedIcon)
         where:
@@ -454,7 +454,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should know the right style for result icons"() {
         when:
-        def formatter = new Formatter();
+        def formatter = new Formatter()
         then:
         formatter.resultIcon().colorFor(result) == expectedStyle
         where:

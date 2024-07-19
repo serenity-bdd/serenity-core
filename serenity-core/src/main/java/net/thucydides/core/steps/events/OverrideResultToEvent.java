@@ -1,12 +1,12 @@
 package net.thucydides.core.steps.events;
 
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 
 public class OverrideResultToEvent
     extends StepEventBusEventBase {
 
 
-	private TestResult testResult;
+	private final TestResult testResult;
 
 	public OverrideResultToEvent( final TestResult testResult) {
 		this.testResult = testResult;

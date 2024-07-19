@@ -51,7 +51,11 @@
                     search: ""
                 },
                 columnDefs: [
-                    {type: 'time-elapsed-dhms', targets: 4}
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                    {type: 'time-elapsed-dhms', targets: 6}
                 ]
             })
             $("#manual-scenario-results").DataTable({
@@ -60,6 +64,12 @@
                     searchPlaceholder: "Filter",
                     search: ""
                 },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                ]
             })
 
             // Results table
@@ -80,7 +90,17 @@
             $(".feature-coverage-table").DataTable({
                 searching: true,
                 paging: false,
-                info: false
+                info: false,
+                language: {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    {
+                        targets: 2,
+                        visible: false
+                    },
+                ]
             });
 
             $(".feature-coverage-table-with-pagination").DataTable({
@@ -90,7 +110,13 @@
                 language: {
                     searchPlaceholder: "Filter",
                     search: ""
-                }
+                },
+                columnDefs: [
+                    {
+                        targets: 2,
+                        visible: false
+                    },
+                ]
             });
         });
     </script>
@@ -198,7 +224,8 @@
                                     ${testOutcomes.testCaseCount} ${testOutcomes.resultTypeLabel}
 
                                     <#if (csvReport! != '')> |
-                                        <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down" title="Download CSV"></i></a>
+                                        <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
+                                                                                        title="Download CSV"></i></a>
                                     </#if>
                                     <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
                                     <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
@@ -261,7 +288,12 @@
                                         <div id="summary" class="tab-pane fade in active">
                                             <div class="container-fluid">
                                                 <div class="dashboard-charts row">
-                                                    <div class="col-lg-4 col-md-6 col-sm-9">
+                                                    <#if reportDurations >
+                                                        <#assign chartClassStyle = "col-lg-4 col-md-6 col-sm-9" >
+                                                    <#else>
+                                                        <#assign chartClassStyle = "col-lg-6 col-md-6 col-sm-12" >
+                                                    </#if>
+                                                    <div class="${chartClassStyle}">
                                                         <!-- PIE CHART -->
                                                         <h4><i class="bi bi-pie-chart"></i> Overview</h4>
                                                         <#if testOutcomes.total != 0>
@@ -270,21 +302,23 @@
                                                             </div>
                                                         </#if>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-6 col-sm-9">
+                                                    <div class="${chartClassStyle}">
                                                         <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
                                                         <!-- Severity bar chart -->
                                                         <div class="chart-container">
                                                             <canvas id="severityChart" height="200px"></canvas>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-6 col-sm-9">
-                                                        <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
+                                                    <#if reportDurations >
+                                                        <div class="${chartClassStyle}">
+                                                            <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
 
-                                                        <!-- Duration bar chart -->
-                                                        <div class="chart-container">
-                                                            <canvas id="durationChart" height="200px"></canvas>
+                                                            <!-- Duration bar chart -->
+                                                            <div class="chart-container">
+                                                                <canvas id="durationChart" height="200px"></canvas>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </#if>
                                                 </div>
                                             </div>
                                             <div class="container-fluid">
@@ -294,7 +328,8 @@
                                                         <div class="col-lg-8 col-md-8 col-sm-9">
                                                             <!-- High level coverage bar chart -->
                                                             <div class="chart-container">
-                                                                <h3><i class="bi bi-reception-3"></i> Functional Coverage Overview</h3>
+                                                                <h3><i class="bi bi-reception-3"></i> Functional
+                                                                    Coverage Overview</h3>
                                                                 <h4>${featureType}</h4>
                                                                 <canvas id="coverageChart"></canvas>
                                                             </div>
@@ -322,11 +357,12 @@
                                                                     <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
                                                                     <h4>${inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle()}</h4>
 
-                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
+                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}" style="width:100%">
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
                                                                             <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">StepsText</th>
                                                                             <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
@@ -337,44 +373,45 @@
                                                                         <tbody>
                                                                         <#list tagCoverageEntries as tagCoverage>
                                                                             <#if (!hideEmptyRequirements || tagCoverage.testCount != 0)>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <#if (!tagCoverageByType.featureNamesAreUnique && tagCoverage.parentName?has_content) >
-                                                                                        <#assign displayedTagName = formatter.breadcrumbFormat(tagCoverage.parentName, tagCoverage.tagName) />
-                                                                                    <#else>
-                                                                                        <#assign displayedTagName = tagCoverage.tagName />
-                                                                                    </#if>
-                                                                                    <#if tagCoverage.testCount = 0>
-                                                                                        ${displayedTagName}
-                                                                                    <#else>
-                                                                                        <a href="${tagCoverage.report}" > ${displayedTagName}</a>
-                                                                                    </#if>
-                                                                                </td>
-                                                                                <td>${tagCoverage.scenarioCount}</td>
-                                                                                <td>${tagCoverage.testCount}</td>
-                                                                                <td>${tagCoverage.successRate}</td>
-                                                                                <td>
-                                                                                    <#if tagCoverage.testCount = 0>
-                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
-                                                                                    <#else>
-                                                                                        ${tagCoverage.resultIcon}
-                                                                                    </#if>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="progress">
-                                                                                        <#list tagCoverage.coverageSegments as coverageSegment>
-                                                                                            <div class="progress-bar"
-                                                                                                 role="progressbar"
-                                                                                                 style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
-                                                                                                 aria-valuenow="${coverageSegment.count}"
-                                                                                                 title="${coverageSegment.title}"
-                                                                                                 aria-valuemin="0"
-                                                                                                 aria-valuemax="100">
-                                                                                            </div>
-                                                                                        </#list>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <#if (!tagCoverageByType.featureNamesAreUnique && tagCoverage.parentName?has_content) >
+                                                                                            <#assign displayedTagName = formatter.breadcrumbFormat(tagCoverage.parentName, tagCoverage.tagName) />
+                                                                                        <#else>
+                                                                                            <#assign displayedTagName = tagCoverage.tagName />
+                                                                                        </#if>
+                                                                                        <#if tagCoverage.testCount = 0>
+                                                                                            ${displayedTagName}
+                                                                                        <#else>
+                                                                                            <a href="${tagCoverage.report}"> ${displayedTagName}</a>
+                                                                                        </#if>
+                                                                                    </td>
+                                                                                    <td>${tagCoverage.scenarioCount}</td>
+                                                                                    <td>${tagCoverage.allStepsText}</td>
+                                                                                    <td>${tagCoverage.testCount}</td>
+                                                                                    <td>${tagCoverage.successRate}</td>
+                                                                                    <td>
+                                                                                        <#if tagCoverage.testCount = 0>
+                                                                                            <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                        <#else>
+                                                                                            ${tagCoverage.resultIcon}
+                                                                                        </#if>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                            <#list tagCoverage.coverageSegments as coverageSegment>
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
+                                                                                                     aria-valuenow="${coverageSegment.count}"
+                                                                                                     title="${coverageSegment.title}"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                            </#list>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
                                                                             </#if>
                                                                         </#list>
                                                                         </tbody>
@@ -439,16 +476,17 @@
                                                     <div class="col-sm-12">
                                                         <@key_statistics_two_columns testOutcomes=testOutcomes />
 
-                                                        <h3><i class="bi bi-gear"></i> Automated Tests</h3>
+                                                        <h3><i class="bi bi-gear"></i> Automated Scenarios</h3>
 
                                                         <#if (automatedTestCases?has_content)>
-                                                            <table class="scenario-result-table table" id="scenario-results">
+                                                            <table class="scenario-result-table table" id="scenario-results" style="width:100%">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
                                                                     <th class="test-name-column">Scenario</th>
                                                                     <th>Context</th>
                                                                     <th>Steps</th>
+                                                                    <th>StepsText</th>
                                                                     <th>Started</th>
                                                                     <th>Total Duration</th>
                                                                     <th>Result</th>
@@ -459,60 +497,44 @@
                                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                                     <#assign context_icon = formatter.contextIcon().forOutcome(scenario) />
                                                                     <#assign context_label = formatter.contextIcon().labelForOutcome(scenario) />
-                                                                    <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
-                                                                        <#list scenario.getExampleOutcomes() as exampleOutcome>
-                                                                            <#assign example_outcome_icon = formatter.resultIcon().forResult(exampleOutcome.result) />
-                                                                            <tr class="scenario-result ${exampleOutcome.result}">
-                                                                                <td>
-                                                                                    <#if scenario.parentName?has_content>
-                                                                                        <a href="${scenario.parentReport}">${scenario.parentName}</a>
-                                                                                    </#if>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <i class="bi bi-table" title="Data Driven Scenario">
-                                                                                    <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
-                                                                                    <#if exampleOutcome.hasSubtitle() >
-                                                                                        <br/>${exampleOutcome.subtitle}
-                                                                                    </#if>
-                                                                                </td>
-                                                                                <td>${context_icon}<span style="display:none">${context_label}</span> </td>
-                                                                                <td>${exampleOutcome.stepCount}</td>
-                                                                                <td>${exampleOutcome.formattedStartTime}</td>
-                                                                                <td>${exampleOutcome.formattedDuration}</td>
-                                                                                <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
-                                                                                    <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                    <tr class="scenario-result ${scenario.result}">
+                                                                        <td>
+                                                                            <#if scenario.parentName?has_content>
+                                                                                <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                                            </#if>
+                                                                        </td>
+                                                                        <td data-order="${scenario.title}">
+                                                                            <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
+                                                                            <i class="bi bi-table"
+                                                                               title="Data Driven Scenario"> <a
+                                                                                        href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                                <br/>
+                                                                                <#list scenario.getResultCounts() as resultCount>
+                                                                                    <#assign outcome_icon = formatter.resultIcon().forResult(resultCount.result) />
+                                                                                    ${outcome_icon} ${resultCount.numberOfTestCases}
+                                                                                    <br/>
+                                                                                </#list>
+                                                                                <#else>
+                                                                                    <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                                </#if>
+                                                                                <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                                         &nbsp;
-                                                                                        <a href="${scenario.externalLink.url}" class="tag"
+                                                                                        <a href="${scenario.externalLink.url}"
                                                                                            title="${scenario.externalLink.type}">
                                                                                             <i class="fs-2 bi bi-camera-reels"></i>
                                                                                         </a>
-                                                                                    </#if>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </#list>
-                                                                    <#else>
-                                                                        <tr class="scenario-result ${scenario.result}">
-                                                                            <td>
-                                                                                <#if scenario.parentName?has_content>
-                                                                                    <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                                 </#if>
-                                                                            </td>
-                                                                            <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
-                                                                            <td>${context_icon}<span style="display:none">${context_label}</span> </td>
-                                                                            <td>${scenario.stepCount}</td>
-                                                                            <td>${scenario.formattedStartTime}</td>
-                                                                            <td>${scenario.formattedDuration}</td>
-                                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
-                                                                                <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
-                                                                                    &nbsp;
-                                                                                    <a href="${scenario.externalLink.url}" class="tag"
-                                                                                   title="${scenario.externalLink.type}">
-                                                                                    <i class="fs-2 bi bi-camera-reels"></i>
-                                                                                </a>
-                                                                                </#if>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </#if>
+                                                                        </td>
+                                                                        <td>${context_icon}<span style="display:none">${context_label}</span>
+                                                                        </td>
+                                                                        <td>${scenario.stepCount}</td>
+                                                                        <td>${scenario.allStepsText}</td>
+                                                                        <td data-order="${scenario.timestamp}">${scenario.formattedStartTime}</td>
+                                                                        <td>${scenario.formattedDuration}</td>
+                                                                        <td>${outcome_icon} <span
+                                                                                    style="display:none">${scenario.result}</span>
+                                                                        </td>
+                                                                    </tr>
                                                                 </#list>
                                                                 </tbody>
                                                             </table>
@@ -528,13 +550,14 @@
                                                         <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                         <#if (manualTestCases?has_content)>
-                                                            <table class="scenario-result-table table" id="manual-scenario-results">
+                                                            <table class="scenario-result-table table" id="manual-scenario-results" style="width:100%">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
                                                                     <th class="test-name-column">Scenario</th>
                                                                     <th>Context</th>
                                                                     <th>Steps</th>
+                                                                    <th>StepsText</th>
                                                                     <th>Result</th>
                                                                 </tr>
                                                                 </thead>
@@ -553,7 +576,8 @@
                                                                                     </#if>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <i class="bi bi-table" title="Data Driven Scenario">
+                                                                                    <i class="bi bi-table"
+                                                                                       title="Data Driven Scenario">
                                                                                         <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
                                                                                         <#if exampleOutcome.hasSubtitle() >
                                                                                             <br/>${exampleOutcome.subtitle}
@@ -561,10 +585,13 @@
                                                                                 </td>
                                                                                 <td><i class="bi bi-person"></i></td>
                                                                                 <td>${exampleOutcome.stepCount}</td>
-                                                                                <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
+                                                                                <td>${exampleOutcome.allStepsText}</td>
+                                                                                <td>${example_outcome_icon} <span
+                                                                                            style="display:none">${exampleOutcome.result}</span>
                                                                                     <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                                         &nbsp;
-                                                                                        <a href="${scenario.externalLink.url}" class="tag"
+                                                                                        <a href="${scenario.externalLink.url}"
+                                                                                           class="tag"
                                                                                            title="${scenario.externalLink.type}">
                                                                                             <i class="fs-2 bi bi-camera-reels"></i>
                                                                                         </a>
@@ -579,13 +606,18 @@
                                                                                     <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                                 </#if>
                                                                             </td>
-                                                                            <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
+                                                                            <td>
+                                                                                <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                            </td>
                                                                             <td><i class="bi bi-person"></i></td>
                                                                             <td>${scenario.stepCount}</td>
-                                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                                            <td>${scenario.allStepsText}</td>
+                                                                            <td>${outcome_icon} <span
+                                                                                        style="display:none">${scenario.result}</span>
                                                                                 <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                                     &nbsp;
-                                                                                    <a href="${scenario.externalLink.url}" class="tag"
+                                                                                    <a href="${scenario.externalLink.url}"
+                                                                                       class="tag"
                                                                                        title="${scenario.externalLink.type}">
                                                                                         <i class="fs-2 bi bi-camera-reels"></i>
                                                                                     </a>
@@ -593,7 +625,7 @@
                                                                             </td>
                                                                         </tr>
                                                                     </#if>
-                                                               </#list>
+                                                                </#list>
                                                                 </tbody>
                                                             </table>
                                                         <#else>

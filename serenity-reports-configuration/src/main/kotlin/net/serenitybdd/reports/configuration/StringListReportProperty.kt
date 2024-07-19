@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.configuration
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.util.EnvironmentVariables
 
 class StringListReportProperty(val property: String, val defaultValues: List<String> = listOf()) : ReportProperty<List<String>> {
     constructor(property: ThucydidesSystemProperty, defaultValues: List<String> = listOf()) : this(property.toString(), defaultValues)

@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.playwright;
 import com.microsoft.playwright.Page;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import org.assertj.core.api.Assertions;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +22,7 @@ public class Photographer {
 
             return screenshotFile.toFile();
         } catch (IOException e) {
-            Assertions.fail("Failed to take Playwright screenshot", e);
-            return null;
+            throw new AssertionError("Failed to take Playwright screenshot", e);
         }
     }
 }

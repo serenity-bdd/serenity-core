@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.adaptors.specflow.SpecflowScenarioTitleLine
 import spock.lang.Specification
 
 

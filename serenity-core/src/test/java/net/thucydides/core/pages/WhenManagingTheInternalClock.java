@@ -1,6 +1,6 @@
 package net.thucydides.core.pages;
 
-import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.model.time.InternalSystemClock;
 import org.junit.Test;
 
 import java.time.ZonedDateTime;

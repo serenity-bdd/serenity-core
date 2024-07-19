@@ -1,7 +1,7 @@
 package net.thucydides.core;
 
 import net.serenitybdd.core.SerenityListeners;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 
 /** @deprecated Use SerenityListeners instead
  *

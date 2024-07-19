@@ -1,10 +1,10 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.model.DataTable;
+import net.serenitybdd.annotations.TestAnnotations;
+import net.thucydides.model.domain.DataTable;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 import net.thucydides.junit.listeners.JUnitStepListener;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;

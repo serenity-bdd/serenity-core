@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.TestOutcomes;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

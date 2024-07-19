@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.joda.time.LocalDateTime;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
 
 public class BuildName {
 

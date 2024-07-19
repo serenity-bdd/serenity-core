@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Set environment configuration options for this test runner.
  * For example:
- * @SerenityOptions("webdriver.driver=chrome")
+ * [AT]SerenityOptions("webdriver.driver=chrome")
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

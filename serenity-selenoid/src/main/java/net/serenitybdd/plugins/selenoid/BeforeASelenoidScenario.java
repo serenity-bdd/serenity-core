@@ -2,9 +2,9 @@ package net.serenitybdd.plugins.selenoid;
 
 import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.MutableCapabilities;

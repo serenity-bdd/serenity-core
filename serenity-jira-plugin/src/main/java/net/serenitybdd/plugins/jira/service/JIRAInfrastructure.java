@@ -1,16 +1,16 @@
 package net.serenitybdd.plugins.jira.service;
 
-import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.workflow.ClasspathWorkflowLoader;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 public class JIRAInfrastructure {
-    static private EnvironmentVariables environmentVariables = ModelInfrastructure.getEnvironmentVariables();
-    static private JIRAConfiguration configuration = new SystemPropertiesJIRAConfiguration();
-    static private IssueTracker issueTracker = new JiraIssueTracker(configuration);
-    static private WorkflowLoader workflowLoader = new ClasspathWorkflowLoader("jira-workflow.groovy", environmentVariables);
+    static private final EnvironmentVariables environmentVariables = ModelInfrastructure.getEnvironmentVariables();
+    static private final JIRAConfiguration configuration = new SystemPropertiesJIRAConfiguration();
+    static private final IssueTracker issueTracker = new JiraIssueTracker(configuration);
+    static private final WorkflowLoader workflowLoader = new ClasspathWorkflowLoader("jira-workflow.groovy", environmentVariables);
 
     public static JIRAConfiguration getConfiguration() {
         return configuration;

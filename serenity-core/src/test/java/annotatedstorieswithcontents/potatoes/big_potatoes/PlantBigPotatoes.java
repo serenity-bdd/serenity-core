@@ -1,6 +1,6 @@
 package annotatedstorieswithcontents.potatoes.big_potatoes;
 
-import net.thucydides.core.annotations.Narrative;
+import net.serenitybdd.annotations.Narrative;
 import org.junit.Test;
 
 @Narrative(

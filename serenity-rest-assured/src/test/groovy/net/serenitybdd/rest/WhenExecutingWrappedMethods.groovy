@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
+import net.serenitybdd.model.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Ignore
@@ -27,20 +27,20 @@ import static net.serenitybdd.rest.SerenityRest.rest
 class WhenExecutingWrappedMethods extends Specification {
 
     @Rule
-    def WireMockRule wire = new WireMockRule(0);
+    WireMockRule wire = new WireMockRule(0)
 
     @Rule
-    def TestCase<BaseStepListener> test = new TestCase({
+    TestCase<BaseStepListener> test = new TestCase({
         Mock(BaseStepListener)
-    }.call());
+    }.call())
 
-    def Gson gson = new GsonBuilder().setPrettyPrinting().
-        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
 
 
     def "should work properly after executing log method"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Title", "King")
             json.addProperty("Salary", "100")
             def body = gson.toJson(json)
@@ -54,7 +54,7 @@ class WhenExecutingWrappedMethods extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             def result = rest().given().contentType("application/json").body(body).log().all()
                 .post(url).then()
@@ -70,7 +70,7 @@ class WhenExecutingWrappedMethods extends Specification {
 
     def "should work properly after executing auth method"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Name", "Ivanna")
             json.addProperty("City", "Earth")
             def body = gson.toJson(json)
@@ -84,7 +84,7 @@ class WhenExecutingWrappedMethods extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             def result = rest().given().contentType("application/json").body(body).auth().none()
                 .post(url).then()
@@ -101,7 +101,7 @@ class WhenExecutingWrappedMethods extends Specification {
     @Ignore("Redirect is not implemented")
     def "should work properly after executing redirect method"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Phone", 1789)
             json.addProperty("Color", "blue")
             def body = gson.toJson(json)
@@ -115,7 +115,7 @@ class WhenExecutingWrappedMethods extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             def result = rest().given().contentType("application/json").content(body)
                 .redirects().follow(true)

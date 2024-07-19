@@ -7,8 +7,6 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * Perform assertions about the state of elements located using Playwright selectors.
  */
@@ -51,7 +49,7 @@ public class Ensure {
                 } else {
                     elementIsVisible = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isVisible(target.asSelector());
                 }
-                assertThat(elementIsVisible).withFailMessage("Expecting <%s> to be visible", target).isTrue();
+                assertThat(elementIsVisible,"Expecting <%s> to be visible", target);
             }
         );
     }
@@ -69,9 +67,16 @@ public class Ensure {
                 } else {
                     elementIsHidden = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isHidden(target.asSelector());
                 }
-                assertThat(elementIsHidden).withFailMessage("Expecting <%s> to be hidden", target).isTrue();
+
+                assertThat(elementIsHidden,"Expecting <%s> to be hidden", target);
             }
         );
+    }
+
+    private void assertThat(boolean value, String failureMessage, Object actual) {
+        if (!value) {
+            throw new AssertionError(String.format(failureMessage, actual));
+        }
     }
 
     /**
@@ -88,9 +93,8 @@ public class Ensure {
                 } else {
                     currentValue = currentPage.inputValue(target.asSelector());
                 }
-                assertThat(currentValue)
-                    .describedAs("Expecting <%s> to have different value", target)
-                    .isEqualTo(expectedValue);
+                assertThat(currentValue.equals(expectedValue),"Expecting <%s> to be <" + expectedValue + ">", currentValue);
+
             }
         );
     }
@@ -108,7 +112,7 @@ public class Ensure {
                 } else {
                     elementIsChecked = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isChecked(target.asSelector());
                 }
-                assertThat(elementIsChecked).withFailMessage("Expecting <%s> to be checked", target).isTrue();
+                assertThat(elementIsChecked,"Expecting <%s> to be checked", target);
             }
         );
     }
@@ -119,14 +123,14 @@ public class Ensure {
     public Performable isNotChecked() {
         return Task.where(target + " should not be checked",
             actor -> {
-                boolean elementIsChecked;
+                boolean elementIsNotChecked;
                 if (timeoutIsSpecified()) {
                     Page.IsCheckedOptions options = new Page.IsCheckedOptions().setTimeout(timeout);
-                    elementIsChecked = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isChecked(target.asSelector(), options);
+                    elementIsNotChecked = !BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isChecked(target.asSelector(), options);
                 } else {
-                    elementIsChecked = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isChecked(target.asSelector());
+                    elementIsNotChecked = !BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isChecked(target.asSelector());
                 }
-                assertThat(elementIsChecked).withFailMessage("Expecting <%s> to be unchecked", target).isFalse();
+                assertThat(elementIsNotChecked,"Expecting <%s> to be unchecked", target);
             }
         );
     }
@@ -144,7 +148,7 @@ public class Ensure {
                 } else {
                     elementIsEnabled = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isEnabled(target.asSelector());
                 }
-                assertThat(elementIsEnabled).withFailMessage("Expecting <%s> to be enabled", target).isTrue();
+                assertThat(elementIsEnabled,"Expecting <%s> to be enabled", target);
             }
         );
     }
@@ -162,7 +166,8 @@ public class Ensure {
                 } else {
                     elementIsDisabled = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isDisabled(target.asSelector());
                 }
-                assertThat(elementIsDisabled).withFailMessage("Expecting <%s> to be disabled", target).isTrue();
+                assertThat(elementIsDisabled,"Expecting <%s> to be disabled", target);
+
             }
         );
     }
@@ -180,7 +185,8 @@ public class Ensure {
                 } else {
                     elementIsEditable = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().isEditable(target.asSelector());
                 }
-                assertThat(elementIsEditable).withFailMessage("Expecting <%s> to be editable", target).isTrue();
+                assertThat(elementIsEditable,"Expecting <%s> to be editable", target);
+
             }
         );
     }

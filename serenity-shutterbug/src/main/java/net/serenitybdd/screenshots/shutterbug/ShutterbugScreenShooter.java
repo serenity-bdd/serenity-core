@@ -6,8 +6,8 @@ import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import net.serenitybdd.core.photography.PhotoLens;
 import net.serenitybdd.core.photography.ScreenShooter;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import javax.imageio.ImageIO;

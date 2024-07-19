@@ -1,13 +1,16 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.logging.ConsoleLoggingListener;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.logging.ConsoleLoggingListener;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;

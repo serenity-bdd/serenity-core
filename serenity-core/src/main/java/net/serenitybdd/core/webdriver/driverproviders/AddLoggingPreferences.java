@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -16,7 +16,7 @@ import java.util.logging.Level;
  * webdriver.logprefs.browser=INFO
  */
 public class AddLoggingPreferences {
-    private EnvironmentVariables environmentVariables;
+    private final EnvironmentVariables environmentVariables;
 
     public AddLoggingPreferences(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;

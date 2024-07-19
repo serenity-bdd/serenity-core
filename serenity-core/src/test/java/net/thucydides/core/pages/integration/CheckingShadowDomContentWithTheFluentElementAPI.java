@@ -24,7 +24,7 @@ public class CheckingShadowDomContentWithTheFluentElementAPI {
     @BeforeClass
     public static void openStaticPage() {
         ChromeOptions options = new ChromeOptions();
-        options.setHeadless(true);
+        options.addArguments("--headless");
         localDriver = new ChromeDriver(options);
         page = new ShadowDomSitePage(localDriver);
         page.open();

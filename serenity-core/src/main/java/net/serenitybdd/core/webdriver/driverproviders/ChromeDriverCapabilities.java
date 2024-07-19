@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.MutableCapabilities;
 

@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 
 public class ErrorConvertor {
 

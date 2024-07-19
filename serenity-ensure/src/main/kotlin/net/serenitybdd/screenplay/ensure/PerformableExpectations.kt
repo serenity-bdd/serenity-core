@@ -1,9 +1,22 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.serenitybdd.annotations.Step
+import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
-import net.thucydides.core.annotations.Step
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.steps.ExecutedStepDescription
+import net.thucydides.model.steps.StepFailure
+
+private fun handleException(errorMsg: String) {
+    takeScreenshot()
+    if (BlackBox.isUsingSoftAssertions()) {
+        BlackBox.softlyAssert(errorMsg.trim())
+        StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(AssertionError(errorMsg.trim()));
+    } else {
+        throw AssertionError(errorMsg.trim())
+    }
+}
 
 open class PerformableExpectation<A, E>(
     private val actual: A?,
@@ -35,20 +48,10 @@ open class PerformableExpectation<A, E>(
                 expected,
                 isNegated,
                 expectedDescription
-            );
-
-            val exceptionMessageWithDescription = if (reportedError.isEmpty()) exceptionMessage
-            else reportedError + ": " + exceptionMessage;
-
-            if (BlackBox.isUsingSoftAssertions()) {
-                BlackBox.softlyAssert(exceptionMessage)
-                StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(
-                    AssertionError(exceptionMessageWithDescription)
-                )
-            } else {
-                takeScreenshot()
-                throw AssertionError(exceptionMessageWithDescription)
-            }
+            )
+            val exceptionMessageWithDescription =
+                if (reportedError.isEmpty()) exceptionMessage else "$reportedError: $exceptionMessage";
+            handleException(exceptionMessageWithDescription)
         }
     }
 
@@ -74,7 +77,7 @@ open class BiPerformableExpectation<A, E>(
     private val expectedDescription: String
 ) : Performable {
 
-    private val description = expectation.describeRange(startRange, endRange, isNegated, expectedDescription);
+    private val description = expectation.describeRange(startRange,endRange,isNegated,expectedDescription)
 
     @Step("{0} should see #description")
     override fun <T : Actor?> performAs(actor: T) {
@@ -82,16 +85,14 @@ open class BiPerformableExpectation<A, E>(
         val result = expectation.apply(actual, startRange, endRange, actor)
 
         if (isAFailure(result, isNegated)) {
-            takeScreenshot()
-            throw AssertionError(
-                expectation.compareActualWithExpected(
-                    actual,
-                    startRange,
-                    endRange,
-                    isNegated,
-                    expectedDescription
-                )
-            )
+            val exceptionMessage = expectation.compareActualWithExpected(
+                actual,
+                startRange,
+                endRange,
+                isNegated,
+                expectedDescription
+            );
+            handleException(exceptionMessage)
         }
     }
 
@@ -135,8 +136,8 @@ open class PerformablePredicate<A>(
             if (exception != null) {
                 throw exception
             } else {
-                takeScreenshot()
-                throw AssertionError(expectation.compareActualWithExpected(actual, isNegated, expectedDescription))
+                val exceptionMessage = expectation.compareActualWithExpected(actual, isNegated, expectedDescription)
+                handleException(exceptionMessage)
             }
         }
     }

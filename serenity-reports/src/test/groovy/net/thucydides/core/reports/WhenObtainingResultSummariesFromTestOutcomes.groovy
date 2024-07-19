@@ -1,12 +1,15 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.model.*
+import net.thucydides.model.domain.*
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.reports.TestOutcomes
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.file.Paths
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
 
 class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
     def currentLocale = Locale.getDefault()
@@ -22,24 +25,24 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
 
     def testOutcomesIn(directory) {
         def outcomeDir = Paths.get(this.getClass().getResource(directory).toURI()).toFile()
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir)
     }
 
     def jsonTestOutcomesIn(directory) {
         def outcomeDir = Paths.get(this.getClass().getResource(directory).toURI()).toFile()
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir)
     }
 
     def "should count the number of successful tests in a set"() {
         when:
-            def testOutcomes = testOutcomesIn("/tagged-test-outcomes-json");// TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomes = testOutcomesIn("/tagged-test-outcomes-json")// TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
         then:
             testOutcomes.total == 3
     }
 
     def "should determine the correct overall result for a set of tests"() {
         when:
-            TestOutcomes testOutcomes = testOutcomesIn(directory) //TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled(directory));
+        TestOutcomes testOutcomes = testOutcomesIn(directory) //TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled(directory));
         then:
             testOutcomes.result == result
         where:

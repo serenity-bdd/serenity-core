@@ -1,11 +1,14 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.annotations.*;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.SomeTestScenario;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
 import org.junit.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;

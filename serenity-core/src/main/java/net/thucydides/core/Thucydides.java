@@ -2,7 +2,7 @@ package net.thucydides.core;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SessionMap;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 /**

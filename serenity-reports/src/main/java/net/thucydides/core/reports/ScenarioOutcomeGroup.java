@@ -1,11 +1,10 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.RuleBackground;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.html.TagFilter;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.Rule;
+import net.thucydides.model.domain.RuleBackground;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.html.TagFilter;
+import net.thucydides.model.requirements.reports.ScenarioOutcome;
 
 import java.util.*;
 import java.util.stream.Collectors;

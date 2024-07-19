@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
 import java.time.Duration
 import java.time.Duration.ofMillis
 import java.time.ZonedDateTime
@@ -45,8 +45,8 @@ fun startTimeOf(outcomes: List<TestOutcome>): ZonedDateTime? =
         .minOfOrNull { outcome -> outcome.startTime }
 
 fun endTimeOf(outcomes: List<TestOutcome>): ZonedDateTime? =
-    outcomes.filter { outcome -> outcome.startTime != null }
-        .maxOfOrNull { outcome -> outcome.startTime.plus(ofMillis(outcome.duration)) }
+    outcomes.filter { outcome -> outcome.endTime != null }
+        .maxOfOrNull { outcome -> outcome.endTime }
 
 private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
     val minStartTime = startTimeOf(outcomes)

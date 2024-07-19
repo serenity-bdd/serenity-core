@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
@@ -10,7 +10,7 @@ import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Every;
 import org.junit.Test;

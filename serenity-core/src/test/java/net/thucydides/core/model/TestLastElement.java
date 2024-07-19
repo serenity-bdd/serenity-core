@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.model.LastElement;
+import net.thucydides.model.domain.LastElement;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

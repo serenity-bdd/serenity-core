@@ -1,16 +1,16 @@
 package net.serenitybdd.plugins.lambdatest;
 
 import net.serenitybdd.core.environment.CustomDriverConfig;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.model.TestOutcomeName;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
 import net.serenitybdd.plugins.CapabilityTags;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.TestLocalEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
@@ -18,11 +18,12 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
 
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
     private final static String LT_OPTIONS = "\"LT:Options\"";
+    private final static String LT_CAPABILITY = "LT:Options";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -57,10 +58,6 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("name", testName);
         newOptions.put("build", BuildName.from(environmentVariables));
 
-        capabilities.setCapability("name", testName);
-        capabilities.setCapability("build", BuildName.from(environmentVariables));
-        capabilities.setCapability("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
-
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
@@ -74,7 +71,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
             });
         });
 
-        capabilities.setCapability(LT_OPTIONS, newOptions);
+        capabilities.setCapability(LT_CAPABILITY, newOptions);
 
         // Operating system
         // Context from browserName and OS

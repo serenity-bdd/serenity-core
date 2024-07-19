@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.webtests.model.BankAccount;
 import net.serenitybdd.screenplay.webtests.pages.BankAccountEntry;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

@@ -1,12 +1,12 @@
 package net.serenitybdd.junit5.tags;
 
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.statistics.service.*;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.statistics.service.*;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Tag;
@@ -43,6 +43,7 @@ public class WhenFindingTagsForATestOutcome {
         for(TagProvider provider : tagProviders) {
             if (provider instanceof AnnotationBasedTagProvider) {
                 containsAnnotationTagProvider = true;
+                break;
             }
         }
         assertThat(containsAnnotationTagProvider, is(true));
@@ -58,6 +59,7 @@ public class WhenFindingTagsForATestOutcome {
         for(TagProvider provider : tagProviders) {
             if (provider instanceof AnnotationBasedTagProvider) {
                 containsAnnotationTagProvider = true;
+                break;
             }
         }
         assertThat(containsAnnotationTagProvider, is(true));

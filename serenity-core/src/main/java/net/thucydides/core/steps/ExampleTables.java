@@ -2,7 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.eventbus.Subscribe;
 import net.thucydides.core.events.TestLifecycleEvents;
-import net.thucydides.core.model.DataTable;
+import net.thucydides.model.domain.DataTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ExampleTables {
 
-    private static ThreadLocal<ExampleTables> currentExampleTable = new ThreadLocal<>();
+    private static final ThreadLocal<ExampleTables> currentExampleTable = new ThreadLocal<>();
 
     private final List<String> headers;
     private final String title;

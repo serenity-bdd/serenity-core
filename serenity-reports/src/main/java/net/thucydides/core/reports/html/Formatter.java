@@ -3,19 +3,25 @@ package net.thucydides.core.reports.html;
 import com.github.rjeschke.txtmark.Configuration;
 import com.google.common.base.Splitter;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.resizable.image.ResizableImageExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.requirements.reports.RenderMarkdown;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.html.ContextIconFormatter;
+import net.thucydides.model.reports.html.ExampleTable;
+import net.thucydides.model.reports.html.MarkdownRendering;
+import net.thucydides.model.reports.html.ResultIconFormatter;
+import net.thucydides.model.requirements.reports.RenderMarkdown;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
@@ -29,10 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,28 +69,24 @@ public class Formatter {
     private final EnvironmentVariables environmentVariables;
     Configuration markdownEncodingConfiguration;
 
-    Parser parser;
-    HtmlRenderer renderer;
+    private static final DataHolder MARKDOWN_OPTIONS = new MutableDataSet()
+            // for full GFM table compatibility add the following table extension options:
+            .set(TablesExtension.COLUMN_SPANS, false)
+            .set(TablesExtension.APPEND_MISSING_COLUMNS, true)
+            .set(TablesExtension.DISCARD_EXTRA_COLUMNS, true)
+            .set(TablesExtension.HEADER_SEPARATOR_COLUMN_MATCH, true)
+            .set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), ResizableImageExtension.create()))
+            .set(HtmlRenderer.SOFT_BREAK, "<br />\n")
+            .toImmutable();
+
+    private static final Parser PARSER = Parser.builder(MARKDOWN_OPTIONS).build();
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder(MARKDOWN_OPTIONS).build();
 
     public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
 
         String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables, "UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
-
-
-        /////////////
-        MutableDataSet options = new MutableDataSet();
-
-        // uncomment to set optional extensions
-        options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
-
-        // uncomment to convert soft-breaks to hard breaks
-        //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
-
-        parser = Parser.builder(options).build();
-        renderer = HtmlRenderer.builder(options).build();
-
     }
 
     public Formatter() {
@@ -99,18 +98,16 @@ public class Formatter {
             return "";
         }
 
-        Node document = parser.parse(text);
-        String html = renderer.render(document);
-
-        return stripSurroundingParagraphTagsFrom(html);
+        Node document = PARSER.parse(text);
+        return stripSurroundingParagraphTagsFrom(RENDERER.render(document));
     }
 
     public String renderMarkdownWithoutTags(String text) {
         if (text == null) {
             return "";
         }
-        Node document = parser.parse(text);
-        return Jsoup.parse(renderer.render(document)).text();
+        Node document = PARSER.parse(text);
+        return Jsoup.parse(RENDERER.render(document)).text();
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {

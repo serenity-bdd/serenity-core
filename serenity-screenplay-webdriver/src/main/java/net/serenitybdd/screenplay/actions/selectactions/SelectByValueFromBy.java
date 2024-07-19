@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.actions.selectactions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.ByAction;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.By;
 
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class SelectByValueFromBy extends ByAction {
         this.values = values;
     }
 
-    @Step("{0} selects #value in #locators")
+    @Step("{0} selects #values in #locators")
     public <T extends Actor> void performAs(T theUser) {
         values.forEach(
                 value -> BrowseTheWeb.as(theUser).find(locators).selectByValue(value)

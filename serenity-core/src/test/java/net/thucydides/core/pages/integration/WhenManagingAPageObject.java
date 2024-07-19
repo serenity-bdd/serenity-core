@@ -3,9 +3,9 @@ package net.thucydides.core.pages.integration;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,6 +14,7 @@ import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -171,8 +172,8 @@ public class WhenManagingAPageObject {
         WebElement textBlock = mock(WebElement.class);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
-        List<WebElement> listWithElements = Arrays.asList(textBlock);
+        List<WebElement> emptyList = List.of();
+        List<WebElement> listWithElements = Collections.singletonList(textBlock);
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
@@ -187,8 +188,8 @@ public class WhenManagingAPageObject {
         WebElement textBlock = mock(WebElement.class);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
-        List<WebElement> listWithElements = Arrays.asList(textBlock);
+        List<WebElement> emptyList = List.of();
+        List<WebElement> listWithElements = Collections.singletonList(textBlock);
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
@@ -203,7 +204,7 @@ public class WhenManagingAPageObject {
         page.setWaitForTimeout(150);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList);
         when(searchedBlock.getText()).thenReturn("no matching text here");
@@ -218,7 +219,7 @@ public class WhenManagingAPageObject {
         WebElement textBlock = mock(WebElement.class);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> listWithElements = Arrays.asList(textBlock);
+        List<WebElement> listWithElements = Collections.singletonList(textBlock);
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
@@ -233,8 +234,8 @@ public class WhenManagingAPageObject {
         WebElement textBlock = mock(WebElement.class);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
-        List<WebElement> listWithElements = Arrays.asList(textBlock);
+        List<WebElement> emptyList = List.of();
+        List<WebElement> listWithElements = Collections.singletonList(textBlock);
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
@@ -249,7 +250,7 @@ public class WhenManagingAPageObject {
         BasicPageObject page = new BasicPageObject(driver);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList);
         when(searchedBlock.getText()).thenReturn("no matching text");
@@ -264,7 +265,7 @@ public class WhenManagingAPageObject {
         BasicPageObject page = new BasicPageObject(driver);
         WebElement searchedBlock = mock(WebElement.class);
 
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
 
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList);
         when(searchedBlock.getText()).thenReturn("no matching text");
@@ -403,30 +404,30 @@ public class WhenManagingAPageObject {
     }
 
     private void noElementIsRendered(By criteria) {
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
         when(driver.findElement(criteria)).thenThrow(new NoSuchElementException("No such element"));
         when(driver.findElements(criteria)).thenReturn(emptyList);
     }
 
     private void elementIsRendered(WebElement renderedElement, By criteria) {
         when(renderedElement.isDisplayed()).thenReturn(true);
-        List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
+        List<WebElement> listWithRenderedElement = List.of(renderedElement);
         when(driver.findElement(criteria)).thenReturn(renderedElement);
         when(driver.findElements(criteria)).thenReturn(listWithRenderedElement);
     }
 
     private void elementIsDisplayedButNotRendered(WebElement renderedElement, By criteria) {
         when(renderedElement.isDisplayed()).thenReturn(false);
-        List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
+        List<WebElement> listWithRenderedElement = List.of(renderedElement);
         when(driver.findElement(criteria)).thenReturn(renderedElement);
         when(driver.findElements(criteria)).thenReturn(listWithRenderedElement);
     }
 
     private void elementIsRenderedWithDelay(WebElement renderedElement, By criteria) {
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
 
         when(renderedElement.isDisplayed()).thenReturn(false).thenReturn(true);
-        List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
+        List<WebElement> listWithRenderedElement = List.of(renderedElement);
         when(driver.findElement(criteria)).thenThrow(new NoSuchElementException("No such element"))
                 .thenThrow(new NoSuchElementException("No such element"))
                 .thenReturn(renderedElement);
@@ -436,10 +437,10 @@ public class WhenManagingAPageObject {
 
 
     private void elementDisappearsAfterADelay(WebElement renderedElement, By criteria) {
-        List<WebElement> emptyList = Arrays.asList();
+        List<WebElement> emptyList = List.of();
 
         when(renderedElement.isDisplayed()).thenReturn(true).thenReturn(false);
-        List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
+        List<WebElement> listWithRenderedElement = List.of(renderedElement);
         when(driver.findElement(criteria)).thenReturn(renderedElement)
                 .thenReturn(renderedElement)
                 .thenThrow(new NoSuchElementException("No such element"));

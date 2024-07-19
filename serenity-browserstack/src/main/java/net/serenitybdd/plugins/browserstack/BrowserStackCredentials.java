@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.browserstack;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Optional;
 
@@ -23,12 +23,16 @@ class BrowserStackCredentials {
 
     public String getUser() {
         String userDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("browserstack.user").orElse("");
-        return Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_USER")).orElse(userDefinedInSerenityConf);
+        Optional<String> browserstackUser = Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_USER"));
+        Optional<String> browserstackUsername = Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_USERNAME"));
+        return browserstackUser.orElse(browserstackUsername.orElse(userDefinedInSerenityConf));
     }
 
     public String getAccessKey() {
         String keyDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("browserstack.key").orElse("");
-        return Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_KEY")).orElse(keyDefinedInSerenityConf);
+        Optional<String> browserstackKey = Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_KEY"));
+        Optional<String> browserstackAccessKey = Optional.ofNullable(environmentVariables.getValue("BROWSERSTACK_ACCESS_KEY"));
+        return browserstackKey.orElse(browserstackAccessKey.orElse(keyDefinedInSerenityConf));
     }
 
     public boolean areDefined() {

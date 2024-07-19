@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenConfiguringExtraWebdriverCapabilities extends Specification {

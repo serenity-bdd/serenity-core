@@ -1,7 +1,7 @@
 package net.serenitybdd.core
 
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenSettingSerenitySystemProperties extends Specification{

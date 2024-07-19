@@ -1,0 +1,42 @@
+name: Feature Request
+description: Suggest an idea for Serenity BDD
+title: "Feature Request: [Brief Description]"
+body:
+  - type: markdown
+    attributes:
+      value: "👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Please provide a detailed description of your idea below."
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "What's the Problem You're Trying to Solve?"
+      description: "Please describe the specific problem or challenge you're facing that led to this feature request."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      description: "How would you like to solve the problem? What's your preferred solution, and why do you believe it's the best approach?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternative Solutions"
+      description: "Have you considered any other solutions or workarounds? Please provide details about any alternative approaches you've thought about."
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: "Implementation Support"
+      description: "Serenity BDD is an open-source project, and we value contributions from our community. While we strive to address issues promptly, we cannot guarantee implementation timelines. To improve the chances of your feature being implemented, please indicate how you would like to support its development:"
+      options:
+        - label: "Contribute the feature myself (with guidance from the Serenity BDD team)"
+        - label: "Hire the Serenity BDD team for implementation"
+        - label: "Add it to the Serenity BDD backlog and wait for community contribution"
+    validations:
+      required: true

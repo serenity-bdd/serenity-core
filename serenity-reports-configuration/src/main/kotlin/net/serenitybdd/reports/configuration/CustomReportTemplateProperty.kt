@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.configuration
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.util.EnvironmentVariables
 
 class CustomReportTemplateProperty : ReportProperty<String?> {
 

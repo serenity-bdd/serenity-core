@@ -1,22 +1,22 @@
 package net.thucydides.core.reports.json
 
-import net.serenitybdd.core.rest.RestMethod
-import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.Feature
-import net.thucydides.core.annotations.Issue
-import net.thucydides.core.annotations.Issues
-import net.thucydides.core.annotations.WithTag
-import net.thucydides.core.digest.Digest
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.*
-import net.thucydides.core.reports.AcceptanceTestLoader
-import net.thucydides.core.reports.AcceptanceTestReporter
-import net.thucydides.core.reports.TestOutcomes
+import net.serenitybdd.model.rest.RestMethod
+import net.serenitybdd.model.rest.RestQuery
+import net.serenitybdd.annotations.Feature
+import net.serenitybdd.annotations.Issue
+import net.serenitybdd.annotations.Issues
+import net.serenitybdd.annotations.WithTag
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.*
+import net.thucydides.model.reports.AcceptanceTestLoader
+import net.thucydides.model.reports.AcceptanceTestReporter
+import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
-import net.thucydides.core.reports.json.gson.GsonJSONConverter
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
-import net.thucydides.core.steps.TestSourceType
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.json.JSONTestOutcomeReporter
+import net.thucydides.model.reports.json.gson.GsonJSONConverter
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource
+import net.thucydides.model.steps.TestSourceType
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.junit.ComparisonFailure
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -30,49 +30,49 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     private static final ZonedDateTime FIRST_OF_JANUARY = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault())
     private static final ZonedDateTime SECOND_OF_JANUARY = ZonedDateTime.of(2013, 1, 2, 0, 0, 0, 0, ZoneId.systemDefault())
 
-    def AcceptanceTestReporter reporter
-    def AcceptanceTestLoader loader
+    AcceptanceTestReporter reporter
+    AcceptanceTestLoader loader
 
 
-    TestOutcomes allTestOutcomes = Mock();
+    TestOutcomes allTestOutcomes = Mock()
 
     File outputDirectory
 
     def setup() {
         outputDirectory = Files.createTempDirectory("json-outcomes").toFile()
-        outputDirectory.deleteOnExit();
-        reporter = new JSONTestOutcomeReporter();
-        loader = new JSONTestOutcomeReporter();
-        reporter.setOutputDirectory(outputDirectory);
-        loader.setOutputDirectory(outputDirectory);
+        outputDirectory.deleteOnExit()
+        reporter = new JSONTestOutcomeReporter()
+        loader = new JSONTestOutcomeReporter()
+        reporter.setOutputDirectory(outputDirectory)
+        loader.setOutputDirectory(outputDirectory)
     }
 
     class AUserStory {
     }
 
-    @net.thucydides.core.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(AUserStory.class)
     class SomeTestScenario {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
     @Issue("PROJ-123")
     @WithTag(name = "important feature", type = "feature")
     class SomeTestScenarioWithTags {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
         @WithTag(name = "simple story", type = "story")
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
@@ -82,64 +82,64 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @net.thucydides.core.annotations.Story(AFeature.AUserStoryInAFeature.class)
+    @net.serenitybdd.annotations.Story(AFeature.AUserStoryInAFeature.class)
     class SomeTestScenarioInAFeature {
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
     class ATestScenarioWithoutAStory {
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
 
-        public void and_should_do_that() {
+        void and_should_do_that() {
         }
     }
 
-    @net.thucydides.core.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(AUserStory.class)
     @Issues(["#123", "#456"])
     class ATestScenarioWithIssues {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
         @Issue("#789")
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
 
-    @net.thucydides.core.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(AUserStory.class)
     @Issues(["PROJ-123", "PROJ-456"])
     class ATestScenarioWithLongIssues {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
         @Issue("PROJ-456")
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
-    @net.thucydides.core.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(AUserStory.class)
     class SomeNestedTestScenario {
-        public void a_nested_test_case() {
+        void a_nested_test_case() {
         };
 
-        public void should_do_this() {
+        void should_do_this() {
         };
 
-        public void should_do_that() {
+        void should_do_that() {
         };
     }
 
@@ -232,7 +232,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should generate an JSON report for an acceptance test run without a test class"() {
         given:
         def testOutcome = TestOutcome.forTestInStory("should_do_this",
-                net.thucydides.core.model.Story.withId("id", "name"))
+                net.thucydides.model.domain.Story.withId("id", "name"))
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
@@ -281,7 +281,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should generate an JSON report for a manual acceptance test run"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).setToManual();
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).setToManual()
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
@@ -295,7 +295,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should store annotated tags and issues in the JSON reports"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
@@ -310,7 +310,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should store the featureTag in the JSON reports"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
@@ -325,9 +325,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include the session id if provided"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.setSessionId("1234");
+        testOutcome.setSessionId("1234")
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -338,7 +338,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include annotated results if provided"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.setAnnotatedResult(TestResult.IGNORED)
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
@@ -353,13 +353,13 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include a data table if provided"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.useExamplesFrom(DataTable.withHeaders(["a","b","c"])
                                              .andTitle("a title")
                                              .andDescription("some description").build())
-        testOutcome.addRow(["a":"1", "b":"2", "c":"3"]);
-        testOutcome.addRow(["a":"2", "b":"3", "c":"4"]);
+        testOutcome.addRow(["a":"1", "b":"2", "c":"3"])
+        testOutcome.addRow(["a":"2", "b":"3", "c":"4"])
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -372,17 +372,17 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include a data table with multiple data sets if provided"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class)
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.useExamplesFrom(DataTable.withHeaders(["a", "b", "c"])
                 .andTitle("a title")
                 .andDescription("a description").build())
-        testOutcome.addRow(["a":"1", "b":"2", "c":"3"]);
-        testOutcome.addRow(["a":"2", "b":"3", "c":"4"]);
+        testOutcome.addRow(["a":"1", "b":"2", "c":"3"])
+        testOutcome.addRow(["a":"2", "b":"3", "c":"4"])
         testOutcome.dataTable.startNewDataSet("another title","another description")
-        testOutcome.addRow(["a":"3", "b":"2", "c":"3"]);
-        testOutcome.addRow(["a":"4", "b":"3", "c":"4"]);
-        testOutcome.addRow(["a":"5", "b":"3", "c":"4"]);
+        testOutcome.addRow(["a":"3", "b":"2", "c":"3"])
+        testOutcome.addRow(["a":"4", "b":"3", "c":"4"])
+        testOutcome.addRow(["a":"5", "b":"3", "c":"4"])
 
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
@@ -403,9 +403,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should contain the feature if provided"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class)
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.setSessionId("1234");
+        testOutcome.setSessionId("1234")
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -417,9 +417,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record features and stories as tags"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class)
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
@@ -430,24 +430,24 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should generate a JSON report in the target directory"() {
         when:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        def jsonReport = reporter.generateReportFor(testOutcome);
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        def jsonReport = reporter.generateReportFor(testOutcome)
 
         then:
-        jsonReport.path.startsWith(outputDirectory.path);
+        jsonReport.path.startsWith(outputDirectory.path)
     }
 
     def "should have a qualified filename if qualifier present"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        def step = TestStepFactory.successfulTestStepCalled("step 1");
-        testOutcome.recordStep(step);
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        def step = TestStepFactory.successfulTestStepCalled("step 1")
+        testOutcome.recordStep(step)
         when:
-        reporter.setQualifier("qualifier");
-        def reportWithQualifier = reporter.generateReportFor(testOutcome);
+        reporter.setQualifier("qualifier")
+        def reportWithQualifier = reporter.generateReportFor(testOutcome)
         and:
         reporter.setQualifier(null)
-        def reportWithoutQualifier = reporter.generateReportFor(testOutcome);
+        def reportWithoutQualifier = reporter.generateReportFor(testOutcome)
         then:
         reportWithQualifier != reportWithoutQualifier
     }
@@ -455,7 +455,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should include error message for failing test"() {
 
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
         def step = TestStepFactory.failingTestStepCalled("step 1")
         and:
         step.failedWith(new IllegalArgumentException("Oh nose!"))
@@ -473,10 +473,10 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should generate a qualified JSON report for an acceptance test run if the qualifier is specified"() {
 
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
-        reporter.setQualifier("qualifier");
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+        reporter.setQualifier("qualifier")
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -486,10 +486,10 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should generate a qualified JSON report with formatted parameters if the qualifier is specified"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
-        reporter.setQualifier("a_b");
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+        reporter.setQualifier("a_b")
 
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -501,8 +501,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test groups as nested structures"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
 
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("Group 1").startingAt(FIRST_OF_JANUARY))
         testOutcome.startGroup()
@@ -521,18 +521,18 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record minimal nested test groups as nested structures"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("Group 1").startingAt(FIRST_OF_JANUARY))
         testOutcome.startGroup()
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("Group 1.1").startingAt(FIRST_OF_JANUARY))
         testOutcome.startGroup()
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("Group 1.1.1").startingAt(FIRST_OF_JANUARY))
         testOutcome.startGroup()
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
-        testOutcome.endGroup();
-        testOutcome.endGroup();
-        testOutcome.endGroup();
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+        testOutcome.endGroup()
+        testOutcome.endGroup()
+        testOutcome.endGroup()
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -545,15 +545,15 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include the name of any screenshots where present"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        def screenshot = new File(outputDirectory, "step_1.png");
-        def source = new File(outputDirectory, "step_1.html");
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        def screenshot = new File(outputDirectory, "step_1.png")
+        def source = new File(outputDirectory, "step_1.html")
         and:
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY);
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot, source));
-        testOutcome.recordStep(step1);
-        testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY));
+        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY)
+        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot, source))
+        testOutcome.recordStep(step1)
+        testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -567,14 +567,14 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should include the name of any screenshots without html where present"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        def screenshot = new File(outputDirectory, "step_1.png");
+        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        def screenshot = new File(outputDirectory, "step_1.png")
         and:
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY);
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot));
-        testOutcome.recordStep(step1);
-        testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY));
+        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY)
+        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot))
+        testOutcome.recordStep(step1)
+        testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -587,9 +587,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     @Unroll
     def "should record test results for #result"() {
         given:
-            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-            testOutcome.setStartTime(FIRST_OF_JANUARY);
-            testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(result))
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(result))
         when:
             def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -601,8 +601,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test results for test with failing steps"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
         testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(TestResult.SUCCESS))
         testOutcome.lastStepFailedWith(new AssertionError("a failure"))
         when:
@@ -615,8 +615,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test results for test with an error"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
         testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(TestResult.SUCCESS))
         testOutcome.lastStepFailedWith(new RuntimeException("an error"))
         when:
@@ -629,9 +629,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test results for test with an error outside a step"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.setAnnotatedResult(TestResult.ERROR);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.setAnnotatedResult(TestResult.ERROR)
         testOutcome.determineTestFailureCause(new RuntimeException("an error"))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -644,9 +644,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test results for test with an failure outside a step"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.setAnnotatedResult(TestResult.FAILURE);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.setAnnotatedResult(TestResult.FAILURE)
         testOutcome.determineTestFailureCause(new AssertionError("a failure"))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -660,9 +660,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should record test results for test with an assertion failure outside a step"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.setAnnotatedResult(TestResult.FAILURE);
+        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.setAnnotatedResult(TestResult.FAILURE)
         testOutcome.determineTestFailureCause(new ComparisonFailure("a failure","1","2"))
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
@@ -676,9 +676,9 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     @Unroll
     def "should record test results for #result with no steps"() {
         given:
-            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-            testOutcome.setStartTime(FIRST_OF_JANUARY);
-            testOutcome.setAnnotatedResult(result)
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        testOutcome.setStartTime(FIRST_OF_JANUARY)
+        testOutcome.setAnnotatedResult(result)
         when:
             def jsonReport = reporter.generateReportFor(testOutcome)
         then:
@@ -691,7 +691,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should be able to write a test outcome as a JSON string"() {
         given:
-            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
         when:
             def jsonString = testOutcome.toJson()
         then:
@@ -703,8 +703,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should be able to store REST query data if present"() {
         given:
-            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-            def testStep = TestStep.forStepCalled("rest step").withResult(TestResult.SUCCESS)
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class)
+        def testStep = TestStep.forStepCalled("rest step").withResult(TestResult.SUCCESS)
             testStep.recordRestQuery(RestQuery.withMethod(RestMethod.GET).andPath("/foo/{id}").withParameters(["1"]))
             testOutcome.recordStep(testStep)
         when:

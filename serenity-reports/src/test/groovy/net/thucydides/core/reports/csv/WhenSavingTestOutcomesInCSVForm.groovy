@@ -1,15 +1,16 @@
 package net.thucydides.core.reports.csv
 
 import au.com.bytecode.opencsv.CSVReader
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.csv.CSVReporter
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
 
 /**
  * Test outcomes can be saved as CSV files, so they can be imported and manipulated in Excel.
@@ -21,7 +22,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def setup() {
         temporaryDirectory = Files.createTempDirectory("serenity-tmp").toFile()
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory.deleteOnExit()
     }
 
     def environmentVariables = new MockEnvironmentVariables()
@@ -40,7 +41,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def "should store a row of data for each test result"() {
         given: "a set of test results"
-            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when: "we store these outcomes as a CSV file"
             def csvReporter = new CSVReporter(temporaryDirectory)
             File csvResults = csvReporter.generateReportFor(TestOutcomes.of(testOutcomeList), "results.csv")
@@ -51,7 +52,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def "should store user-configurable extra columns"() {
         given: "a set of test results"
-            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         and: "we want to store extra columns from tag values"
             environmentVariables.setProperty("thucydides.csv.extra.columns","feature, epic")
         when: "we store these outcomes as a CSV file"
@@ -63,8 +64,8 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def "should store windows-1251 encoding, if it set in config"() {
         given: "a set of test results in windows-1251"
-            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-win-1251"));
-            System.out.println(testOutcomeList);
+            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-win-1251"))
+        System.out.println(testOutcomeList)
         and: "in environment setted windows-1251 encoding"
             environmentVariables.setProperty("thucydides.report.encoding", "windows-1251")
         when: "we store these outcomes as a CSV file"
@@ -77,7 +78,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
     }
 
     def linesIn(File csvResults) {
-        def CSVReader reader = new CSVReader(new java.io.InputStreamReader(new java.io.FileInputStream(csvResults), "windows-1251"))
+        CSVReader reader = new CSVReader(new java.io.InputStreamReader(new java.io.FileInputStream(csvResults), "windows-1251"))
         try{
             reader.readAll()
         }finally{

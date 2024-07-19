@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.formatting;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 
 import java.util.List;
 

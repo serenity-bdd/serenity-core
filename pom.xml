@@ -7,13 +7,13 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.1.21-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/license/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -33,7 +33,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-        <tag>3.6.15</tag>
+        <tag>4.1.12</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,62 +42,71 @@
 
         <junit.version>4.13.2</junit.version>
         <groovy.version>4.0.13</groovy.version>
-        <spock.version>2.2-M1-groovy-4.0</spock.version>
-        <byte-buddy.version>1.14.5</byte-buddy.version>
-        <guava.version>31.1-jre</guava.version>
+        <spock.version>2.4-M1-groovy-4.0</spock.version>
+        <byte-buddy.version>1.14.15</byte-buddy.version>
+        <guava.version>33.1.0-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
-<!--        <slf4j.version>1.7.30</slf4j.version>-->
-        <slf4j.version>2.0.7</slf4j.version>
-<!--        <guice.version>5.1.0</guice.version>-->
-        <cucumber.version>7.13.0</cucumber.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <cucumber.version>7.17.0</cucumber.version>
         <gson.version>2.10.1</gson.version>
-        <junit5.version>5.10.0</junit5.version>
+        <junit5.version>5.10.2</junit5.version>
         <mockito.version>3.3.3</mockito.version>
-        <assertj.version>3.24.2</assertj.version>
-        <commons.lang.version>3.13.0</commons.lang.version>
+        <assertj.version>3.25.3</assertj.version>
+        <opentest.version>1.3.0</opentest.version>
+        <commons.lang.version>3.14.0</commons.lang.version>
         <commons.lang2.version>2.6</commons.lang2.version>
-        <commons.io.version>2.11.0</commons.io.version>
-        <commons.text.version>1.10.0</commons.text.version>
+        <commons.io.version>2.15.1</commons.io.version>
+        <commons.text.version>1.11.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.collections.version>3.2.2</commons.collections.version>
-        <commons.net.version>3.9.0</commons.net.version>
-        <commons.codec.version>1.16.0</commons.codec.version>
+        <commons.collections.version>4.4</commons.collections.version>
+        <commons.compress.version>1.26.0</commons.compress.version>
+        <commons.net.version>3.10.0</commons.net.version>
+        <commons.codec.version>1.16.1</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <selenium.version>4.11.0</selenium.version>
-        <htmlunit.driver.version>4.10.0</htmlunit.driver.version>
+        <selenium.version>4.21.0</selenium.version>
+        <htmlunit.driver.version>4.21.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
-        <joda-time.version>2.12.2</joda-time.version>
+        <joda-time.version>2.12.7</joda-time.version>
         <xstream.version>1.4.20</xstream.version>
-        <opencsv.version>2.0</opencsv.version>
-        <typesafe.version>1.4.2</typesafe.version>
+        <opencsv.version>2.1</opencsv.version>
+        <typesafe.version>1.4.3</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <freemarker.version>2.3.31</freemarker.version>
-        <appium.version>8.3.0</appium.version>
-        <webdrivermanager.version>5.3.2</webdrivermanager.version>
+        <freemarker.version>2.3.32</freemarker.version>
+        <appium.version>9.2.2</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-        <htmlunit.version>3.4.0</htmlunit.version>
+        <htmlunit.version>4.1.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
-        <spring.version>5.3.25</spring.version>
-        <spring.boot.version>2.7.14</spring.boot.version>
+        <spring.version>6.1.7</spring.version>
+        <spring.boot.version>3.2.5</spring.boot.version>
         <jimfs.version>1.3.0</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <ant.version>1.10.12</ant.version>
-        <restassured.version>5.3.1</restassured.version>
+        <restassured.version>5.4.0</restassured.version>
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <javassist.version>3.29.2-GA</javassist.version>
-        <jackson.version>2.15.2</jackson.version>
+        <jackson.version>2.17.0</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.version>1.9.24</kotlin.version>
         <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>4.1.109.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.3.1</version>
+            </dependency>
             <!-- Testing libraries -->
             <dependency>
                 <groupId>junit</groupId>
@@ -153,6 +162,7 @@
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.rest-assured</groupId>
@@ -257,49 +267,20 @@
                 <version>${commons.text.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${commons.beanutils.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-net</groupId>
                 <artifactId>commons-net</artifactId>
                 <version>${commons.net.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${commons.collections.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons.compress.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons.codec.version}</version>
             </dependency>
-            <!-- Cucumber dependencies -->
-            <dependency>
-                <groupId>io.cucumber</groupId>
-                <artifactId>cucumber-core</artifactId>
-                <version>${cucumber.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apiguardian</groupId>
-                        <artifactId>apiguardian-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.cucumber</groupId>
-                <artifactId>cucumber-java</artifactId>
-                <version>${cucumber.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apiguardian</groupId>
-                        <artifactId>apiguardian-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
@@ -317,24 +298,6 @@
             </dependency>
 
             <!-- Testing -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit5.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit5.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.vintage</groupId>
-                <artifactId>junit-vintage-engine</artifactId>
-                <version>${junit5.version}</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.skyscreamer</groupId>
                 <artifactId>jsonassert</artifactId>
@@ -479,6 +442,24 @@
                 <version>${xchart.version}</version>
             </dependency>
 
+            <!-- BOM should be latest to overwrite versions -->
+
+            <!-- Cucumber -->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${cucumber.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Junit 5 -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit5.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <distributionManagement>
@@ -497,7 +478,7 @@
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
@@ -562,9 +543,6 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-                        <parallel>all</parallel>
-                        <threadCount>16</threadCount>
-                        <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -584,9 +562,6 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-                        <!--                        <parallel>all</parallel>-->
-                        <!--                        <threadCount>8</threadCount>-->
-                        <!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
                     </configuration>
                     <executions>
                         <execution>
@@ -666,12 +641,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>11</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
                     <failOnError>false</failOnError>
+                    <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>
             <plugin>
@@ -711,11 +687,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>11</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
+                    <excludePackageNames>io.netty.*</excludePackageNames>
+                    <excludePackageNames>org.eclipse.*</excludePackageNames>
+                    <excludePackageNames>io.cucumber.*</excludePackageNames>
+                    <excludePackageNames>org.apache.*</excludePackageNames>
+                    <excludePackageNames>org.assertj.*</excludePackageNames>
+                    <excludePackageNames>org.seleniumhq.*</excludePackageNames>
+                    <excludePackageNames>io.opentelemetry.*</excludePackageNames>
+                    <excludePackageNames>com.google.*</excludePackageNames>
+                    <excludePackageNames>org.checkerframework.*</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>

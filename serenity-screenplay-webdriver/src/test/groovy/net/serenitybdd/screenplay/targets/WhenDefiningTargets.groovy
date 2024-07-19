@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.targets
 
+import io.appium.java_client.AppiumBy
 import io.appium.java_client.AppiumDriver
-import io.appium.java_client.MobileBy
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
@@ -30,8 +30,8 @@ class WhenDefiningTargets extends Specification {
 
     def BY_TARGET = Target.the("By Target").located(By.name("Simple locator"))
     def CROSS_PLATFORM_BY_TARGET = Target.the("Cross Platform By Target")
-                                         .locatedForAndroid(MobileBy.id("android_element_id"))
-                                         .locatedForIOS(MobileBy.id("iOS_element_id"))
+                                         .locatedForAndroid(AppiumBy.id("android_element_id"))
+                                         .locatedForIOS(AppiumBy.id("iOS_element_id"))
 
     def setup() {
         initMocks(this)

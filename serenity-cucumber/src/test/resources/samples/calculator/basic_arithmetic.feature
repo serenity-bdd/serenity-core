@@ -1,5 +1,7 @@
 @foo
 @issue:ISSUE-123
+@issue:ISSUE-234
+@issue:ISSUE-456
 Feature: Basic Arithmetic
   Calculing additions
 

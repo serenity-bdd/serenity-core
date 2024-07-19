@@ -1,12 +1,12 @@
 package net.serenitybdd.core.webdriver.driverproviders.cache;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.WebDriverInitialisationException;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.reflection.ClassFinder;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.reflection.ClassFinder;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class PreScenarioFixtures {
 
     private static final List<BeforeAWebdriverScenario> CACHED_BEFORE_A_WEBDRIVER_SCENARIOS = Collections.synchronizedList(new ArrayList<>());
-    private static AtomicBoolean beforeScenariosLoaded = new AtomicBoolean(false);
+    private static final AtomicBoolean beforeScenariosLoaded = new AtomicBoolean(false);
 
     public static List<BeforeAWebdriverScenario> executeBeforeAWebdriverScenario() {
         if (!beforeScenariosLoaded.get()) {

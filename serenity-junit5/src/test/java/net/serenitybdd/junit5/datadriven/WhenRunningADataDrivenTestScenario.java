@@ -3,15 +3,15 @@ package net.serenitybdd.junit5.datadriven;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit5.datadriven.samples.*;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
 import org.apache.commons.io.FileUtils;
@@ -274,11 +274,12 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void a_separate_json_report_should_be_generated_for_each_scenario() {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+
         runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
+
         File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
 

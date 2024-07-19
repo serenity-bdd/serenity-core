@@ -2,9 +2,9 @@ package net.serenitybdd.demos.todos.pageobjects.steps;
 
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatusFilter;
 import net.serenitybdd.demos.todos.pageobjects.pages.TodoListPage;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.annotations.Step;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import static java.util.Arrays.asList;
 import static net.serenitybdd.demos.todos.pageobjects.model.TodoStatus.Active;
@@ -132,7 +132,7 @@ public class TodoUserSteps {
 
     @Step
     public void should_see_the_correct_website_title() {
-        assertThat(todoListPage.getTitle(), is("AngularJS • TodoMVC"));
+        assertThat(todoListPage.getTitle(), is("Serenity/JS TodoApp"));
     }
 
     @Step
@@ -142,7 +142,6 @@ public class TodoUserSteps {
 
     @Step
     public void should_see_the_about_section() {
-        assertThat(todoListPage.footer(), containsString("Credits"));
+        assertThat(todoListPage.footer(), containsString("Serenity/JS TodoApp, based on TodoMVC"));
     }
-
 }

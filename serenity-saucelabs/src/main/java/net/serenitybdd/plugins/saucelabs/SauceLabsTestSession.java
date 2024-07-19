@@ -1,8 +1,8 @@
 package net.serenitybdd.plugins.saucelabs;
 
 import io.restassured.RestAssured;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

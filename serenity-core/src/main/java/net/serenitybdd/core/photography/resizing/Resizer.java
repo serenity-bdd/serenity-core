@@ -1,9 +1,9 @@
 package net.serenitybdd.core.photography.resizing;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.photography.PhotoFilter;
 import net.serenitybdd.core.photography.ScreenshotNegative;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 public class Resizer implements PhotoFilter {
 

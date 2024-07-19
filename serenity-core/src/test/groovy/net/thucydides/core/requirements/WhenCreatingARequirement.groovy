@@ -1,15 +1,17 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.model.Example
-import net.thucydides.core.requirements.model.Requirement
-import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.requirements.model.Example
+import net.thucydides.model.requirements.model.Requirement
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.requirements.PackageAnnotationBasedTagProvider
+import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomes
 import spock.lang.Specification
 
 class WhenCreatingARequirement extends Specification {
@@ -39,9 +41,9 @@ class WhenCreatingARequirement extends Specification {
         given: "there are no associated tests"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
         and: "we read the requirements from the directory structure"
-            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, new ReportNameProvider())
+        RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, new ReportNameProvider())
         when: "we generate the capability outcomes"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
+        RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the test results for the requirements should be empty"
             def requirementsTestCount = outcomes.requirementOutcomes.collect {it.testOutcomes.total}
             requirementsTestCount == [0,0,0,0,0,0,0]

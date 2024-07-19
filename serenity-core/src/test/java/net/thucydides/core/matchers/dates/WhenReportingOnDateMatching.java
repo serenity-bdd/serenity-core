@@ -1,7 +1,8 @@
 package net.thucydides.core.matchers.dates;
 
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.matchers.dates.*;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -20,11 +21,11 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Parameterized.class)
 public class WhenReportingOnDateMatching {
 
-    private static DateTime januaryOne2000 = new DateTime(2000, 1, 1, 1, 0);
-    private static DateTime januaryOne2001 = new DateTime(2001, 1, 1, 1, 0);
+    private static final DateTime januaryOne2000 = new DateTime(2000, 1, 1, 1, 0);
+    private static final DateTime januaryOne2001 = new DateTime(2001, 1, 1, 1, 0);
 
-    private static List<DateTime> dateTimes = NewList.of(januaryOne2000, januaryOne2001);
-    private static List<Date> dates = NewList.of(januaryOne2000.toDate(), januaryOne2001.toDate());
+    private static final List<DateTime> dateTimes = NewList.of(januaryOne2000, januaryOne2001);
+    private static final List<Date> dates = NewList.of(januaryOne2000.toDate(), januaryOne2001.toDate());
 
     @Parameters
     public static Collection<Object[]> data() {

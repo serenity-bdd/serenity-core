@@ -1,15 +1,14 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.core.time.Stopwatch
+import net.serenitybdd.model.time.Stopwatch
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
 import net.thucydides.core.pages.integration.StaticSitePage
-import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.steps.StepFailure
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.thucydides.core.environment.SystemEnvironmentVariables
+import net.thucydides.model.steps.StepFailure
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
@@ -41,7 +40,7 @@ import static java.time.temporal.ChronoUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
-    @Shared DriverServicePool driverService;
+    @Shared DriverServicePool driverService
 
     @Shared
     WebDriver driver
@@ -57,12 +56,12 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     WebDriver newDriver() {
 
-        def desiredCapabilities = new DesiredCapabilities();
-        def chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+        def desiredCapabilities = new DesiredCapabilities()
+        def chromeOptions = new ChromeOptions()
+        chromeOptions.addArguments("--headless")
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions)
 
-        driver = driverService.newDriver(desiredCapabilities);
+        driver = driverService.newDriver(desiredCapabilities)
         return driver
     }
 
@@ -71,7 +70,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         if (driver == null) {
             driver = newDriver()
         }
-        driver.navigate().refresh();
+        driver.navigate().refresh()
     }
 
     //
@@ -94,7 +93,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
             def stepFailure = Mock(StepFailure)
             StepEventBus.getEventBus().testStarted("a test")
             StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"))
-            StepEventBus.getEventBus().stepFailed(stepFailure);
+            StepEventBus.getEventBus().stepFailed(stepFailure)
         when: "We access the field"
             Stopwatch stopwatch = new Stopwatch()
             stopwatch.start()
@@ -106,18 +105,18 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     private StaticSitePage openStaticPageWith(Map<String, String> variables) {
-        def environmentVariables = new MockEnvironmentVariables();
+        def environmentVariables = new MockEnvironmentVariables()
         for(String key : variables.keySet()) {
-            environmentVariables.setProperty(key, variables[key]);
+            environmentVariables.setProperty(key, variables[key])
         }
-        WebDriverFacade driverFacade = new WebDriverFacade(driver, new WebDriverFactory(), environmentVariables);
+        WebDriverFacade driverFacade = new WebDriverFacade(driver, new WebDriverFactory(), environmentVariables)
         def page = new StaticSitePage(driverFacade, environmentVariables)
         page.open()
         return page
     }
 
     private StaticSitePage openStaticPage() {
-        def driver = new WebDriverFacade(driver, new WebDriverFactory()); // HtmlUnitDriver();
+        def driver = new WebDriverFacade(driver, new WebDriverFactory()) // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()
         return page

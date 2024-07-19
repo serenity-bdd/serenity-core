@@ -2,9 +2,9 @@ package net.serenitybdd.plugins.bitbar;
 
 import com.testdroid.api.APIEntity;
 import com.testdroid.api.model.APIDeviceSession;
-import net.serenitybdd.core.model.TestOutcomeName;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.serenitybdd.model.model.TestOutcomeName;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;

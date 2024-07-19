@@ -1,11 +1,11 @@
 package net.serenitybdd.core.injectors;
 
-import net.serenitybdd.core.di.DependencyInjector;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.di.DependencyInjector;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
-import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.serenitybdd.annotations.Fields;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.DriverConfiguration;
 
 import java.lang.reflect.Field;

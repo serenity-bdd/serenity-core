@@ -1,13 +1,13 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.annotations.DefaultUrl;
-import net.thucydides.core.annotations.NamedUrl;
-import net.thucydides.core.annotations.NamedUrls;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.annotations.DefaultUrl;
+import net.serenitybdd.annotations.NamedUrl;
+import net.serenitybdd.annotations.NamedUrls;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
@@ -25,7 +25,7 @@ public class PageUrls {
     private static final String CLASSPATH_URL_PREFIX = "classpath:";
     private static final String NAMED_URL_PREFIX = "page:";
     private static final int CLASSPATH_URL_PREFIX_LENGTH = CLASSPATH_URL_PREFIX.length();
-    private Object pageObject;
+    private final Object pageObject;
 
     private String pageLevelDefaultBaseUrl;
 

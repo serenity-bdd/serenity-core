@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.1.21-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-cucumber</artifactId>
     <packaging>jar</packaging>
@@ -69,7 +69,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit5.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -92,17 +91,26 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-core</artifactId>
-            <version>${cucumber.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apiguardian</groupId>
+                    <artifactId>apiguardian-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>${cucumber.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apiguardian</groupId>
+                    <artifactId>apiguardian-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
-            <version>${cucumber.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -119,7 +127,6 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java8</artifactId>
-            <version>${cucumber.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -131,7 +138,6 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>datatable-matchers</artifactId>
-            <version>${cucumber.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -143,9 +149,14 @@
 
         <!-- TEST DEPENDENCIES -->
         <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
@@ -161,26 +172,21 @@
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-api</artifactId>
-            <version>1.8.2</version>
             <scope>test</scope>
         </dependency>
          <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-engine</artifactId>
-            <version>1.8.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-testkit -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-testkit</artifactId>
-            <version>1.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -205,12 +211,6 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-           <groupId>io.cucumber</groupId>
-           <artifactId>cucumber-junit-platform-engine</artifactId>
-           <version>${cucumber.version}</version>
-           <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

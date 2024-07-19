@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.adaptors
 
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor
 
 
 class MyAdaptor implements TestOutcomeAdaptor {

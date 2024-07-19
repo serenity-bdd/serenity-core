@@ -3,8 +3,8 @@ package net.thucydides.junit.runners
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.samples.*
@@ -17,7 +17,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import static net.thucydides.core.model.TestResult.*
+import static net.thucydides.model.domain.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
 
 class WhenRunningTestScenarios extends Specification {
@@ -28,8 +28,8 @@ class WhenRunningTestScenarios extends Specification {
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
     }
 
 
@@ -55,7 +55,7 @@ class WhenRunningTestScenarios extends Specification {
     @Ignore
     def "should be able to record the driver used for a test"() {
         given:
-            def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox);
+            def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox)
         when:
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
@@ -66,7 +66,7 @@ class WhenRunningTestScenarios extends Specification {
     @Ignore
     def "should be able to record the driver used for a test when a different driver is specified"() {
         given:
-            def runner = new SerenityRunner(SamplePassingScenarioUsingChrome);
+            def runner = new SerenityRunner(SamplePassingScenarioUsingChrome)
         when:
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
@@ -121,7 +121,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleScenarioWithStateVariables, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -136,7 +136,7 @@ class WhenRunningTestScenarios extends Specification {
             def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
-            def outcomes = runner.testOutcomes;
+            def outcomes = runner.testOutcomes
             def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_manual_test' }
         then:
             manualOutcome.isManual()
@@ -148,7 +148,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
-            def outcomes = runner.testOutcomes;
+            def outcomes = runner.testOutcomes
             def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_successful_manual_test' }
         then:
             manualOutcome.isManual()
@@ -160,7 +160,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_failing_manual_test' }
         then:
         manualOutcome.isManual()
@@ -174,7 +174,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_failing_manual_test_with_a_message' }
         then:
         manualOutcome.isManual()
@@ -197,7 +197,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleScenarioWithFailingNestedNonStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -211,7 +211,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleScenarioWithFailingNestedStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -228,7 +228,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleScenarioWithFailingNonStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -242,7 +242,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SamplePendingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         then:
         outcomes[0].result == PENDING
         outcomes[0].testSteps == []
@@ -253,7 +253,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SamplePassingScenarioWithPrivateFields, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -273,7 +273,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SamplePassingScenarioWithFieldsInParent, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         outcomes.size() == 3
@@ -294,7 +294,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(testclass, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         def results = resultsFrom(outcomes)
         then:
         results["happy_day_scenario"].result == happy_day_result
@@ -315,7 +315,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new SerenityRunner(SampleEmptyTestFailing, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes;
+        def outcomes = runner.testOutcomes
         then:
         outcomes.size() == 1
         outcomes[0].result == FAILURE
@@ -327,7 +327,7 @@ class WhenRunningTestScenarios extends Specification {
             def runner = new SerenityRunner(SampleDynamicTableScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
-            def outcomes = runner.testOutcomes;
+            def outcomes = runner.testOutcomes
         then:
             outcomes.size() == 1
             outcomes.get(0).getDataTable().getRows().size() == 3
@@ -340,7 +340,7 @@ class WhenRunningTestScenarios extends Specification {
             def runner = new SerenityRunner(SampleOutsideStepFailure, webDriverFactory)
         when:
             runner.run(new RunNotifier())
-            def outcomes = runner.testOutcomes;
+            def outcomes = runner.testOutcomes
         then:
             outcomes.size() == 1
             outcomes[0].result == FAILURE
@@ -353,7 +353,7 @@ class WhenRunningTestScenarios extends Specification {
         when:
         runner.run(new RunNotifier())
         then:
-        def steps = runner.testOutcomes[0].testSteps;
+        def steps = runner.testOutcomes[0].testSteps
         def stepResults = steps.collect {it.result}
         stepResults == [SUCCESS, SUCCESS, IGNORED, SUCCESS, FAILURE, SKIPPED]
     }
@@ -365,8 +365,8 @@ class WhenRunningTestScenarios extends Specification {
         when:
         runner.run(new RunNotifier())
         then:
-        runner.testOutcomes[0].result == IGNORED;
-        runner.testOutcomes[0].testSteps == [];
+        runner.testOutcomes[0].result == IGNORED
+        runner.testOutcomes[0].testSteps == []
 
     }
 
@@ -520,7 +520,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should ignore close if the webdriver is not defined"() {
         when:
-        def manager = new SerenityWebdriverManager(webDriverFactory, new WebDriverConfiguration(environmentVariables));
+        def manager = new SerenityWebdriverManager(webDriverFactory, new WebDriverConfiguration(environmentVariables))
         then:
         manager.closeDriver()
     }
@@ -592,9 +592,9 @@ class WhenRunningTestScenarios extends Specification {
     }
 
     private File reload(File old) {
-        return Paths.get(old.getAbsolutePath()).toFile();
+        return Paths.get(old.getAbsolutePath()).toFile()
     }
     private Path reload(Path old) {
-        return Paths.get(old.toAbsolutePath().toString());
+        return Paths.get(old.toAbsolutePath().toString())
     }
 }

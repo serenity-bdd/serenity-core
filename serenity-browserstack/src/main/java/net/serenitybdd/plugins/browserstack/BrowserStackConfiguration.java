@@ -1,8 +1,8 @@
 package net.serenitybdd.plugins.browserstack;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
 
@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
  */
 class BrowserStackConfiguration {
 
-    public static final String BROWSERSTACK_OPTIONS = "\"bstack:options\"";
+    public static final String BROWSERSTACK_OPTIONS = "bstack:options";
     public static final String BROWSERSTACK_OPTIONS_PATH = "webdriver.capabilities." + BROWSERSTACK_OPTIONS;
 
     static boolean isActiveFor(EnvironmentVariables environmentVariables) {

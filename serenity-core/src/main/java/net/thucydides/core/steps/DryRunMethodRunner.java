@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 
 import java.lang.reflect.Method;
 import java.util.List;

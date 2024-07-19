@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.asciidoc
 
 import net.serenitybdd.reports.asciidoc.configuration.SerenityReport
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

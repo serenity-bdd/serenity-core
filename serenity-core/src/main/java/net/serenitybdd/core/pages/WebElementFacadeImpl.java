@@ -3,14 +3,13 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
-import net.serenitybdd.core.time.InternalSystemClock;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.model.time.InternalSystemClock;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.TemporalUnitConverter;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -19,6 +18,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Coordinates;
@@ -33,13 +33,12 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
-import static net.thucydides.core.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
+import static net.thucydides.model.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 
@@ -373,7 +372,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 return element.isDisplayed();
             }
 
-        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException |
+                 TimeoutException e) {
             return false;
         }
     }
@@ -721,7 +721,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 waitForCondition().until(elementToBeClickable(getElement()));
                 return true;
             }
-        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException |
+                 TimeoutException e) {
             return false;
         }
         return false;
@@ -741,8 +742,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
         WithRetries.on(this).perform(elementFacade -> {
-                elementFacade.getElement().clear();
-                elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keyValue));
+            elementFacade.getElement().clear();
+            elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keyValue));
         }, 12);
         notifyScreenChange();
         return this;
@@ -751,6 +752,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private CharSequence[] nonNullCharSequenceFrom(CharSequence... charSequences) {
         return Arrays.stream(charSequences).filter(chars -> chars != null).collect(Collectors.toList()).toArray(new CharSequence[]{});
     }
+
     /**
      * Type a value into a field and then press Enter, making sure that the field is empty first.
      *
@@ -1040,14 +1042,19 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private boolean hasValueAttribute(WebElement element) {
         try {
             return element.getAttribute("value") != null;
-        } catch (UnsupportedCommandException exception){
+        } catch (UnsupportedCommandException exception) {
             return false;
         }
     }
 
     @Override
     public Wait<WebDriver> waitForCondition() {
-        return new FluentWait<>(driver, webdriverClock, sleeper).withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds)).pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH)).ignoring(NoSuchElementException.class, NoSuchFrameException.class);
+        return new FluentWait<>(driver, webdriverClock, sleeper)
+                .withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds))
+                .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
+                .ignoreAll(Arrays.asList(NoSuchElementException.class,
+                                         NoSuchFrameException.class,
+                                         StaleElementReferenceException.class));
     }
 
     @Override
@@ -1098,6 +1105,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         return getElement().getAttribute("textContent");
+    }
+
+    @Override
+    public String getAriaLabel() {
+        return getAttribute("aria-label");
+    }
+
+    @Override
+    public String getRole() {
+        return getAttribute("role");
     }
 
     @Override
@@ -1417,6 +1434,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public ListOfWebElementFacades findNestedElementsMatching(ResolvableElement nestedElement) {
         return nestedElement.resolveAllFor(this);
     }
+
     public static ListOfWebElementFacades fromWebElements(List<WebElement> elements) {
         List<WebElementFacade> facades = elements.stream().map(element -> WebElementFacadeImpl.wrapWebElement(Serenity.getDriver(), element)).collect(Collectors.toList());
         return new ListOfWebElementFacades(facades);

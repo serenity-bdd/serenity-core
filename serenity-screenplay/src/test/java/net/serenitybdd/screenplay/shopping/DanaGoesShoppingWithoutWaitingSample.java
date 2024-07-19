@@ -1,16 +1,16 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.ThisTakesTooLong;
+import net.serenitybdd.screenplay.shopping.questions.BrokenQuestion;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
-import net.serenitybdd.screenplay.waits.Wait;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Every;
 import org.junit.Test;
@@ -27,7 +27,6 @@ import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theT
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
 import static net.serenitybdd.screenplay.shopping.tasks.Checkout.fastCheckout;
-import static net.serenitybdd.screenplay.shopping.tasks.Checkout.slowCheckout;
 import static net.serenitybdd.screenplay.shopping.tasks.JoinTheCheckoutQueue.joinTheCheckoutQueue;
 import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -254,6 +253,19 @@ public class DanaGoesShoppingWithoutWaitingSample {
                 seeThat(theTotalCost(), equalTo(20)));
     }
 
+
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithABrokenQuestion() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
+                purchase().aPear().thatCosts(5).dollars());
+
+        then(dana).should(seeThat(BrokenQuestion.thatThrowsAnException(), equalTo(10)));
+    }
+
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithAQuestionWithAFailingAssertion() {
+        when(dana).should(seeThat(BrokenQuestion.thatThrowsAnAssertionError(), equalTo(10)));
+    }
 
     // Expected to fail with two failures and a skipped
     @Test

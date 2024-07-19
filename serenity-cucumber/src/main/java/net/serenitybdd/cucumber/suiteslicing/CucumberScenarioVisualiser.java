@@ -3,11 +3,9 @@ package net.serenitybdd.cucumber.suiteslicing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.cucumber.gherkin.CucumberScenarioLoader;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.cucumber.util.PathUtils;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

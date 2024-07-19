@@ -4,25 +4,30 @@ import com.google.common.base.Preconditions;
 
 import io.cucumber.core.resource.ClassLoaders;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.parallel.Agency;
 import net.serenitybdd.core.parallel.Agent;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.events.TestLifecycleEvents;
-import net.thucydides.core.model.*;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.TestFailureCause;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +35,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
+import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
 /**
  * An event bus for Step-related notifications.
@@ -55,11 +61,11 @@ public class StepEventBus {
 
     private static boolean noCleanupForStickyBuses = false;
 
-    private static String JUNIT_CONFIG_FILE_NAME = "junit-platform.properties";
+    private static final String JUNIT_CONFIG_FILE_NAME = "junit-platform.properties";
 
     private static boolean jUnit5ParallelMode = false;
 
-    private Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
+    private final Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
 
     static {
         jUnit5ParallelMode =  isJUnit5ParallelMode();
@@ -130,8 +136,8 @@ public class StepEventBus {
 
     private TestResultTally resultTally;
 
-    private Stack<String> stepStack = new Stack<>();
-    private Stack<Boolean> webdriverSuspensions = new Stack<>();
+    private final Stack<String> stepStack = new Stack<>();
+    private final Stack<Boolean> webdriverSuspensions = new Stack<>();
 
     private Set<StepListener> customListeners;
 
@@ -322,7 +328,7 @@ public class StepEventBus {
     private Set<StepListener> getCustomListeners() {
 
         if (customListeners == null) {
-            customListeners = Collections.synchronizedSet(new HashSet<StepListener>());
+            customListeners = Collections.synchronizedSet(new HashSet<>());
 
             ServiceLoader<StepListener> stepListenerServiceLoader = ServiceLoader.load(StepListener.class);
             Iterator<StepListener> listenerImplementations = stepListenerServiceLoader.iterator();
@@ -446,7 +452,9 @@ public class StepEventBus {
 
     private void recordTestMetadataFor(TestOutcome outcome) {
         outcome.setTestSource(testSource);
-        outcome.setContext(TestContext.forTheCurrentTest().getContext());
+        if (!TestContext.forTheCurrentTest().getContext().isEmpty()) {
+            outcome.setContext(TestContext.forTheCurrentTest().getContext());
+        }
     }
 
     private void recordTestContext() {
@@ -615,15 +623,22 @@ public class StepEventBus {
         stepFailed = true;
     }
 
-    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+    public void stepFailed(final StepFailure failure,
+                           List<ScreenshotAndHtmlSource> screenshotList,
+                           boolean isInDataDrivenTest,
+                           ZonedDateTime timestamp) {
 
         stepDone();
         getResultTally().logFailure(failure);
 
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.stepFailed(failure,screenshotList);
+            stepListener.stepFailed(failure,screenshotList,isInDataDrivenTest, timestamp);
         }
         stepFailed = true;
+    }
+
+    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
+        stepFailed(failure,screenshotList,isInDataDrivenTest, ZonedDateTime.now());
     }
 
 
@@ -942,6 +957,7 @@ public class StepEventBus {
      */
     public void takeScreenshot() {
         if (!isDryRun()) {
+//            getBaseStepListener().notifyUIError();
             getBaseStepListener().takeScreenshot();
         }
     }

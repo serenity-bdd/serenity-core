@@ -2,8 +2,8 @@ package net.serenitybdd.reports.json
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -46,7 +46,7 @@ class WhenGeneratingAJsonSummaryReportWithManualTests {
         fun `should report coverage for manual tests`() {
             val coverages = jsonTree.getAsJsonArray("coverage")
 
-            val coverageTagSubtitles = mutableListOf<String>();
+            val coverageTagSubtitles = mutableListOf<String>()
             for (coverage in coverages) {
                 val tagCoverages = coverage.asJsonObject.getAsJsonArray("tagCoverages")
                 for (tagCoverage in tagCoverages) {

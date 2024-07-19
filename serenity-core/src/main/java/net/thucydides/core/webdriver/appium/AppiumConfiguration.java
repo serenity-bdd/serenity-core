@@ -1,15 +1,11 @@
 package net.thucydides.core.webdriver.appium;
 
-import io.appium.java_client.remote.AndroidMobileCapabilityType;
-import io.appium.java_client.remote.IOSMobileCapabilityType;
-import io.appium.java_client.remote.MobileCapabilityType;
-import io.appium.java_client.remote.YouiEngineCapabilityType;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.driverproviders.AddLoggingPreferences;
 import net.serenitybdd.core.webdriver.driverproviders.SetProxyConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
@@ -225,10 +221,10 @@ public class AppiumConfiguration {
 
     private static List<String> collectAppiumCapabilities() {
         Class<?>[] capabilityClasses = {
-                MobileCapabilityType.class,
-                AndroidMobileCapabilityType.class,
-                IOSMobileCapabilityType.class,
-                YouiEngineCapabilityType.class
+//                MobileCapabilityType.class,
+//                AndroidMobileCapabilityType.class,
+//                IOSMobileCapabilityType.class,
+//                YouiEngineCapabilityType.class
         };
 
         List<String> mobileCapabilities = new ArrayList<>();

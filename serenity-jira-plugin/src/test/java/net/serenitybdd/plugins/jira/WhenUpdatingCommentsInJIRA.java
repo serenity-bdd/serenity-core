@@ -1,18 +1,18 @@
 package net.serenitybdd.plugins.jira;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.plugins.jira.domain.IssueComment;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.service.NoSuchIssueException;
 import net.serenitybdd.plugins.jira.workflow.ClasspathWorkflowLoader;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

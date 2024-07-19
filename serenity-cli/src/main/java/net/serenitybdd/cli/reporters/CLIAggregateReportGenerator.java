@@ -1,8 +1,7 @@
 package net.serenitybdd.cli.reporters;
 
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
-import net.thucydides.core.requirements.Requirements;
-import org.apache.commons.lang3.StringUtils;
+import net.thucydides.model.requirements.Requirements;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -47,7 +46,8 @@ public class CLIAggregateReportGenerator implements CLIReportGenerator {
     @Override
     public void generateReportsFrom(Path sourceDirectory) throws IOException {
 
-        Requirements requirements = RequirementsStrategy.forDirectory(requirementsDirectory);
+        Requirements requirements = RequirementsStrategy.forJSONOutputsIn(sourceDirectory)
+                                                        .andFeatureFilesIn(requirementsDirectory);
         HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter(project, requirements);
         reporter.setSourceDirectory(sourceDirectory.toFile());
         reporter.setOutputDirectory(destinationDirectory.toFile());

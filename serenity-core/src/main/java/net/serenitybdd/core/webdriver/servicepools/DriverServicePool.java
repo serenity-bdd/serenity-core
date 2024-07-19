@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -24,7 +24,7 @@ public abstract class DriverServicePool<T extends DriverService> {
 
     protected abstract String serviceName();
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Used as a fallback if the driver service cannot be used for some reason.

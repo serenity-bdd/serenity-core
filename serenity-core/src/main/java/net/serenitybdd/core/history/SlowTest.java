@@ -1,6 +1,7 @@
 package net.serenitybdd.core.history;
 
-import net.thucydides.core.model.flags.Flag;
+
+import net.thucydides.model.domain.flags.Flag;
 
 public enum SlowTest implements Flag {
 

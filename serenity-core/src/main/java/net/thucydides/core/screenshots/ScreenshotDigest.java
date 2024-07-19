@@ -1,7 +1,8 @@
 package net.thucydides.core.screenshots;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.annotations.BlurLevel;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class ScreenshotDigest {
     public String forScreenshot(File screenshotFile) throws IOException {
         try(InputStream screenshot = new FileInputStream(screenshotFile)){
             return DigestUtils.sha256Hex(screenshot)
-                + "_" + blurLevel.orElse(BlurLevel.NONE).toString()
+                + "_" + blurLevel.orElse(BlurLevel.NONE)
                 + optionalWidth()
                 + ".png";
         }

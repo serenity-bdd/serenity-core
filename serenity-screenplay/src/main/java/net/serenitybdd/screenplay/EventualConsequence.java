@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.time.Stopwatch;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.time.Stopwatch;
 import net.serenitybdd.markers.CanBeSilent;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
-    private List<Performable> setupActions = new ArrayList<>();
+    private final List<Performable> setupActions = new ArrayList<>();
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeoutInMilliseconds) {
         this(consequenceThatMightTakeSomeTime, timeoutInMilliseconds, false);
@@ -37,7 +37,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime) {
         this(consequenceThatMightTakeSomeTime,
-             ConfiguredEnvironment.getConfiguration().getElementTimeoutInSeconds() * 1000);
+             ConfiguredEnvironment.getConfiguration().getElementTimeoutInSeconds() * 1000L);
     }
 
     public static <T> EventualConsequence<T> eventually(Consequence<T> consequenceThatMightTakeSomeTime) {

@@ -1,11 +1,12 @@
 package net.thucydides.core.bootstrap;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.reports.ReportService;
+import net.thucydides.model.reports.ReportService;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
@@ -44,16 +45,16 @@ class ThucydidesContext {
      */
     private File outputDirectory;
 
-    private String defaultDriver;
+    private final String defaultDriver;
 
     private Pages pages;
 
     /**
      * Thucydides configuration data
      */
-    private Configuration configuration;
+    private final Configuration configuration;
 
-    private WebdriverManager webdriverManager;
+    private final WebdriverManager webdriverManager;
 
     private ThucydidesContext(StepListener... additionalListeners) {
         this(null, additionalListeners);

@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 
 /**
  * Created by john on 1/11/2015.

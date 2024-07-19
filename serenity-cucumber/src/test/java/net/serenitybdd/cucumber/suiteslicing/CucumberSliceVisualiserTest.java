@@ -1,9 +1,9 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 import io.cucumber.gherkin.ScenarioLineCountStatistics;
-import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.annotations.Narrative;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,12 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.DefaultCapabilityTypes
+import net.thucydides.model.requirements.FileSystemRequirements
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.requirements.Requirements
+import net.thucydides.model.requirements.RequirementsTagProvider
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
@@ -12,10 +17,10 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "Should be able to load capabilities from the default directory structure"() {
         given: "We are using the default requirements service"
-            Requirements requirements = new FileSystemRequirements("sample-story-directories/capabilities_and_features")
+        Requirements requirements = new FileSystemRequirements("sample-story-directories/capabilities_and_features")
         when: "We load the available requirements"
         def capabilities = requirements.requirementsService.requirements
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         def capabilityTypes = capabilities.collect { it.type }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
@@ -36,24 +41,24 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features with spaces")
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
     }
 
     def "Should be able to load capabilities from a directory structure containing spaces in the path"() {
         given: "We are using the default requirements provider"
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("stories");
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("stories")
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat", "Raise chickens"]
         and: "the child requirements should be found"
         def growCucumbers = capabilities.get(0)
-        def cucumberFeatures = growCucumbers.children.collect { it.name }
-        cucumberFeatures == ["Grow green cucumbers"]
 
+        def cucumberFeatureNames = growCucumbers.children.collect { it.name }
+        cucumberFeatureNames == ["grow green cucumbers"]
     }
 
     def "Should be able to load issues from the default directory structure"() {
@@ -74,7 +79,8 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         then: "the capability should be found"
         def potatoeGrowingCapability = capabilities.get(1)
         then: "the title should be a human-readable version of the directory name"
-        potatoeGrowingCapability.name == "Grow potatoes"
+        potatoeGrowingCapability.name == "grow_potatoes"
+        potatoeGrowingCapability.displayName == "Grow potatoes"
     }
 
     def "Should support feature files in the requirements directory"() {
@@ -95,7 +101,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
             def environmentVariables = new MockEnvironmentVariables()
             environmentVariables.setProperty("serenity.requirement.types", "feature, story")
         and:
-            RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/narrative_files",0,environmentVariables);
+            RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/narrative_files",0,environmentVariables)
         when: "We load requirements with nested capability directories"
             def capabilities = capabilityProvider.getRequirements()
             def types = capabilities.collect { it -> it.type }
@@ -109,7 +115,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         def environmentVariables = new MockEnvironmentVariables()
 //        environmentVariables.setProperty("serenity.requirement.types", "feature, story")
         and:
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/simple-features",0,environmentVariables);
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/simple-features",0,environmentVariables)
         when: "We load requirements with a directory containing features and narratives"
         def capabilities = capabilityProvider.getRequirements()
         def types = capabilities.collect { it -> it.type }
@@ -120,7 +126,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
 
     def "Should map features files in the requirements directory"() {
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/feature_files");
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/feature_files")
         when: "We load requirements with nested capability directories"
         def capabilities = capabilityProvider.getRequirements()
 
@@ -135,7 +141,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "The capability is determined by a configurable convention"() {
         given: "We are using the default requirements provider"
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features");
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features")
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
         then: "the requirements should be of type 'capability"
@@ -145,7 +151,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "capabilities can be nested"() {
         given: "We are using the default requirements provider"
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features");
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features")
         when: "We load requirements with nested capability directories"
         def capabilities = capabilityProvider.getRequirements()
         then: "the nested requirements should be recorded"
@@ -158,7 +164,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "nested capability types are set by convention if no narrative.txt files are present"() {
         given: "We are using the default requirements provider"
-        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/two-level-feature-files-with-no-narratives/features");
+        RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/two-level-feature-files-with-no-narratives/features")
         when: "We load requirements with nested requirement directories and no narrative.txt files"
         def capabilities = capabilityProvider.getRequirements()
         def theme = capabilities.get(0)
@@ -170,10 +176,10 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "default nested requirement types can be overridden using an environment variable"() {
         given: "We are using the default requirements provider"
-        EnvironmentVariables vars = new MockEnvironmentVariables();
+        EnvironmentVariables vars = new MockEnvironmentVariables()
         and: "We define the requirement type hierarchy in the environment variables"
         vars.setProperty("serenity.requirement.types", "a, b, c")
-        FileSystemRequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/two-level-feature-files-with-no-narratives/features", 0, vars);
+        FileSystemRequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/two-level-feature-files-with-no-narratives/features", 0, vars)
         when: "We load requirements with nested requirement directories and no .narrative files"
         def capabilities = capabilityProvider.getRequirements()
         then: "the second-level requirement are of type 'epic'"

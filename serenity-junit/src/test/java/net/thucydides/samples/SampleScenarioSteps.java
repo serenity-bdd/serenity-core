@@ -2,9 +2,9 @@ package net.thucydides.samples;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Assume;
@@ -13,6 +13,7 @@ import org.openqa.selenium.ElementNotInteractableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -251,7 +252,9 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     private void action() {
         try {
-            Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5));
+            System.out.println("STEP EXECUTED " + ZonedDateTime.now());
+//            Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5));
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

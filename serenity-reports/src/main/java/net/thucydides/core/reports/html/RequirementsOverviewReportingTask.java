@@ -1,26 +1,29 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.reports.ScenarioOutcomeGroup;
-import net.thucydides.core.reports.TestOutcomes;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.time.Stopwatch;
 import net.thucydides.core.reports.html.accessibility.ChartColorScheme;
-import net.thucydides.core.requirements.JSONRequirementsTree;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.reports.RequirementOutcome;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.requirements.reports.ScenarioOutcomes;
-import net.thucydides.core.tags.BreadcrumbTagFilter;
-import net.thucydides.core.tags.OutcomeTagFilter;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.domain.Rule;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.core.reports.ScenarioOutcomeGroup;
+import net.thucydides.model.reports.ReportOptions;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.RequirementsFilter;
+import net.thucydides.model.reports.html.ScenarioResultCounts;
+import net.thucydides.model.reports.html.TagFilter;
+import net.thucydides.model.requirements.JSONRequirementsTree;
+import net.thucydides.model.requirements.RequirementsService;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.reports.RequirementOutcome;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.requirements.reports.ScenarioOutcome;
+import net.thucydides.model.requirements.reports.ScenarioOutcomes;
+import net.thucydides.model.tags.BreadcrumbTagFilter;
+import net.thucydides.model.tags.OutcomeTagFilter;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +32,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
-import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.model.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
 class RequirementsOverviewReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -47,7 +49,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     private final String relativeLink;
     private final String reportName;
     private boolean asParentRequirement;
-    private RequirementsFilter requirementsFilter;
+    private final RequirementsFilter requirementsFilter;
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
                                              EnvironmentVariables environmentVariables,
@@ -116,7 +118,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         List<Requirement> requirements;
         if (requirementsOutcomes.getParentRequirement().isPresent()) {
-            requirements = Arrays.asList(requirementsOutcomes.getParentRequirement().get());
+            requirements = List.of(requirementsOutcomes.getParentRequirement().get());
             context.put("requirement", requirementsOutcomes.getParentRequirement().get());
             context.put("requirementTags", new TagFilter().removeHiddenTagsFrom(requirementsOutcomes.getParentRequirement().get().getTags()));
         } else {

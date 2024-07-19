@@ -1,6 +1,6 @@
 package net.serenitybdd.core.pages;
 
-import net.thucydides.core.annotations.At;
+import net.serenitybdd.annotations.At;
 
 import java.util.ArrayList;
 import java.util.HashMap;

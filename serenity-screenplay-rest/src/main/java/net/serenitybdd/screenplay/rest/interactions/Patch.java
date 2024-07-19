@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.rest.interactions;
 
 import net.serenitybdd.screenplay.Actor;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.rest.abilities.CallAnApi.as;

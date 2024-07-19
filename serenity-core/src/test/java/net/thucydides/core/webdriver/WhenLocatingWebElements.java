@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.thucydides.core.annotations.locators.SmartAjaxElementLocator;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.model.steps.StepFailure;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

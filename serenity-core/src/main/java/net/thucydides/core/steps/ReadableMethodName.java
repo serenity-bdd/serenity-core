@@ -1,5 +1,7 @@
 package net.thucydides.core.steps;
 
+import net.thucydides.model.steps.StepArgumentWriter;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;

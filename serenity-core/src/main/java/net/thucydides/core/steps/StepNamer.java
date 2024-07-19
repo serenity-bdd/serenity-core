@@ -1,8 +1,10 @@
 package net.thucydides.core.steps;
 
+import net.thucydides.model.steps.StepArgumentWriter;
+
 import java.lang.reflect.Method;
 
-import static net.thucydides.core.util.Inflector.inflection;
+import static net.thucydides.model.util.Inflector.inflection;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 public class StepNamer {

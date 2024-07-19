@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 
 /*
 "'rgba(153,204,51,0.5)'",      // PASSING

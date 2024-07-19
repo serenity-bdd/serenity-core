@@ -1,15 +1,19 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.reports.model.DurationDistribution;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.TagExclusions;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_TEST_DURATIONS;
 
 public class ResultReports {
 
@@ -19,7 +23,8 @@ public class ResultReports {
                                                          File outputDirectory,
                                                          ReportNameProvider reportNameProvider) {
 
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables, testOutcomes);
+
 
         return Stream.of(
                 // RESULT REPORTS
@@ -121,24 +126,26 @@ public class ResultReports {
 
         List<ReportingTask> tasks = new ArrayList<>();
 
-        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomesForThisTag);
-        durationDistribution.getDurationBuckets().forEach(
-                bucket -> {
-                    if (!bucket.getOutcomes().isEmpty()) {
-                        String label = "Duration " + bucket.getDuration();
-                        if (!currentTag.getCompleteName().isEmpty()) {
-                            label = currentTag.getName() + " > " + label;
+        if (SERENITY_REPORT_TEST_DURATIONS.booleanFrom(environmentVariables,true)) {
+            DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomesForThisTag);
+            durationDistribution.getDurationBuckets().forEach(
+                    bucket -> {
+                        if (!bucket.getOutcomes().isEmpty()) {
+                            String label = "Duration " + bucket.getDuration();
+                            if (!currentTag.getCompleteName().isEmpty()) {
+                                label = currentTag.getName() + " > " + label;
+                            }
+                            tasks.add(durationReport(freemarker,
+                                    environmentVariables,
+                                    outputDirectory,
+                                    TestOutcomes.of(bucket.getTestOutcomes()).withLabel(label),
+                                    reportName,
+                                    currentTag,
+                                    bucket.getDuration()));
                         }
-                        tasks.add(durationReport(freemarker,
-                                environmentVariables,
-                                outputDirectory,
-                                TestOutcomes.of(bucket.getTestOutcomes()).withLabel(label),
-                                reportName,
-                                currentTag,
-                                bucket.getDuration()));
                     }
-                }
-        );
+            );
+        }
         return tasks.stream();
     }
 

@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
@@ -10,17 +10,17 @@ import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.facts.Fact;
 import net.serenitybdd.screenplay.facts.FactLifecycleListener;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.annotations.Step;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.events.StepFinishedEvent;
 import net.thucydides.core.steps.events.StepPendingEvent;
 import net.thucydides.core.steps.events.StepStartedEvent;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIO
 import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.THROW_EXCEPTION_ON_FAILURE;
 import static net.serenitybdd.screenplay.SilentTasks.isNestedInSilentTask;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
-import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
+import static net.thucydides.model.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
 
 /**
  * An actor represents the person or system using the application under test.
@@ -43,12 +43,12 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private String id;
     private String name;
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
-    private EventBusInterface eventBusInterface = new EventBusInterface();
-    private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
+    private final EventBusInterface eventBusInterface = new EventBusInterface();
+    private final ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
 
     private String description;
-    private Map<String, Object> notepad = new HashMap<>();
-    private Map<Class, Ability> abilities = new HashMap<>();
+    private final Map<String, Object> notepad = new HashMap<>();
+    private final Map<Class, Ability> abilities = new HashMap<>();
 
     private String preferredPronoun;
 
@@ -172,7 +172,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         attemptsTo(todos);
     }
 
-    private List<FactLifecycleListener> factListeners = new ArrayList<>();
+    private final List<FactLifecycleListener> factListeners = new ArrayList<>();
 
     public final void has(Fact... facts) {
         Arrays.stream(facts).forEach(
@@ -472,7 +472,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private void endPerformance(ErrorHandlingMode mode) {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
         boolean isAFixtureMethod = StepEventBus.getParallelEventBus().inFixtureMethod();
-        if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod) {
+        if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod && !eventBusInterface.softAssertsActive()) {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
                         StepEventBus.getParallelEventBus().notifyFailure();

@@ -1,13 +1,13 @@
 package net.thucydides.core.scheduling;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

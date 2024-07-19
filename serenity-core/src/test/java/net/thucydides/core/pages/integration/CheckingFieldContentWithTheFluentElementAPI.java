@@ -26,7 +26,7 @@ public class CheckingFieldContentWithTheFluentElementAPI {
     @BeforeClass
     public static void openStaticPage() {
         ChromeOptions options = new ChromeOptions();
-        options.setHeadless(true);
+        options.addArguments("--headless");
         localDriver = new ChromeDriver(options);
         page = new StaticSitePage(localDriver);
         page.open();

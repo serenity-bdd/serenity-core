@@ -1,18 +1,18 @@
 package net.serenitybdd.screenplay.waits;
 
 import net.serenitybdd.screenplay.Actor;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import org.awaitility.Awaitility;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT;
 
 public class WaitOnSupplier extends WaitWithTimeout {
 
-    private Callable<Boolean> expectedState;
+    private final Callable<Boolean> expectedState;
 
     public WaitOnSupplier(Callable<Boolean> expectedState) {
         this.expectedState = expectedState;

@@ -1,6 +1,8 @@
 package net.thucydides.core.reports.adaptors
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.adaptors.AdaptorService
+import net.thucydides.model.reports.adaptors.UnknownAdaptor
 import spock.lang.Specification
 
 class WhenFindingAdaptors extends Specification {

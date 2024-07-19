@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.construction;
 
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 

@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;

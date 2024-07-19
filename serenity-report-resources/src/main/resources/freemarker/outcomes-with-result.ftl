@@ -216,11 +216,15 @@
                                         <div id="summary" class="tab-pane fade in active">
                                             <div class="container-fluid">
                                                 <div class="row">
-                                                    <div class="col-sm-4">
+                                                    <#if reportDurations >
+                                                        <#assign chartClassStyle = "col-sm-4" >
+                                                    <#else>
+                                                        <#assign chartClassStyle = "col-sm-6" >
+                                                    </#if>
+                                                    <div class="${chartClassStyle}">
                                                         <@key_statistics testOutcomes=testOutcomes />
-
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="${chartClassStyle}">
                                                         <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
                                                         <!-- Severity bar chart -->
                                                         <div class="chart-container" style="position: relative; width:30vw">
@@ -228,6 +232,7 @@
                                                         </div>
                                                     </div>
 
+                                                    <#if reportDurations >
                                                     <div class="col-sm-4">
                                                         <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
 
@@ -236,6 +241,7 @@
                                                             <canvas id="durationChart" width="300" height="300"></canvas>
                                                         </div>
                                                     </div>
+                                                    </#if>
                                                 </div>
                                             </div>
                                             <div class="container-fluid">
@@ -439,23 +445,23 @@
                                                                     </#if>
                                                                 </td>
                                                                 <td>
-                                                                    <i class="bi bi-table" title="Data Driven Scenario">
-                                                                        <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
-                                                                        <#if exampleOutcome.hasSubtitle() >
-                                                                            <br/>${exampleOutcome.subtitle}
-                                                                        </#if>
+                                                                    <i class="bi bi-table" title="Data Driven Scenario"></i>
+                                                                    <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
+                                                                    <#if exampleOutcome.hasSubtitle() >
+                                                                        <br/>${exampleOutcome.subtitle}
+                                                                    </#if>
+                                                                    <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                        &nbsp;
+                                                                        <a href="${scenario.externalLink.url}"
+                                                                           title="${scenario.externalLink.type}">
+                                                                            <i class="fs-2 bi bi-camera-reels"></i>
+                                                                        </a>
+                                                                    </#if>
                                                                 </td>
                                                                 <td>${exampleOutcome.stepCount}</td>
                                                                 <td>${exampleOutcome.formattedStartTime}</td>
                                                                 <td>${exampleOutcome.formattedDuration}</td>
                                                                 <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
-                                                                    <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
-                                                                        &nbsp;
-                                                                        <a href="${scenario.externalLink.url}" class="tag"
-                                                                           title="${scenario.externalLink.type}">
-                                                                            <i class="fs-2 bi bi-camera-reels"></i>
-                                                                        </a>
-                                                                    </#if>
                                                                 </td>
                                                             </tr>
                                                         </#list>
@@ -466,18 +472,19 @@
                                                                     <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                 </#if>
                                                             </td>
-                                                            <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
-                                                            <td>${scenario.stepCount}</td>
-                                                            <td>${scenario.formattedStartTime}</td>
-                                                            <td>${scenario.formattedDuration}</td>
-                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                            <td><a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                 <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                     &nbsp;
-                                                                    <a href="${scenario.externalLink.url}" class="tag"
+                                                                    <a href="${scenario.externalLink.url}"
                                                                        title="${scenario.externalLink.type}">
                                                                         <i class="fs-2 bi bi-camera-reels"></i>
                                                                     </a>
                                                                 </#if>
+                                                            </td>
+                                                            <td>${scenario.stepCount}</td>
+                                                            <td>${scenario.formattedStartTime}</td>
+                                                            <td>${scenario.formattedDuration}</td>
+                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
                                                             </td>
                                                         </tr>
                                                     </#if>

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.stubs.WebDriverStub
 import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Specification
@@ -24,7 +24,7 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
         environmentVariables.setProperty("webdriver.provided.mydriver", "net.thucydides.core.webdriver.MyDriverSource")
         def factory = new WebDriverFactory(environmentVariables)
         when:
-        driver = factory.newWebdriverInstance(ProvidedDriver);
+        driver = factory.newWebdriverInstance(ProvidedDriver)
         then:
         driver.class == WebDriverStub
     }

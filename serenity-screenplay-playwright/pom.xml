@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.1.21-SNAPSHOT</version>
     </parent>
 
     <artifactId>serenity-screenplay-playwright</artifactId>
@@ -13,7 +13,7 @@
     <name>Serenity Screenplay Playwright Integration</name>
 
     <properties>
-        <playwright.version>1.22.0</playwright.version>
+        <playwright.version>1.41.0</playwright.version>
     </properties>
 
     <build>
@@ -31,7 +31,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
                 <configuration>
                     <parallel>all</parallel>
                     <threadCount>8</threadCount>
@@ -74,13 +74,16 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

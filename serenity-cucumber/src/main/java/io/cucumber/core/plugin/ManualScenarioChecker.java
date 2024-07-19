@@ -3,14 +3,14 @@ package io.cucumber.core.plugin;
 
 
 import io.cucumber.messages.types.Tag;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.jsoup.internal.StringUtil;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.CURRENT_TARGET_VERSION;
+import static net.thucydides.model.ThucydidesSystemProperty.CURRENT_TARGET_VERSION;
 
 public class ManualScenarioChecker {
     private final EnvironmentVariables environmentVariables;

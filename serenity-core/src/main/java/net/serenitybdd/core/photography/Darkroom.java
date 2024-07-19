@@ -2,8 +2,8 @@ package net.serenitybdd.core.photography;
 
 import net.serenitybdd.core.photography.bluring.Blurer;
 import net.serenitybdd.core.photography.resizing.Resizer;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_SCREENSHOTS;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_COMPRESS_SCREENSHOTS;
 
 /**
  * A darkroom processes and saves screenshots that were taken during the tests.
@@ -19,15 +19,17 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_SCR
 public class Darkroom {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
-    private final static List<PhotoFilter> DEFAULT_PROCESSORS = Arrays.asList(new Blurer());
+    private final static List<PhotoFilter> DEFAULT_PROCESSORS = List.of(new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
     private final EnvironmentVariables environmentVariables;
 
     public void isOpenForBusiness() {
-        if (theDarkroomIsClosed()) {
-            LOGGER.debug("Opening darkroom");
-            start();
+        synchronized (this) {
+            if (theDarkroomIsClosed()) {
+                LOGGER.debug("Opening darkroom");
+                start();
+            }
         }
     }
 
@@ -61,7 +63,9 @@ public class Darkroom {
     }
 
     public void start() {
-
+        if (theDarkroomIsOpen()) {
+            return; // Already open, no need to start again.
+        }
         this.processingLine = new DarkroomProcessingLine(getProcessors());
         screenshotThread = new Thread(processingLine,"Darkroom Processing Line");
         screenshotThread.setDaemon(true);
@@ -71,6 +75,7 @@ public class Darkroom {
     public void terminate() {
         if (processingLine != null) {
             shutdownProcessingLine();
+            processingLine = null; // Clear the processing line to ensure the darkroom is marked as closed.
         }
         DarkroomFileSystem.close();
     }

@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.model.screenshots.Screenshot;
+import net.thucydides.model.domain.screenshots.Screenshot;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,8 +1,8 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.Instrumented;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.stream;
-import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
+import static net.thucydides.model.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
 
 public class InstrumentedTask {
 

@@ -10,7 +10,7 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 
 import java.io.File;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_IE_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_IE_DRIVER;
 
 public class InternetExplorerServicePool extends DriverServicePool<InternetExplorerDriverService> {
 

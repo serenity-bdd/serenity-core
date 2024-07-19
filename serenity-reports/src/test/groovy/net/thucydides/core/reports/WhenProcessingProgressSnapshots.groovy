@@ -1,6 +1,6 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.reports.history.ProgressSnapshot
+import net.thucydides.model.reports.history.ProgressSnapshot
 import org.joda.time.DateTime
 import spock.lang.Specification
 
@@ -9,7 +9,7 @@ class WhenProcessingProgressSnapshots extends Specification {
     def "should format date for javascript graphs"() {
         when:
             DateTime time = new DateTime(2012,06,21,10,15,02);
-            ProgressSnapshot snapshot = ProgressSnapshot.forRequirementType("capability")
+        ProgressSnapshot snapshot = ProgressSnapshot.forRequirementType("capability")
                                                         .atTime(time)
                                                         .with(5).completed()
                                                         .and(1).failed()

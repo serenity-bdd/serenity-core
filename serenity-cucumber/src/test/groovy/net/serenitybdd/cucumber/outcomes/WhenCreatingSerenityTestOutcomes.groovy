@@ -1,13 +1,13 @@
 package net.serenitybdd.cucumber.outcomes
 
 import net.serenitybdd.cucumber.integration.*
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.steps.TestSourceType
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.steps.TestSourceType
 import org.assertj.core.util.Files
 import spock.lang.Specification
 
@@ -24,11 +24,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record failures for a failing scenario"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(FailingScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(FailingScenario.class, outputDirectory)
 
         when:
-        runtime.run();
-        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
         then:
@@ -48,11 +48,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
         def steps = testOutcome.testSteps.collect { step -> step.description }
 
@@ -66,11 +66,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record results for each step"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -82,11 +82,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record failures for failing scenario outlines"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(FailingScenarioOutline.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(FailingScenarioOutline.class, outputDirectory)
 
         when:
-        runtime.run();
-        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
 
@@ -101,11 +101,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record a feature tag based on the name of the feature when the feature name is different from the feature file name"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithALongName.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithALongName.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -114,11 +114,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record the capability tag based on the directory of the feature if known"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithALongName.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithALongName.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -127,11 +127,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record background steps"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithTableInBackgroundSteps.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithTableInBackgroundSteps.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -140,11 +140,11 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
     def "should record table data in steps"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithTableInBackgroundSteps.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithTableInBackgroundSteps.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -169,11 +169,11 @@ Feature: A simple feature with tags
 
     def "should record any provided tags"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithTags.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithTags.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -185,11 +185,11 @@ Feature: A simple feature with tags
 
     def "should record the narrative text"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithNarrativeTexts.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithNarrativeTexts.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -198,11 +198,11 @@ Feature: A simple feature with tags
 
     def "should record the scenario description text for a scenario"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithNarrativeTexts.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithNarrativeTexts.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -212,11 +212,11 @@ Feature: A simple feature with tags
 
     def "should record pending and skipped steps for a pending scenario"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(PendingScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(PendingScenario.class, outputDirectory)
 
         when:
-        runtime.run();
-        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
 
@@ -228,10 +228,10 @@ Feature: A simple feature with tags
 
     def "should generate a well-structured Thucydides test outcome for feature files with several Cucumber scenario"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenarios.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenarios.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -259,10 +259,10 @@ Feature: A simple feature with tags
 
     def "should generate outcomes for scenarios with a background section"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -279,10 +279,10 @@ Feature: A simple feature with tags
 
     def "should read @issue tags"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -295,51 +295,51 @@ Feature: A simple feature with tags
 
     def "should fill @issue keys"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(BasicArithmeticScenario.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.each { outcome ->
             outcome.tags.contains(TestTag.withName("ISSUE-123").andType("issue"))
-            outcome.getIssueKeys().contains("ISSUE-123");
+            outcome.getIssueKeys().contains("ISSUE-123")
         }
         and:
         recordedTestOutcomes[0].tags.contains(TestTag.withName("ISSUE-456").andType("issue"))
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-123");
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-456");
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-123")
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-456")
     }
 
     def "should fill @issues keys"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(FeatureWithMoreIssuesTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(FeatureWithMoreIssuesTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.each { outcome ->
             outcome.tags.contains(TestTag.withName("ISSUE-123,ISSUE-789").andType("issues"))
-            outcome.getIssueKeys().contains("ISSUE-123");
-            outcome.getIssueKeys().contains("ISSUE-789");
+            outcome.getIssueKeys().contains("ISSUE-123")
+            outcome.getIssueKeys().contains("ISSUE-789")
         }
         and:
         recordedTestOutcomes[0].tags.contains(TestTag.withName("ISSUE-456,ISSUE-001").andType("issues"))
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-456");
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-001");
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-123");
-        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-789");
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-456")
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-001")
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-123")
+        recordedTestOutcomes[0].getIssueKeys().contains("ISSUE-789")
     }
 
     def "scenarios with the @pending tag should be reported as Pending"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenariosWithPendingTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenariosWithPendingTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -368,10 +368,10 @@ Feature: A simple feature with tags
 
     def "individual scenarios with the @pending tag should be reported as Pending"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithPendingTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithPendingTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -389,10 +389,10 @@ Feature: A simple feature with tags
 
     def "Scenarios in a feature file with the @pending tag should all be reported as Pending"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(FeatureWithPendingTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(FeatureWithPendingTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -411,10 +411,10 @@ Feature: A simple feature with tags
 
     def "individual scenarios with the @wip tag should be reported as Skipped"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithSkippedTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(ScenariosWithSkippedTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -432,10 +432,10 @@ Feature: A simple feature with tags
 
     def "scenarios with the @wip tag should be reported as skipped"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenariosWithSkippedTag.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(MultipleScenariosWithSkippedTag.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -463,10 +463,10 @@ Feature: A simple feature with tags
 
     def "throwing PendingException should be reported as Pending"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(ScenarioThrowingPendingException.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(ScenarioThrowingPendingException.class, outputDirectory)
 
         when:
-        runtime.run();
+        runtime.run()
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
@@ -482,11 +482,11 @@ Feature: A simple feature with tags
 
     def "should store correct test source in outcome"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -498,11 +498,11 @@ Feature: A simple feature with tags
 
     def "should run steps defined as lambdas"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithLambdaSteps.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithLambdaSteps.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -511,18 +511,18 @@ Feature: A simple feature with tags
 
     def "should contain rule information in test outcome"() {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithRules.class, outputDirectory);
+        def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithRules.class, outputDirectory)
 
         when:
-        runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        runtime.run()
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def firstTestOutcome = recordedTestOutcomes[0]
         def secondTestOutcome = recordedTestOutcomes[1]
 
         then:
         firstTestOutcome.rule.getName() == "This is a simple rule"
-        firstTestOutcome.rule.getDescription().trim() == "Simple first rule description";
+        firstTestOutcome.rule.getDescription().trim() == "Simple first rule description"
         secondTestOutcome.rule.getName() == "This is a simple second rule"
-        secondTestOutcome.rule.getDescription().trim() == "Simple second rule description";
+        secondTestOutcome.rule.getDescription().trim() == "Simple second rule description"
     }
 }

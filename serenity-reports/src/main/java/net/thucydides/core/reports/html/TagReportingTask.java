@@ -2,12 +2,14 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
+import net.serenitybdd.model.time.Stopwatch;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.TagExclusions;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -134,7 +135,8 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                            final List<String> requirementTypes,
                                            final List<String> knownRequirementReportNames) {
 
-            TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+            TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables, testOutcomes);
+
             Set<TestTag> reportedTags = testOutcomes.getTags().stream()
                     .filter(exclusions::doNotExclude)
                     .filter(tag -> !requirementTag(requirementTypes, tag))

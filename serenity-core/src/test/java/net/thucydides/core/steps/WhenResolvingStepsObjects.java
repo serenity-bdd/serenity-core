@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.steps.construction.StepsClassResolver;
 import org.junit.Assert;
 import org.junit.Before;

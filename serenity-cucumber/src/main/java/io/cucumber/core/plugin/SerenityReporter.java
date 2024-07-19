@@ -22,25 +22,25 @@ import net.serenitybdd.cucumber.CucumberWithSerenity;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.*;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
-import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.requirements.FeatureFilePath;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.Rule;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.domain.stacktrace.RootCauseAnalyzer;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.requirements.FeatureFilePath;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.util.Inflector;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.TestSourceType;
+import net.thucydides.model.util.Inflector;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -56,9 +56,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Cucumber Formatter for Serenity.
+ * @deprecated - use the SerenityParallelReporter now
  *
  * @author L.Carausu (liviu.carausu@gmail.com)
  */
+@Deprecated(since="4.0.50")
 public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private static final String OPEN_PARAM_CHAR = "\uff5f";
@@ -66,14 +68,14 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private static final String SCENARIO_OUTLINE_NOT_KNOWN_YET = "";
 
-    private Configuration systemConfiguration;
+    private final Configuration systemConfiguration;
 
     private final List<BaseStepListener> baseStepListeners;
 
     private final static String FEATURES_ROOT_PATH = "/features/";
     private final static String FEATURES_CLASSPATH_ROOT_PATH = ":features/";
 
-    private FeatureFileLoader featureLoader = new FeatureFileLoader();
+    private final FeatureFileLoader featureLoader = new FeatureFileLoader();
 
     private LineFilters lineFilters;
 
@@ -81,11 +83,11 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerenityReporter.class);
 
-    private ManualScenarioChecker manualScenarioDateChecker;
+    private final ManualScenarioChecker manualScenarioDateChecker;
 
-    private ThreadLocal<ScenarioContext> localContext = ThreadLocal.withInitial(ScenarioContext::new);
+    private final ThreadLocal<ScenarioContext> localContext = ThreadLocal.withInitial(ScenarioContext::new);
 
-    private Set<URI> contextURISet = new CopyOnWriteArraySet<>();
+    private final Set<URI> contextURISet = new CopyOnWriteArraySet<>();
 
     protected ScenarioContext getContext() {
         return localContext.get();
@@ -107,7 +109,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
     }
 
-    private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
+    private final FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
 
     private StepEventBus getStepEventBus(URI featurePath) {
         URI prefixedPath = featurePathFormatter.featurePathWithPrefixIfNecessary(featurePath);
@@ -127,14 +129,14 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         baseStepListeners.add(listeners.getBaseStepListener());
     }
 
-    private EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
-    private EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
-    private EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
-    private EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
-    private EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
-    private EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
-    private EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
-    private EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
+    private final EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
+    private final EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
+    private final EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
+    private final EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
+    private final EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
+    private final EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
+    private final EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
+    private final EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
     protected void handleTestRunStarted(TestRunStarted event) {
     }
@@ -176,11 +178,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         boolean useDecodedURI = systemConfiguration.getEnvironmentVariables().getPropertyAsBoolean("use.decoded.url", false);
         String pathURIAsString;
         if (useDecodedURI) {
-            try {
-                pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                pathURIAsString = fullPathUri.toString();
-            }
+            pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8);
         } else {
             pathURIAsString = fullPathUri.toString();
         }
@@ -743,7 +741,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         for (Tag tag : cucumberTags) {
             if (tag.getName().startsWith("@issue:")) {
                 String tagIssueValue = tag.getName().substring("@issue:".length());
-                issues.add(tagIssueValue);
+                issues.addAll(Arrays.asList(tagIssueValue.split(",")));
             }
             if (tag.getName().startsWith("@issues:")) {
                 String tagIssuesValues = tag.getName().substring("@issues:".length());
@@ -927,7 +925,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         if (!latestTestOutcome().get().testStepWithDescription(stepTitle).isPresent()) {
             return false;
         }
-        Optional<net.thucydides.core.model.TestStep> matchingTestStep = latestTestOutcome().get().testStepWithDescription(stepTitle);
+        Optional<net.thucydides.model.domain.TestStep> matchingTestStep = latestTestOutcome().get().testStepWithDescription(stepTitle);
         if (matchingTestStep.isPresent() && matchingTestStep.get().getNestedException() != null) {
             return (matchingTestStep.get().getNestedException().getOriginalCause() == cause);
         }
@@ -947,7 +945,12 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private boolean isAssumptionFailure(Throwable rootCause) {
-        return (AssumptionViolatedException.class.isAssignableFrom(rootCause.getClass()));
+        try {
+            Class<?> assumptionViolationException = Class.forName("org.junit.AssumptionViolatedException");
+            return assumptionViolationException.isAssignableFrom(rootCause.getClass());
+        } catch (ClassNotFoundException var3) {
+            return false;
+        }
     }
 
     private String stepTitleFrom(io.cucumber.messages.types.Step currentStep, TestStep testStep) {

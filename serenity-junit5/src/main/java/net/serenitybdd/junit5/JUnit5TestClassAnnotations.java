@@ -25,6 +25,8 @@ public class JUnit5TestClassAnnotations {
 
         Annotation displayNameGenerationAnnotation = testClass.getAnnotation(DisplayNameGeneration.class);
         if (displayNameGenerationAnnotation != null) {
+
+
             DisplayNameGenerator nameGenerator = DisplayNameGenerator.getDisplayNameGenerator(testClass.getAnnotation(DisplayNameGeneration.class).value());
             return Optional.of(nameGenerator.generateDisplayNameForMethod(testClass, javaMethod));
         }

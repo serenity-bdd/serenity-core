@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.browserstack;
 
 import com.google.gson.*;
-import net.serenitybdd.core.model.TestOutcomeName;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.serenitybdd.model.model.TestOutcomeName;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.Header;
@@ -176,15 +176,16 @@ public class BrowserStackTestSession {
             return null;
         }
 
+        String sessionBody = null;
         try {
             HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom().
                                                             setCookieSpec(CookieSpecs.STANDARD).build()).build();
             HttpGet querySessionInfo = new HttpGet(getSessionUri());
             HttpEntity sessionDetails = httpClient.execute(querySessionInfo).getEntity();
-            String sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));
+            sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));
             sessionElement = gson.fromJson(sessionBody, JsonElement.class);
         } catch (IOException | JsonSyntaxException | JsonIOException e) {
-            LOGGER.error("Failed to connect to Browserstack API.", e);
+            LOGGER.error("Failed to connect to Browserstack API for session " + sessionId + System.lineSeparator() + sessionBody, e);
         }
 
         if (sessionElement == null) {

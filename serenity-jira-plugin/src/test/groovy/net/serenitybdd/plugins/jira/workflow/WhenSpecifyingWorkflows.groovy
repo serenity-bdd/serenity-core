@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.jira.workflow
 
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 import spock.lang.Specification
 
 class WhenSpecifyingWorkflows extends Specification {

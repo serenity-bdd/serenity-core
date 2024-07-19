@@ -1,14 +1,15 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.NumericalFormatter;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.formatters.ReportFormatter;
-import net.thucydides.core.requirements.reports.RenderMarkdown;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.NumericalFormatter;
+import net.thucydides.model.domain.Story;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.reports.html.DescriptionSplitter;
+import net.thucydides.model.requirements.reports.RenderMarkdown;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -194,6 +195,36 @@ public class WhenFormattingForHTML {
         String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("&Eacute;rintett befogad&aacute;sa"));
 
         assertThat(htmlFormatted, equalTo("&Eacute;rintett befogad&aacute;sa"));
+    }
+
+    @Test
+    public void markdown_should_render_formatting() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("**bold**"));
+
+        assertThat(htmlFormatted, equalTo("<strong>bold</strong>"));
+    }
+
+    @Test
+    public void markdown_should_render_images() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("![Wordle Game](assets/wordle.png)"));
+
+        assertThat(htmlFormatted, equalTo("<img src=\"assets/wordle.png\" alt=\"Wordle Game\" />"));
+    }
+
+    @Test
+    public void markdown_should_render_resized_images() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("![Image_30x30](./test-image.jpg =30x30)"));
+
+        assertThat(htmlFormatted, equalTo("<img src=\"./test-image.jpg\" alt=\"Image_30x30\" width=\"30px\" height=\"30px\"></img>"));
     }
 
     @Test

@@ -6,9 +6,9 @@ import net.serenitybdd.demos.todos.screenplay.tasks.Start;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,9 +47,9 @@ public class LearnAboutTheApplication {
 
         then(james).should(
             seeThat(Application.information(),
-                displays("title",equalTo("AngularJS • TodoMVC")),
+                displays("title",equalTo("Serenity/JS TodoApp")),
                 displays("heading",equalTo("todos")),
-                displays("about", containsString("Credits"))
+                displays("about", containsString("Serenity/JS TodoApp, based on TodoMVC"))
             )
         );
     }

@@ -1,14 +1,14 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -18,13 +18,15 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_DRIVER;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER;
 
 /**
  * A Remote Driver using services like Browserstack, LambdaTest or SauceLabs (for remote web testing), or Selenium Grid.
@@ -44,6 +46,8 @@ public class RemoteDriverProvider implements DriverProvider {
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return RemoteWebdriverStub.from(environmentVariables);
+        } else if (isAppium(environmentVariables)) {
+            return new AppiumDriverProvider(fixtureProviderService).newInstance(options, environmentVariables);
         } else {
             //
             // The remote url is defined in serenity.conf or can be defined in a class that implements ProvidesRemoteWebdriverUrl
@@ -83,6 +87,10 @@ public class RemoteDriverProvider implements DriverProvider {
         }
     }
 
+    private boolean isAppium(EnvironmentVariables environmentVariables) {
+        return "appium".equalsIgnoreCase(WEBDRIVER_REMOTE_DRIVER.from(environmentVariables));
+    }
+
     private URL getRemoteUrlFrom(EnvironmentVariables environmentVariables) {
 
         String remoteUrl = null;
@@ -100,8 +108,8 @@ public class RemoteDriverProvider implements DriverProvider {
             if (remoteUrl == null) {
                 throw new RemoteDriverConfigurationError("A webdriver.remote.url property must be defined when using a Remote driver.");
             }
-            return new URL(remoteUrl);
-        } catch (MalformedURLException e) {
+            return new URI(remoteUrl).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RemoteDriverConfigurationError("Incorrectly formed webdriver.remote.url property: " + remoteUrl, e);
         }
     }

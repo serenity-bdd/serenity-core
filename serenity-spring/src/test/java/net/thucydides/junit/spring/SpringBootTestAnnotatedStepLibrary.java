@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
 
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.junit.spring.samples.dao.GizmoDao;
 import net.thucydides.junit.spring.samples.service.BazingaService;
 import net.thucydides.junit.spring.samples.service.GizmoService;

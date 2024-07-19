@@ -1,26 +1,28 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.core.ListenerInWrongPackage;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.util.ExtendedTemporaryFolder;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.annotations.Feature;
+import net.serenitybdd.annotations.Story;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.domain.features.ApplicationFeature;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.model.screenshots.ScreenshotException;
 import net.thucydides.core.steps.samples.FlatScenarioSteps;
 import net.thucydides.core.steps.samples.NestedScenarioSteps;
 import net.thucydides.core.steps.samples.StepsDerivedFromADifferentDomain;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.util.FileSystemUtils;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.junit.*;
 import org.mockito.Mock;
@@ -338,7 +340,7 @@ public class WhenRecordingStepExecutionResults {
     @Test
     public void the_listener_should_record_the_tested_story_instance_without_a_class() {
 
-        StepEventBus.getParallelEventBus().testSuiteStarted(net.thucydides.core.model.Story.from(MyStory.class));
+        StepEventBus.getParallelEventBus().testSuiteStarted(net.thucydides.model.domain.Story.from(MyStory.class));
         StepEventBus.getParallelEventBus().testStarted("app should work");
 
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
@@ -352,7 +354,7 @@ public class WhenRecordingStepExecutionResults {
 
         StepEventBus.getParallelEventBus().testSuiteStarted(MyStory.class);
         StepEventBus.getParallelEventBus().testStarted("app_should_work", MyStory.class);
-        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.core.model.Story.from(MyStory.class));
+        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.model.domain.Story.from(MyStory.class));
 
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
@@ -363,13 +365,13 @@ public class WhenRecordingStepExecutionResults {
     @Test
     public void the_listener_should_record_mulitple_tested_story_instances_without_a_class_via_the_tests() {
 
-        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.core.model.Story.from(MyStory.class));
+        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.model.domain.Story.from(MyStory.class));
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
-        StepEventBus.getParallelEventBus().testStarted("app should still work", net.thucydides.core.model.Story.from(MyStory.class));
+        StepEventBus.getParallelEventBus().testStarted("app should still work", net.thucydides.model.domain.Story.from(MyStory.class));
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
-        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.core.model.Story.from(AnotherStory.class));
+        StepEventBus.getParallelEventBus().testStarted("app should work", net.thucydides.model.domain.Story.from(AnotherStory.class));
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
@@ -471,7 +473,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        net.thucydides.core.model.Story story = outcome.getUserStory();
+        net.thucydides.model.domain.Story story = outcome.getUserStory();
         assertThat(story.getStoryClassName(), is(MyStory.class.getName()));
     }
 
@@ -841,6 +843,31 @@ public class WhenRecordingStepExecutionResults {
         assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.FAILURE));
         assertThat(testOutcome.getTestSteps().get(1).getException().getErrorType(), is("java.lang.AssertionError"));
         assertThat(testOutcome.getTestSteps().get(1).getErrorMessage(), containsString("Step failed"));
+    }
+
+    @Test
+    public void a_failing_step_should_not_prevent_collecting_next_steps_result_if_soft_asserts_enabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+        steps.failingWithExceptionStep();
+        steps.step_two();
+        steps.failingWithExceptionStep();
+        steps.step_three();
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        assertThat(testOutcome.getTestSteps().size(), equalTo(5));
+        TestResult[] expectedResults = {TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS};
+        for (int i = 0; i < testOutcome.getTestSteps().size(); i++) {
+            assertThat(testOutcome.getTestSteps().get(i).getResult(), is(expectedResults[i]));
+        }
     }
 
     @Test

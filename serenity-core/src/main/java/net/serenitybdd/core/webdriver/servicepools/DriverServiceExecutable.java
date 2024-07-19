@@ -1,9 +1,9 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import net.serenitybdd.core.CurrentOS;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.CurrentOS;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.os.ExecutableFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ public class DriverServiceExecutable {
         private String exeProperty;
         private String documentationUrl;
         private Optional<EnvironmentVariables> environmentVariables = Optional.empty();
-        private boolean reportMissingBinary = false;
+        private final boolean reportMissingBinary = false;
 
         public DriverServiceExecutableBuilder(String exeName) {
             this.exeName = exeName;

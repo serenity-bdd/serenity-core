@@ -1,6 +1,6 @@
 package annotatedstorieswithcontents.nice_zucchinis;
 
-import net.thucydides.core.annotations.Narrative;
+import net.serenitybdd.annotations.Narrative;
 
 @Narrative(
         title = "A Narrative for test3",

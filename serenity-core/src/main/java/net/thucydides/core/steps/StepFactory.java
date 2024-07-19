@@ -4,25 +4,26 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.TypeCache;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.VisibilityBridgeStrategy;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewSet;
-import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.collect.NewSet;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.ConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryType;
-import net.thucydides.core.steps.di.DependencyInjectorService;
+import net.thucydides.model.steps.di.DependencyInjectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,12 +53,12 @@ public class StepFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
 
-    private static ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial(() -> new StepFactory());
+    private static final ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial(() -> new StepFactory());
     private Method privateLookupIn;
     private Object lookup;
 
     private final ByteBuddy byteBuddy;
-    private TypeCache<TypeCache.SimpleKey> proxyCache;
+    private final TypeCache<TypeCache.SimpleKey> proxyCache;
 
     /**
      * Create a new step factory.
@@ -65,7 +66,8 @@ public class StepFactory {
      * are created.
      */
     public StepFactory(final Pages pages) {
-        this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED );
+        this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED )
+                                        .with(VisibilityBridgeStrategy.Default.NEVER);
         this.pages = pages;
         this.dependencyInjectorService = SerenityInfrastructure.getDependencyInjectorService();
         this.proxyCache = new TypeCache.WithInlineExpunction<TypeCache.SimpleKey>( TypeCache.Sort.WEAK );
@@ -357,7 +359,7 @@ public class StepFactory {
     }
 
     private <T> T stepLibraryWithPages(final Class<T> scenarioStepsClass, final Class proxyClass, final Interceptor interceptor) throws IllegalAccessException, InstantiationException {
-        final ProxyConfiguration newStepLibrary = (ProxyConfiguration)(T) proxyClass.newInstance();;
+        final ProxyConfiguration newStepLibrary = (ProxyConfiguration) proxyClass.newInstance();
         newStepLibrary.$$_serenity_set_interceptor(interceptor);
         return injectPagesInto(scenarioStepsClass, (T)newStepLibrary);
     }

@@ -1,8 +1,8 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Steps;
 
 import net.thucydides.samples.SampleScenarioSteps;
 
@@ -27,7 +27,7 @@ public class SimpleSuccessfulParameterizedTestSample {
 
 
     @ParameterizedTest
-    @ValueSource(strings = { "A", "B" ,"C"})
+    @ValueSource(strings = { "D", "E" ,"F","H"})
     public void test2() {
     }
 

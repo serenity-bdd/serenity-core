@@ -1,16 +1,12 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Manual;
+import net.serenitybdd.annotations.Steps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 public class AddDifferentSortsOfTodos {
 

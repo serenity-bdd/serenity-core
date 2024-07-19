@@ -1,6 +1,6 @@
 package net.thucydides.core.util;
 
-import net.serenitybdd.core.CurrentOS;
+import net.serenitybdd.model.CurrentOS;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
@@ -75,7 +75,7 @@ public class ExtendedTemporaryFolder extends ExternalResource {
             file = new File(file, folderName);
             if (!file.mkdir() && isLastElementInArray(i, folderNames)) {
                 throw new IOException(
-                        "a folder with the name \'" + folderName + "\' already exists");
+                        "a folder with the name '" + folderName + "' already exists");
             }
         }
         return file;

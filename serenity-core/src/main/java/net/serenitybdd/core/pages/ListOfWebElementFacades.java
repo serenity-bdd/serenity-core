@@ -37,8 +37,9 @@ public class ListOfWebElementFacades extends ArrayList<WebElementFacade> {
         return convert((list) -> list.stream().map(elementConverter).collect(Collectors.toList()));
     }
 
-    public List<? super WebElementFacade> filter(Predicate<? super WebElementFacade> condition) {
-        return convert((list) -> list.stream().filter(condition).collect(Collectors.toList()));
+    public ListOfWebElementFacades filter(Predicate<? super WebElementFacade> condition) {
+
+        return new ListOfWebElementFacades(convert((list) -> list.stream().filter(condition).collect(Collectors.toList())));
     }
 
     public void setFallback(Function<PageObject, ListOfWebElementFacades> fallbackMethod, PageObject page) {

@@ -1,5 +1,6 @@
 package net.thucydides.core.reports;
 
+import net.thucydides.model.reports.NumberOfThreads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

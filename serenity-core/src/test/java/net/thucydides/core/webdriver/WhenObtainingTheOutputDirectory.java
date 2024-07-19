@@ -1,9 +1,9 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.apache.commons.lang3.SystemUtils;
 import org.hamcrest.Matchers;
 import org.junit.After;

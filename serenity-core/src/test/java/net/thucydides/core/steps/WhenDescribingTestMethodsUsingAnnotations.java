@@ -1,9 +1,9 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.TestsRequirement;
-import net.thucydides.core.annotations.TestsRequirements;
-import net.thucydides.core.annotations.Title;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.TestsRequirement;
+import net.serenitybdd.annotations.TestsRequirements;
+import net.serenitybdd.annotations.Title;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

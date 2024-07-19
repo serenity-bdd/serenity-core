@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub;
 import net.thucydides.core.webdriver.stubs.IOSWebDriverStub;

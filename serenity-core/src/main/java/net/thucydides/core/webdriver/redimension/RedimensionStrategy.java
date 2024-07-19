@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver.redimension;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 enum RedimensionStrategy {

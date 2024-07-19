@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
+import net.thucydides.model.batches.BatchManager;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.DataTableRow;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;

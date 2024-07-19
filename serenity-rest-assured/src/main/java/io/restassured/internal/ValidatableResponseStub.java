@@ -263,4 +263,9 @@ public class ValidatableResponseStub implements ValidatableResponse {
     public ValidatableResponse time(Matcher<Long> matcher, TimeUnit timeUnit) {
         return new ValidatableResponseImpl("",null,null,null,null,null);
     }
+
+    @Override
+    public ValidatableResponse onFailMessage(String s) {
+        return new ValidatableResponseImpl("",null,null,null,null,null);
+    }
 }

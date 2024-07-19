@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.resources.FileResources;
-import net.thucydides.core.resources.ResourceList;
+import net.thucydides.model.resources.FileResources;
+import net.thucydides.model.resources.ResourceList;
 
 import java.io.File;
 import java.io.IOException;

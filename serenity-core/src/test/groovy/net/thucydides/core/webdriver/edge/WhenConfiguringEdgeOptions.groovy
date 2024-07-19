@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.edge
 
 import net.serenitybdd.core.webdriver.driverproviders.EdgeDriverCapabilities
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenConfiguringEdgeOptions extends Specification {

@@ -1,7 +1,8 @@
 package net.serenitybdd.core.environment;
 
 import com.typesafe.config.Config;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.Optional;

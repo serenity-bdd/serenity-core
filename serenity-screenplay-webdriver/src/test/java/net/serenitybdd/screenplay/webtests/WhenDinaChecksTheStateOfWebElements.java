@@ -6,10 +6,9 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Screenshots;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Screenshots;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -21,7 +20,7 @@ import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 @RunWith(SerenityRunner.class)
 public class WhenDinaChecksTheStateOfWebElements {
 
-    @Managed(driver = "firefox", options = "--headless")
+    @Managed(driver = "chrome", options = "--headless")
     WebDriver browser;
 
     Actor dana = new Actor("Dana");

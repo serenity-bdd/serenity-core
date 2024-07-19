@@ -2,17 +2,18 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.serenitybdd.core.webdriver.driverproviders.*;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -21,13 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
 
 /**
@@ -57,7 +55,7 @@ public class WebDriverFactory {
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            SerenityInfrastructure.getFixtureProviderService(),
+                SerenityInfrastructure.getFixtureProviderService(),
                 SerenityInfrastructure.getCloseBrowser());
     }
 
@@ -143,15 +141,7 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            if (shouldRetry(cause)) {
-                LOGGER.debug("Waiting to retry: " + cause.getMessage() + ")");
-                return waitThenRetry(driverClass, options, environmentVariables);
-            } else {
-                throw new DriverConfigurationError(
-                        "WebDriver was unable to create a new instance of type " + driverClass + System.lineSeparator()
-                        + "WebDriver reported the following message: " + cause.getMessage() + System.lineSeparator()
-                        + "See below for more details.", cause);
-            }
+            return waitThenRetry(driverClass, options, environmentVariables);
         }
     }
 
@@ -176,7 +166,7 @@ public class WebDriverFactory {
     private WebDriver waitThenRetry(Class<? extends WebDriver> driverClass,
                                     String options,
                                     EnvironmentVariables environmentVariables) {
-        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables, 30);
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_COUNT.integerFrom(environmentVariables, 6);
         return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, null);
     }
 
@@ -186,14 +176,16 @@ public class WebDriverFactory {
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
         LOGGER.debug("Remaining tries: " + remainingTries);
+        int retryDelay = WEBDRIVER_CREATION_RETRY_DELAY.integerFrom(environmentVariables, 5);
 
         if (remainingTries == 0) {
             throw new DriverConfigurationError(
                     "After several attempts, could not instantiate new WebDriver instance of type " + driverClass +
-                    " (" + cause.getMessage() + "). See below for more details.", cause);
+                            " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
-        PauseTestExecution.forADelayOf(30).seconds();
+        PauseTestExecution.forADelayOf(retryDelay).seconds();
+        Map<String, Integer> ageOfFriends = Map.of("Peter", 23, "Paul", 25, "Mary", 27);
 
         try {
             return createWebDriver(driverClass, options, environmentVariables);
@@ -212,7 +204,7 @@ public class WebDriverFactory {
                         .from(environmentVariables, "All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
                 partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
-                                       && (cause.getMessage().contains(partialErrorMessage))
+                        && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 
@@ -229,7 +221,7 @@ public class WebDriverFactory {
     }
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables) {
-       return EnvironmentSpecificConfiguration
+        return EnvironmentSpecificConfiguration
                 .from(environmentVariables)
                 .getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_DRIVER, DRIVER, WEBDRIVER_CAPABILITIES_BROWSERNAME)
                 .orElse(null);

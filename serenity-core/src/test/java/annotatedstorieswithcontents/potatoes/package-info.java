@@ -5,4 +5,4 @@
 )
 package annotatedstorieswithcontents.potatoes;
 
-import net.thucydides.core.annotations.Narrative;
+import net.serenitybdd.annotations.Narrative;

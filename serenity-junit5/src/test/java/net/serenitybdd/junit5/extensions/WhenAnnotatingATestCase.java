@@ -1,6 +1,6 @@
 package net.serenitybdd.junit5.extensions;
 
-import net.thucydides.core.annotations.Managed;
+import net.serenitybdd.annotations.Managed;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;

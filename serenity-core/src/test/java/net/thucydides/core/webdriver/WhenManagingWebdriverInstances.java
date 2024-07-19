@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

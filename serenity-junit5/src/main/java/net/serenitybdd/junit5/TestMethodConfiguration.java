@@ -1,8 +1,8 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.model.TestResult;
+import net.serenitybdd.annotations.Manual;
+import net.serenitybdd.annotations.Pending;
+import net.thucydides.model.domain.TestResult;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

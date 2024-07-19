@@ -1,12 +1,11 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.HasCustomFieldValues;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class AnonymousPerformable implements Performable, HasCustomFieldValues {
     private String title;

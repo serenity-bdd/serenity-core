@@ -1,7 +1,7 @@
 package net.thucydides.core.pages;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.At;
+import net.serenitybdd.annotations.At;
 import org.openqa.selenium.WebDriver;
 
 @At("#HOST/common/microRegistration")

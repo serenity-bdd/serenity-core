@@ -1,8 +1,8 @@
 package net.serenitybdd.core.steps
 
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.annotations.Steps
+import net.serenitybdd.annotations.Step
+import net.serenitybdd.annotations.Steps
 import spock.lang.Specification
 
 class WhenUsingScenarioActors extends Specification {

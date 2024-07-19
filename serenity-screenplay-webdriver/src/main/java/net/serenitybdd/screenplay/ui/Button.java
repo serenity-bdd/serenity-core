@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.ui;
 
-import net.serenitybdd.core.i8n.LocalisedLabels;
+import net.serenitybdd.model.i8n.LocalisedLabels;
 import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;

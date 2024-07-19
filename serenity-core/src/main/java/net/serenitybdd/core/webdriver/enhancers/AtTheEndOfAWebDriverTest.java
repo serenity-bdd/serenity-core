@@ -1,9 +1,9 @@
 package net.serenitybdd.core.webdriver.enhancers;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reflection.ClassFinder;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reflection.ClassFinder;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,8 +28,8 @@ public class AtTheEndOfAWebDriverTest {
         return new ArrayList<>(baseWebdriverTeardownClasses);
     }
 
-    private static List<AfterAWebdriverScenario> afterAWebdriverScenarios = Collections.synchronizedList(new ArrayList<>());;
-    private static AtomicBoolean fixturesLoaded = new AtomicBoolean(false);
+    private static List<AfterAWebdriverScenario> afterAWebdriverScenarios = Collections.synchronizedList(new ArrayList<>());
+    private static final AtomicBoolean fixturesLoaded = new AtomicBoolean(false);
 
     private static List<AfterAWebdriverScenario> afterAWebdriverScenarios(String extensionPackage) {
         if (!fixturesLoaded.get()) {

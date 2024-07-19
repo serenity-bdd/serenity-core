@@ -1,7 +1,10 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.requirements.model.NarrativeReader
-import net.thucydides.core.util.FileSystemUtils
+import net.thucydides.model.requirements.DefaultCapabilityTypes
+import net.thucydides.model.requirements.FileSystemRequirements
+import net.thucydides.model.requirements.Requirements
+import net.thucydides.model.requirements.model.NarrativeReader
+import net.thucydides.model.util.FileSystemUtils
 import spock.lang.Specification
 
 class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specification {
@@ -13,7 +16,7 @@ class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specific
     def "Directories in a 1-level directory structure represent the top level of the requirements hierarchy"() {
         given: "there is a readme.md file in a single-level directory structure"
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/one-level-feature-files/features/fruit")
-            Requirements requirements = new FileSystemRequirements("sample-story-directories/one-level-feature-files/features")
+        Requirements requirements = new FileSystemRequirements("sample-story-directories/one-level-feature-files/features")
         when:
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/one-level-feature-files/features")
             def narrative = reader.loadFrom(directoryContainingANarrative)
@@ -67,7 +70,7 @@ class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specific
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title and description should be loaded"
-            narrative.get().title.get() == "Grow more apples"
+            narrative.get().title.get() == "Grow apples"
             narrative.get().text.contains("In order to make apple pies") &&
             narrative.get().text.contains("As a farmer") &&
             narrative.get().text.contains("I want to grow apples")

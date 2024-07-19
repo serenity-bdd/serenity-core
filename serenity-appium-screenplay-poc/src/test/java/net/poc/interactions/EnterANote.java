@@ -5,7 +5,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.poc.model.Note;
 import net.poc.ui.AddNotePage;
 import net.poc.ui.CameraViewerPage;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

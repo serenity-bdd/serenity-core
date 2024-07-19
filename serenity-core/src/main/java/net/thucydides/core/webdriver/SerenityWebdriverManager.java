@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import io.appium.java_client.AppiumDriver;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -135,7 +135,6 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     @Override
     public void setCurrentDriver(WebDriver driver) {
-
         inThisTestThread().setCurrentDriverTo(driver);
     }
 

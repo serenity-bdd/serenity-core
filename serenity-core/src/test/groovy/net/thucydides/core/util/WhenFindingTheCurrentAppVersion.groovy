@@ -1,6 +1,7 @@
 package net.thucydides.core.util
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.VersionProvider
 import spock.lang.Specification
 
 
@@ -11,10 +12,10 @@ class WhenFindingTheCurrentAppVersion extends Specification {
 
     def "should find version from the versions.properties file"() {
         when:
-            VersionProvider versionProvider = new VersionProvider()
+        VersionProvider versionProvider = new VersionProvider()
         then:
             println versionProvider.version
-            versionProvider.version != null;
+            versionProvider.version != null
     }
 
     def "should find the build number from the environment variables"() {

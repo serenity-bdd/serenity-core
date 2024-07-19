@@ -67,8 +67,8 @@ class WhenUsingFluentAssertionsWithDates {
 
             @Test
             fun `when the date does not match`() {
-                shouldFailWithMessage("""|Expecting a value that is before: <2019-01-01>
-                                         |But got.........................: <2019-01-02>"""
+                shouldFailWithMessage("""|Expected: a value that is before: <2019-01-01>
+                                         |Actual:   <2019-01-02>"""
                         .trimMargin())
                         .whenChecking(that(wednesday).isBefore(tuesday))
             }
@@ -83,8 +83,8 @@ class WhenUsingFluentAssertionsWithDates {
 
             @Test
             fun `is not the expected day`() {
-                shouldFailWithMessage("""|Expecting a value that is on a: <THURSDAY>
-                                         |But got.......................: <2019-01-02>"""
+                shouldFailWithMessage("""|Expected: a value that is on a: <THURSDAY>
+                                         |Actual:   <2019-01-02>"""
                         .trimMargin())
                         .whenChecking(that(wednesday).isDayOfWeek(DayOfWeek.THURSDAY))
             }
@@ -99,8 +99,8 @@ class WhenUsingFluentAssertionsWithDates {
 
             @Test
             fun `is not the expected day`() {
-                shouldFailWithMessage("""|Expecting a value that is on day of month: <2>
-                                         |But got..................................: <2019-01-03>"""
+                shouldFailWithMessage("""|Expected: a value that is on day of month: <2>
+                                         |Actual:   <2019-01-03>"""
                         .trimMargin())
                         .whenChecking(that(thursday).isDayOfMonth(2))
             }
@@ -115,8 +115,8 @@ class WhenUsingFluentAssertionsWithDates {
 
             @Test
             fun `is not the expected month`() {
-                shouldFailWithMessage("""|Expecting a value that is in month: <MARCH>
-                                         |But got...........................: <2019-01-03>"""
+                shouldFailWithMessage("""|Expected: a value that is in month: <MARCH>
+                                         |Actual:   <2019-01-03>"""
                         .trimMargin())
                         .whenChecking(that(thursday).isInTheMonthOf(Month.MARCH))
             }
@@ -132,8 +132,8 @@ class WhenUsingFluentAssertionsWithDates {
 
             @Test
             fun `is not the expected year`() {
-                shouldFailWithMessage("""|Expecting a value that is in the year: <2000>
-                                         |But got..............................: <2019-01-03>"""
+                shouldFailWithMessage("""|Expected: a value that is in the year: <2000>
+                                         |Actual:   <2019-01-03>"""
                         .trimMargin())
                         .whenChecking(that(thursday).isTheYear(2000))
             }

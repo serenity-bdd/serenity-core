@@ -1,28 +1,27 @@
 package net.serenitybdd.plugins.browserstack;
 
-import com.typesafe.config.Config;
 import net.serenitybdd.core.environment.CustomDriverConfig;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.model.TestOutcomeName;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.TestLocalEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
 
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
-    private final static String BSTACK_OPTIONS = "\"bstack:options\"";
+    private final static String BSTACK_OPTIONS_CONFIG_PROPERTY = "\"bstack:options\"";
+    private final static String BSTACK_OPTIONS_CAPABILITY = "bstack:options";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -48,7 +47,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         }
 
         // Add any other options specified in the webdriver.capabilities.LT:Options section
-        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, BSTACK_OPTIONS).ifPresent(ltOptions -> {
+        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, BSTACK_OPTIONS_CONFIG_PROPERTY).ifPresent(ltOptions -> {
             ltOptions.entrySet().forEach(entry -> {
                 newOptions.put(entry.getKey(), entry.getValue().unwrapped());
             });
@@ -57,10 +56,14 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         // Add the test name to the capabilities
         newOptions.put("sessionName", testName);
 
-        // Add the Browserstack options to the capabilities
-        capabilities.setCapability(BSTACK_OPTIONS, newOptions);
+        // Add the build name to the capabilities
+        newOptions.put("buildName", BuildNameGenerator.forEnvironmentVariables(environmentVariables).getBuildName());
 
-        String context = fetchContextFrom(capabilities, environmentVariables, BSTACK_OPTIONS);
+
+        // Add the Browserstack options to the capabilities
+        capabilities.setCapability(BSTACK_OPTIONS_CAPABILITY, newOptions);
+
+        String context = fetchContextFrom(capabilities, environmentVariables, BSTACK_OPTIONS_CONFIG_PROPERTY);
         testOutcome.setContext(context);
 
         return capabilities;

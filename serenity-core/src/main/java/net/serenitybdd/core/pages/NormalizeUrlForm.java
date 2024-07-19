@@ -1,10 +1,7 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.InvalidPathException;
 
 public class NormalizeUrlForm {
     public static String ofUrl(String baseUrl) {

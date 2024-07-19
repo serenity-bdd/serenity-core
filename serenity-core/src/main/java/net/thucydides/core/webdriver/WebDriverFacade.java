@@ -3,21 +3,29 @@ package net.thucydides.core.webdriver;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.federatedcredentialmanagement.FederatedCredentialManagementDialog;
+import org.openqa.selenium.federatedcredentialmanagement.HasFederatedCredentialManagement;
 import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.Sequence;
+import org.openqa.selenium.print.PrintOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.virtualauthenticator.HasVirtualAuthenticator;
+import org.openqa.selenium.virtualauthenticator.VirtualAuthenticator;
+import org.openqa.selenium.virtualauthenticator.VirtualAuthenticatorOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
@@ -26,7 +34,11 @@ import java.util.function.Supplier;
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive, HasAuthentication {
+//public class RemoteWebDriver implements WebDriver, JavascriptExecutor, HasCapabilities, HasDownloads, HasFederatedCredentialManagement, HasVirtualAuthenticator, Interactive, PrintsPage, TakesScreenshot {
+public class WebDriverFacade implements WebDriver, JavascriptExecutor, HasCapabilities,
+        HasDownloads, HasFederatedCredentialManagement, HasVirtualAuthenticator,
+        Interactive, PrintsPage, TakesScreenshot,
+        ConfigurableTimeouts, HasAuthentication {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -113,7 +125,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
     }
 
     public WebDriver getProxiedDriver() {
-        if (StepEventBus.getParallelEventBus().isDryRun()){
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
             return new WebDriverStub();
         }
         if (proxiedWebDriver == null) {
@@ -145,7 +157,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
     }
 
     private void initializeProxiedDriver() {
-        if (StepEventBus.getParallelEventBus().isDryRun()){
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
             proxiedWebDriver = new WebDriverStub();
         }
         if (proxiedWebDriver == null) {
@@ -187,7 +199,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
             try {
                 return ((TakesScreenshot) getProxiedDriver()).getScreenshotAs(target);
             } catch (OutOfMemoryError outOfMemoryError) {
-                // Out of memory errors can happen with extremely big screens, and currently Selenium does
+                // Out of memory errors can happen with big screens, and currently Selenium does
                 // not handle them correctly/at all.
                 LOGGER.error("Failed to take screenshot - out of memory", outOfMemoryError);
             } catch (RuntimeException e) {
@@ -487,5 +499,369 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
         if (!(getProxiedDriver() instanceof HasAuthentication)) {
             throw new HasAuthenticationNotSupportedException("HasAuthentication not supported for driver " + getProxiedDriver());
         }
+    }
+
+    @Override
+    public List<String> getDownloadableFiles() {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            return ((HasDownloads) getProxiedDriver()).getDownloadableFiles();
+        } else {
+            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement HasDownloads");
+        }
+    }
+
+    @Override
+    public void downloadFile(String fileName, Path targetLocation) throws IOException {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            ((HasDownloads) getProxiedDriver()).downloadFile(fileName, targetLocation);
+        }
+    }
+
+    @Override
+    public void deleteDownloadableFiles() {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            ((HasDownloads) getProxiedDriver()).deleteDownloadableFiles();
+        }
+    }
+
+    @Override
+    public Pdf print(PrintOptions printOptions) throws WebDriverException {
+        if (getProxiedDriver() instanceof PrintsPage) {
+            return ((PrintsPage) getProxiedDriver()).print(printOptions);
+        } else {
+            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement PrintsPage");
+        }
+    }
+
+    @Override
+    public void setDelayEnabled(boolean enabled) {
+        if (getProxiedDriver() instanceof HasFederatedCredentialManagement) {
+            ((HasFederatedCredentialManagement) getProxiedDriver()).setDelayEnabled(enabled);
+        }
+    }
+
+    @Override
+    public void resetCooldown() {
+        if (getProxiedDriver() instanceof HasFederatedCredentialManagement) {
+            ((HasFederatedCredentialManagement) getProxiedDriver()).resetCooldown();
+        }
+    }
+
+    @Override
+    public FederatedCredentialManagementDialog getFederatedCredentialManagementDialog() {
+        if (getProxiedDriver() instanceof HasFederatedCredentialManagement) {
+            return ((HasFederatedCredentialManagement) getProxiedDriver()).getFederatedCredentialManagementDialog();
+        } else {
+            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement FederatedCredentialManagementDialog");
+        }
+    }
+
+    @Override
+    public VirtualAuthenticator addVirtualAuthenticator(VirtualAuthenticatorOptions options) {
+        if (getProxiedDriver() instanceof HasVirtualAuthenticator) {
+            return ((HasVirtualAuthenticator) getProxiedDriver()).addVirtualAuthenticator(options);
+        } else {
+            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement VirtualAuthenticator");
+        }
+    }
+
+    @Override
+    public void removeVirtualAuthenticator(VirtualAuthenticator authenticator) {
+        if (getProxiedDriver() instanceof HasVirtualAuthenticator) {
+            ((HasVirtualAuthenticator) getProxiedDriver()).removeVirtualAuthenticator(authenticator);
+        }
+    }
+
+//    @Override
+//    public SessionId getSessionId() {
+//        if (getProxiedDriver() instanceof RemoteWebDriver) {
+//            return ((RemoteWebDriver) getProxiedDriver()).getSessionId();
+//        } else {
+//            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement RemoteWebDriver");
+//        }
+//    }
+//
+//    @Override
+//    protected void setSessionId(String opaqueKey) {
+//        // use the proxied driver if it is a RemoteWebDriver
+//        try {
+//            if (getProxiedDriver() instanceof RemoteWebDriver) {
+//                Field sessionIdField = RemoteWebDriver.class.getDeclaredField("sessionId");
+//                sessionIdField.setAccessible(true); // Make the field accessible
+//                sessionIdField.set(getProxiedDriver(), new SessionId(opaqueKey)); // Set the new session ID
+//            }
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            LOGGER.warn("Could not set the session ID for the proxied driver", e);
+//        }
+//    }
+//
+//    @Override
+//    protected void startSession(Capabilities capabilities) {
+//        // use the proxied driver if it is a RemoteWebDriver
+//        try {
+//            if (getProxiedDriver() instanceof RemoteWebDriver) {
+//                // Invoke the startSession method on the proxied driver using reflection
+//                Method startSessionMethod = RemoteWebDriver.class.getDeclaredMethod("startSession", Capabilities.class);
+//                startSessionMethod.setAccessible(true); // Make the method accessible
+//                startSessionMethod.invoke(getProxiedDriver(), capabilities);
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException e) {
+//            LOGGER.warn("Could not set the session ID for the proxied driver", e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @Override
+//    public ErrorHandler getErrorHandler() {
+//        if (getProxiedDriver() instanceof RemoteWebDriver) {
+//            return ((RemoteWebDriver) getProxiedDriver()).getErrorHandler();
+//        } else {
+//            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement RemoteWebDriver");
+//        }
+//    }
+//
+//    @Override
+//    public void setErrorHandler(ErrorHandler handler) {
+//        if (getProxiedDriver() instanceof RemoteWebDriver) {
+//            ((RemoteWebDriver) getProxiedDriver()).setErrorHandler(handler);
+//        } else {
+//            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement RemoteWebDriver");
+//        }
+//    }
+//
+//    @Override
+//    public CommandExecutor getCommandExecutor() {
+//        if (getProxiedDriver() instanceof RemoteWebDriver) {
+//            return ((RemoteWebDriver) getProxiedDriver()).getCommandExecutor();
+//        } else {
+//            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement RemoteWebDriver");
+//        }
+//    }
+//
+//    @Override
+//    protected void setCommandExecutor(CommandExecutor executor) {
+//        try {
+//            if (getProxiedDriver() instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("setCommandExecutor", CommandExecutor.class);
+//                method.setAccessible(true); // Make the method accessible
+//                method.invoke(getProxiedDriver(), executor);
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException e) {
+//            LOGGER.warn("Could not call setCommandExecutor for the proxied driver", e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @Override
+//    public List<WebElement> findElements(SearchContext context, BiFunction<String, Object, CommandPayload> findCommand, By locator) {
+//        if (proxiedWebDriver instanceof RemoteWebDriver) {
+//            return ((RemoteWebDriver) proxiedWebDriver).findElements(context, findCommand, locator);
+//        } else {
+//            LOGGER.warn("Could not call findElements() on " + proxiedWebDriver.getClass());
+//            return new ArrayList<>();
+//        }
+//    }
+//
+//    @Override
+//    protected void setFoundBy(SearchContext context, WebElement element, String by, String using) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("setFoundBy", SearchContext.class, WebElement.class, String.class, String.class);
+//                method.setAccessible(true); // Make the method accessible
+//                method.invoke(getProxiedDriver(), context, element, by, using);
+//            } else {
+//                LOGGER.warn("Could not call setFoundBy() on " + proxiedWebDriver.getClass());
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException e) {
+//            LOGGER.warn("Could not call setFoundBy for the proxied driver", e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @Override
+//    protected JsonToWebElementConverter getElementConverter() {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("getElementConverter");
+//                method.setAccessible(true); // Make the method accessible
+//                return (JsonToWebElementConverter) method.invoke(getProxiedDriver());
+//            } else {
+//                LOGGER.warn("Could not call getElementConverter() on " + proxiedWebDriver.getClass());
+//                return null;
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call getElementConverter for the proxied driver", e);
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    protected void setElementConverter(JsonToWebElementConverter converter) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("setElementConverter", JsonToWebElementConverter.class);
+//                method.setAccessible(true); // Make the method accessible
+//                method.invoke(getProxiedDriver(), converter);
+//            } else {
+//                LOGGER.warn("Could not call setElementConverter() on " + proxiedWebDriver.getClass());
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException e) {
+//            LOGGER.warn("Could not call setFoundBy for the proxied driver", e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @Override
+//    public void setLogLevel(Level level) {
+//        if (proxiedWebDriver instanceof RemoteWebDriver) {
+//            ((RemoteWebDriver) proxiedWebDriver).setLogLevel(level);
+//        } else {
+//            LOGGER.warn("Could not call setLogLevel() on " + proxiedWebDriver.getClass());
+//        }
+//    }
+//
+//    @Override
+//    protected Response execute(CommandPayload payload) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("execute", CommandPayload.class);
+//                method.setAccessible(true); // Make the method accessible
+//                return (Response) method.invoke(getProxiedDriver(), payload);
+//            } else {
+//                LOGGER.warn("Could not call execute() on " + proxiedWebDriver.getClass());
+//                return null;
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call execute for the proxied driver", e);
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    protected Response execute(String driverCommand, Map<String, ?> parameters) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("execute", String.class, Map.class);
+//                method.setAccessible(true); // Make the method accessible
+//                return (Response) method.invoke(getProxiedDriver(), driverCommand, parameters);
+//            } else {
+//                LOGGER.warn("Could not call execute() on " + proxiedWebDriver.getClass());
+//                return null;
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call execute for the proxied driver", e);
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    protected Response execute(String command) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("execute", String.class);
+//                method.setAccessible(true); // Make the method accessible
+//                return (Response) method.invoke(getProxiedDriver(), command);
+//            } else {
+//                LOGGER.warn("Could not call execute() on " + proxiedWebDriver.getClass());
+//                return null;
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call execute for the proxied driver", e);
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    protected ExecuteMethod getExecuteMethod() {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("getExecuteMethod");
+//                method.setAccessible(true); // Make the method accessible
+//                return (ExecuteMethod) method.invoke(getProxiedDriver());
+//            } else {
+//                LOGGER.warn("Could not call getExecuteMethod() on " + proxiedWebDriver.getClass());
+//                return null;
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call getExecuteMethod for the proxied driver", e);
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    protected void log(SessionId sessionId, String commandName, Object toLog, When when) {
+//        try {
+//            if (proxiedWebDriver instanceof RemoteWebDriver) {
+//                Method method = RemoteWebDriver.class.getDeclaredMethod("log", SessionId.class, String.class, Object.class, When.class);
+//                method.setAccessible(true); // Make the method accessible
+//                method.invoke(getProxiedDriver(), sessionId, commandName, toLog, when);
+//            } else {
+//                LOGGER.warn("Could not call log() on " + proxiedWebDriver.getClass());
+//            }
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            LOGGER.warn("Could not call log for the proxied driver", e);
+//        }
+//    }
+//
+//    @Override
+//    public FileDetector getFileDetector() {
+//        if (proxiedWebDriver instanceof RemoteWebDriver) {
+//            return ((RemoteWebDriver) proxiedWebDriver).getFileDetector();
+//        } else {
+//            LOGGER.warn("Could not call getFileDetector() on " + proxiedWebDriver.getClass());
+//            return null;
+//        }
+//    }
+//
+//    @Override
+//    public void setFileDetector(FileDetector detector) {
+//        if (proxiedWebDriver instanceof RemoteWebDriver) {
+//            ((RemoteWebDriver) proxiedWebDriver).setFileDetector(detector);
+//        } else {
+//            LOGGER.warn("Could not call setFileDetector() on " + proxiedWebDriver.getClass());
+//        }
+//    }
+
+    @Override
+    public void requireDownloadsEnabled(Capabilities capabilities) {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            ((HasDownloads) getProxiedDriver()).requireDownloadsEnabled(capabilities);
+        }
+    }
+
+    @Override
+    public ScriptKey pin(String script) {
+        if (getProxiedDriver() instanceof JavascriptExecutor) {
+            return ((JavascriptExecutor) getProxiedDriver()).pin(script);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void unpin(ScriptKey key) {
+        if (getProxiedDriver() instanceof JavascriptExecutor) {
+            ((JavascriptExecutor) getProxiedDriver()).unpin(key);
+        }
+    }
+
+    @Override
+    public Set<ScriptKey> getPinnedScripts() {
+        if (getProxiedDriver() instanceof JavascriptExecutor) {
+            return ((JavascriptExecutor) getProxiedDriver()).getPinnedScripts();
+        }
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Object executeScript(ScriptKey key, Object... args) {
+        if (getProxiedDriver() instanceof JavascriptExecutor) {
+            return ((JavascriptExecutor) getProxiedDriver()).executeScript(key, args);
+        }
+        return null;
     }
 }

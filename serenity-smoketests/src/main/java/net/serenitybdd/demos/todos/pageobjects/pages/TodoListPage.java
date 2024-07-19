@@ -5,7 +5,7 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatus;
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatusFilter;
-import net.thucydides.core.annotations.DefaultUrl;
+import net.serenitybdd.annotations.DefaultUrl;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@DefaultUrl("http://todomvc.com/examples/angularjs/#/")
+@DefaultUrl("https://todo-app.serenity-js.org/#/")
 public class TodoListPage extends PageObject {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ public class TodoListPage extends PageObject {
     private static final String NEW_TODO_INPUT_FIELD = ".new-todo";
     private static final String ITEM_ROW = "//div[@class='view' and contains(.,'%s')]";
     private static final String ITEM_ROW_LABEL = "//label[contains(.,'%s')]";
-    private static final String COMPLETE_TICKBOX = ".//input[@ng-model='todo.completed']";
+    private static final String COMPLETE_TICKBOX = ".//input[@type='checkbox']";
     private static final String DELETE_BUTTON = "//button[@class='destroy']";
     private static final String FILTERS = ".filters";
     private static final String SELECTED_FILTER = ".filters li .selected";

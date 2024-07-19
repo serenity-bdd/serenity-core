@@ -2,16 +2,21 @@ package net.serenitybdd.junit5;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.matcher.ElementMatchers;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.junit5.utils.ClassUtil;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.logging.ConsoleLoggingListener;
-import net.thucydides.core.model.*;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.logging.ConsoleLoggingListener;
+import net.thucydides.model.domain.*;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.reports.ReportService;
+import net.thucydides.model.reports.ReportService;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -29,26 +34,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.thucydides.core.reports.ReportService.getDefaultReporters;
-import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;
+import static net.thucydides.model.reports.ReportService.getDefaultReporters;
+import static net.thucydides.model.steps.TestSourceType.TEST_SOURCE_JUNIT5;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 
-    private static List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
+    private static final List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
 
     private static final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
     static {
-        ByteBuddyAgent.install();
-        new ByteBuddy().rebase(Assertions.class).visit(Advice.to(AssertThrowsAdvice.class).on(named("assertThrows"))).make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
+        Instrumentation inst = ByteBuddyAgent.install();
+        new AgentBuilder.Default()
+                .type(ElementMatchers.named("org.junit.jupiter.api.Assertions"))
+                .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
+                        builder.method(ElementMatchers.named("assertThrows"))
+                                .intercept(Advice.to(AssertThrowsAdvice.class))
+                ).installOn(inst);
     }
-
 
     private ReportService reportService;
 
@@ -58,12 +68,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     //key-> "ClassName.MethodName"
     //entries-> DataTable associated with method
-    private Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
 
 
     private boolean isSerenityTest = false;
 
-    public SerenityTestExecutionListener() {}
+    public SerenityTestExecutionListener() {
+    }
 
     private static File getOutputDirectory() {
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
@@ -186,7 +197,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private void startTestAtEventBus(TestIdentifier testIdentifier) {
-        eventBusFor(testIdentifier).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
+        eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());
         String displayName = removeEndBracketsFromDisplayName(testIdentifier.getDisplayName());
         if (isMethodSource(testIdentifier)) {
             String className = ((MethodSource) testIdentifier.getSource().get()).getClassName();
@@ -205,8 +216,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         return displayName;
     }
 
-    private Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
-
+    private static final Map<Class<?>, String> TEST_CASE_DISPLAY_NAMES = new ConcurrentHashMap<>();
+    private static final Map<String, String> DATA_DRIVEN_TEST_NAMES =  new ConcurrentHashMap<>();
     @Override
     public synchronized void executionStarted(TestIdentifier testIdentifier) {
         Class<?> testClass;
@@ -237,7 +248,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
             eventBusFor(testIdentifier).getBaseStepListener().clearTestOutcomes();
             eventBusFor(testIdentifier).testSuiteStarted(testClass, testIdentifier.getDisplayName());
-            testCaseDisplayNames.put(testClass, testIdentifier.getDisplayName());
+            TEST_CASE_DISPLAY_NAMES.put(testClass, testIdentifier.getDisplayName());
         }
 
         if (isMethodSource(testIdentifier)) {
@@ -257,6 +268,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     logger.trace("-->EventBus.exampleStarted " + rowNumber + "--" + dataTable.row(rowNumber).toStringMap());
                     logger.trace("-->EventBus.useExamplesFrom" + dataTable + " with parameter set number " + rowNumber);
                     eventBusFor(testIdentifier).exampleStarted(dataTable.row(rowNumber).toStringMap());
+                } else {
+                    DATA_DRIVEN_TEST_NAMES.put(testIdentifier.getUniqueId(), testIdentifier.getDisplayName());
                 }
             }
         }
@@ -400,7 +413,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.debug(Thread.currentThread() + " Test started " + testIdentifier);
             eventBusFor(testIdentifier).clear();
             eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());
-            String testName = StringUtils.isNotEmpty(testIdentifier.getDisplayName()) ? testIdentifier.getDisplayName() : methodSource.getMethodName();
+
+//            String testName = StringUtils.isNotEmpty(testIdentifier.getDisplayName()) ? testIdentifier.getDisplayName() : methodSource.getMethodName();
+            String testName = Inflector.getInstance().humanize(methodSource.getMethodName());
+            if (testIdentifier.getDisplayName().startsWith("[")) {
+                testName = testName + testIdentifier.getDisplayName();
+            } else if (StringUtils.isNotEmpty(testIdentifier.getDisplayName())) {
+                testName = testIdentifier.getDisplayName();
+            }
             try {
                 Method javaMethod = methodSource.getJavaMethod();
 
@@ -415,10 +435,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             }
 
             eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"),
-                                                    methodSource.getJavaClass(),
-                                                    methodSource.getMethodName(),
-                                                    testIdentifier.getUniqueId(),
-                                                    testIdentifier.getParentId().orElse(testIdentifier.getUniqueId()));
+                    methodSource.getJavaClass(),
+                    methodSource.getMethodName(),
+                    testIdentifier.getUniqueId(),
+                    testIdentifier.getParentId().orElse(testIdentifier.getUniqueId()));
 
             //
             // Check for @Pending tests
@@ -437,7 +457,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             File outputDirectory = getOutputDirectory();
             BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
             currentEventBus.registerListener(baseStepListener);
-            currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
+//            currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
+            currentEventBus.registerListener(SerenityInfrastructure.getLoggingListener());
             logger.trace("  -> ADDED BASE LISTENER " + baseStepListener);
             StepListener loggingListener = Listeners.getLoggingListener();
             currentEventBus.registerListener(loggingListener);
@@ -460,9 +481,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private boolean testingThisTest(TestIdentifier testIdentifier, Class<?> testClass) {
         if (isMethodSource(testIdentifier)) {
             MethodSource methodSource = (MethodSource) testIdentifier.getSource().get();
-            if (testClass.equals(methodSource.getJavaClass())) {
-                return true;
-            }
+            return testClass.equals(methodSource.getJavaClass());
         }
         return false;
     }
@@ -472,7 +491,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (isMethodSource(testIdentifier)) {
             Class<?> testCase = ((MethodSource) testIdentifier.getSource().get()).getJavaClass();
             logger.trace("-->TestSuiteStarted " + testCase);
-            String testSuiteName = testCaseDisplayNames.getOrDefault(testCase, testCase.getSimpleName());
+            String testSuiteName = TEST_CASE_DISPLAY_NAMES.getOrDefault(testCase, testCase.getSimpleName());
             eventBusFor(testIdentifier).testSuiteStarted(((MethodSource) testIdentifier.getSource().get()).getJavaClass(), testSuiteName);
         }
     }
@@ -488,9 +507,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         logger.trace("GET TEST OUTCOMES FOR " + testIdentifier);
         logger.trace(" - BASE STEP LISTENER: " + eventBusFor(testIdentifier).getBaseStepListener());
         List<TestOutcome> testOutcomes = eventBusFor(testIdentifier).getBaseStepListener().getTestOutcomes();
-        logger.trace(" - EVENT TEST OUTCOMES: " + testOutcomes);
-        logger.trace(" - THREAD TEST OUTCOMES: " + StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes());
-
+        testOutcomes.forEach(
+                outcome -> {
+                    if (testIdentifier.getParentId().isPresent() && DATA_DRIVEN_TEST_NAMES.get(testIdentifier.getParentId().get()) != null) {
+                        outcome.setTestOutlineName(DATA_DRIVEN_TEST_NAMES.get(testIdentifier.getParentId().get()));
+                    }
+                }
+        );
         return testOutcomes;
     }
 
@@ -504,7 +527,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void generateReportsForParameterizedTests(List<TestIdentifier> testIdentifiers) {
         logger.trace("GENERATE REPORTS FOR PARAMETERIZED TESTS " + testIdentifiers);
-        List<TestOutcome> allTestOutcomes = testIdentifiers.stream().map(this::getTestOutcomes).flatMap(List::stream).collect(Collectors.toList());
+        List<TestOutcome> allTestOutcomes = testIdentifiers
+                .stream()
+                .map(this::getTestOutcomes)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
         ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = new ParameterizedTestsOutcomeAggregator(allTestOutcomes);
 
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());

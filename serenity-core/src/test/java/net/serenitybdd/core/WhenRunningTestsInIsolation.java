@@ -1,12 +1,12 @@
 package net.serenitybdd.core;
 
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.ManagedPages;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.junit.After;
 import org.junit.Before;

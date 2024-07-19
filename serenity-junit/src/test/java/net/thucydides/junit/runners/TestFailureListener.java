@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TestFailureListener extends RunListener {
     
-    private List<Failure> failures = new ArrayList<Failure>();
+    private final List<Failure> failures = new ArrayList<Failure>();
     
     @Override
     public void testFailure(Failure failure) throws Exception {

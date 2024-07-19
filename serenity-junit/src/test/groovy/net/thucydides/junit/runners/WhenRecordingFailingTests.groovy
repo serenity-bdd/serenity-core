@@ -2,7 +2,7 @@ package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,12 +17,12 @@ class WhenRecordingFailingTests extends Specification {
     def environmentVariables = new MockEnvironmentVariables()
     def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
-    File rerunDir;
+    File rerunDir
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
-        rerunDir = Files.createTempDirectory("reruns").toFile();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
+        rerunDir = Files.createTempDirectory("reruns").toFile()
         rerunDir.deleteOnExit()
 
         environmentVariables.setProperty("rerun.failures.directory", rerunDir.getCanonicalPath())
@@ -33,17 +33,17 @@ class WhenRecordingFailingTests extends Specification {
     static class ATestWithMoreTestMethods {
 
         @Test
-        public void testMethod1() {
-            throw new Exception();
+        void testMethod1() {
+            throw new Exception()
         }
 
         @Test
-        public void testMethod2() {
-            throw new Exception();
+        void testMethod2() {
+            throw new Exception()
         }
 
         @Test
-        public void testMethod3() {
+        void testMethod3() {
         }
     }
 

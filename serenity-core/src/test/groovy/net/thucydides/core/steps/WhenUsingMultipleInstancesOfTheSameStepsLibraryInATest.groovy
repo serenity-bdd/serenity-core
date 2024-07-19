@@ -1,7 +1,7 @@
 package net.thucydides.core.steps
 
-import net.thucydides.core.annotations.Steps
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.serenitybdd.annotations.Steps
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specification {
@@ -12,7 +12,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
 
     static class SimpleTestSampleWithDefaultSteps {
         @Steps
-        SampleStepLibrary steps1;
+        SampleStepLibrary steps1
 
         @Steps
         SampleStepLibrary steps2
@@ -20,10 +20,10 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
 
     static class SimpleTestSampleSupportingMultipleInstances {
         @Steps
-        SampleStepLibrary steps1;
+        SampleStepLibrary steps1
 
         @Steps
-        SampleStepLibrary steps2;
+        SampleStepLibrary steps2
 
         @Steps(uniqueInstance=true)
         SampleStepLibrary uniqueInstanceSteps1
@@ -35,10 +35,10 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
 
     static class SimpleTestSampleSupportingSharedInstances {
         @Steps
-        SampleStepLibrary steps1;
+        SampleStepLibrary steps1
 
         @Steps
-        SampleStepLibrary steps2;
+        SampleStepLibrary steps2
 
         @Steps(shared=true)
         SampleStepLibrary sharedSteps1
@@ -54,7 +54,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
         given:
             def testCase = new SimpleTestSampleWithDefaultSteps()
         when: "we get two instances of the same step library"
-            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory)
         then: "the step libraries should be instantiated"
             testCase.steps1 != null && testCase.steps2 != null
         and: "by default different instances should be used"
@@ -67,7 +67,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
         when: "we get two instances of the same step library"
             environmentVariables.setProperty("step.creation.strategy","legacy")
         and:
-            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory)
         then: "the step libraries should be instantiated"
             testCase.steps1 != null && testCase.steps2 != null
         and: "the same shared instance should be used"
@@ -80,7 +80,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
         when: "we get two instances of the same step library"
             environmentVariables.setProperty("step.creation.strategy","legacy")
         and:
-            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory)
         then:
             testCase.uniqueInstanceSteps1 != null && testCase.uniqueInstanceSteps2 != null
         and: "different instances should be used"
@@ -93,7 +93,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
         when: "we get two instances of the same step library"
             environmentVariables.setProperty("step.creation.strategy","default")
         and:
-            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory)
         then: "the step libraries should be instantiated"
             testCase.steps1 != null && testCase.steps2 != null
         and: "the different instances should be used"
@@ -106,7 +106,7 @@ class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specificati
         when: "we get two instances of the same step library"
             environmentVariables.setProperty("step.creation.strategy","default")
         and:
-            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory)
         then: "the step libraries should be instantiated"
             testCase.sharedSteps1 != null && testCase.sharedSteps2 != null
         and: "the different instances should be used"

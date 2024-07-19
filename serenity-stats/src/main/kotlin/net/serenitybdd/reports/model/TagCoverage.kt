@@ -1,16 +1,16 @@
 package net.serenitybdd.reports.model
 
-import net.serenitybdd.core.di.ModelInfrastructure
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestResult.*
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.reports.html.ResultIconFormatter
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.NameConverter.humanize
+import net.serenitybdd.model.di.ModelInfrastructure
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestResult.*
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.reports.html.ResultIconFormatter
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.util.NameConverter.humanize
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -27,20 +27,27 @@ class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcom
 class TagCoverageBuilder(
     val testOutcomes: TestOutcomes,
     val tagsToDisplay: Collection<TestTag>,
-    val environmentVariables: EnvironmentVariables
+    val environmentVariables: EnvironmentVariables,
+    var reportNameProvider: ReportNameProvider
 ) {
 
     constructor(testOutcomes: TestOutcomes, environmentVariables: EnvironmentVariables) : this(
         testOutcomes,
         setOf(),
-        environmentVariables
+        environmentVariables,
+        ReportNameProvider()
     )
 
-    var hideEmptyRequirements: Boolean = false;
+    var hideEmptyRequirements: Boolean = false
 
     init {
         hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables)
             .getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true)
+    }
+
+    fun withReportNameProvider(reportNameProvider: ReportNameProvider): TagCoverageBuilder {
+        this.reportNameProvider = reportNameProvider
+        return this
     }
 
     fun forTagTypes(displayedTagTypes: List<String>): List<CoverageByTagType> {
@@ -52,6 +59,7 @@ class TagCoverageBuilder(
             if (shouldShow(testOutcomesWithTag)) {
                 coveragesByTagType.add(
                     CoverageByTagType(
+                        reportNameProvider,
                         displayedTagType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
                         humanize(displayedTagType),
                         testOutcomes.withTagType(displayedTagType),
@@ -59,7 +67,7 @@ class TagCoverageBuilder(
                 )
             }
         }
-        return coveragesByTagType;
+        return coveragesByTagType
     }
 
     private fun shouldShow(testOutcomes: TestOutcomes): Boolean {
@@ -74,11 +82,12 @@ class TagCoverageBuilder(
     }
 
     fun showingTags(tagsOfType: Collection<TestTag>): TagCoverageBuilder {
-        return TagCoverageBuilder(testOutcomes, tagsOfType, environmentVariables)
+        return TagCoverageBuilder(testOutcomes, tagsOfType, environmentVariables, reportNameProvider)
     }
 }
 
 class CoverageByTagType(
+    val reportNameProvider: ReportNameProvider,
     val tagType: String,
     val tagTitle: String,
     val testOutcomes: TestOutcomes,
@@ -155,7 +164,8 @@ class CoverageByTagType(
             testOutcomesForTag.testCaseCount,
             successRate,
             testOutcomesForTag.result,
-            ReportNameProvider().forRequirementOrTag(testTag),
+            testOutcomesForTag.allStepsText,
+            reportNameProvider.forRequirementOrTag(testTag),    //            ReportNameProvider().forRequirementOrTag(testTag),
             countByResultLabelFrom(testOutcomesForTag),
             percentageByResultFrom(testOutcomesForTag)
         )
@@ -182,6 +192,7 @@ class CoverageByTag(
     val testCount: Long,
     val successRate: String,
     val result: TestResult,
+    var allStepsText: String,
     val report: String,
     val countByResult: Map<String, Long>,
     val percentageByResult: Map<String, Double>
@@ -205,6 +216,6 @@ class CoverageByTag(
 
 class CoverageSegment(val percentage: Double, val count: Long, val result: TestResult) {
     val color = BackgroundColor().inDarkforResult(result)
-    val roundedPercentage = Math.round(percentage);
+    val roundedPercentage = Math.round(percentage)
     val title = "${roundedPercentage}% ${result.toString().lowercase()}"
 }

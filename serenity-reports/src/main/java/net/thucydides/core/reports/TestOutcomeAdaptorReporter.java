@@ -1,10 +1,11 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.*;
+import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor;
+import net.thucydides.model.reports.json.JSONTestOutcomeReporter;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,8 +2,8 @@ package net.serenitybdd.cucumber.formatter
 
 import io.cucumber.core.plugin.ManualScenarioChecker
 import io.cucumber.core.plugin.TaggedScenario
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -13,7 +13,7 @@ import io.cucumber.messages.types.Tag
 class WhenReportingManualTestResults extends Specification {
 
     def environmentVariables = new MockEnvironmentVariables()
-    def gherkinLocation = new Location(0,0);
+    def gherkinLocation = new Location(0,0)
     def dateChecker = new ManualScenarioChecker(environmentVariables)
 
     @Unroll

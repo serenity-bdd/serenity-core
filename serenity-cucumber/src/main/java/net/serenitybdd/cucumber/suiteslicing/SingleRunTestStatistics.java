@@ -1,8 +1,8 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.util.Inflector;
+import net.serenitybdd.model.time.Stopwatch;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.csv.CSVFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,8 @@ public class SingleRunTestStatistics implements TestStatistics {
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleRunTestStatistics.class);
 
     private final List<TestScenarioResult> records;
-    private String fileName;
-    private String[] headers;
+    private final String fileName;
+    private final String[] headers;
 
 
     private SingleRunTestStatistics(String fileName) {

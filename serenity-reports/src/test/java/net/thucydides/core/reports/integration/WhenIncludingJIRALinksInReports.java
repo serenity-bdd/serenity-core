@@ -1,11 +1,11 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.annotations.Title;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.issues.SystemPropertiesIssueTracking;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
+import net.serenitybdd.annotations.Story;
+import net.serenitybdd.annotations.Title;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.TestOutcomes;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -25,15 +26,15 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
     protected class JIRAAnnotatedTestScenario {
 
         @Title("a simple test case (#1234)")
-        public void a_simple_test_case() {};
+        public void a_simple_test_case() {}
 
         @Title("should do this as well (#1234, #2345)")
-        public void should_do_this_too() {};
+        public void should_do_this_too() {}
 
         //@Issue("#3456")
-        public void and_should_do_this() {};
+        public void and_should_do_this() {}
 
-        public void should_do_that() {};
+        public void should_do_that() {}
     }
 
 
@@ -58,7 +59,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        String reportContents = FileUtils.readFileToString(screenshotReport);
+        String reportContents = FileUtils.readFileToString(screenshotReport, Charset.defaultCharset());
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"));
     }
 
@@ -72,7 +73,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
         recordSimpleTest(testOutcome);
 
         File screenshotReport = reporter.generateReportFor(testOutcome);
-        String reportContents = FileUtils.readFileToString(screenshotReport);
+        String reportContents = FileUtils.readFileToString(screenshotReport, Charset.defaultCharset());
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"));
     }
 
@@ -86,7 +87,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         File screenshotReport =reporter.generateReportFor(testOutcome);
 
-        String reportContents = FileUtils.readFileToString(screenshotReport);
+        String reportContents = FileUtils.readFileToString(screenshotReport, Charset.defaultCharset());
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.jira/browse/1234\">#1234</a>"));
     }
 
@@ -101,7 +102,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        String reportContents = FileUtils.readFileToString(screenshotReport);
+        String reportContents = FileUtils.readFileToString(screenshotReport, Charset.defaultCharset());
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.jira/browse/MYPROJECT-1234\">#1234</a>"));
     }
 
@@ -115,7 +116,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        String reportContents = FileUtils.readFileToString(screenshotReport);
+        String reportContents = FileUtils.readFileToString(screenshotReport, Charset.defaultCharset());
         assertThat(reportContents, allOf(containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"),
                                          containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/2345\">#2345</a>")));
     }

@@ -1,15 +1,14 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.steps.UIInteractionSteps;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
-import net.thucydides.core.annotations.Shared;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.reflection.FieldSetter;
-import net.thucydides.core.util.Inflector;
+import net.serenitybdd.annotations.Shared;
+import net.serenitybdd.annotations.Steps;
+import net.thucydides.model.reflection.FieldSetter;
+import net.thucydides.model.util.Inflector;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

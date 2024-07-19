@@ -5,14 +5,14 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 /**
  * Enter a text value into an input field.
  * This task waits for an element matching selector, waits for actionability  checks, focuses the element,
- * fills it and triggers an input event after filling. If the element is inside the <label> element that has associated control,
+ * fills it and triggers an input event after filling. If the element is inside the label element that has associated control,
  * that control will be filled instead.
- * If the element to be filled is not an <input>, <textarea> or [contenteditable] element, this method throws an error.
+ * If the element to be filled is not an input, textarea or [contenteditable] element, this method throws an error.
  * Note that you can pass an empty string to clear the input field.
  * <p>
  * Sample usage:
@@ -22,7 +22,7 @@ import net.thucydides.core.annotations.Step;
  * Or
  * <pre>
  *     Target SEARCH_FIELD = Target.the("Search field").locatedBy("#search_form_input_homepage")
- *     Enter.theValue("pengins").into(SEARCH_FIELD);
+ *     Enter.theValue("penguins").into(SEARCH_FIELD);
  * </pre>
  */
 public class Enter implements Performable {

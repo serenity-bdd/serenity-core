@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.questions;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.After;
 import org.junit.Before;

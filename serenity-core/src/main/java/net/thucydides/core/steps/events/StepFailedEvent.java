@@ -1,7 +1,8 @@
 package net.thucydides.core.steps.events;
 
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.core.steps.session.TestSession;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.StepFailure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,18 +17,21 @@ public class StepFailedEvent
 
 	private final List<ScreenshotAndHtmlSource> screenshotList;
 
+	private boolean isInDataDrivenTest;
 
 	public StepFailedEvent(StepFailure stepFailure, List<ScreenshotAndHtmlSource> screenshotList) {
 		this.stepFailure = stepFailure;
 		this.screenshotList = screenshotList;
+		if (TestSession.isSessionStarted()) {
+			this.isInDataDrivenTest = TestSession.getTestSessionContext().isInDataDrivenTest();
+		}
 	}
-
 
 	@Override
 	public void play() {
 		LOGGER.debug("SRP:PlayStepFinishedEvent with screenshot size "
 	 					+ ((screenshotList != null) ?  screenshotList.size() : 0));
-		getStepEventBus().stepFailed(stepFailure, screenshotList);
+		getStepEventBus().stepFailed(stepFailure, screenshotList, isInDataDrivenTest, this.timestamp);
 	}
 
 	public String toString() {

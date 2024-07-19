@@ -1,11 +1,12 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.reports.html.ResultIconFormatter
-import net.thucydides.core.util.NameConverter.humanize
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.reports.html.ResultIconFormatter
+import net.thucydides.model.util.NameConverter.humanize
 import org.apache.commons.lang3.StringUtils
+import java.util.*
 
 class FrequentFailures {
     companion object {
@@ -27,7 +28,7 @@ class FrequentFailuresBuilder(val testOutcomes: TestOutcomes) {
                     .take(maxEntries)
 
     private fun testResultOf(outcomes: List<ScenarioSummaryResult>) =
-            TestResult.valueOf(outcomes.first().result.toUpperCase())
+            TestResult.valueOf(outcomes.first().result.uppercase(Locale.getDefault()))
 }
 
 class FrequentFailure(val type: String, val count: Int, val result: TestResult) {

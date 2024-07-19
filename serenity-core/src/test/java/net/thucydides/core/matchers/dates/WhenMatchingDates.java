@@ -1,7 +1,7 @@
 package net.thucydides.core.matchers.dates;
 
 
-import net.serenitybdd.core.collect.NewSet;
+import net.serenitybdd.model.collect.NewSet;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.Date;
 import java.util.Set;
 
-import static net.thucydides.core.matchers.dates.DateMatchers.*;
+import static net.thucydides.model.matchers.dates.DateMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
@@ -25,13 +25,13 @@ public class WhenMatchingDates {
 
     @Before
     public void setupDates() {
-        firstOfJanuary2000 = new DateTime(2000,01,01,12,0).toDate();
-        januaryFirst2000 = new DateTime(2000,01,01,12,0).toDate();
-        januaryFirst2001 = new DateTime(2001,01,01,12,0).toDate();
-        januaryFirst2002 = new DateTime(2002,01,01,12,0).toDate();
-        januaryFirst2003 = new DateTime(2003,01,01,12,0).toDate();
-        januaryFirst1900 = new DateTime(1900,01,01,12,0).toDate();
-        januaryFirst2100 = new DateTime(2100,01,01,12,0).toDate();
+        firstOfJanuary2000 = new DateTime(2000,1,1,12,0).toDate();
+        januaryFirst2000 = new DateTime(2000,1,1,12,0).toDate();
+        januaryFirst2001 = new DateTime(2001,1,1,12,0).toDate();
+        januaryFirst2002 = new DateTime(2002,1,1,12,0).toDate();
+        januaryFirst2003 = new DateTime(2003,1,1,12,0).toDate();
+        januaryFirst1900 = new DateTime(1900,1,1,12,0).toDate();
+        januaryFirst2100 = new DateTime(2100,1,1,12,0).toDate();
     }
 
     @Test

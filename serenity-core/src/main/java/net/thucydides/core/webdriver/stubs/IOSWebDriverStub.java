@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
+import io.appium.java_client.ExecutesMethod;
 import io.appium.java_client.HidesKeyboardWithKeyName;
 import io.appium.java_client.LocksDevice;
 import io.appium.java_client.PushesFiles;
@@ -95,11 +96,6 @@ public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWith
     }
 
     @Override
-    public void hideKeyboard(String strategy, String keyName) {
-
-    }
-
-    @Override
     public void hideKeyboard() {
 
     }
@@ -113,4 +109,13 @@ public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWith
 
     }
 
+    @Override
+    public ExecutesMethod assertExtensionExists(String s) {
+        return new ExecutesMethodStub();
+    }
+
+    @Override
+    public ExecutesMethod markExtensionAbsence(String s) {
+        return new ExecutesMethodStub();
+    }
 }

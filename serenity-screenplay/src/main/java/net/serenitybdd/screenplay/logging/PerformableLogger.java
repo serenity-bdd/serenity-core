@@ -7,7 +7,7 @@ import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorPerforms;
-import net.thucydides.core.steps.ReplaceField;
+import net.thucydides.model.steps.ReplaceField;
 import net.thucydides.core.steps.StepName;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

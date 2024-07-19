@@ -3,9 +3,9 @@ package net.serenitybdd.plugins.jira;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestResultList;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestResultList;
 
 import java.util.ArrayList;
 import java.util.List;

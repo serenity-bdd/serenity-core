@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.thucydides.core.adapters.TestFramework;
-import net.thucydides.core.util.NameConverter;
+import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.util.NameConverter;
 
 import java.lang.reflect.Method;
 import java.util.Optional;

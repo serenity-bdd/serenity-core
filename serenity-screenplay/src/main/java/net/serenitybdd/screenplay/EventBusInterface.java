@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.stacktrace.FailureCause;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.model.steps.StepFailure;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
 import org.slf4j.Logger;
@@ -17,38 +17,36 @@ import java.util.Optional;
 
 public class EventBusInterface {
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventBusInterface.class);
-
     public static void castActor(String name) {
         if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
         if (!TestSession.isSessionStarted()) {
             StepEventBus.getParallelEventBus().castActor(name);
-        }  else {
+        } else {
             TestSession.addEvent(new CastActorEvent(name));
         }
 
     }
 
     public void reportStepFailureFor(Performable todo, Throwable e) {
-        ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "attemptsTo");
-        if (!TestSession.isSessionStarted()) {
-            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(taskDescription, e));
-        }  else {
-            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e),screenshotList));
-        }
+        handleStepFailure(e, ExecutedStepDescription.of(todo.getClass(), "attemptsTo"));
     }
 
     public <T> void reportStepFailureFor(Consequence<T> consequence, Throwable e) {
-        ExecutedStepDescription consequenceDescription = ExecutedStepDescription.withTitle(consequence.toString());
+        handleStepFailure(e, ExecutedStepDescription.withTitle(consequence.toString()));
+    }
+
+    private static void handleStepFailure(Throwable e, ExecutedStepDescription taskDescription) {
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(consequenceDescription, e));
-        }  else {
-             List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            TestSession.addEvent(new StepFailedEvent(new StepFailure(consequenceDescription, e ), screenshotList));
+            // We are not running the tests in parallel with Cucumber so process the event immediately
+            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(taskDescription, e));
+        } else if (!TestSession.currentStepHasFailed()) {
+            // We are running the tests in parallel with Cucumber so add a test session event for processing later
+            // Only process the step failure if it is the first one we encounter in the test, OR if it is a
+            // subsequent failing soft assertion.
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
+            TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e), screenshotList));
         }
     }
 
@@ -62,7 +60,7 @@ public class EventBusInterface {
 
     public void updateOverallResult() {
         if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
-            if(!TestSession.isSessionStarted()) {
+            if (!TestSession.isSessionStarted()) {
                 StepEventBus.getParallelEventBus().updateOverallResults();
             } else {
                 TestSession.addEvent(new UpdateOverallResultsEvent());
@@ -152,6 +150,11 @@ public class EventBusInterface {
     public void enableSoftAsserts() {
         StepEventBus.getParallelEventBus().enableSoftAsserts();
     }
+
+    public boolean softAssertsActive() {
+        return StepEventBus.getParallelEventBus().softAssertsActive();
+    }
+
 
     public void disableSoftAsserts() {
         StepEventBus.getParallelEventBus().disableSoftAsserts();

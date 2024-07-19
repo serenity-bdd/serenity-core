@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
 
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.model.domain.TestResult.*;
 
 public class TestStepFactory {
 

@@ -1,6 +1,6 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.reports.html.ResultCounts
+import net.thucydides.model.reports.html.ResultCounts
 import spock.lang.Specification
 
 class WhenCountingTestResults extends Specification {

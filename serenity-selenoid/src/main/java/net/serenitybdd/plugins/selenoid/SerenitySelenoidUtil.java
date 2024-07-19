@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.selenoid;
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.ExternalLink;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.net.MalformedURLException;
 import java.net.URL;

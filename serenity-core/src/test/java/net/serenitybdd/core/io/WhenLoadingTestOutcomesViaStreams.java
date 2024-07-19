@@ -1,7 +1,7 @@
 package net.serenitybdd.core.io;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomeStream;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.TestOutcomeStream;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenLoadingTestOutcomesViaStreams {

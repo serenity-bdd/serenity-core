@@ -9,7 +9,7 @@
     </parent>
     <artifactId>serenity-browsermob-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>Serenity Report Resources</name>
+    <name>Serenity BrowserMob Resources</name>
     <properties>
         <browsermob.version>2.1.5</browsermob.version>
     </properties>
@@ -72,17 +72,17 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.91.Final</version>
+            <version>4.1.108.Final</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.69</version>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.78</version>
         </dependency>
         <dependency>
             <groupId>org.opentest4j</groupId>
             <artifactId>opentest4j</artifactId>
-            <version>1.2.0</version>
+            <version>${opentest.version}</version>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->

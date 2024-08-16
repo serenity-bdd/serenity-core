@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
@@ -220,29 +221,29 @@
             </dependency>
 
             <!-- Guice dependencies -->
-<!--            <dependency>-->
-<!--                <groupId>com.google.inject</groupId>-->
-<!--                <artifactId>guice</artifactId>-->
-<!--                <version>${guice.version}</version>-->
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.ow2.asm</groupId>-->
-<!--                        <artifactId>asm</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>asm</groupId>-->
-<!--                        <artifactId>asm</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>com.google.guava</groupId>-->
-<!--                        <artifactId>guava</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.sonatype.sisu.inject</groupId>-->
-<!--                        <artifactId>cglib</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.google.inject</groupId>-->
+            <!--                <artifactId>guice</artifactId>-->
+            <!--                <version>${guice.version}</version>-->
+            <!--                <exclusions>-->
+            <!--                    <exclusion>-->
+            <!--                        <groupId>org.ow2.asm</groupId>-->
+            <!--                        <artifactId>asm</artifactId>-->
+            <!--                    </exclusion>-->
+            <!--                    <exclusion>-->
+            <!--                        <groupId>asm</groupId>-->
+            <!--                        <artifactId>asm</artifactId>-->
+            <!--                    </exclusion>-->
+            <!--                    <exclusion>-->
+            <!--                        <groupId>com.google.guava</groupId>-->
+            <!--                        <artifactId>guava</artifactId>-->
+            <!--                    </exclusion>-->
+            <!--                    <exclusion>-->
+            <!--                        <groupId>org.sonatype.sisu.inject</groupId>-->
+            <!--                        <artifactId>cglib</artifactId>-->
+            <!--                    </exclusion>-->
+            <!--                </exclusions>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -464,11 +465,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
     <build>
@@ -607,7 +608,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
                             </rules>
                         </configuration>
                         <!--                        <goals>-->
@@ -632,8 +633,8 @@
                 </executions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <!--                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
-                    <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <!--                    <nexusUrl>https://oss.sonatype.org</nexusUrl>-->
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
@@ -793,7 +794,7 @@
                         <version>3.1.1</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-<!--                            <releaseProfiles>release</releaseProfiles>-->
+                            <!--                            <releaseProfiles>release</releaseProfiles>-->
                             <goals>deploy</goals>
                             <localCheckout>true</localCheckout>
                             <scmCommentPrefix>[ci skip]</scmCommentPrefix>

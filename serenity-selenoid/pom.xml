@@ -4,7 +4,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.1.31</version>
+        <version>4.1.32-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-selenoid</artifactId>
     <packaging>jar</packaging>

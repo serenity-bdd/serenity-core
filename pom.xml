@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>4.1.27-SNAPSHOT</version>
+    <version>4.1.30-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -33,7 +33,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-        <tag>4.1.12</tag>
+        <tag>4.1.20</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,30 +41,30 @@
         <maven.compiler.target>11</maven.compiler.target>
 
         <junit.version>4.13.2</junit.version>
-        <groovy.version>4.0.22</groovy.version>
+        <groovy.version>4.0.13</groovy.version>
         <spock.version>2.4-M1-groovy-4.0</spock.version>
-        <byte-buddy.version>1.14.18</byte-buddy.version>
-        <guava.version>33.2.1-jre</guava.version>
+        <byte-buddy.version>1.14.15</byte-buddy.version>
+        <guava.version>33.1.0-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <cucumber.version>7.18.1</cucumber.version>
-        <gson.version>2.11.0</gson.version>
-        <junit5.version>5.11.0</junit5.version>
+        <cucumber.version>7.17.0</cucumber.version>
+        <gson.version>2.10.1</gson.version>
+        <junit5.version>5.10.2</junit5.version>
         <mockito.version>3.3.3</mockito.version>
-        <assertj.version>3.26.3</assertj.version>
+        <assertj.version>3.25.3</assertj.version>
         <opentest.version>1.3.0</opentest.version>
-        <commons.lang.version>3.16.0</commons.lang.version>
+        <commons.lang.version>3.14.0</commons.lang.version>
         <commons.lang2.version>2.6</commons.lang2.version>
-        <commons.io.version>2.16.1</commons.io.version>
-        <commons.text.version>1.12.0</commons.text.version>
+        <commons.io.version>2.15.1</commons.io.version>
+        <commons.text.version>1.11.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.collections.version>4.4</commons.collections.version>
-        <commons.compress.version>1.27.0</commons.compress.version>
-        <commons.net.version>3.11.1</commons.net.version>
-        <commons.codec.version>1.17.1</commons.codec.version>
-        <freemarker.version>2.3.33</freemarker.version>
-        <selenium.version>4.23.1</selenium.version>
-        <htmlunit.driver.version>4.23.0</htmlunit.driver.version>
+        <commons.compress.version>1.26.0</commons.compress.version>
+        <commons.net.version>3.10.0</commons.net.version>
+        <commons.codec.version>1.16.1</commons.codec.version>
+        <freemarker.version>2.3.32</freemarker.version>
+        <selenium.version>4.21.0</selenium.version>
+        <htmlunit.driver.version>4.21.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.12.7</joda-time.version>
@@ -72,22 +72,23 @@
         <opencsv.version>2.1</opencsv.version>
         <typesafe.version>1.4.3</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
-        <awaitility.version>4.2.2</awaitility.version>
-        <appium.version>9.3.0</appium.version>
+        <awaitility.version>4.2.0</awaitility.version>
+        <freemarker.version>2.3.32</freemarker.version>
+        <appium.version>9.2.2</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-        <htmlunit.version>4.4.0</htmlunit.version>
+        <htmlunit.version>4.1.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>
-        <ngwebdriver.version>1.2</ngwebdriver.version>
-        <spring.version>6.1.12</spring.version>
+        <ngwebdriver.version>1.1.6</ngwebdriver.version>
+        <spring.version>6.1.7</spring.version>
         <spring.boot.version>3.2.5</spring.boot.version>
         <jimfs.version>1.3.0</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <ant.version>1.10.12</ant.version>
-        <restassured.version>5.5.0</restassured.version>
+        <restassured.version>5.4.0</restassured.version>
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <javassist.version>3.29.2-GA</javassist.version>
-        <jackson.version>2.17.2</jackson.version>
+        <jackson.version>2.17.0</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
@@ -183,7 +184,7 @@
             <dependency>
                 <groupId>org.objenesis</groupId>
                 <artifactId>objenesis</artifactId>
-                <version>3.4</version>
+                <version>3.3</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -619,7 +620,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.7.0</version>
+                <version>1.6.13</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -632,6 +633,7 @@
                 </executions>
                 <configuration>
                     <serverId>ossrh</serverId>
+                    <!--                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
                     <nexusUrl>https://oss.sonatype.org</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
@@ -789,10 +791,10 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <version>3.0.0-M4</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-<!--                            <releaseProfiles>release</releaseProfiles>-->
+                            <releaseProfiles>release</releaseProfiles>
                             <goals>deploy</goals>
                             <localCheckout>true</localCheckout>
                             <scmCommentPrefix>[ci skip]</scmCommentPrefix>

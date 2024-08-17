@@ -4,7 +4,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.1.27-SNAPSHOT</version>
+        <version>4.1.30-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-shutterbug</artifactId>
     <packaging>jar</packaging>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
+            <version>1.18.30</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

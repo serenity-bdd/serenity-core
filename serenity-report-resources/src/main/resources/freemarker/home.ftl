@@ -503,11 +503,11 @@
                                                                                 <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                             </#if>
                                                                         </td>
-                                                                        <td data-order="${scenario.title}">
+                                                                        <td data-order="<#outputformat 'HTML'>${scenario.title}</#outputformat>">
                                                                             <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
                                                                             <i class="bi bi-table"
                                                                                title="Data Driven Scenario"> <a
-                                                                                        href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                                        href="${scenario.scenarioReport}"><#outputformat 'HTML'>${scenario.title}</#outputformat></a>
                                                                                 <br/>
                                                                                 <#list scenario.getResultCounts() as resultCount>
                                                                                     <#assign outcome_icon = formatter.resultIcon().forResult(resultCount.result) />

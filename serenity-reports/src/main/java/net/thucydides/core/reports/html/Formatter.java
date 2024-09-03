@@ -437,7 +437,8 @@ public class Formatter {
 
     private static final CharSequenceTranslator ESCAPE_SPECIAL_CHARS = new AggregateTranslator(
             new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()),
-            new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE())
+            new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE()),
+            new LookupTranslator(new String[][] { {"<", "&lt;"}, {">", "&gt;"}})
     );
 
     private final CharSequenceTranslator BASIC_XML = new AggregateTranslator(

@@ -587,7 +587,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
-                                                                        <i class="bi bi-table" title="Data Driven Scenario"> <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                        <i class="bi bi-table" title="Data Driven Scenario"> <a href="${scenario.scenarioReport}"><#outputformat 'HTML'>${scenario.title}</#outputformat></a>
                                                                             <br/>
                                                                             <#list scenario.getResultCounts() as resultCount>
                                                                                 <#assign outcome_icon = formatter.resultIcon().forResult(resultCount.result) />

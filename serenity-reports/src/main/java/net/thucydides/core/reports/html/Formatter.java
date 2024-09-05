@@ -481,6 +481,10 @@ public class Formatter {
                 (htmlCompatible(renderMarkdownWithoutTags(firstLine))) : htmlCompatible(firstLine);
     }
 
+    public String escapeHtmlTags(String fieldValue) {
+        return fieldValue.replace("<", "&lt;").replace(">", "&gt;");
+    }
+
     public String htmlCompatibleTestTitle(Object fieldValue) {
         String firstLine = fieldValue.toString().split("\\n")[0];
 

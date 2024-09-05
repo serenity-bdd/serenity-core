@@ -38,14 +38,11 @@
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
             <#assign breadcrumbTitle = breadcrumb.displayName > <!-- inflection.of(breadcrumb.displayName).asATitle()-->
-            > <a href="${breadcrumbReport}">
-            ${formatter.escapeHtmlTags(formatter.htmlCompatibleStoryTitle(breadcrumbTitle))}
-        </a>
+            > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
 <#--        > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}-->
 <#--        > ${formatter.htmlCompatibleTestTitle(testOutcome.title)}-->
-        >
-            ${formatter.escapeHtmlTags(formatter.htmlCompatibleTestTitle(formatter.humanReadableFormOf(testOutcome.title)))}
+        > ${formatter.htmlCompatibleTestTitle(formatter.humanReadableFormOf(testOutcome.title))}
         </span>
         </div>
         <div class="rightbg"></div>
@@ -349,7 +346,7 @@
                                 <#assign roeResult = row.result/>
                             </#if>
                             <td class="test-${roeResult}"><a
-                                        href="#${rowIndex}"><#outputformat 'HTML'>${formatter.plainHtmlCompatible(value)}</#outputformat></a>
+                                        href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
                             </td>
                         </#list>
                     </tr>

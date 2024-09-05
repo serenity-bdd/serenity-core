@@ -40,7 +40,7 @@
         </li>
     </#if>
     </ul>
-    <span class="date-and-time"><a href="build-info.html">Detailed build information <i class="bi bi-info-circle"></i></a> <br> Report generated ${timestamp}</span>
+    <span class="date-and-time"><a href="build-info.html">Detailed build information <i class="bi bi-info-circle"></i></a> <br /> Report generated ${timestamp}</span>
     <br style="clear:left"/>
 </div>
 </#macro>

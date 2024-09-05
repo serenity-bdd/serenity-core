@@ -437,8 +437,7 @@ public class Formatter {
 
     private static final CharSequenceTranslator ESCAPE_SPECIAL_CHARS = new AggregateTranslator(
             new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()),
-            new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE()),
-            new LookupTranslator(new String[][] { {"<", "&lt;"}, {">", "&gt;"}})
+            new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE())
     );
 
     private final CharSequenceTranslator BASIC_XML = new AggregateTranslator(
@@ -479,6 +478,10 @@ public class Formatter {
 
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.story)) ?
                 (htmlCompatible(renderMarkdownWithoutTags(firstLine))) : htmlCompatible(firstLine);
+    }
+
+    public String escapeHtmlTags(String fieldValue) {
+        return fieldValue.replace("<", "&lt;").replace(">", "&gt;");
     }
 
     public String htmlCompatibleTestTitle(Object fieldValue) {

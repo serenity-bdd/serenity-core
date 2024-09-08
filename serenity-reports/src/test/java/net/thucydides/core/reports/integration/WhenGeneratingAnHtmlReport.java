@@ -20,17 +20,18 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.io.FileMatchers.anExistingFile;
 
 public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
 
     @Mock
     TestOutcomes allTestOutcomes;
-    
+
     @Before
     public void setupWorkingDirectory() throws IOException {
-        
+
         MockitoAnnotations.initMocks(this);
-        
+
         File screenshotsSourceDirectory = FileSystemUtils.getResourceAsFile("screenshots");
         File[] screenshots = screenshotsSourceDirectory.listFiles();
 
@@ -50,7 +51,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
 
         File htmlReport = reporter.generateReportFor(testOutcome);
 
-        assertThat(htmlReport.exists(), is(true));
+        assertThat(htmlReport, anExistingFile());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         testOutcome.determineTestFailureCause(new AssertionError("test failed"));
         File htmlReport = reporter.generateReportFor(testOutcome);
 
-        assertThat(htmlReport.exists(), is(true));
+        assertThat(htmlReport, anExistingFile());
     }
 
     @Test
@@ -73,7 +74,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         testOutcome.setAnnotatedResult(TestResult.FAILURE);
         File htmlReport = reporter.generateReportFor(testOutcome);
 
-        assertThat(htmlReport.exists(), is(true));
+        assertThat(htmlReport, anExistingFile());
     }
 
 
@@ -82,10 +83,10 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         TestOutcome testOutcome = new TestOutcome("a_simple_test_case");
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
         reporter.generateReportFor(testOutcome);
-        
+
         File cssDir = new File(outputDirectory, "css");
         File cssStylesheet = new File(cssDir, "core.css");
-        assertThat(cssStylesheet.exists(), is(true));
+        assertThat(cssStylesheet, anExistingFile());
     }
 
     @Test
@@ -99,7 +100,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
 
         File cssDir = new File(differentOutputDirectory, "css");
         File cssStylesheet = new File(cssDir, "core.css");
-        assertThat(cssStylesheet.exists(), is(true));
+        assertThat(cssStylesheet, anExistingFile());
     }
 
     @Test
@@ -109,14 +110,14 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
 
         reporter.generateReportFor(testOutcome);
-        
+
         File report = new File(outputDirectory,Digest.ofTextValue("a_simple_test_case") + ".html");
         File cssDir = new File(outputDirectory, "css");
         File cssStylesheet = new File(cssDir, "core.css");
-        assertThat(cssStylesheet.exists(), is(true));
-        assertThat(report.exists(), is(true));
+        assertThat(cssStylesheet, anExistingFile());
+        assertThat(report, anExistingFile());
     }
-    
+
     @Test
     public void screenshots_should_have_a_separate_html_report()  throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
@@ -130,7 +131,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         File report = reporter.generateReportFor(testOutcome);
         File screenshotReport = withSuffix(report,"_screenshots");
 
-        assertThat(screenshotReport.exists(), is(true));
+        assertThat(screenshotReport, anExistingFile());
 
     }
 
@@ -215,7 +216,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         final String alternativeResourceDirectory = "alt-report-resources";
         reporter.setResourceDirectory(alternativeResourceDirectory);
         reporter.generateReportFor(testOutcome);
-        
+
         File expectedCssStylesheet = new File(new File(outputDirectory,"css"), "alternative.css");
         assertThat(expectedCssStylesheet.exists(), is(true));
     }
@@ -242,7 +243,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
 
         environmentVariables.setProperty("thucydides.report.resources", "alt-report-resources");
         reporter.generateReportFor(testOutcome);
-        
+
         File expectedCssStylesheet = new File(new File(outputDirectory,"css"), "alternative.css");
         assertThat(expectedCssStylesheet.exists(), is(true));
     }
@@ -256,12 +257,12 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         final String alternativeResourceDirectory = "alt-report-resources";
         reporter.setResourceDirectory(alternativeResourceDirectory);
         reporter.generateReportFor(testOutcome);
-        
+
         File defaultCssStylesheet = new File(new File(outputDirectory,"css"), "core.css");
         assertThat(defaultCssStylesheet.exists(), is(false));
     }
 
-    
+
     @Test
     public void a_sample_report_should_be_generated_in_the_target_directory() throws Exception {
 

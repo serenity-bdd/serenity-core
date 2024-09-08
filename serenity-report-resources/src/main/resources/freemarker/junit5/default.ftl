@@ -338,7 +338,7 @@
                                     <#assign roeResult = row.result/>
                                 </#if>
                                 <td class="test-${roeResult}"><a
-                                            href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
+                                            href="#${rowIndex}"><#outputformat 'HTML'>${formatter.plainHtmlCompatible(value)}</#outputformat></a>
                                 </td>
                             </#list>
                         </tr>

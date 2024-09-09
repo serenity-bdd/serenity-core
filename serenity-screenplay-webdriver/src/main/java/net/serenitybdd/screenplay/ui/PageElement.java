@@ -13,7 +13,7 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndM
 public class PageElement {
 
     private static final String BY_NAME_ID_OR_ARIA_LABEL = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[aria-label='{0}' i]";
-    private static final String BY_TAG = "xpath://{0}";
+    private static final String BY_TAG = "xpath:.//{0}";
 
     /**
      * Locate an element with a given name.

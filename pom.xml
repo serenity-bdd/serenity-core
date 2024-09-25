@@ -69,7 +69,7 @@
         <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.13.0</joda-time.version>
         <xstream.version>1.4.20</xstream.version>
-        <opencsv.version>2.1</opencsv.version>
+        <opencsv.version>5.9</opencsv.version>
         <typesafe.version>1.4.3</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.2.2</awaitility.version>
@@ -364,7 +364,8 @@
                 <version>${appium.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.sf.opencsv</groupId>
+<!--                <groupId>net.sf.opencsv</groupId>-->
+                <groupId>com.opencsv</groupId>
                 <artifactId>opencsv</artifactId>
                 <version>${opencsv.version}</version>
             </dependency>

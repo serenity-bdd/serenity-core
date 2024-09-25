@@ -9,7 +9,6 @@ import io.restassured.response.ResponseOptions;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.model.rest.RestMethod;
 import net.serenitybdd.model.rest.RestQuery;
-import net.serenitybdd.rest.RestStepListener;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.event.RecordRestQueryEvent;
 import net.serenitybdd.rest.filters.FieldsRecordingFilter;
@@ -38,10 +37,6 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
  * Time: 7:51 AM
  */
 public class RestReportingHelper {
-
-    public RestReportingHelper() {
-        getParallelEventBus().registerListener(new RestStepListener());
-    }
 
     private static boolean shouldRecordResponseBodyFor(Response result) {
         final ContentType type = ContentType.fromContentType(result.contentType());

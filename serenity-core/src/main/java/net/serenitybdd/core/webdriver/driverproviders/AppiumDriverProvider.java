@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import com.google.common.eventbus.Subscribe;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.windows.WindowsDriver;
 import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
@@ -27,6 +28,7 @@ import java.net.URL;
 import static net.thucydides.model.ThucydidesSystemProperty.MANAGE_APPIUM_SERVERS;
 import static net.thucydides.core.webdriver.SupportedWebDriver.ANDROID;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IPHONE;
+import static net.thucydides.core.webdriver.SupportedWebDriver.REMOTE;
 
 public class AppiumDriverProvider implements DriverProvider {
 
@@ -65,6 +67,10 @@ public class AppiumDriverProvider implements DriverProvider {
                 IOSDriver iosDriver = new IOSDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), IPHONE));
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 return iosDriver;
+            case WINDOWS:
+            	WindowsDriver windowsDriver = new WindowsDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), REMOTE));
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(windowsDriver.getCapabilities()));
+                return windowsDriver;
         }
         throw new DriverConfigurationError(appiumTargetPlatform(environmentVariables).name());
     }
@@ -119,6 +125,18 @@ public class AppiumDriverProvider implements DriverProvider {
                 WebDriverInstanceEvents.bus().register(listenerFor(iosDriver, deviceName));
                 LOGGER.info("  -> driver created" + iosDriver);
                 return iosDriver;
+            case WINDOWS:
+                LOGGER.info("  - Using windows appium server at " + appiumUrl);
+                enhancedOptions = enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), REMOTE);
+                LOGGER.info("  - Using appium capabilities " +  enhancedOptions);
+                TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+                TestContext.forTheCurrentTest().recordCurrentPlatform();
+                WindowsDriver windowsDriver = new WindowsDriver(appiumUrl, enhancedOptions);
+
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(windowsDriver.getCapabilities()));
+                WebDriverInstanceEvents.bus().register(listenerFor(windowsDriver, deviceName));
+                LOGGER.info("  -> driver created" + windowsDriver);
+                return windowsDriver;
         }
         throw new DriverConfigurationError(appiumTargetPlatform(testEnvironmentVariables).name());
 

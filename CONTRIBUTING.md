@@ -14,9 +14,9 @@ It is easy to make changes, and test them as well. If you need some instructions
   * This is usually the master branch.
   * Only target release branches if you are certain your fix must be on that
     branch.
-  * To quickly create a topic branch based on master; `git checkout -b
-    fix_my_contribution master`. Please avoid working directly on the
-    `master` branch. 
+  * To quickly create a topic branch based on main; `git checkout -b
+    fix_my_contribution main`. Please avoid working directly on the
+    `main` branch. 
 * Make commits of logical units using [Commit message conventions](#commit_message_conventions).
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Make sure your commit messages are in the proper format.
@@ -104,15 +104,15 @@ screenshots “what was before this PR” and how it will be changed”.
 
 ## <a name="how_to_build"></a> How to build
 
-For builds we use [maven](http://maven.apache.org), and uses Maven Wrapper to achieve that all developers will use same version.
-
-So, now you are ready to build the project. After you checkout it go to folder and execute:
+Serenity BDD is built with [Maven](http://maven.apache.org), using Maven Wrapper to achieve consistent builds for all developers.
+Ensure that JDK 17 is installed and configured as the default JDK.
+After cloning the repository navigate to the project root directory and execute:
 ```
 ./mvnw clean verify
 ```
-It will take some time... A lot of tests should execute before build can be marked successful. Using gradle documentation you can configure executing only your tests.
+The build takes a few minutes. A lot of tests should execute before build can be marked successful.
 
-If you wish to check a change locally before running the full test suite, you can build the snapshot version like this:
+To check a change locally without running the full test suite build the snapshot version like this:
 
 ```
 ./mvnw clean install -DskipTests

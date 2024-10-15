@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.4-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -41,35 +41,35 @@
         <maven.compiler.target>11</maven.compiler.target>
 
         <junit.version>4.13.2</junit.version>
-        <groovy.version>4.0.22</groovy.version>
+        <groovy.version>4.0.23</groovy.version>
         <spock.version>2.4-M1-groovy-4.0</spock.version>
-        <byte-buddy.version>1.14.18</byte-buddy.version>
-        <guava.version>33.2.1-jre</guava.version>
+        <byte-buddy.version>1.15.2</byte-buddy.version>
+        <guava.version>33.3.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <cucumber.version>7.18.1</cucumber.version>
+        <cucumber.version>7.19.0</cucumber.version>
         <gson.version>2.11.0</gson.version>
-        <junit5.version>5.11.0</junit5.version>
+        <junit5.version>5.11.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>
         <assertj.version>3.26.3</assertj.version>
         <opentest.version>1.3.0</opentest.version>
-        <commons.lang.version>3.16.0</commons.lang.version>
+        <commons.lang.version>3.17.0</commons.lang.version>
         <commons.lang2.version>2.6</commons.lang2.version>
-        <commons.io.version>2.16.1</commons.io.version>
+        <commons.io.version>2.17.0</commons.io.version>
         <commons.text.version>1.12.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.collections.version>4.4</commons.collections.version>
-        <commons.compress.version>1.27.0</commons.compress.version>
+        <commons.compress.version>1.27.1</commons.compress.version>
         <commons.net.version>3.11.1</commons.net.version>
         <commons.codec.version>1.17.1</commons.codec.version>
         <freemarker.version>2.3.33</freemarker.version>
-        <selenium.version>4.23.1</selenium.version>
+        <selenium.version>4.25.0</selenium.version>
         <htmlunit.driver.version>4.23.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
-        <joda-time.version>2.12.7</joda-time.version>
+        <joda-time.version>2.13.0</joda-time.version>
         <xstream.version>1.4.20</xstream.version>
-        <opencsv.version>2.1</opencsv.version>
+        <opencsv.version>5.9</opencsv.version>
         <typesafe.version>1.4.3</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.2.2</awaitility.version>
@@ -78,7 +78,7 @@
         <htmlunit.version>4.4.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.2</ngwebdriver.version>
-        <spring.version>6.1.12</spring.version>
+        <spring.version>6.1.13</spring.version>
         <spring.boot.version>3.2.5</spring.boot.version>
         <jimfs.version>1.3.0</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
@@ -104,7 +104,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.3.1</version>
+                <version>5.4</version>
             </dependency>
             <!-- Testing libraries -->
             <dependency>
@@ -183,7 +183,7 @@
             <dependency>
                 <groupId>org.objenesis</groupId>
                 <artifactId>objenesis</artifactId>
-                <version>3.3</version>
+                <version>3.4</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -217,6 +217,11 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>dnsjava</groupId>
+                <artifactId>dnsjava</artifactId>
+                <version>3.6.1</version>
             </dependency>
 
             <!-- Guice dependencies -->
@@ -364,7 +369,8 @@
                 <version>${appium.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.sf.opencsv</groupId>
+<!--                <groupId>net.sf.opencsv</groupId>-->
+                <groupId>com.opencsv</groupId>
                 <artifactId>opencsv</artifactId>
                 <version>${opencsv.version}</version>
             </dependency>

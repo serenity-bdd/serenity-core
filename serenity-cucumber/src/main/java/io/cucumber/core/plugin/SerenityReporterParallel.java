@@ -97,7 +97,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
      */
     private final Map<URI, ScenarioContextParallel> localContexts = Collections.synchronizedMap(new HashMap<>());
 
-    private ScenarioContextParallel getContext(URI featureURI) {
+    protected ScenarioContextParallel getContext(URI featureURI) {
         synchronized (localContexts) {
             return localContexts.computeIfAbsent(featureURI, uri -> new ScenarioContextParallel(featureURI));
         }
@@ -146,7 +146,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     private final EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
     private final EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
-    private void handleTestRunStarted(TestRunStarted event) {
+    protected void handleTestRunStarted(TestRunStarted event) {
         LOGGER.debug("SRP:handleTestRunStarted {} ", Thread.currentThread());
     }
 
@@ -162,7 +162,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         publisher.registerHandlerFor(WriteEvent.class, writeEventHandler);
     }
 
-    private void handleTestSourceRead(TestSourceRead event) {
+    protected void handleTestSourceRead(TestSourceRead event) {
         LOGGER.debug("SRP:handleTestSourceRead {}", Thread.currentThread());
         featureLoader.addTestSourceReadEvent(event);
         URI featurePath = event.getUri();
@@ -198,7 +198,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         }
     }
 
-    private Optional<Feature> featureFrom(URI featureFileUri) {
+    protected Optional<Feature> featureFrom(URI featureFileUri) {
 
         LOGGER.debug("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
@@ -238,7 +238,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         return userStory;
     }
 
-    private void handleTestCaseStarted(TestCaseStarted event) {
+    protected void handleTestCaseStarted(TestCaseStarted event) {
         try {
             TestCase testCase = event.getTestCase();
             LOGGER.debug("SRP:handleTestCaseStarted {} {} {} at line {}", testCase.getUri(), Thread.currentThread(),
@@ -344,7 +344,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         return (Feature) astNode.node;
     }
 
-    private void handleTestCaseFinished(TestCaseFinished event) {
+    protected void handleTestCaseFinished(TestCaseFinished event) {
         LOGGER.debug("SRP:handleTestCaseFinished " + " " + event.getTestCase().getUri()
                 + " " + Thread.currentThread() + " " + event.getTestCase().getId() + " at line " + event.getTestCase().getLocation().getLine());
         URI featurePath = event.getTestCase().getUri();
@@ -444,7 +444,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         return testOutcomes.get(testOutcomes.size() - 1);
     }
 
-    private void handleTestStepStarted(TestStepStarted event) {
+    protected void handleTestStepStarted(TestStepStarted event) {
         ZonedDateTime startTime = ZonedDateTime.now();
         URI featurePath = event.getTestCase().getUri();
         TestSourcesModel.AstNode mainAstNode = featureLoader.getAstNode(featurePath, event.getTestCase().getLocation().getLine());
@@ -497,7 +497,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).stepEventBus().stepFinished();
     }
 
-    private void handleTestStepFinished(TestStepFinished event) {
+    protected void handleTestStepFinished(TestStepFinished event) {
         LOGGER.debug("SRP:handleTestStepFinished " + " " + event.getTestCase().getUri() +
                 " " + Thread.currentThread() + " " + event.getTestCase().getId() +
                 " at line " + event.getTestCase().getLocation().getLine());
@@ -516,7 +516,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     }
 
-    private void handleTestRunFinished(TestRunFinished event) {
+    protected void handleTestRunFinished(TestRunFinished event) {
         LOGGER.debug("SRP:handleTestRunFinished " + Thread.currentThread() + " " + contextURISet);
 
         for (URI featurePath : contextURISet) {

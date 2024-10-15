@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.csv
 
-import au.com.bytecode.opencsv.CSVReader
+import com.opencsv.CSVReader
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.reports.TestOutcomes

@@ -32,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -106,9 +107,8 @@ public class StepEventBus {
         if (key == null) {
             return new SilentEventBus(ConfiguredEnvironment.getEnvironmentVariables());
         }
-        STICKY_EVENT_BUSES.putIfAbsent(key, new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables(),
-                ConfiguredEnvironment.getConfiguration()));
-        return STICKY_EVENT_BUSES.get(key);
+        return STICKY_EVENT_BUSES.computeIfAbsent(key, (unused) -> new StepEventBus(
+                ConfiguredEnvironment.getEnvironmentVariables(), ConfiguredEnvironment.getConfiguration()));
     }
 
     public static void setCurrentBusToEventBusFor(Object key) {
@@ -128,7 +128,7 @@ public class StepEventBus {
         STICKY_EVENT_BUSES.remove(key);
     }
 
-    private List<StepListener> registeredListeners = new ArrayList<>();
+    private List<StepListener> registeredListeners = new CopyOnWriteArrayList<>();
     /**
      * A reference to the base step listener, if registered.
      */

@@ -1,7 +1,7 @@
 package net.thucydides.model.reports.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.base.Splitter;
+import com.opencsv.CSVWriter;
 import net.serenitybdd.model.collect.NewList;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;

@@ -2,7 +2,6 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
@@ -22,7 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.model.ThucydidesSystemProperty.*;
@@ -141,7 +143,15 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            return waitThenRetry(driverClass, options, environmentVariables);
+            if (shouldRetry(cause)) {
+                LOGGER.debug("Waiting to retry: {})", cause.getMessage());
+                return waitThenRetry(driverClass, options, environmentVariables, cause);
+            } else {
+                throw new DriverConfigurationError(
+                        "WebDriver was unable to create a new instance of type " + driverClass + System.lineSeparator()
+                                + "WebDriver reported the following message: " + cause.getMessage() + System.lineSeparator()
+                                + "See below for more details.", cause);
+            }
         }
     }
 
@@ -165,9 +175,10 @@ public class WebDriverFactory {
 
     private WebDriver waitThenRetry(Class<? extends WebDriver> driverClass,
                                     String options,
-                                    EnvironmentVariables environmentVariables) {
-        int maxRetryCount = WEBDRIVER_CREATION_RETRY_COUNT.integerFrom(environmentVariables, 6);
-        return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, null);
+                                    EnvironmentVariables environmentVariables,
+                                    Exception cause) {
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables, 30);
+        return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, cause);
     }
 
     private WebDriver waitThenRetry(int remainingTries,
@@ -176,7 +187,6 @@ public class WebDriverFactory {
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
         LOGGER.debug("Remaining tries: " + remainingTries);
-        int retryDelay = WEBDRIVER_CREATION_RETRY_DELAY.integerFrom(environmentVariables, 5);
 
         if (remainingTries == 0) {
             throw new DriverConfigurationError(
@@ -184,8 +194,7 @@ public class WebDriverFactory {
                             " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
-        PauseTestExecution.forADelayOf(retryDelay).seconds();
-        Map<String, Integer> ageOfFriends = Map.of("Peter", 23, "Paul", 25, "Mary", 27);
+        PauseTestExecution.forADelayOf(30).seconds();
 
         try {
             return createWebDriver(driverClass, options, environmentVariables);

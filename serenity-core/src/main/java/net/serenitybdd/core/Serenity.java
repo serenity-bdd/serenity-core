@@ -348,7 +348,7 @@ public class Serenity {
     public static boolean shouldThrowErrorsImmediately() {
         // Throw errors immediately if this is a Cucumber test
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        return Arrays.stream(stackTrace).anyMatch(element -> element.getClassName().contains("io.cucumber.core"));
+        return throwExceptionsImmediately.get() || Arrays.stream(stackTrace).anyMatch(element -> element.getClassName().contains("io.cucumber.core"));
     }
 
     public static WebDriverConfigurer webdriver() {

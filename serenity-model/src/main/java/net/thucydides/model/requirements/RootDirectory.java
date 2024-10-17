@@ -262,7 +262,8 @@ public class RootDirectory {
         String relativeRoot = rootDirectoryPath.equals(".") ? "" : rootDirectoryPath;
 
         if (ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
-            return Optional.of(Paths.get(ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.from(environmentVariables)));
+            URI serenityReqDir = new File(ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.from(environmentVariables)).toURI();
+            return Optional.of(Paths.get(serenityReqDir));
         }
         List<File> resourceDirectories = getResourceDirectories(Paths.get(relativeRoot), environmentVariables);
         List<File> resourceDirectoriesByIncreasingDepth = resourceDirectories.stream()

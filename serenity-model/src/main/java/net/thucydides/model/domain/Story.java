@@ -12,6 +12,8 @@ import net.thucydides.model.requirements.model.FeatureType;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -94,7 +96,12 @@ public class Story {
     private PathElements pathElementsFromDirectoryPath(String path) {
         List<PathElement> pathElements = new ArrayList<>();
         if (path != null) {
-            Path storyPath = Paths.get(path);
+            Path storyPath = null;
+            try {
+                storyPath = Paths.get(new URI(path));
+            } catch (URISyntaxException e) {
+                storyPath = Paths.get(path);
+            }
             for (int i = 0; i < storyPath.getNameCount(); i++) {
                 pathElements.add(new PathElement(storyPath.getName(i).toString(), ""));
             }

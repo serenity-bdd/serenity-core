@@ -143,15 +143,7 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            if (shouldRetry(cause)) {
-                LOGGER.debug("Waiting to retry: {})", cause.getMessage());
-                return waitThenRetry(driverClass, options, environmentVariables, cause);
-            } else {
-                throw new DriverConfigurationError(
-                        "WebDriver was unable to create a new instance of type " + driverClass + System.lineSeparator()
-                                + "WebDriver reported the following message: " + cause.getMessage() + System.lineSeparator()
-                                + "See below for more details.", cause);
-            }
+            return waitThenRetry(driverClass, options, environmentVariables, cause);
         }
     }
 
@@ -177,7 +169,7 @@ public class WebDriverFactory {
                                     String options,
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
-        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables, 30);
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_COUNT.integerFrom(environmentVariables, 6);
         return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, cause);
     }
 
@@ -187,6 +179,7 @@ public class WebDriverFactory {
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
         LOGGER.debug("Remaining tries: " + remainingTries);
+        int retryDelay = WEBDRIVER_CREATION_RETRY_DELAY.integerFrom(environmentVariables, 5);
 
         if (remainingTries == 0) {
             throw new DriverConfigurationError(
@@ -194,7 +187,7 @@ public class WebDriverFactory {
                             " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
-        PauseTestExecution.forADelayOf(30).seconds();
+        PauseTestExecution.forADelayOf(retryDelay).seconds();
 
         try {
             return createWebDriver(driverClass, options, environmentVariables);

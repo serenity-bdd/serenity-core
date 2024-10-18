@@ -47,7 +47,7 @@
         <guava.version>33.3.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <cucumber.version>7.19.0</cucumber.version>
+        <cucumber.version>7.20.1</cucumber.version>
         <gson.version>2.11.0</gson.version>
         <junit5.version>5.11.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>

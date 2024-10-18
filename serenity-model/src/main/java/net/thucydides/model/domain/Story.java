@@ -112,31 +112,7 @@ public class Story {
     public static String pathOf(Class<?> userStoryClass) {
         String canonicalName = userStoryClass.getCanonicalName();
         return stripRootPathFrom(canonicalName);
-//        String localPath = stripRootPathFrom(canonicalName);
-//        int lastDot = localPath.lastIndexOf(".");
-//
-//        if (lastDot > 0) {
-//            return localPath.substring(0, lastDot);
-//        } else {
-//            return "";
-//        }
     }
-
-    public static String completePathOf(Class<?> userStoryClass) {
-        String canonicalName = userStoryClass.getCanonicalName();
-
-        int lastDot = canonicalName.lastIndexOf(".");
-        int lastDollar = canonicalName.lastIndexOf("$");
-        int lastSeparator = Math.max(lastDollar, lastDot);
-
-        if (lastSeparator > 0) {
-            return canonicalName.substring(0, lastSeparator);
-//            return localPath;
-        } else {
-            return "";
-        }
-    }
-
 
     private static String stripRootPathFrom(String testOutcomePath) {
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();

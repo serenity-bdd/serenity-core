@@ -99,7 +99,7 @@ public class Story {
             Path storyPath = null;
             try {
                 storyPath = Paths.get(new URI(path));
-            } catch (URISyntaxException e) {
+            } catch (URISyntaxException | IllegalArgumentException e) {
                 storyPath = Paths.get(path);
             }
             for (int i = 0; i < storyPath.getNameCount(); i++) {

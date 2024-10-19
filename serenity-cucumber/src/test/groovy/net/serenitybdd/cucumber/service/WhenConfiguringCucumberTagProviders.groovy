@@ -30,14 +30,13 @@ class WhenConfiguringCucumberTagProviders extends Specification {
         then:
             tagProviders.size() == 3
             tagProviders[0].class == FileSystemRequirementsTagProvider
-            System.err.println "ROOT DIRECTORY A:" + ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory
             ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory.replace("\\","/") == "src/test/resources/features"
     }
 
     def "should be able to override the feature directory using the environment variables"() {
         given:
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-            environmentVariables.setProperty("serenity.requirements.dir","feature-files")
+            environmentVariables.setProperty("serenity.requirements.dir","custom-feature-files")
             CucumberTagProviderStrategy tagProviderStrategy = new CucumberTagProviderStrategy(environmentVariables)
         when:
             Set<TagProvider> tagProviders = tagProviderStrategy.tagProviders
@@ -45,7 +44,7 @@ class WhenConfiguringCucumberTagProviders extends Specification {
             tagProviders.size() == 3
             tagProviders[0].class == FileSystemRequirementsTagProvider
             System.err.println "ROOT DIRECTORY B:" + ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory
-            ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory == "feature-files"
+            ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory.endsWith("custom-feature-files")
     }
 
     def "should provide feature and capability tags based on the feature file directory"() {

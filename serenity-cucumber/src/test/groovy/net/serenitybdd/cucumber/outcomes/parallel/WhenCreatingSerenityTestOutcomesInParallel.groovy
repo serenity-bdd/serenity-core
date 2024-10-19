@@ -7,7 +7,6 @@ import net.thucydides.model.domain.TestResult
 import net.thucydides.model.domain.TestStep
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
-import net.thucydides.model.util.TestResources
 import net.thucydides.model.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification
@@ -34,12 +33,11 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
             TestOutcome testOutcome = recordedTestOutcomes[0]
             List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
         then:
+        true
             testOutcome.result == TestResult.FAILURE
         and:
             stepResults.contains(TestResult.FAILURE)
-        //  TODO: Fix known issue where the steps after a failed step appear as nested underneath the failed step.
-        //  NOTE: Hic Sunt Dracones
-        //  stepResults == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.FAILURE, TestResult.SKIPPED]
+            stepResults == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.FAILURE, TestResult.SKIPPED]
     }
 
 

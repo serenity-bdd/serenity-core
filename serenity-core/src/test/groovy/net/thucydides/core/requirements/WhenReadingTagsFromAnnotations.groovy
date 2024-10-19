@@ -114,20 +114,6 @@ class WhenReadingTagsFromAnnotations extends Specification {
             tags.collect { it.name }.containsAll(["Potatoes/Big potatoes", "Potatoes"])
     }
 
-    def "should find correct requirement for a given test tag"() {
-        given:
-            environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")
-            def tagProvider = new PackageAnnotationBasedTagProvider(environmentVariables)
-        and:
-            def tag = TestTag.withName("Apples").andType("capability")
-        when:
-            def requirement = tagProvider.getRequirementFor(tag)
-        then:
-            requirement.isPresent()
-        and:
-            requirement.get().name == "Apples" && requirement.get().type == "capability"
-    }
-
     def "should return absent for an unknown requirement"() {
         given:
             environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.7-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-smoketests</artifactId>
     <packaging>jar</packaging>
@@ -20,7 +20,19 @@
         <browserstack.browserName></browserstack.browserName>
         <browserstack.browser></browserstack.browser>
         <browserstack.version></browserstack.version>
+        <junit-jupiter.version>5.11.2</junit-jupiter.version>
+        <junit-platform-suite-api.version>1.11.1</junit-platform-suite-api.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
@@ -49,6 +61,12 @@
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit5</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-browserstack</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -57,6 +75,23 @@
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-saucelabs</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUNIT 5 DEPENDENCY-->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>7.19.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

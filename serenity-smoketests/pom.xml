@@ -64,7 +64,12 @@
             <artifactId>serenity-junit5</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>        <dependency>
+        <groupId>net.serenity-bdd</groupId>
+        <artifactId>serenity-ensure</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-browserstack</artifactId>

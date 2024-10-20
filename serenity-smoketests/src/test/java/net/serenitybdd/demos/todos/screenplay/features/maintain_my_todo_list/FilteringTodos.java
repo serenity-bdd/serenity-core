@@ -10,19 +10,14 @@ import net.serenitybdd.demos.todos.screenplay.tasks.Start;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.ensure.Ensure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.WebDriver;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
 
 @ExtendWith(SerenityJUnit5Extension.class)
 public class FilteringTodos {
@@ -38,43 +33,38 @@ public class FilteringTodos {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            // initialTodos, itemsToComplete, filtersToApply, expectedDisplayedItems, expectedSelectedFilter
-            "Walk the dog;Put out the garbage, Walk the dog, Completed, Walk the dog,                      Completed",
-            "Walk the dog;Put out the garbage, Walk the dog, Active,    Put out the garbage,               Active",
-            "Walk the dog;Put out the garbage, Walk the dog, All,       Walk the dog;Put out the garbage,  All"
-    })
-    public void should_be_able_to_filter_todos(
-            String initialTodos,
-            String itemsToComplete,
-            String filterToApply,
-            String expectedDisplayedItems,
-            String expectedSelectedFilter
+    @CsvSource(delimiterString = "|", value = {
+            // initialTodos                   | itemsToComplete | filters   | expectedDisplayedItems           | selectedFilter
+            "Walk the dog;Put out the garbage | Walk the dog    | Completed | Walk the dog                     | Completed",
+            "Walk the dog;Put out the garbage | Walk the dog    | Active    | Put out the garbage              | Active",
+            "Walk the dog;Put out the garbage | Walk the dog    | All       | Walk the dog;Put out the garbage | All",
+            "Walk the dog                     | Walk the dog    | Completed |                                  | Completed"})
+    public void should_be_able_to_filter_todos(String initialTodos, String itemsToComplete, String filter,
+                                               String expectedDisplayedItems, String selectedFilter
     ) {
-        // Parse the CSV string parameters into lists
-        TodoStatusFilter expectedFilter = TodoStatusFilter.valueOf(expectedSelectedFilter);
+        TodoStatusFilter filterToApply = TodoStatusFilter.valueOf(filter);
+        TodoStatusFilter expectedFilter = TodoStatusFilter.valueOf(selectedFilter);
 
-        // Given
-        givenThat(james).wasAbleTo(Start.withATodoListContaining(asList(initialTodos)));
-
-        // When
-        james.attemptsTo(
-                CompleteItems.called(asList(itemsToComplete)),
-                FilterItems.toShow(TodoStatusFilter.valueOf(filterToApply))
+        givenThat(james).wasAbleTo(
+                Start.withATodoListContaining(itemsIn(initialTodos))
         );
 
-        // Then
-        then(james).should(
-                seeThat(TheItems.displayed(), hasItems(expectedDisplayedItems)),
-                seeThat(CurrentFilter.selected(), is(expectedFilter))
+        when(james).attemptsTo(
+                CompleteItems.called(itemsIn(itemsToComplete)),
+                FilterItems.toShow(filterToApply)
+        );
+
+        then(james).attemptsTo(
+                Ensure.that(TheItems.displayed()).contains(itemsIn(expectedDisplayedItems)),
+                Ensure.that(CurrentFilter.selected()).isEqualTo(expectedFilter)
         );
     }
 
-    private List<String> asList(String str) {
-        if (str == null || str.trim().isEmpty()) {
-            return new ArrayList<>();
+    private String[] itemsIn(String listOfItems) {
+        if (listOfItems == null || listOfItems.trim().isEmpty()) {
+            return new String[]{};
         }
-        return Arrays.asList(str.split(";"));
+        return listOfItems.split(";");
     }
 
 }

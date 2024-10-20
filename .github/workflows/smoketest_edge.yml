@@ -1,4 +1,4 @@
-name: Smoke Tests (Chrome)
+name: Smoke Tests (Edge)
 
 on: [push]
 

@@ -1,4 +1,4 @@
-package net.serenitybdd.demos.todos.pageobjects.features.maintain_my_todo_list;
+package net.serenitybdd.demos.todos.pageobjects.features.maintain_the_todo_list;
 
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatusFilter;
 import net.serenitybdd.demos.todos.pageobjects.steps.TodoUserSteps;

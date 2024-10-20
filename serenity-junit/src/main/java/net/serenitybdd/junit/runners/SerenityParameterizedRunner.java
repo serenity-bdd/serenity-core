@@ -30,7 +30,9 @@ import java.util.List;
 /**
  * Run a Serenity test suite using a set of data.
  * Similar to the JUnit parameterized tests, but better ;-).
+ * @Deprecated we recommend moving to JUnit 5 which supports data-driven tests natively.
  */
+@Deprecated
 public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();

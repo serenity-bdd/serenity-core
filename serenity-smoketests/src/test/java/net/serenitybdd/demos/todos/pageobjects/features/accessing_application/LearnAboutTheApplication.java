@@ -1,4 +1,4 @@
-package net.serenitybdd.demos.todos.pageobjects.features.accessing_the_application;
+package net.serenitybdd.demos.todos.pageobjects.features.accessing_application;
 
 import net.serenitybdd.demos.todos.pageobjects.steps.TodoUserSteps;
 import net.serenitybdd.junit.runners.SerenityRunner;

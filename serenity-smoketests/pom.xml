@@ -21,7 +21,7 @@
         <browserstack.browser></browserstack.browser>
         <browserstack.version></browserstack.version>
         <junit-jupiter.version>5.11.2</junit-jupiter.version>
-        <junit-platform-suite-api.version>1.11.1</junit-platform-suite-api.version>
+        <junit-platform-suite-api.version>1.11.2</junit-platform-suite-api.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -148,6 +148,9 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

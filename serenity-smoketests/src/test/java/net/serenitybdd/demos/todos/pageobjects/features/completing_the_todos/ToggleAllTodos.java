@@ -1,4 +1,4 @@
-package net.serenitybdd.demos.todos.pageobjects.features.completing_todos;
+package net.serenitybdd.demos.todos.pageobjects.features.completing_the_todos;
 
 import net.serenitybdd.demos.todos.pageobjects.steps.TodoUserSteps;
 import net.serenitybdd.junit.runners.SerenityRunner;

@@ -35,8 +35,10 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 	private void saveCurrentWebDriverContext() {
 		WebDriverFacade currentDriver = (WebDriverFacade) SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
 		if (currentDriver != null && currentDriver.isInstantiated()) {
-			SessionId sessionId = RemoteDriver.of(currentDriver).getSessionId();
-			setWebSessionId(sessionId);
+			if (RemoteDriver.isARemoteDriver(currentDriver)) {
+				SessionId sessionId = RemoteDriver.of(currentDriver).getSessionId();
+				setWebSessionId(sessionId);
+			}
 			setWebDriver(currentDriver);
 			setDriverUsedInThisTest(ThucydidesWebDriverSupport.getDriversUsed());
 		}

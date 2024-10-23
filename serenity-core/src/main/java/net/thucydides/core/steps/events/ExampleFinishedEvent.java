@@ -22,10 +22,12 @@ public class ExampleFinishedEvent extends StepEventBusEventBase {
     }
 
     private void saveCurrentWebDriverContext() {
-        WebDriver currentDriver = SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
-        if (currentDriver != null && (!(currentDriver instanceof WebDriverFacade) || ((WebDriverFacade) currentDriver).isInstantiated())) {
-            SessionId sessionId = RemoteDriver.of(currentDriver).getSessionId();
-            setWebSessionId(sessionId);
+        WebDriverFacade currentDriver = (WebDriverFacade) SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
+        if (currentDriver != null && currentDriver.isInstantiated()) {
+            if (RemoteDriver.isARemoteDriver(currentDriver)) {
+                SessionId sessionId = RemoteDriver.of(currentDriver).getSessionId();
+                setWebSessionId(sessionId);
+            }
             setWebDriver(currentDriver);
             setDriverUsedInThisTest(ThucydidesWebDriverSupport.getDriversUsed());
         }

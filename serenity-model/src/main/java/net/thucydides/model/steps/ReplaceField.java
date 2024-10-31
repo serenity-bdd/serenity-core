@@ -58,7 +58,7 @@ public class ReplaceField {
         }
         if (value.getClass().isArray()) {
             List<String> elements = new ArrayList<>();
-            Collections.singletonList(value).forEach(
+            Collections.singletonList(((Object[])value)[0]).forEach(
                     part -> elements.add(part.toString())
             );
 

@@ -65,7 +65,8 @@ class WhenUsingFluentAssertionsWIthComparableTypes {
             @Test
             fun `for shorts`() {
                 val age : Short = 30
-                shouldPassWhenChecking(that(age).isGreaterThan(18))
+                val minAge : Short = 18
+                shouldPassWhenChecking(that(age).isGreaterThan(minAge))
 
             }
 

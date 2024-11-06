@@ -5,10 +5,10 @@ import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
 import io.cucumber.messages.types.*;
+import net.serenitybdd.cucumber.utils.PathUtils;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenario;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
-import net.serenitybdd.cucumber.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,12 +85,12 @@ public class CucumberScenarioLoader {
                         .filter(child -> child.getScenario() != null && child.getScenario().isPresent())
                         .map(FeatureChild::getScenario)
                         .map(scenarioDefinition -> new WeightedCucumberScenario(
-                        PathUtils.getAsFile(mapsForFeatures.get(cucumberFeature)).getName(),
-                        cucumberFeature.getName(),
-                        scenarioDefinition.get().getName(),
-                        scenarioWeightFor(cucumberFeature, scenarioDefinition.get()),
-                        tagsFor(cucumberFeature, scenarioDefinition.get()),
-                        scenarioCountFor(scenarioDefinition.get())))
+                            PathUtils.getAsFile(mapsForFeatures.get(cucumberFeature)).getName(),
+                            cucumberFeature.getName(),
+                            scenarioDefinition.get().getName(),
+                            scenarioWeightFor(cucumberFeature, scenarioDefinition.get()),
+                            tagsFor(cucumberFeature, scenarioDefinition.get()),
+                            scenarioCountFor(scenarioDefinition.get())))
                     .collect(toList());
             } catch (Throwable e) {
                 throw new IllegalStateException(String.format("Could not extract scenarios from %s", mapsForFeatures.get(cucumberFeature)), e);

@@ -48,6 +48,7 @@
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.16</slf4j.version>
         <cucumber.version>7.20.1</cucumber.version>
+        <cucumber.tag-expressions.version>6.1.1</cucumber.tag-expressions.version>
         <gson.version>2.11.0</gson.version>
         <junit5.version>5.11.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>

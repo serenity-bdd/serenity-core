@@ -1,5 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ public class WeightedCucumberScenariosTest {
         List<WeightedCucumberScenarios> weightedCucumberScenarios = oneScenario.sliceInto(100);
         assertThat(weightedCucumberScenarios, hasSize(100));
         assertThat(weightedCucumberScenarios.get(0).scenarios, hasSize(1));
-        assertThat(weightedCucumberScenarios.get(0).scenarios.get(0), is(weightedCucumberScenario));
+        assertThat(weightedCucumberScenarios.get(0).scenarios.get(0), Is.is(weightedCucumberScenario));
         assertThat(weightedCucumberScenarios.get(1).scenarios, hasSize(0));
         assertThat(weightedCucumberScenarios.get(99).scenarios, hasSize(0));
     }
@@ -31,7 +32,7 @@ public class WeightedCucumberScenariosTest {
         List<WeightedCucumberScenario> scenarios = Collections.singletonList(new WeightedCucumberScenario("test.feature", "featurename", "scenarioname", BigDecimal.ONE, emptySet(), 0));
         WeightedCucumberScenarios oneScenario = new WeightedCucumberScenarios(scenarios);
         WeightedCucumberScenarios fork1 = oneScenario.slice(1).of(1);
-        assertThat(oneScenario, is(fork1));
+        assertThat(oneScenario, Is.is(fork1));
     }
 
 }

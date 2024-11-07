@@ -1,7 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,20 +35,20 @@ public class CucumberSuiteSlicerTest {
 
     @Test
     public void shouldReturnOnlyScenariosWithSpecifiedTags() {
-        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("@shouldPass")).scenarios, Matchers.contains(expectedScenario1));
+        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("@shouldPass")).scenarios, contains(expectedScenario1));
     }
 
     @Test
     public void noSuppliedTagsMeansReturnAllScenarios() {
-        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList()).scenarios, Matchers.contains(expectedScenario1, expectedScenario2));
+        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList()).scenarios, contains(expectedScenario1, expectedScenario2));
     }
 
     @Test
     public void shouldSupportNotInTheTagExpression() {
-        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("not @shouldPass")).scenarios, Matchers.contains(expectedScenario2));
+        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("not @shouldPass")).scenarios, contains(expectedScenario2));
     }
     @Test
     public void shouldSupportOldExclusionSyntaxInTheTagExpression() {
-        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("~@shouldPass")).scenarios, Matchers.contains(expectedScenario2));
+        assertThat(cucumberSuiteSlicer.scenarios(1, 1, 1, 1, asList("~@shouldPass")).scenarios, contains(expectedScenario2));
     }
 }

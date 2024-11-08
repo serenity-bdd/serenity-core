@@ -64,12 +64,12 @@
         <commons.net.version>3.11.1</commons.net.version>
         <commons.codec.version>1.17.1</commons.codec.version>
         <freemarker.version>2.3.33</freemarker.version>
-        <selenium.version>4.25.0</selenium.version>
+        <selenium.version>4.26.0</selenium.version>
         <htmlunit.driver.version>4.25.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.13.0</joda-time.version>
-        <xstream.version>1.4.20</xstream.version>
+        <xstream.version>1.4.21</xstream.version>
         <opencsv.version>5.9</opencsv.version>
         <typesafe.version>1.4.3</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
@@ -79,8 +79,8 @@
         <htmlunit.version>4.5.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.2</ngwebdriver.version>
-        <spring.version>6.1.13</spring.version>
-        <spring.boot.version>3.2.5</spring.boot.version>
+        <spring.version>6.1.14</spring.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
         <jimfs.version>1.3.0</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <ant.version>1.10.12</ant.version>
@@ -88,7 +88,7 @@
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <javassist.version>3.29.2-GA</javassist.version>
-        <jackson.version>2.17.2</jackson.version>
+        <jackson.version>2.18.1</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
@@ -105,7 +105,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.4</version>
+                <version>5.4.1</version>
             </dependency>
             <!-- Testing libraries -->
             <dependency>
@@ -224,32 +224,6 @@
                 <artifactId>dnsjava</artifactId>
                 <version>3.6.1</version>
             </dependency>
-
-            <!-- Guice dependencies -->
-<!--            <dependency>-->
-<!--                <groupId>com.google.inject</groupId>-->
-<!--                <artifactId>guice</artifactId>-->
-<!--                <version>${guice.version}</version>-->
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.ow2.asm</groupId>-->
-<!--                        <artifactId>asm</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>asm</groupId>-->
-<!--                        <artifactId>asm</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>com.google.guava</groupId>-->
-<!--                        <artifactId>guava</artifactId>-->
-<!--                    </exclusion>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.sonatype.sisu.inject</groupId>-->
-<!--                        <artifactId>cglib</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
-<!--            </dependency>-->
-
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>

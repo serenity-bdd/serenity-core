@@ -50,7 +50,7 @@ class WhenUsingSmartFindBy extends Specification {
     def "should throw exception if button not found"(){
 
         when: "we try to find an element using button text"
-        def element = driver.findElement(By.buttonText("Missing Button"))
+        driver.findElement(By.buttonText("Missing Button"))
 
         then:
             thrown(NoSuchElementException)

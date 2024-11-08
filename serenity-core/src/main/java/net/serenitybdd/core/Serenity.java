@@ -137,7 +137,6 @@ public class Serenity {
     public static void injectDriverInto(final Object testCase) {
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(ThucydidesWebDriverSupport.getDriver(),
                 ThucydidesWebDriverSupport.getWebdriverManager());
-
     }
 
     /**

@@ -89,8 +89,10 @@ Check out Serenity BDD in more detail here:
 * [User Guide](https://serenity-bdd.github.io)
 * [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
 * [The Serenity BDD Web Site](https://serenity-bdd.github.io)
-* **[The Serenity Dojo Training Library](https://expansion.serenity-dojo.com/)** which includes a comprehensive range of free tutorials and more in depth courses on Serenity BDD.
-* [**Introductory Course**: Effective UI Test Automation With Serenity BDD and Selenium](https://www.udemy.com/course/serenity-bdd-web-testing/?referralCode=3E5878CF6F4676EF507B)
+
+### Learn Online
+* [**Introductory Course: Effective UI Test Automation With Serenity BDD and Selenium (START HERE!)** ](https://www.udemy.com/course/serenity-bdd-web-testing/?referralCode=3E5878CF6F4676EF507B)
+* **[The Serenity Dojo Training Library](https://expansion.serenity-dojo.com/)** which includes a comprehensive range of more in depth courses on Serenity BDD.
 * [**Master The Serenity Screenplay Pattern**: Next-generation Automated Acceptance Tests With Serenity Screenplay](https://expansion.serenity-dojo.com/courses/writing-more-sustainable-tests-with-the-screenplay-pattern)
     
 ## Release Notes

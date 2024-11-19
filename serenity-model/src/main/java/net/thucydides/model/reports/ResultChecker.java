@@ -116,11 +116,6 @@ public class ResultChecker {
         logger.info(resultLine("Slowest test took", CompoundDuration.of(testOutcomes.getSlowestTestDuration())));
         logger.info("------------------------------------------------");
         logger.info("");
-
-        Path index = outputDirectory.toPath().resolve("index.html");
-
-        logger.info(white("SERENITY REPORTS",0));
-        logger.info("  - Full Report: " + index.toUri());
     }
 
     private String resultLine(String label, String value) {

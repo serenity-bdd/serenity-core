@@ -2,12 +2,12 @@ package net.serenitybdd.maven.plugins;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.thucydides.core.reports.ExtendedReports;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.model.domain.TestResult;
-import net.thucydides.core.reports.ExtendedReports;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.ResultChecker;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.UserStoryTestReporter;
@@ -83,6 +83,13 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     @Parameter
     public String requirementsBaseDir;
 
+    /**
+     * Set to 'false' if you don't want to generate the full Serenity HTML report, but do want to produce other reports
+     * such as the single page HTML report.
+     */
+    @Parameter(defaultValue = "true")
+    public Boolean generateFullReport;
+
     EnvironmentVariables environmentVariables;
 
     Configuration configuration;
@@ -118,7 +125,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
      * Set this to true (default value) if you want the aggregate task to ignore test failures and continue the build process
      * If set to false, the aggregate task will end with an error if any tests are broken.
      */
-    @Parameter(defaultValue="true")
+    @Parameter(defaultValue = "true")
     public boolean ignoreFailedTests;
 
     private Path projectDirectory;
@@ -209,14 +216,20 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         prepareExecution();
 
         try {
-            TestResult testResult = generateHtmlStoryReports();
+            if (generateFullReport) {
+                generateHtmlStoryReports();
+            }
             generateExtraReports();
             generateCustomReports();
             if (!ignoreFailedTests) {
+                TestResult testResult = calculateTestResult();
                 switch (testResult) {
-                    case ERROR: throw new MojoFailureException("An error occurred in the Serenity tests");
-                    case FAILURE: throw new MojoFailureException("A failure occurred in the Serenity tests");
-                    case COMPROMISED: throw new MojoFailureException("There were compromised tests in the Serenity test suite");
+                    case ERROR:
+                        throw new MojoFailureException("An error occurred in the Serenity tests");
+                    case FAILURE:
+                        throw new MojoFailureException("A failure occurred in the Serenity tests");
+                    case COMPROMISED:
+                        throw new MojoFailureException("There were compromised tests in the Serenity test suite");
                 }
             }
         } catch (IOException e) {
@@ -224,10 +237,14 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         }
     }
 
+    private TestResult calculateTestResult() throws IOException {
+        return new ResultChecker(outputDirectory).checkTestResults();
+    }
+
     private void generateCustomReports() throws IOException {
         Collection<UserStoryTestReporter> customReporters = getCustomReportsFor(environmentVariables);
 
-         for (UserStoryTestReporter reporter : customReporters) {
+        for (UserStoryTestReporter reporter : customReporters) {
             reporter.generateReportsForTestResultsFrom(sourceOfTestResult());
         }
     }
@@ -260,7 +277,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
 
     }
 
-    private TestResult generateHtmlStoryReports() throws IOException {
+    private void generateHtmlStoryReports() throws IOException {
         getReporter().setProjectDirectory(projectDirectory.toFile().getPath());
         getReporter().setSourceDirectory(sourceDirectory);
         getReporter().setOutputDirectory(outputDirectory);
@@ -271,8 +288,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         getReporter().setJiraPassword(jiraPassword);
         getReporter().setTags(tags);
         getReporter().setGenerateTestOutcomeReports();
-        TestOutcomes outcomes = getReporter().generateReportsForTestResultsFrom(sourceDirectory);
-        return new ResultChecker(outputDirectory).checkTestResults(outcomes);
+        getReporter().generateReportsForTestResultsFrom(sourceDirectory);
     }
 
     private void generateExtraReports() {

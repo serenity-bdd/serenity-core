@@ -16,6 +16,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -31,6 +33,7 @@ import java.util.Optional;
 @Mojo(name = "reports", requiresProject = false, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class SerenityReportMojo extends AbstractMojo {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(SerenityReportMojo.class);
     /**
      * Reports are generated here
      */
@@ -145,6 +148,7 @@ public class SerenityReportMojo extends AbstractMojo {
                     report.setSourceDirectory(sourceDirectory.toPath());
                     report.setOutputDirectory(outputDirectory.toPath());
                     Path generatedReport = report.generateReport();
+                    LOGGER.info("Generated report file for {}: {}",report.getName(), generatedReport);
                 }
         );
     }

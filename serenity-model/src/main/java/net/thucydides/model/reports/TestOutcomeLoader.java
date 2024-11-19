@@ -61,15 +61,10 @@ public class TestOutcomeLoader {
             final List<Callable<List<TestOutcome>>> partitions = new ArrayList<>();
             final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
 
-//            for(File sourceFile : getAllOutcomeFilesFrom(reportDirectory)) {
-//                partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile));
-//            }
-//
             allOutcomeFilesFrom(reportDirectory).forEach(
                     sourceFile -> partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile.toFile()))
             );
 
-//            final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
             final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
             final List<Future<List<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
 

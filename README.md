@@ -86,11 +86,13 @@ If you are using Serenity for your company projects and need faster or more in-d
 ## Where can I learn more?
 
 Check out Serenity BDD in more detail here:
-* [User Guide](https://serenity-bdd.github.io/documentation/)
+* [User Guide](https://serenity-bdd.github.io)
 * [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
-* [The Serenity BDD Web Site](http://serenity-bdd.info)
-* **[The Serenity Dojo Training Library](https://expansion.serenity-dojo.com/)** which includes a comprehensive range of free tutorials and more in depth courses on Serenity BDD.
-* [**Introductory Course**: Effective UI Test Automation With Serenity BDD and Selenium](https://expansion.serenity-dojo.com/courses/testing-web-applications-with-serenity-bdd)
+* [The Serenity BDD Web Site](https://serenity-bdd.github.io)
+
+### Learn Online
+* [**Introductory Course: Effective UI Test Automation With Serenity BDD and Selenium (START HERE!)** ](https://www.udemy.com/course/serenity-bdd-web-testing/?referralCode=3E5878CF6F4676EF507B)
+* **[The Serenity Dojo Training Library](https://expansion.serenity-dojo.com/)** which includes a comprehensive range of more in depth courses on Serenity BDD.
 * [**Master The Serenity Screenplay Pattern**: Next-generation Automated Acceptance Tests With Serenity Screenplay](https://expansion.serenity-dojo.com/courses/writing-more-sustainable-tests-with-the-screenplay-pattern)
     
 ## Release Notes
@@ -112,6 +114,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|---------------------|-----------------------|
+| 4.2.8         | 4.2.8                 | 4.26.0           | 5.5.0               | 8.3.0                 |
 | 4.1.3         | 4.1.3                 | 4.18.1           | 5.3.1               | 8.3.0                 |
 | 4.1.0         | 4.1.0                 | 4.16.0           | 5.3.1               | 8.3.0                 |
 | 4.0.12        | 4.0.12                | 4.12.1           | 5.3.1               | 8.3.0                 |
@@ -153,6 +156,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 4.2.8         | 4.2.8                 | 4.2.8             | 7.20.1   |
 | 4.1.3         | 4.1.3                 | 4.1.3             | 7.15.0   |
 | 4.0.12        | 4.0.12                | 4.0.12            | 7.14.0   |
 | 4.0.1         | 4.0.1                 | 4.0.1             | 7.13.0   |

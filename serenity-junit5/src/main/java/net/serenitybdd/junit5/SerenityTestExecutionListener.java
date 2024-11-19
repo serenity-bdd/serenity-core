@@ -1,15 +1,11 @@
 package net.serenitybdd.junit5;
 
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
-import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
-import net.thucydides.model.logging.ConsoleLoggingListener;
 import net.thucydides.model.domain.*;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.model.reports.ReportService;
@@ -18,8 +14,6 @@ import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.steps.StepListener;
 import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
@@ -141,60 +135,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private void processTestMethodAnnotationsFor(TestIdentifier testIdentifier) {
         Optional<TestSource> testSource = testIdentifier.getSource();
         if (testSource.isPresent() && (testSource.get() instanceof MethodSource)) {
-            MethodSource methodTestSource = ((MethodSource) testIdentifier.getSource().get());
-            String className = methodTestSource.getClassName();
-            String methodName = methodTestSource.getMethodName();
-            //method parameter types are class names as strings comma separated : java.langString,java.lang.Integer
-            String methodParameterTypes = methodTestSource.getMethodParameterTypes();
-            List<Class> methodParameterClasses = null;
-
-            if (methodParameterTypes != null && !methodParameterTypes.isEmpty()) {
-                methodParameterClasses = Arrays.asList(methodParameterTypes.split(",")).stream().map(parameterClassName -> {
-                    try {
-                        //ClassUtils handles also simple data type like int, char..
-                        return ClassUtil.forName(parameterClassName.trim(), this.getClass().getClassLoader());
-                    } catch (ClassNotFoundException e) {
-                        logger.error("Problem when getting parameter classes ", e);
-                        return null;
-                    }
-                }).collect(Collectors.toList());
-            }
-            try {
-                if (isIgnored(getProcessedMethod(className, methodName, methodParameterClasses))) {
-                    startTestAtEventBus(testIdentifier);
-                    eventBusFor(testIdentifier).testIgnored();
-                    eventBusFor(testIdentifier).testFinished();
-                }
-            } catch (ClassNotFoundException | NoSuchMethodException exception) {
-                logger.error("Exception when processing method annotations", exception);
-            }
+            startTestAtEventBus(testIdentifier);
+            eventBusFor(testIdentifier).testIgnored();
+            eventBusFor(testIdentifier).testFinished();
         }
     }
-
-
-    private Method getProcessedMethod(String className, String methodName, List<Class> methodParameterClasses) throws NoSuchMethodException, ClassNotFoundException {
-        if (!isNullOrEmpty(methodParameterClasses)) {
-            Class[] classesArray = new Class[methodParameterClasses.size()];
-            return Class.forName(className).getMethod(methodName, methodParameterClasses.toArray(classesArray));
-        }
-        // check whether the class with name className has a method with name methodName and return it if it exists
-        if (Arrays.stream(Class.forName(className).getDeclaredMethods()).anyMatch(method -> method.getName().equals(methodName))) {
-            return Class.forName(className).getDeclaredMethod(methodName);
-        }
-        return Class.forName(className).getMethod(methodName);
-    }
-
-    private boolean isNullOrEmpty(List<Class> methodParameterClasses) {
-        if ((methodParameterClasses == null) || (methodParameterClasses.isEmpty())) {
-            return true;
-        }
-        return (methodParameterClasses.stream().allMatch(Objects::isNull));
-    }
-
-    private boolean isIgnored(Method child) {
-        return child.getAnnotation(Disabled.class) != null;
-    }
-
 
     private void startTestAtEventBus(TestIdentifier testIdentifier) {
         eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());

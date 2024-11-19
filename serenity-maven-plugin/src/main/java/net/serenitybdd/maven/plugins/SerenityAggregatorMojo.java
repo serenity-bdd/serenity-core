@@ -87,7 +87,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
      * Set to 'false' if you don't want to generate the full Serenity HTML report, but do want to produce other reports
      * such as the single page HTML report.
      */
-    @Parameter(defaultValue = "true")
+    @Parameter(property = "serenity.generateFullReport")
     public Boolean generateFullReport;
 
     EnvironmentVariables environmentVariables;
@@ -216,7 +216,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         prepareExecution();
 
         try {
-            if (generateFullReport) {
+            if (generateFullReport == null || generateFullReport) {
                 generateHtmlStoryReports();
             }
             generateExtraReports();

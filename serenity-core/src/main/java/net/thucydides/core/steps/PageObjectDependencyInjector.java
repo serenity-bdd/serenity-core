@@ -95,6 +95,7 @@ public class PageObjectDependencyInjector implements DependencyInjector {
 
     private void updatePageObject(Object pageObject) {//, Pages pages) {
         if (pageObject instanceof PageObject) {
+            ((PageObject) pageObject).setDriver(Serenity.getWebdriverManager().getWebdriver());
             if (Serenity.getWebdriverManager().hasAnInstantiatedDriver()) {
                 ((PageObject) pageObject).setDriver(Serenity.getWebdriverManager().getWebdriver());
             }

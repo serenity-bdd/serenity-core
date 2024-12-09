@@ -528,7 +528,7 @@
                                                                         <td>${context_icon}<span style="display:none">${context_label}</span>
                                                                         </td>
                                                                         <td>${scenario.stepCount}</td>
-                                                                        <td>${scenario.allStepsText}</td>
+                                                                        <td><#outputformat 'HTML'>${scenario.allStepsText}</#outputformat></td>
                                                                         <td data-order="${scenario.timestamp}">${scenario.formattedStartTime}</td>
                                                                         <td>${scenario.formattedDuration}</td>
                                                                         <td>${outcome_icon} <span
@@ -658,7 +658,7 @@
                                                                 <#list evidence as evidenceRecord>
                                                                     <tr>
                                                                         <td>${evidenceRecord.scenario}</td>
-                                                                        <td>${evidenceRecord.title}</td>
+                                                                        <td><#outputformat 'HTML'>${evidenceRecord.title}</#outputformat></td>
                                                                         <td>${evidenceRecord.detailsLink}</td>
                                                                     </tr>
                                                                 </#list>

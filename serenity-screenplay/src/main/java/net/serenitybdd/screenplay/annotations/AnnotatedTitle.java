@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.annotations;
 import net.serenitybdd.screenplay.Uninstrumented;
 import net.serenitybdd.annotations.Fields;
 import org.apache.commons.lang3.StringUtils;
+import org.opentest4j.AssertionFailedError;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -38,8 +39,7 @@ public class AnnotatedTitle {
             field.setAccessible(true);
             return field.get(question);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            throw new AssertionError("Question label cound not be instantiated for "  + text);
+            throw new AssertionFailedError("Question label could not be instantiated for "  + text);
         }
     }
 

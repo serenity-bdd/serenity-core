@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.session;
 
-import io.cucumber.messages.types.Tag;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.events.EventTreeFormatter;
 import net.thucydides.core.steps.events.StepEventBusEvent;
 import net.thucydides.core.steps.events.StepFailedEvent;
 import net.thucydides.core.steps.events.StepStartedEvent;
@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -70,4 +68,7 @@ public class TestSession {
         return sessionContext.get().getStepEventBusEvents();
     }
 
+    public static String asTree() {
+        return EventTreeFormatter.formatEventTree(getSessionEvents());
+    }
 }

@@ -93,8 +93,8 @@
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
-        <kotlin.version>2.0.21</kotlin.version>
-        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
+        <kotlin.version>2.1.0</kotlin.version>
+        <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -175,6 +175,11 @@
                 <artifactId>byte-buddy</artifactId>
                 <version>${byte-buddy.version}</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>5.13.0</version>
             </dependency>
             <dependency>
                 <groupId>net.bytebuddy</groupId>

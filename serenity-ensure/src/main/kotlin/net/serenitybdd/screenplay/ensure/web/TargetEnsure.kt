@@ -194,14 +194,14 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
             }
 
     private fun attributeValueOf(attributeName: String, target: Target): KnowableValue<String> =
-            fun(actor: Actor?): String {
+            fun(actor: Actor?): String? {
                 if (actor == null) return ""
                 return target.resolveFor(actor).getAttribute(attributeName)
             }
 
-    private fun attributeValuesOf(attributeName: String, target: Target): KnowableValue<List<String>?> =
-            fun(actor: Actor?): List<String> {
-                if (actor == null) return emptyList()
+    private fun attributeValuesOf(attributeName: String, target: Target): KnowableValue<MutableList<String>?> =
+            fun(actor: Actor?): MutableList<String> {
+                if (actor == null) return ArrayList()
                 return target.resolveAllFor(actor).map { it.getAttribute(attributeName) }
             }
 

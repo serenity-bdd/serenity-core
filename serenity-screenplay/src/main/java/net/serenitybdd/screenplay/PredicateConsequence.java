@@ -5,6 +5,7 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -37,7 +38,7 @@ public class PredicateConsequence<T> extends BaseConsequence<T> {
         try {
             performSetupActionsAs(actor);
             if (!expected.test(question.answeredBy(actor))) {
-                throw new AssertionError("predicate failed");
+                throw new AssertionFailedError("predicate failed");
             }
 
         } catch (Throwable actualError) {

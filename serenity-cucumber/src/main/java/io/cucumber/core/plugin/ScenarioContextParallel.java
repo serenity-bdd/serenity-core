@@ -72,6 +72,9 @@ public class ScenarioContextParallel {
     // key - scenarioId
     private final Map<String, List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());
 
+    public URI getScenarioContextURI() {
+        return scenarioContextURI;
+    }
 
     public ScenarioContextParallel(URI scenarioContextURI) {
         this.baseStepListeners = Collections.synchronizedList(new ArrayList<>());
@@ -182,7 +185,7 @@ public class ScenarioContextParallel {
 
     public synchronized boolean isAScenarioOutline(String scenarioId) {
         return currentScenarioDefinitionMap.get(scenarioId) != null &&
-                currentScenarioDefinitionMap.get(scenarioId).getExamples().size() > 0;
+            currentScenarioDefinitionMap.get(scenarioId).getExamples().size() > 0;
     }
 
     public synchronized void startNewExample(String scenarioId) {
@@ -264,7 +267,7 @@ public class ScenarioContextParallel {
 
         AtomicInteger rowNumber = new AtomicInteger();
         rows.forEach(
-                row -> table.appendRow(newRow(headers, lineNumbersOfEachRow, rowNumber.getAndIncrement(), row))
+            row -> table.appendRow(newRow(headers, lineNumbersOfEachRow, rowNumber.getAndIncrement(), row))
         );
         table.updateLineNumbers(lineNumbersOfEachRow);
         exampleCountMap.put(scenarioId, new AtomicInteger(table.getSize()));
@@ -276,8 +279,8 @@ public class ScenarioContextParallel {
                                 int rowNumber,
                                 Map<String, String> row) {
         return new DataTableRow(
-                rowValuesFrom(headers, row),
-                lineNumbersOfEachRow.getOrDefault(rowNumber, 0L));
+            rowValuesFrom(headers, row),
+            lineNumbersOfEachRow.getOrDefault(rowNumber, 0L));
     }
 
     private List<String> rowValuesFrom(List<String> headers, Map<String, String> row) {
@@ -377,7 +380,7 @@ public class ScenarioContextParallel {
                 LOGGER.error("An unrecoverable error occurred during test execution: " + exception.getMessage(), exception);
                 exception.printStackTrace();
                 recordUnexpectedFailure(new SerenityManagedException("An unrecoverable error occurred during test execution: " + exception.getMessage(),
-                                        exception));
+                    exception));
             }
         }
         clearEventBus();

@@ -19,9 +19,9 @@ public class FeatureFileLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeatureFileLoader.class);
 
-    private Optional<Feature> featureFrom(URI featureFileUri) {
+    public Optional<Feature> featureFrom(URI featureFileUri) {
 
-        String defaultFeatureId = new File(featureFileUri).getName().replace(".feature", "");
+        String defaultFeatureId = new File(featureFileUri.toString()).getName().replace(".feature", "");
         String defaultFeatureName = Inflector.getInstance().humanize(defaultFeatureId);
 
         parseGherkinIn(featureFileUri);
@@ -47,12 +47,12 @@ public class FeatureFileLoader {
 
     public Feature featureWithDefaultName(Feature feature, String defaultName) {
         return new Feature(feature.getLocation(),
-                feature.getTags(),
-                feature.getLanguage(),
-                feature.getKeyword(),
-                defaultName,
-                feature.getDescription(),
-                feature.getChildren());
+            feature.getTags(),
+            feature.getLanguage(),
+            feature.getKeyword(),
+            defaultName,
+            feature.getDescription(),
+            feature.getChildren());
     }
 
     public void addTestSourceReadEvent(TestSourceRead event) {

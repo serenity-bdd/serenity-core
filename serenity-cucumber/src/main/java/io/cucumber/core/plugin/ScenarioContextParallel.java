@@ -1,6 +1,8 @@
 package io.cucumber.core.plugin;
 
 
+import io.cucumber.plugin.event.Status;
+import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.steps.events.StepEventBusEvent;
 import io.cucumber.messages.types.Scenario;
@@ -337,6 +339,12 @@ public class ScenarioContextParallel {
 
     public void addStepEventBusEvent(StepEventBusEvent event) {
         if (TestSession.isSessionStarted()) {
+            if (event instanceof StepFinishedWithResultEvent) {
+                if (Status.FAILED.equals(((StepFinishedWithResultEvent) event).getResult().getStatus()) && TestSession.currentStepHasFailed()) {
+                    LOGGER.debug("SRP:ignored event " + event + " " + Thread.currentThread() + " because current Step has already failed");
+                    return;
+                }
+            }
             TestSession.addEvent(event);
             event.setStepEventBus(stepEventBus);
         } else {

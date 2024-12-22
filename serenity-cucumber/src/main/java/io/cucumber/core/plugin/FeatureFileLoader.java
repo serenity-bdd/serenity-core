@@ -21,7 +21,7 @@ public class FeatureFileLoader {
 
     public Optional<Feature> featureFrom(URI featureFileUri) {
 
-        String defaultFeatureId = new File(featureFileUri).getName().replace(".feature", "");
+        String defaultFeatureId = new File(featureFileUri.toString()).getName().replace(".feature", "");
         String defaultFeatureName = Inflector.getInstance().humanize(defaultFeatureId);
 
         parseGherkinIn(featureFileUri);

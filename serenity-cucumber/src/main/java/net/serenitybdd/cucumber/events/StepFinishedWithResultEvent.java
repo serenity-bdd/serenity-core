@@ -141,6 +141,10 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
                 ? getStepEventBus().getCurrentStep().get().getDescription() : "";
     }
 
+    public Result getResult() {
+        return result;
+    }
+
     public String toString() {
 		return("EventBusEvent STEP_FINISHED_WITH_RESULT with result " + result);
 	}

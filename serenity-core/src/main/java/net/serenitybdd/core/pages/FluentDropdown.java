@@ -90,4 +90,19 @@ public class FluentDropdown implements ISelect {
     public void deselectByVisibleText(String text) {
         select().deselectByVisibleText(text);
     }
+
+    @Override
+    public void deSelectByContainsVisibleText(String text) {
+        select().deSelectByContainsVisibleText(text);
+    }
+
+    @Override
+    public void selectByContainsVisibleText(String text) {
+        select().selectByContainsVisibleText(text);
+    }
+
+    public void byContainsVisibleText(String text) {
+        selectByContainsVisibleText(text);
+    }
+
 }

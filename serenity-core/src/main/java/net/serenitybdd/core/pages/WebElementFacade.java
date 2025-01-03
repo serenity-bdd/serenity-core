@@ -38,6 +38,7 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
 
     <T extends WebElementFacade> T then(By bySelector);
 
+    @Deprecated
     String getAttribute(String name);
 
     ListOfWebElementFacades thenFindAll(By... selector);

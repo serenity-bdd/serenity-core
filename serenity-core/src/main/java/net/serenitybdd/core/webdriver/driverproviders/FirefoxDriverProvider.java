@@ -15,6 +15,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FirefoxDriverProvider extends DownloadableDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
@@ -28,41 +32,38 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
 
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
-        // If webdriver calls are suspended no need to create a new driver
         if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        // Download the driver using WebDriverManager if required
-//        downloadDriverIfRequired("firefox", environmentVariables);
-        //
-        // Update the binary path if necessary
-        //
+
         UpdateDriverEnvironmentProperty.forDriverProperty(GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY);
-        //
-        // Load the FirefoxDriver capabilities from the serenity.conf file
-        //
-        FirefoxOptions firefoxOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").firefoxOptions();
+
+        FirefoxOptions firefoxOptions = W3CCapabilities.definedIn(environmentVariables)
+                .withPrefix("webdriver.capabilities")
+                .firefoxOptions();
+
+        // Set BiBi Firefox preferences
+        firefoxOptions.addPreference("remote.active-protocols", 1);
+        firefoxOptions.addPreference("devtools.chrome.enabled", false);
+        firefoxOptions.addPreference("devtools.debugger.remote-enabled", true);
+
+        // Configure base capabilities
+        firefoxOptions.setCapability("webSocketUrl", true);
+        firefoxOptions.setCapability("moz:debuggerAddress", true);
+
         FirefoxOptionsEnhancer.enhanceOptions(firefoxOptions).using(environmentVariables);
-        //
-        // Add any arguments passed from the test itself
-        //
+
         firefoxOptions.addArguments(argumentsIn(options));
         if (ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables)) {
             firefoxOptions.addArguments("-headless");
         }
-        //
-        // Check for extended classes to add extra ChromeOptions configuration
-        //
-        final FirefoxOptions enhancedOptions = EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(firefoxOptions);
-        //
-        // Record browser and platform
-        //
+
+        final FirefoxOptions enhancedOptions = EnhanceCapabilitiesWithFixtures.using(fixtureProviderService)
+                .into(firefoxOptions);
+
         TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
         TestContext.forTheCurrentTest().recordCurrentPlatform();
 
-        //
-        // Record the driver capabilities for reporting
-        //
         driverProperties.registerCapabilities("firefox", capabilitiesToProperties(enhancedOptions));
 
         return new FirefoxDriver(enhancedOptions);

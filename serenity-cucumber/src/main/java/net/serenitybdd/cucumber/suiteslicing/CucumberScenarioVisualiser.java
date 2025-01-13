@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.cucumber.gherkin.CucumberScenarioLoader;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.serenitybdd.cucumber.utils.PathUtils;
+import net.serenitybdd.cucumber.util.PathUtils;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

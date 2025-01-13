@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 
-import net.serenitybdd.cucumber.utils.BigDecimalAverageCollector;
+import net.serenitybdd.cucumber.util.BigDecimalAverageCollector;
 import net.thucydides.model.util.Inflector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

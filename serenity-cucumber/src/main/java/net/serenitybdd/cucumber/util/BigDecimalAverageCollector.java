@@ -1,4 +1,4 @@
-package net.serenitybdd.cucumber.utils;
+package net.serenitybdd.cucumber.util;
 
 import java.math.BigDecimal;
 import java.util.Collections;

@@ -84,7 +84,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     private LineFilters lineFilters;
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SerenityReporter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerenityReporterParallel.class);
 
     private final Set<URI> contextURISet = new CopyOnWriteArraySet<>();
 

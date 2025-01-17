@@ -1,23 +1,26 @@
 package net.serenitybdd.core.reports;
 
+import net.thucydides.core.steps.session.PlaybackSession;
 import net.thucydides.model.domain.ReportData;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.session.TestSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
 
 public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
-    private final StepEventBus eventBus;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportDataSaver.class);
+    private StepEventBus eventBus;
     private String title;
     private boolean fileIsDownloadable = false;
     private boolean isEvidence = false;
@@ -46,6 +49,11 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     }
 
     public void doAddContents(ReportData reportData) {
+        if (PlaybackSession.isSessionStarted()) {
+            StepEventBus playBackStepEventBus = PlaybackSession.getTestSessionContext().getStepEventBus();
+            LOGGER.debug("SRP:replace event bus {} with playback event bus {}", eventBus , playBackStepEventBus );
+            eventBus = playBackStepEventBus;
+        }
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
             outcome -> currentStepOrBackgroundIn(outcome)
                 .withReportData(reportData)

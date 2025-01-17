@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import net.serenitybdd.cucumber.utils.BigDecimalAverageCollector;
+import net.serenitybdd.cucumber.util.BigDecimalAverageCollector;
 
 import java.math.BigDecimal;
 import java.util.List;

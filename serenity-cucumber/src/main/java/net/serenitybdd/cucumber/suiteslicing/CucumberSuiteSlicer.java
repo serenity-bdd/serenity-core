@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 import io.cucumber.gherkin.CucumberScenarioLoader;
-import net.serenitybdd.cucumber.utils.TagParser;
+import net.serenitybdd.cucumber.util.TagParser;
 
 import java.net.URI;
 import java.util.List;

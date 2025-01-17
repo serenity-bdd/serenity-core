@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.2.10-SNAPSHOT</version>
+        <version>4.2.13-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-cucumber</artifactId>
     <packaging>jar</packaging>
@@ -211,12 +211,6 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-junit5</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

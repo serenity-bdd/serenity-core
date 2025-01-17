@@ -1,8 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 import io.cucumber.gherkin.CucumberScenarioLoader;
-
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,7 +79,7 @@ public class CucumberScenarioLoaderTest {
             .sliceInto(sliceCount);
 
         for (int i = 0; i < jvm1Slices.size(); i++) {
-            assertThat(jvm1Slices.get(i).scenarios, Matchers.contains(buildMatchingCucumberScenario(jvm2Slices.get(i))));
+            assertThat(jvm1Slices.get(i).scenarios, contains(buildMatchingCucumberScenario(jvm2Slices.get(i))));
         }
     }
 

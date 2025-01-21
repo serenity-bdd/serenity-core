@@ -25,6 +25,7 @@ import net.thucydides.model.ThucydidesSystemProperty;
 import net.serenitybdd.annotations.TestAnnotations;
 import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.model.domain.*;
+import net.thucydides.model.domain.failures.FailureAnalysis;
 import net.thucydides.model.domain.stacktrace.FailureCause;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.session.TestSession;
@@ -904,6 +905,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         );
     }
 
+    FailureAnalysis failureAnalysis = new FailureAnalysis();
+
     public void stepFailed(StepFailure failure) {
 
         if (!aStepHasFailed() || StepEventBus.getEventBus().softAssertsActive()) {
@@ -915,6 +918,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
+
+        // In all cases, mark the step as done with the appropriate result
+        currentStepDone(failureAnalysis.resultFor(failure));
     }
 
     public void stepFailed(StepFailure failure,
@@ -931,6 +937,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
+        // Step marked as done with the appropriate result before
+        currentStepDone(failureAnalysis.resultFor(failure), timestamp);
     }
 
 
@@ -943,7 +951,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
-  }
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
 
     public void lastStepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);

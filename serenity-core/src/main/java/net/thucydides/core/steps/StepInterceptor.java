@@ -495,8 +495,12 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
         if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed() && !StepEventBus.getEventBus().softAssertsActive()) {
             return;
         }
-        notifyOfStepFailure(object, method, args, assertionError);
-        LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
+        try {
+            LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
+            notifyOfStepFailure(object, method, args, assertionError);
+        } finally {
+            notifyStepFinishedFor(method, args);
+        }
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, Method zuperMethod, Object result) throws Throwable {

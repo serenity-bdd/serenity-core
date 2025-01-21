@@ -1919,16 +1919,13 @@ public class TestOutcome {
     }
 
     public List<String> getIssues() {
-        List<String> allIssues = new ArrayList<>();
-        if (issues != null) {
-            allIssues.addAll(issues);
-        } else {
-            allIssues.addAll(issues());
-        }
-        if (thereAre(additionalIssues)) {
-            allIssues.addAll(additionalIssues);
-        }
-        return allIssues;
+        return Stream.concat(
+                        issues != null ? issues.stream() : issues().stream(),
+                        thereAre(additionalIssues) ? additionalIssues.stream() : Stream.empty()
+                )
+                .distinct() // Ensure distinct values
+                .sorted()   // Sort the values naturally
+                .collect(Collectors.toList()); // Collect into a List
     }
 
     private List<String> versions() {
@@ -2029,7 +2026,11 @@ public class TestOutcome {
 
 
     public void addIssues(List<String> issues) {
-        additionalIssues.addAll(issues);
+        Set<String> aggreatateIssues = new HashSet<>(additionalIssues);
+        aggreatateIssues.addAll(issues);
+
+        additionalIssues.clear();
+        additionalIssues.addAll(aggreatateIssues);
     }
 
     private List<String> readIssues() {
@@ -2167,6 +2168,7 @@ public class TestOutcome {
         return getIssues().stream()
                 .map(issue -> IssueKeyFormat.forEnvironment(getEnvironmentVariables()).andKey(issue))
                 .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 

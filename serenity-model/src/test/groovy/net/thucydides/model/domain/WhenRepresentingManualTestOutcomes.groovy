@@ -66,7 +66,7 @@ class WhenRepresentingManualTestOutcomes extends Specification {
         when:
             outcome.addIssues(["MYPROJ-012"])
         then:
-            outcome.issues == ["MYPROJ-123","MYPROJ-012"]
+            outcome.issues == ["MYPROJ-012","MYPROJ-123"]
     }
 
 }

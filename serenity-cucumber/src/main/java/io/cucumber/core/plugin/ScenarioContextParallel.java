@@ -10,6 +10,7 @@ import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestCase;
 import io.cucumber.plugin.event.TestStep;
+import net.thucydides.core.steps.session.PlaybackSession;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.DataTableRow;
 import net.thucydides.model.domain.TestTag;
@@ -367,15 +368,20 @@ public class ScenarioContextParallel {
      */
     public synchronized void playAllTestEvents() {
         LOGGER.debug("SRP:playAllTestEvents for URI " + scenarioContextURI + "--" + allTestEventsByLine);
-        for (var entry : allTestEventsByLine.entrySet()) {
-            try {
-                replayAllTestCaseEventsForLine(entry.getKey(), entry.getValue());
-            } catch (Throwable exception) {
-                LOGGER.error("An unrecoverable error occurred during test execution: " + exception.getMessage(), exception);
-                exception.printStackTrace();
-                recordUnexpectedFailure(new SerenityManagedException("An unrecoverable error occurred during test execution: " + exception.getMessage(),
-                    exception));
+        PlaybackSession.startSession("ScenarioContextParallelPlayback_" + scenarioContextURI ,stepEventBus());
+        try {
+            for (var entry : allTestEventsByLine.entrySet()) {
+                try {
+                    replayAllTestCaseEventsForLine(entry.getKey(), entry.getValue());
+                } catch (Throwable exception) {
+                    LOGGER.error("An unrecoverable error occurred during test execution: " + exception.getMessage(), exception);
+                    exception.printStackTrace();
+                    recordUnexpectedFailure(new SerenityManagedException("An unrecoverable error occurred during test execution: " + exception.getMessage(),
+                            exception));
+                }
             }
+        } finally {
+            PlaybackSession.closeSession();
         }
         clearEventBus();
     }

@@ -245,7 +245,8 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
                     "-step1\n" +
                         "---> STEP DONE\n" +
                         "-failing_step\n" +
-                        "---> STEP FAILED\n" +
+                        "----> STEP FAILED\n" +
+                        "---> STEP DONE\n" +
                         "-step3\n" +
                         "---> STEP IGNORED\n";
         assertThat(listener.toString(), containsString(expectedExecution));

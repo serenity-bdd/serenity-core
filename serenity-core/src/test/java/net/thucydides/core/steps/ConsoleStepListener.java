@@ -79,7 +79,6 @@ public class ConsoleStepListener extends BaseStepListener {
     }
 
     public void stepFailed(StepFailure failure) {
-        pop();
         writeIndent(buffer);
         buffer.append("--> STEP FAILED").append("\n");
     }

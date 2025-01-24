@@ -340,12 +340,6 @@ public class ScenarioContextParallel {
 
     public void addStepEventBusEvent(StepEventBusEvent event) {
         if (TestSession.isSessionStarted()) {
-            if (event instanceof StepFinishedWithResultEvent) {
-                if (Status.FAILED.equals(((StepFinishedWithResultEvent) event).getResult().getStatus()) && TestSession.currentStepHasFailed()) {
-                    LOGGER.debug("SRP:ignored event " + event + " " + Thread.currentThread() + " because current Step has already failed");
-                    return;
-                }
-            }
             TestSession.addEvent(event);
             event.setStepEventBus(stepEventBus);
         } else {

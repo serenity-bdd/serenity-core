@@ -614,6 +614,7 @@ public class StepEventBus {
 
     public void stepFailed(final StepFailure failure) {
 
+        stepDone();
         getResultTally().logFailure(failure);
 
         for (StepListener stepListener : getAllListeners()) {
@@ -627,6 +628,7 @@ public class StepEventBus {
                            boolean isInDataDrivenTest,
                            ZonedDateTime timestamp) {
 
+        stepDone();
         getResultTally().logFailure(failure);
 
         for (StepListener stepListener : getAllListeners()) {

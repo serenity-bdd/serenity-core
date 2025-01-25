@@ -390,8 +390,7 @@ public class WhenUsingTheStepEventBus {
                 + "-step1\n"
                 + "---> STEP DONE\n"
                 + "-failingStep\n"
-                + "----> STEP FAILED\n"
-                + "---> STEP DONE\n"
+                + "---> STEP FAILED\n"
                 + "TEST DONE\n";
         assertThat(consoleStepListener.toString(), is(expectedSteps));
     }
@@ -415,7 +414,7 @@ public class WhenUsingTheStepEventBus {
                         + "---> STEP DONE\n"
                         + "-step2\n"
                         + "---> STEP DONE\n"
-                        + "---> STEP FAILED\n"
+                        + "--> STEP FAILED\n"
                         + "TEST DONE\n";
         assertThat(consoleStepListener.toString(), is(expectedSteps));
     }
@@ -523,8 +522,7 @@ public class WhenUsingTheStepEventBus {
                 + "--step1\n"
                 + "----> STEP DONE\n"
                 + "--failingStep\n"
-                + "-----> STEP FAILED\n"
-                + "----> STEP DONE\n"
+                + "----> STEP FAILED\n"
                 + "--step2\n"
                 + "----> STEP IGNORED\n"
                 + "---> STEP DONE\n"
@@ -573,8 +571,7 @@ public class WhenUsingTheStepEventBus {
                 + "--step1\n"
                 + "----> STEP DONE\n"
                 + "--failingStep\n"
-                + "-----> STEP FAILED\n"
-                + "----> STEP DONE\n"
+                + "----> STEP FAILED\n"
                 + "--step2\n"
                 + "----> STEP IGNORED\n"
                 + "---> STEP DONE\n"
@@ -599,8 +596,7 @@ public class WhenUsingTheStepEventBus {
                 + "--step1\n"
                 + "----> STEP DONE\n"
                 + "--failingStep\n"
-                + "-----> STEP FAILED\n"
-                + "----> STEP DONE\n"
+                + "----> STEP FAILED\n"
                 + "--step2\n"
                 + "----> STEP IGNORED\n"
                 + "---> STEP DONE\n"
@@ -639,8 +635,7 @@ public class WhenUsingTheStepEventBus {
         String expectedSteps =
                 "TEST a_test\n"
                 + "-stepThatFailsAndReturnsAStep\n"
-                + "----> STEP FAILED\n"
-                + "---> STEP DONE\n"
+                + "---> STEP FAILED\n"
                 + "-stepThatReturnsAStep\n"
                 + "---> STEP IGNORED\n"
                 + "TEST DONE\n";

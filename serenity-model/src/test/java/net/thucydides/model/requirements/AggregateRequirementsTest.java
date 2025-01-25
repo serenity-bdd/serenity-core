@@ -55,7 +55,7 @@ class AggregateRequirementsTest {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
 
-            assertThat(requirements).hasSize(2);
+            assertThat(requirements).hasSize(1);
 
             Requirement capability = requirements.get(0);
             assertThat(capability.getName()).isEqualTo("payments");
@@ -75,7 +75,7 @@ class AggregateRequirementsTest {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));
 
-            assertThat(requirements).hasSize(2);
+            assertThat(requirements).hasSize(1);
 
             Requirement theme = requirements.get(0);
             assertThat(theme.getName()).isEqualTo("ecommerce");

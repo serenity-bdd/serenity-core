@@ -71,7 +71,6 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
                 getStepEventBus().stepFailed(stepFailure, screenshots, isInDataDrivenTest);
             }
         }
-        this.getStepEventBus().stepFinished(this.screenshotList, this.getTimestamp());
     }
 
     private void skipped(String stepTitle, Throwable cause) {

@@ -55,7 +55,7 @@ class WhenConvertingW3CPropertiesToChromeOptions {
         ChromeOptions options = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").chromeOptions();
 
         assertThat(options).isNotNull();
-        assertThat(options.getBrowserName()).isEqualTo("Chrome");
+        assertThat(options.getBrowserName()).isEqualTo("chrome");
     }
 
     @Nested
@@ -66,7 +66,7 @@ class WhenConvertingW3CPropertiesToChromeOptions {
 
         @Test
         void browserName() {
-            assertThat(options.getBrowserName()).isEqualTo("Chrome");
+            assertThat(options.getBrowserName()).isEqualTo("chrome");
         }
 
         @Test

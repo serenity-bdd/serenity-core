@@ -6,6 +6,7 @@ import io.restassured.internal.filter.FilterContextImpl;
 import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
+import net.serenitybdd.rest.utils.RestRuntimeException;
 import net.serenitybdd.rest.stubs.ResponseStub;
 import net.serenitybdd.rest.utils.ReflectionHelper;
 import net.serenitybdd.rest.utils.RestExecutionHelper;
@@ -39,7 +40,7 @@ public class UpdatingContextFilter implements Filter {
             if (RestExecutionHelper.restCallsAreDisabled()) {
                 return stubbed();
             }
-            throw new RuntimeException("Incorrect implementation, should update field without any problem", e);
+            throw new RestRuntimeException("Incorrect implementation, should update field without any problem", e);
         }
     }
 

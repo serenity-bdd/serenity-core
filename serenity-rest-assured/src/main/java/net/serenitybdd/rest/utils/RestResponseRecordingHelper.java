@@ -56,9 +56,9 @@ public class RestResponseRecordingHelper {
 
                 }
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("Incorrect implementation, should be used correct charset", e);
+                throw new RestRuntimeException("Incorrect implementation, should be used correct charset", e);
             } catch (IOException e) {
-                throw new RuntimeException("Some exception during recording fields", e);
+                throw new RestRuntimeException("Some exception during recording fields", e);
             }
         }
         return result;

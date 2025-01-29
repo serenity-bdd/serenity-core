@@ -29,6 +29,7 @@ import io.restassured.specification.ResponseSpecification;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.RestDecorationHelper;
+import net.serenitybdd.rest.utils.RestRuntimeException;
 import net.serenitybdd.rest.utils.RestSpecificationFactory;
 
 import java.io.File;
@@ -372,7 +373,7 @@ public class SerenityRest {
             try {
                 return setDefaultProxy(new URI(host));
             } catch (URISyntaxException e) {
-                throw new RuntimeException("Internal error in REST Assured when constructing URI for Proxy.", e);
+                throw new RestRuntimeException("Internal error in REST Assured when constructing URI for Proxy.", e);
             }
         } else {
             return setDefaultProxy(host(host));

@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
-import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 
@@ -93,7 +92,13 @@ public class RestReportingHelper {
                              final RuntimeException throwable, final Object... params) {
         RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);
         ExecutedStepDescription description = ExecutedStepDescription.withTitle(restQuery.toString());
-        StepFailure failure = new StepFailure(description, throwable);
+        Throwable exception;
+        if (throwable instanceof RestRuntimeException) {
+            exception = throwable.getCause();
+        } else {
+            exception = throwable;
+        }
+        StepFailure failure = new StepFailure(description, exception);
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new StepStartedEvent(description));
             TestSession.addEvent(new RecordRestQueryEvent(restQuery));

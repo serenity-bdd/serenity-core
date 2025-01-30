@@ -298,11 +298,12 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             if (isMethodSource(testIdentifier)) {
                 MethodSource methodSource = ((MethodSource) testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
-                testFinished(testIdentifier, methodSource, testExecutionResult);
+//                testFinished(testIdentifier, methodSource, testExecutionResult);
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if (dataTable != null) {
                     eventBusFor(testIdentifier).exampleFinished();
                 }
+                testFinished(testIdentifier, methodSource, testExecutionResult);
             }
         }
         recordSummaryData(testIdentifier, testExecutionResult);

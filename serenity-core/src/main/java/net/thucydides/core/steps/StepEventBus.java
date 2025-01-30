@@ -493,7 +493,7 @@ public class StepEventBus {
     }
 
     public void testFinished() {
-        testFinished(false);
+        testFinished(this.isCurrentTestDataDriven());
     }
 
     private TestOutcome checkForEmptyScenarioIn(TestOutcome outcome) {

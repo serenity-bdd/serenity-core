@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.playwright.abilities;
 
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.BrowserType;
 import net.serenitybdd.screenplay.Actor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -81,6 +82,20 @@ class WhenAnActorWantsToUsePlaywright {
                     () -> BrowseTheWebWithPlaywright.as(billy));
 
             assertThat(exception.getMessage()).contains("The actor Billy does not have the ability to use Playwright");
+        }
+
+        @DisplayName("We can use the 'chromium' channel for the Playwright session")
+        @Test
+        void usingTheChromiumChannel() {
+            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
+            launchOptions.setChannel("chromium");
+            william.can(BrowseTheWebWithPlaywright.withOptions(launchOptions).withBrowserType("chromium"));
+
+            Page page = BrowseTheWebWithPlaywright.as(william).getBrowser().newPage();
+
+            page.navigate("https://duckduckgo.com/");
+
+            assertThat(page.title()).contains("DuckDuckGo");
         }
 
     }

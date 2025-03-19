@@ -144,7 +144,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
                 Optional<TestOutcome> latestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome();
 
                 guessedTestName = latestOutcome.map(
-                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + " - " + testOutcome.getTitle())
                 ).orElseGet(RemoteTestName::fromCurrentTest);
 
                 guessedTestName.ifPresent(name -> {

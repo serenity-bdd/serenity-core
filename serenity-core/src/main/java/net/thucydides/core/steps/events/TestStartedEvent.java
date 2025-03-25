@@ -41,6 +41,7 @@ public class TestStartedEvent extends StepEventBusEventBase {
 		}
 	}
 
+	public String getTestName() { return testName;}
 	public String toString() {
 		return("EventBusEvent TEST_STARTED_EVENT with name " + testName + " " + id);
 	}

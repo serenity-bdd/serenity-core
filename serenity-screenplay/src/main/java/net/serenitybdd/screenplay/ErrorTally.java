@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.Serenity;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,10 @@ class ErrorTally {
 
     private void throwSummaryExceptionFrom(List<Throwable> errorCauses) {
         String overallErrorMessage = join(System.lineSeparator(), errorMessagesIn(errorCauses));
-        throw new AssertionError(overallErrorMessage);
+        throw new AssertionFailedError(overallErrorMessage);
     }
 
     private List<Throwable> errorCausesIn(List<FailedConsequence> failedConsequences) {
-//        return failedConsequences.map(FailedConsequence::getCause);
         return failedConsequences.stream()
                 .map(FailedConsequence::getCause)
                 .collect(Collectors.toList());
@@ -50,5 +50,9 @@ class ErrorTally {
                 .map(Throwable::getMessage)
                 .collect(Collectors.toList());
 //        return errorCauses.map(Throwable::getMessage);
+    }
+
+    public boolean hasErrors() {
+        return !errors.isEmpty();
     }
 }

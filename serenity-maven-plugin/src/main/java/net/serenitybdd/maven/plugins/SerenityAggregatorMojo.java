@@ -289,6 +289,9 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         getReporter().setTags(tags);
         getReporter().setGenerateTestOutcomeReports();
         getReporter().generateReportsForTestResultsFrom(sourceDirectory);
+
+        Path index = outputDirectory.toPath().resolve("index.html");
+        LOGGER.info("  - Full Report: {}",  index.toUri());
     }
 
     private void generateExtraReports() {

@@ -292,7 +292,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     BlackBox.logAssertion(actualValue,"an uppercase value")
                     if (actualValue == null) { return false }
 
-                    return actualValue.isNotEmpty() && actualValue.toUpperCase() == actualValue
+                    return actualValue.isNotEmpty() && actualValue.uppercase() == actualValue
                 }
         )
 

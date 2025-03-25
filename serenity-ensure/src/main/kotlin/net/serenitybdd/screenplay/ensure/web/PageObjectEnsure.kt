@@ -13,7 +13,7 @@ class PageObjectEnsure() {
     fun windowHandle() : StringEnsure = StringEnsure(windowHandleValue())
 
     private fun titleValue() : KnowableValue<String> = fun(actor: Actor) : String = BrowseTheWeb.`as`(actor).title
-    private fun currentUrlValue() : KnowableValue<String> = fun(actor: Actor) : String = BrowseTheWeb.`as`(actor).driver.currentUrl
-    private fun pageSourceValue() : KnowableValue<String> = fun(actor: Actor) : String = BrowseTheWeb.`as`(actor).driver.pageSource
+    private fun currentUrlValue() : KnowableValue<String> = fun(actor: Actor) : String? = BrowseTheWeb.`as`(actor).driver.currentUrl
+    private fun pageSourceValue() : KnowableValue<String> = fun(actor: Actor) : String? = BrowseTheWeb.`as`(actor).driver.pageSource
     private fun windowHandleValue() : KnowableValue<String> = fun(actor: Actor) : String = BrowseTheWeb.`as`(actor).driver.windowHandle
 }

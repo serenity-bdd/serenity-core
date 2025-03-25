@@ -1,6 +1,8 @@
 package io.cucumber.core.plugin;
 
 
+import io.cucumber.plugin.event.Status;
+import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.steps.events.StepEventBusEvent;
 import io.cucumber.messages.types.Scenario;
@@ -8,6 +10,7 @@ import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestCase;
 import io.cucumber.plugin.event.TestStep;
+import net.thucydides.core.steps.session.PlaybackSession;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.DataTableRow;
 import net.thucydides.model.domain.TestTag;
@@ -70,6 +73,9 @@ public class ScenarioContextParallel {
     // key - scenarioId
     private final Map<String, List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());
 
+    public URI getScenarioContextURI() {
+        return scenarioContextURI;
+    }
 
     public ScenarioContextParallel(URI scenarioContextURI) {
         this.baseStepListeners = Collections.synchronizedList(new ArrayList<>());
@@ -180,7 +186,7 @@ public class ScenarioContextParallel {
 
     public synchronized boolean isAScenarioOutline(String scenarioId) {
         return currentScenarioDefinitionMap.get(scenarioId) != null &&
-                currentScenarioDefinitionMap.get(scenarioId).getExamples().size() > 0;
+            currentScenarioDefinitionMap.get(scenarioId).getExamples().size() > 0;
     }
 
     public synchronized void startNewExample(String scenarioId) {
@@ -262,7 +268,7 @@ public class ScenarioContextParallel {
 
         AtomicInteger rowNumber = new AtomicInteger();
         rows.forEach(
-                row -> table.appendRow(newRow(headers, lineNumbersOfEachRow, rowNumber.getAndIncrement(), row))
+            row -> table.appendRow(newRow(headers, lineNumbersOfEachRow, rowNumber.getAndIncrement(), row))
         );
         table.updateLineNumbers(lineNumbersOfEachRow);
         exampleCountMap.put(scenarioId, new AtomicInteger(table.getSize()));
@@ -274,8 +280,8 @@ public class ScenarioContextParallel {
                                 int rowNumber,
                                 Map<String, String> row) {
         return new DataTableRow(
-                rowValuesFrom(headers, row),
-                lineNumbersOfEachRow.getOrDefault(rowNumber, 0L));
+            rowValuesFrom(headers, row),
+            lineNumbersOfEachRow.getOrDefault(rowNumber, 0L));
     }
 
     private List<String> rowValuesFrom(List<String> headers, Map<String, String> row) {
@@ -334,6 +340,12 @@ public class ScenarioContextParallel {
 
     public void addStepEventBusEvent(StepEventBusEvent event) {
         if (TestSession.isSessionStarted()) {
+            if (event instanceof StepFinishedWithResultEvent) {
+                if (Status.FAILED.equals(((StepFinishedWithResultEvent) event).getResult().getStatus()) && TestSession.currentStepHasFailed()) {
+                    LOGGER.debug("SRP:ignored event " + event + " " + Thread.currentThread() + " because current Step has already failed");
+                    return;
+                }
+            }
             TestSession.addEvent(event);
             event.setStepEventBus(stepEventBus);
         } else {
@@ -362,15 +374,20 @@ public class ScenarioContextParallel {
      */
     public synchronized void playAllTestEvents() {
         LOGGER.debug("SRP:playAllTestEvents for URI " + scenarioContextURI + "--" + allTestEventsByLine);
-        for (var entry : allTestEventsByLine.entrySet()) {
-            try {
-                replayAllTestCaseEventsForLine(entry.getKey(), entry.getValue());
-            } catch (Throwable exception) {
-                LOGGER.error("An unrecoverable error occurred during test execution: " + exception.getMessage(), exception);
-                exception.printStackTrace();
-                recordUnexpectedFailure(new SerenityManagedException("An unrecoverable error occurred during test execution: " + exception.getMessage(),
-                                        exception));
+        PlaybackSession.startSession("ScenarioContextParallelPlayback_" + scenarioContextURI ,stepEventBus());
+        try {
+            for (var entry : allTestEventsByLine.entrySet()) {
+                try {
+                    replayAllTestCaseEventsForLine(entry.getKey(), entry.getValue());
+                } catch (Throwable exception) {
+                    LOGGER.error("An unrecoverable error occurred during test execution: " + exception.getMessage(), exception);
+                    exception.printStackTrace();
+                    recordUnexpectedFailure(new SerenityManagedException("An unrecoverable error occurred during test execution: " + exception.getMessage(),
+                            exception));
+                }
             }
+        } finally {
+            PlaybackSession.closeSession();
         }
         clearEventBus();
     }

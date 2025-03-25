@@ -59,7 +59,7 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
 
 
     private void failed(String stepTitle, Throwable cause, List<ScreenshotAndHtmlSource> screenshots) {
-        if (!errorOrFailureRecordedForStep(stepTitle, cause)) {
+        if (!errorOrFailureRecordedForStep(stepTitle, cause))  {
             if (!isEmpty(stepTitle)) {
                 getStepEventBus().updateCurrentStepTitle(stepTitle);
             }
@@ -141,4 +141,11 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
                 ? getStepEventBus().getCurrentStep().get().getDescription() : "";
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public String toString() {
+		return("EventBusEvent STEP_FINISHED_WITH_RESULT with result " + result);
+	}
 }

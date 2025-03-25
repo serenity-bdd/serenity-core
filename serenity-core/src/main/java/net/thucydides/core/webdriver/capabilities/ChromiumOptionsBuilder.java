@@ -1,8 +1,12 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -18,12 +22,26 @@ import java.util.stream.Collectors;
  */
 public class ChromiumOptionsBuilder {
 
+
     public static ChromiumOptions<?> fromDesiredCapabilities(DesiredCapabilities capabilities,
-                                                             ChromiumOptions<?> chromiumOptions,
+                                                             ChromiumOptions<?> baseChromiumOptions,
                                                              String capabilitySectionName) {
         // General capabilities
-        chromiumOptions.merge(chromiumOptions);
-        chromiumOptions = (ChromiumOptions<?>) chromiumOptions.merge(capabilities);
+        ChromiumOptions<?> chromiumOptions = new ChromeOptions();
+
+        // Process standard W3C capabilities
+        Map<String, Object> standardCaps = capabilities.asMap();
+        for (Map.Entry<String, Object> entry : standardCaps.entrySet()) {
+            String capabilityName = entry.getKey();
+            if (!capabilityName.equals(capabilitySectionName) &&
+                    !capabilityName.equals(ChromeOptions.LOGGING_PREFS) &&
+                    !capabilityName.equals(EdgeOptions.LOGGING_PREFS)) {
+                chromiumOptions.setCapability(capabilityName, entry.getValue());
+            }
+        }
+
+        // Browser version and platform name
+        SetBrowserVersionAndPlatform.from(capabilities).in(chromiumOptions);
 
         // Browser version and platform name
         SetBrowserVersionAndPlatform.from(capabilities).in(chromiumOptions);
@@ -52,11 +70,21 @@ public class ChromiumOptionsBuilder {
                     // Extensions
                     case "extensions":
                         if (!(options.get("extensions") instanceof List)) {
-                            throw new InvalidCapabilityException("Invalid W3C capability: extensions should be a map but was " + options.get("extensions"));
+                            throw new InvalidCapabilityException("Invalid W3C capability: extensions should be a list but was " + options.get("extensions"));
                         }
                         if (!((List<?>) options.get("extensions")).isEmpty()) {
+                            new File(((List<?>)options.get("extensions")).get(0).toString());
                             addExtensions((List<?>) options.get("extensions"), chromiumOptions);
                         }
+                        break;
+                    case "proxy":
+                        if (!(options.get("proxy") instanceof Map)) {
+                            throw new InvalidCapabilityException(
+                                    "Invalid W3C capability: proxy should be a map but was " + options.get("proxy"));
+                        }
+                        ChromeProxyConfigurator proxyConfigurator = new ChromeProxyConfigurator();
+                        Proxy proxy = proxyConfigurator.createProxyFromConfig((Map<?, ?>) options.get("proxy"));
+                        chromiumOptions.setCapability("proxy", proxy);
                         break;
                     // Binary
                     case "binary":
@@ -87,6 +115,7 @@ public class ChromiumOptionsBuilder {
                         extraOptions.put(optionName, options.get(optionName));
                 }
             }
+
             Map<String, Object> browserSpecificOptions = NestedMap.called(capabilitySectionName).from(chromiumOptions.asMap());
             extraOptions.putAll(browserSpecificOptions);
             Map<String, Object> distinctExtraOptions = extraOptions.entrySet().stream().distinct().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -99,6 +128,8 @@ public class ChromiumOptionsBuilder {
         } else if (capabilities.getCapability(EdgeOptions.LOGGING_PREFS) != null) {
             setChromiumLoggingPreferences(capabilities, chromiumOptions);
         }
+
+        chromiumOptions = (ChromiumOptions<?>) chromiumOptions.merge(baseChromiumOptions);
 
         return chromiumOptions;
     }

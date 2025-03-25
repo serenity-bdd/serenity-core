@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.2.7-SNAPSHOT</version>
+        <version>4.2.12</version>
     </parent>
     <artifactId>serenity-smoketests</artifactId>
     <packaging>jar</packaging>
@@ -20,8 +20,8 @@
         <browserstack.browserName></browserstack.browserName>
         <browserstack.browser></browserstack.browser>
         <browserstack.version></browserstack.version>
-        <junit-jupiter.version>5.11.2</junit-jupiter.version>
-        <junit-platform-suite-api.version>1.11.2</junit-platform-suite-api.version>
+        <junit-jupiter.version>5.11.4</junit-jupiter.version>
+        <junit-platform-suite-api.version>1.11.4</junit-platform-suite-api.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -149,10 +149,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <release>11</release>
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>

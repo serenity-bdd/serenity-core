@@ -251,15 +251,15 @@
 
                                     <#if testOutcomes.haveFlags()>
                                         <span class="test-count"> |
-                        <#list testOutcomes.flags as flag>
-                            <#assign flagTitle = inflection.of(flag.message).inPluralForm().asATitle() >
-                            <#assign flagTag = "flag_${inflection.of(flag.message).asATitle()}" >
-                            <#assign flagReport = reportName.forTag(flagTag) >
-                            <#assign flagCount = testOutcomes.flagCountFor(flag)>
-                            <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}"
-                               title="${flag.message}"></i> <a href="${flagReport}">${flagTitle}</a> (${flagCount})
-                        </#list>
-                    </span>
+                                        <#list testOutcomes.flags as flag>
+                                            <#assign flagTitle = inflection.of(flag.message).inPluralForm().asATitle() >
+                                            <#assign flagTag = "flag_${inflection.of(flag.message).asATitle()}" >
+                                            <#assign flagReport = reportName.forTag(flagTag) >
+                                            <#assign flagCount = testOutcomes.flagCountFor(flag)>
+                                            <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}"
+                                               title="${flag.message}"></i> <a href="${flagReport}">${flagTitle}</a> (${flagCount})
+                                        </#list>
+                                    </span>
                                     </#if>
 
                                 </div>

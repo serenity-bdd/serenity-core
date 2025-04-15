@@ -11,7 +11,6 @@ import net.thucydides.core.reports.html.Merger
 import net.thucydides.model.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
-import java.time.Duration
 import java.time.ZonedDateTime
 
 /**
@@ -84,7 +83,7 @@ class JsonSummaryReporter(val environmentVariables: EnvironmentVariables,
                             date = testOutcomes.startTime.orElse(ZonedDateTime.now()).toLocalDateTime()
                     ),
                     "results" to TestResultSummary(
-                            totalCount = testOutcomes.total,
+                            totalCount = testOutcomes.total.toLong(),
                             countByResult = countByResultLabelFrom(testOutcomes),
                             percentageByResult = percentageByResultLabelFrom(testOutcomes),
                             totalTestDuration = testOutcomes.duration.toString(),

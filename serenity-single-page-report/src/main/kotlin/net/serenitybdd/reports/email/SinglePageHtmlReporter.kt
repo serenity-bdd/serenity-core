@@ -81,7 +81,7 @@ class SinglePageHtmlReporter(
                         date = testOutcomes.startTime.orElse(ZonedDateTime.now()).toLocalDateTime()
                 ),
                 "results" to TestResultSummary(
-                        totalCount = testOutcomes.total,
+                        totalCount = testOutcomes.testCaseCount,
                         countByResult = countByResultLabelFrom(testOutcomes),
                         percentageByResult = percentageByResultLabelFrom(testOutcomes),
                         totalTestDuration = formattedDuration(Duration.ofMillis(testOutcomes.duration)),

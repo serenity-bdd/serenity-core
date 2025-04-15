@@ -10,6 +10,7 @@ import net.serenitybdd.reports.model.maxDurationOf
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.util.EnvironmentVariables
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration
@@ -25,6 +26,8 @@ class SinglePageHtmlReporter(
 
     constructor() : this(ModelInfrastructure.getEnvironmentVariables())
 
+    private val logger = LoggerFactory.getLogger(SinglePageHtmlReporter::class.java)
+
     override fun getName(): String = "single-page-html"
     override fun getDescription(): String = "Single Page HTML Summary"
 
@@ -38,8 +41,13 @@ class SinglePageHtmlReporter(
     }
 
     override fun generateReport(): Path {
+
+        logger.info("GENERATING SINGLE PAGE HTML REPORT FROM {}", sourceDirectory.toAbsolutePath().toString())
+        logger.info("OUTPUT WILL BE GENERATED IN {}", outputDirectory.toAbsolutePath().toString())
         // Fetch the test outcomes
         val testOutcomes = testOutcomesIn(sourceDirectory).filteredByEnvironmentTags()
+
+        logger.info("FOUND {} TEST OUTCOMES", testOutcomes.total);
 
         // Prepare the parameters
         val fields = templateFields(environmentVariables, testOutcomes)

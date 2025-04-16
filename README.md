@@ -114,7 +114,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|---------------------|-----------------------|
-| 4.2.16        | 4.2.16                | 4.28.0           | 5.5.0               | 8.3.0                 |
+| 4.2.22        | 4.2.22                | 4.28.0           | 5.5.0               | 8.3.0                 |
 | 4.1.3         | 4.1.3                 | 4.18.1           | 5.3.1               | 8.3.0                 |
 | 4.1.0         | 4.1.0                 | 4.16.0           | 5.3.1               | 8.3.0                 |
 | 4.0.12        | 4.0.12                | 4.12.1           | 5.3.1               | 8.3.0                 |
@@ -156,7 +156,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
-| 4.2.16        | 4.2.16                | 4.2.16            | 7.20.1   |
+| 4.2.22        | 4.2.22                | 4.2.16            | 7.20.1   |
 | 4.1.3         | 4.1.3                 | 4.1.3             | 7.15.0   |
 | 4.0.12        | 4.0.12                | 4.0.12            | 7.14.0   |
 | 4.0.1         | 4.0.1                 | 4.0.1             | 7.13.0   |

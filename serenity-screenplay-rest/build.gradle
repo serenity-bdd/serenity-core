@@ -7,10 +7,10 @@ dependencies {
     implementation project(':serenity-core')
     implementation project(':serenity-rest-assured')
     implementation project(':serenity-screenplay')
-    testImplementation "junit:junit:${junitVersion}"
-    testImplementation project(':serenity-junit')
+    testImplementation project(':serenity-junit5')
 
     // Unit testing
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.wiremock:wiremock"
 }

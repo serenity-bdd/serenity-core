@@ -1,0 +1,20 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "url": "/session-check",
+    "cookies" : {
+      "JSESSIONID" : {
+        "absent" : true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"message\": \"New session started\"}",
+    "headers": {
+      "Content-Type": "application/json",
+      "Set-Cookie": ["JSESSIONID=ABC123XYZ456; Path=/; HttpOnly"]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "GET",
+    "url": "/session-check",
+    "cookies" : {
+      "JSESSIONID" : {
+        "equalTo" : "ABC123XYZ456"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"message\": \"Hi! Welcome back!\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

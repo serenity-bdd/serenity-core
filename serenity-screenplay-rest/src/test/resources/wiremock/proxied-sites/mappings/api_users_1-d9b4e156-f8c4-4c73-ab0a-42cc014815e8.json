@@ -1,0 +1,24 @@
+{
+  "id" : "d9b4e156-f8c4-4c73-ab0a-42cc014815e8",
+  "name" : "api_users_1",
+  "request" : {
+    "url" : "/api/users/1",
+    "method" : "DELETE",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    }
+  },
+  "response" : {
+    "status" : 204,
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*"
+    }
+  },
+  "uuid" : "d9b4e156-f8c4-4c73-ab0a-42cc014815e8",
+  "persistent" : true,
+  "insertionIndex" : 31
+}

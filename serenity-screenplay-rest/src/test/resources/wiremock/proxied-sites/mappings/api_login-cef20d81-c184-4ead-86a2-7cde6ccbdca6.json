@@ -1,0 +1,31 @@
+{
+  "id" : "cef20d81-c184-4ead-86a2-7cde6ccbdca6",
+  "name" : "api_login",
+  "request" : {
+    "url" : "/api/login",
+    "method" : "POST",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    },
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"email\": \"eve.holt@reqres.in\",\"password\": \"cityslicka\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "api_login-cef20d81-c184-4ead-86a2-7cde6ccbdca6.json",
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "cef20d81-c184-4ead-86a2-7cde6ccbdca6",
+  "persistent" : true,
+  "insertionIndex" : 58
+}

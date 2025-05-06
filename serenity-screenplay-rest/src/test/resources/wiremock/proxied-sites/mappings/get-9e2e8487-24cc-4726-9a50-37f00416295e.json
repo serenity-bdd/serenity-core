@@ -1,0 +1,40 @@
+{
+  "id" : "9e2e8487-24cc-4726-9a50-37f00416295e",
+  "name" : "get",
+  "request" : {
+    "urlPath" : "/get",
+    "method" : "GET",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "postman-echo.com",
+        "caseInsensitive" : true
+      }
+    },
+    "queryParameters" : {
+      "foo1" : {
+        "hasExactly" : [ {
+          "equalTo" : "bar1"
+        } ]
+      },
+      "foo2" : {
+        "hasExactly" : [ {
+          "equalTo" : "bar2"
+        } ]
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "get-9e2e8487-24cc-4726-9a50-37f00416295e.json",
+    "headers" : {
+      "set-cookie" : "sails.sid=s%3AR9SwBvV8Wa-fK20-UndUhmvp0fB6YgoT.Jgz0i6B4QBbHcjywbjKxslmR0%2B6KMOrJf%2FTvHbHOd9s; Path=/; HttpOnly",
+      "Server" : "nginx",
+      "ETag" : "W/\"236-PLm04YH3UKHXBaGRWpWTpUb6e8Y\"",
+      "Date" : "Sat, 03 May 2025 09:00:42 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "9e2e8487-24cc-4726-9a50-37f00416295e",
+  "persistent" : true,
+  "insertionIndex" : 24
+}

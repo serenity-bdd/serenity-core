@@ -30,7 +30,7 @@ public class FailureCauseTest {
     @Test
     public void should_report_unresolvable_exception_types() {
         Throwable testExc = new InnerClassException();
-        defaultExpectations(testExc, UnrecognisedException.class, null);
+        defaultExpectations(testExc, UnrecognisedException.class, "net.thucydides.core.model.stacktrace.FailureCauseTest$InnerClassException:null");
     }
 
     private void defaultExpectations(Throwable testExc, Class<?> expectedInstance, String expectedMessage) {

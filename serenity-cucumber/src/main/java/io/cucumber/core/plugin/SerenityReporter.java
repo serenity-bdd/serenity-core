@@ -866,7 +866,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             if (!isEmpty(stepTitle)) {
                 getContext().stepEventBus().updateCurrentStepTitle(stepTitle);
             }
-            Throwable rootCause = new RootCauseAnalyzer(cause).getRootCause().toException();
+            Throwable rootCause = new RootCauseAnalyzer(cause).getRootCause().getOriginalCause();
             if (isAssumptionFailure(rootCause)) {
                 getContext().stepEventBus().assumptionViolated(rootCause.getMessage());
             } else {
@@ -883,7 +883,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             if (cause == null) {
                 getContext().stepEventBus().stepIgnored();
             } else {
-                Throwable rootCause = new RootCauseAnalyzer(cause).getRootCause().toException();
+                Throwable rootCause = new RootCauseAnalyzer(cause).getRootCause().getOriginalCause();
                 if (isAssumptionFailure(rootCause)) {
                     getContext().stepEventBus().assumptionViolated(rootCause.getMessage());
                 } else {

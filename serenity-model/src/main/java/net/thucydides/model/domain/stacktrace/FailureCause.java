@@ -169,7 +169,7 @@ public class FailureCause {
             Class failureClass = Class.forName(testFailureClassname);
             Throwable exception = buildThrowable(testFailureMessage, failureClass);
             if (exception == null) {
-                exception = new UnrecognisedException();
+                exception = new UnrecognisedException(testFailureClassname + ":" + testFailureMessage);
             }
             exception.setStackTrace(this.getStackTrace());
             return Optional.ofNullable(exception);

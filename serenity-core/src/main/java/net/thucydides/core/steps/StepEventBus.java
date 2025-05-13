@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
-import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
 /**
@@ -1221,6 +1219,14 @@ public class StepEventBus {
             return screenshots;
         } else {
             return new ArrayList<>();
+        }
+    }
+
+    public void recordScreenshot(String screenshotName,byte[] screenshot) {
+         if (!isDryRun()) {
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.recordScreenshot(screenshotName, screenshot);
+            }
         }
     }
 }

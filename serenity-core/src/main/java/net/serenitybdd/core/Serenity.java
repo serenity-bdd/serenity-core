@@ -1,5 +1,6 @@
 package net.serenitybdd.core;
 
+import net.serenitybdd.core.reports.AddReportScreenshotEvent;
 import net.serenitybdd.model.IgnoredStepException;
 import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.model.collect.NewList;
@@ -15,7 +16,6 @@ import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.model.reflection.StackTraceAnalyser;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.model.steps.ExecutedStepDescription;
@@ -273,6 +273,21 @@ public class Serenity {
 
     public static void takeScreenshot() {
         getStepEventBus().takeScreenshot();
+    }
+
+    /**
+     * Records a screenshot under the 'screenshotName' file name, having as content
+     * the screenshot byte array.
+     *
+     * @param screenshotName the screenshot file name.
+     * @param screenshot screenshot content as byte array.
+     */
+    public static void recordScreenshot(String screenshotName, byte[] screenshot) {
+        if(!TestSession.isSessionStarted()) {
+            getStepEventBus().recordScreenshot(screenshotName,screenshot);
+        } else {
+            TestSession.addEvent(new AddReportScreenshotEvent(screenshotName,screenshot));
+        }
     }
 
     public static List<ScreenshotAndHtmlSource> takeScreenshots() {

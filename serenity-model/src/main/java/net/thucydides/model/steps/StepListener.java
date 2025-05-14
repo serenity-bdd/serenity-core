@@ -7,7 +7,6 @@ import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -228,5 +227,10 @@ public interface StepListener {
 
     void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots);
 
-
+    /**
+     * Records an arbitrary screenshot stored as a byte[]
+     * @param screenshotName - screenshot destination file name. It should be a valid file name.
+     * @param screenshot - screenshot represented as byte[.
+     */
+    void recordScreenshot(String screenshotName, byte[] screenshot);
 }

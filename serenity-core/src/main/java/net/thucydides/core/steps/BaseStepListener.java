@@ -40,9 +40,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1029,6 +1030,22 @@ public class BaseStepListener implements StepListener, StepPublisher {
     @Override
     public void takeScreenshots(TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         takeEndOfStepScreenshotForRecording(result, screenshots);
+    }
+
+    @Override
+    public void recordScreenshot(String screenshotName,byte[] screenshotContent) {
+        if (currentStepExists()) {
+            TestStep currentStep = currentStepStack.pop();
+            Path screenshotPath  = outputDirectory.toPath().resolve(screenshotName);
+			try {
+				Files.write(screenshotPath, screenshotContent);
+			} catch (IOException e) {
+			    LOGGER.error("cannot write snapshot to file " + screenshotPath);
+				return;
+			}
+			ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotPath.toFile());
+            currentStep.addScreenshot(screenshotAndHtmlSource);
+        }
     }
 
     public void currentStepDone(TestResult result, ZonedDateTime time) {

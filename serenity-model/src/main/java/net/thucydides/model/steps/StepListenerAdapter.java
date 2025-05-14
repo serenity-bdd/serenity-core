@@ -180,4 +180,7 @@ public class StepListenerAdapter implements StepListener {
 	public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
 	}
+
+	@Override
+	public void recordScreenshot(String screenshotName,byte[] screenshot) {}
 }

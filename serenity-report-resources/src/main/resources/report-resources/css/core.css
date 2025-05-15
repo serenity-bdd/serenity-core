@@ -2745,3 +2745,7 @@ div.code {
 .dataTables_filter input {
     font-weight: normal;
 }
+
+.scenario-docs.card-header.failure a.tagLink {
+    color: bisque;
+}

@@ -10,10 +10,7 @@ import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.reports.ScenarioOutcomeGroup;
 import net.thucydides.model.reports.ReportOptions;
 import net.thucydides.model.reports.TestOutcomes;
-import net.thucydides.model.reports.html.ReportNameProvider;
-import net.thucydides.model.reports.html.RequirementsFilter;
-import net.thucydides.model.reports.html.ScenarioResultCounts;
-import net.thucydides.model.reports.html.TagFilter;
+import net.thucydides.model.reports.html.*;
 import net.thucydides.model.requirements.JSONRequirementsTree;
 import net.thucydides.model.requirements.RequirementsService;
 import net.thucydides.model.requirements.model.Requirement;
@@ -152,7 +149,8 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", filteredTestOutcomes);
-        context.put("resultCounts", ResultCountCache.resultCountsFor(testOutcomes));
+//        context.put("resultCounts", ResultCountCache.resultCountsFor(testOutcomes));
+        context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
         context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));
         context.put("allTestOutcomes", testOutcomes);
         context.put("timestamp", TestOutcomeTimestamp.from(filteredTestOutcomes));

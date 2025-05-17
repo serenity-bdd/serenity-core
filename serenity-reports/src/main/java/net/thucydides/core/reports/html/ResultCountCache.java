@@ -5,9 +5,6 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.html.ResultCounts;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ResultCountCache {
 
     private static final LoadingCache<TestOutcomes, ResultCounts> RESULT_COUNTS = Caffeine.newBuilder()

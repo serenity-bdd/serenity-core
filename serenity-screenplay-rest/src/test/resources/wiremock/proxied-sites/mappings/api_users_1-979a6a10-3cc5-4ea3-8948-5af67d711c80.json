@@ -1,0 +1,31 @@
+{
+  "id" : "979a6a10-3cc5-4ea3-8948-5af67d711c80",
+  "name" : "api_users_1",
+  "request" : {
+    "url" : "/api/users/1",
+    "method" : "PUT",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    },
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"firstName\": \"jack\",\"lastName\": \"smith\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "api_users_1-979a6a10-3cc5-4ea3-8948-5af67d711c80.json",
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "979a6a10-3cc5-4ea3-8948-5af67d711c80",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

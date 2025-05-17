@@ -1,0 +1,31 @@
+{
+  "id" : "8eebbbbd-4d08-4eec-b3ed-a014ab2d69a1",
+  "name" : "api_users",
+  "request" : {
+    "url" : "/api/users",
+    "method" : "POST",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    },
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"firstName\": \"joe\",\"lastName\": \"smith\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "api_users-8eebbbbd-4d08-4eec-b3ed-a014ab2d69a1.json",
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "8eebbbbd-4d08-4eec-b3ed-a014ab2d69a1",
+  "persistent" : true,
+  "insertionIndex" : 48
+}

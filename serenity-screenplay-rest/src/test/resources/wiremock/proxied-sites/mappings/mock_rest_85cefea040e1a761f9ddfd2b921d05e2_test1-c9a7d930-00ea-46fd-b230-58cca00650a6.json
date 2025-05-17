@@ -1,0 +1,27 @@
+{
+  "id" : "c9a7d930-00ea-46fd-b230-58cca00650a6",
+  "name" : "mock_rest_85cefea040e1a761f9ddfd2b921d05e2_test1",
+  "request" : {
+    "url" : "/mock/rest/85cefea040e1a761f9ddfd2b921d05e2/test1",
+    "method" : "GET",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "extendsclass.com",
+        "caseInsensitive" : true
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "mock_rest_85cefea040e1a761f9ddfd2b921d05e2_test1-c9a7d930-00ea-46fd-b230-58cca00650a6.json",
+    "headers" : {
+      "X-CDN-Cache" : "MISS",
+      "X-CDN-Request-ID" : "16790769",
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "c9a7d930-00ea-46fd-b230-58cca00650a6",
+  "persistent" : true,
+  "insertionIndex" : 5
+}

@@ -100,12 +100,12 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-handler</artifactId>
-                <version>4.1.116.Final</version>
+                <version>4.2.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.4.1</version>
+                <version>5.4.4</version>
             </dependency>
             <!-- Testing libraries -->
             <dependency>

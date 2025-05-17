@@ -1,0 +1,27 @@
+{
+  "id" : "161c8fac-6b49-4b6a-a6c3-1859509cbc1b",
+  "name" : "api_users",
+  "request" : {
+    "url" : "/api/users",
+    "method" : "GET",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "api_users-161c8fac-6b49-4b6a-a6c3-1859509cbc1b.json",
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*",
+      "X-Powered-By" : "Express",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "161c8fac-6b49-4b6a-a6c3-1859509cbc1b",
+  "persistent" : true,
+  "insertionIndex" : 9
+}

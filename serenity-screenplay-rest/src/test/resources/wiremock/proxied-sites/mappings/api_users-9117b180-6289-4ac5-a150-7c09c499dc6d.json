@@ -1,0 +1,33 @@
+{
+  "id" : "9117b180-6289-4ac5-a150-7c09c499dc6d",
+  "name" : "api_users",
+  "request" : {
+    "urlPath" : "/api/users",
+    "method" : "GET",
+    "headers" : {
+      "Host" : {
+        "equalTo" : "reqres.in",
+        "caseInsensitive" : true
+      }
+    },
+    "queryParameters" : {
+      "page" : {
+        "hasExactly" : [ {
+          "equalTo" : "2"
+        } ]
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "api_users-9117b180-6289-4ac5-a150-7c09c499dc6d.json",
+    "headers" : {
+      "Server" : "cloudflare",
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "9117b180-6289-4ac5-a150-7c09c499dc6d",
+  "persistent" : true,
+  "insertionIndex" : 39
+}

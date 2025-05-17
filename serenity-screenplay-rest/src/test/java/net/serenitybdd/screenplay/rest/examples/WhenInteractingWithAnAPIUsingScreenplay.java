@@ -1,6 +1,11 @@
 package net.serenitybdd.screenplay.rest.examples;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.NetworkAddressRules;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import net.serenitybdd.rest.RestDefaults;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
@@ -14,8 +19,11 @@ import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
 import net.serenitybdd.screenplay.rest.questions.RestQuestionBuilder;
 import net.serenitybdd.screenplay.rest.questions.TheResponse;
 import net.serenitybdd.annotations.Step;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
@@ -23,15 +31,40 @@ import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeT
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@RunWith(SerenityRunner.class)
+import io.restassured.builder.RequestSpecBuilder;
+
+@ExtendWith(SerenityJUnit5Extension.class)
 public class WhenInteractingWithAnAPIUsingScreenplay {
 
-    Actor sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at("https://reqres.in"));
+    private static final String REQRES_BASE_URL = "https://reqres.in";
+
+    // The ENABLE_RECORDING option allows capturing requests and responses via wiremock and requires proper access
+    // to the external sites. There is some manual cleanup of the stubs after recording so in case of adding new
+    // endpoints - you'd probably want to keep the existing stubs and run tests to hit the new endpoints only.
+    private static final boolean ENABLE_RECORDING = false;
+    private static final String MOCKED_SITES_CLASSPATH = "wiremock/proxied-sites";
+    private static final String MOCKED_SITES_ROOT = "src/test/resources/" + MOCKED_SITES_CLASSPATH;
+
+    Actor sam;
+
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+        .options(prepareWireMockConfiguration())
+        .proxyMode(true)
+        .build();
+
+    @BeforeEach
+    void prepare() {
+        RestDefaults.reset(); // Reset previous settings, if any. Ensures that e.g headers are not repeated.
+        RestDefaults.setDefaultRequestSpecification(getDefaultRequestSpecBuilder().build());
+
+        sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at(REQRES_BASE_URL));
+    }
 
     @Test
     public void list_all_users() {
 
-        Actor sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at("https://reqres.in"));
+        Actor sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at(REQRES_BASE_URL));
 
         sam.attemptsTo(
                 FetchUser.withId(1),
@@ -181,7 +214,7 @@ public class WhenInteractingWithAnAPIUsingScreenplay {
     }
 
     @Test
-    public void using_query_parameters() {
+    public void using_path_parameters() {
 
         sam.attemptsTo(
                 Get.resource("/api/users/{id}").with( request -> request.pathParam("id", 1))
@@ -200,7 +233,8 @@ public class WhenInteractingWithAnAPIUsingScreenplay {
         );
 
         sam.should(
-                seeThatResponse(response -> response.statusCode(not(equalTo(200))))
+                seeThatResponse(response -> response.statusCode(not(equalTo(200)))),
+                seeThatResponse(response -> response.statusCode(equalTo(404)))
         );
     }
 
@@ -258,5 +292,52 @@ public class WhenInteractingWithAnAPIUsingScreenplay {
         String token = SerenityRest.lastResponse().jsonPath().get("token");
 
         assertThat(token).isEqualTo("QpwL5tke4Pnpja7X4");
+    }
+
+    private static WireMockConfiguration prepareWireMockConfiguration() {
+        final WireMockConfiguration options = WireMockConfiguration.options()
+            .dynamicPort()
+            .withRootDirectory(MOCKED_SITES_ROOT)
+            .enableBrowserProxying(ENABLE_RECORDING);
+
+        if (!ENABLE_RECORDING) {
+            options.limitProxyTargets(NetworkAddressRules.builder().deny("*").build());
+            options.usingFilesUnderClasspath(MOCKED_SITES_CLASSPATH);
+        }
+
+        return options;
+    }
+
+    private static RequestSpecBuilder getDefaultRequestSpecBuilder() {
+        final RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
+            .setProxy(wireMockExtension.getPort())
+            .setRelaxedHTTPSValidation();
+
+        if (ENABLE_RECORDING) {
+            requestSpecBuilder.addHeader("x-api-key", "reqres-free-v1");
+        }
+
+        return requestSpecBuilder;
+    }
+
+    @BeforeEach
+    void prepareWireMock() {
+        if (ENABLE_RECORDING) {
+            wireMockExtension.startRecording(WireMock.recordSpec()
+                .captureHeader("Host", true)
+                .extractBinaryBodiesOver(0)
+                .extractTextBodiesOver(0)
+                .ignoreRepeatRequests()
+                .allowNonProxied(false)
+                .makeStubsPersistent(true)
+            );
+        }
+    }
+
+    @AfterEach
+    void tearDownWireMock() {
+        if (ENABLE_RECORDING) {
+            wireMockExtension.stopRecording();
+        }
     }
 }

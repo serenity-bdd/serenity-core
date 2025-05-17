@@ -114,7 +114,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>6.6.15.Final</version>
+            <version>5.3.37.Final</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

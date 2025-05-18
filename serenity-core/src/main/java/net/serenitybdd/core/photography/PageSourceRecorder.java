@@ -30,7 +30,7 @@ public class PageSourceRecorder {
         byte[] pageSource = render(getPageSource());
 
 
-        if (WebDriverFactory.isAlive(driver) && (pageSource.length > 0)) {
+        if (WebDriverFactory.isAlive(driver) && (pageSource.length > 0) && shouldRecordPageSource()) {
             try {
                 Path pageSourceFile = Files.createTempFile(path, "pagesource", ".html");
                 Files.write(pageSourceFile, pageSource);
@@ -40,6 +40,11 @@ public class PageSourceRecorder {
             }
         }
         return Optional.empty();
+    }
+
+    private boolean shouldRecordPageSource() {
+        // Disable this for now
+        return false;
     }
 
 

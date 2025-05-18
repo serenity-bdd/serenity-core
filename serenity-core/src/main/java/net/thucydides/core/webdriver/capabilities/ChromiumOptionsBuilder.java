@@ -28,7 +28,7 @@ public class ChromiumOptionsBuilder {
                                                              String capabilitySectionName) {
         // General capabilities
         ChromiumOptions<?> chromiumOptions =
-                (capabilities.getBrowserName().equalsIgnoreCase("chrome") || capabilities.getBrowserName().equalsIgnoreCase("chromium")) ?
+                (capabilities.getBrowserName().isEmpty() || capabilities.getBrowserName().equalsIgnoreCase("chrome") || capabilities.getBrowserName().equalsIgnoreCase("chromium")) ?
                 new ChromeOptions() : new EdgeOptions();
 
         // Process standard W3C capabilities

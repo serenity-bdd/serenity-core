@@ -1094,7 +1094,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void takeEndOfStepScreenshotForRecording(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
-        if (currentTestIsABrowserTest()) {
+        if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
             takeRecord(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
@@ -1135,6 +1135,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void takeRecord(final ScreenshotType screenshotType, TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
+
         if (shouldTakeScreenshotsWithoutCurrentStep(result)) {
             try {
                 grabScreenshots(result).forEach(

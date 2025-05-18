@@ -37,14 +37,19 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
  */
 public class RestReportingHelper {
 
+    final int MAX_LOGGABLE_BODY_SIZE = 16 * 1024;
+
     private static boolean shouldRecordResponseBodyFor(Response result) {
         final ContentType type = ContentType.fromContentType(result.contentType());
         return type != null && (ContentType.JSON == type || ContentType.XML == type
                 || ContentType.TEXT == type || ContentType.HTML == type);
     }
 
-    public RestQuery recordRestSpecificationData(final RestMethod method, final RequestSpecificationDecorated spec,
-                                                 final String path, final Object... params) {
+    public RestQuery recordRestSpecificationData(final RestMethod method,
+                                                 final RequestSpecificationDecorated spec,
+                                                 final String path,
+                                                 final Object... params) {
+
         final Map<LogDetail, String> values = new HashMap<>();
         for (final Filter filter : spec.getDefinedFilters()) {
             if (filter instanceof FieldsRecordingFilter) {
@@ -52,15 +57,33 @@ public class RestReportingHelper {
                 values.put(internal.logDetail(), internal.recorded());
             }
         }
-        final RestQuery query = RestQuery.
-                withMethod(method).andPath(ObjectUtils.firstNonNull(values.get(LogDetail.URI).replaceFirst("^Request URI:\t", ""), "")).
-                withContentType(String.valueOf(
-                                ContentType.fromContentType(spec.getContentType()))
-                ).
-                withContent(firstNonNull(values.get(LogDetail.BODY), "")).
-                withRequestCookies(firstNonNull(values.get(LogDetail.COOKIES), "")).
-                withRequestHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""));
-        return query;
+
+        String contentType = spec.getContentType();
+        boolean isBinary = isBinaryContentType(contentType);
+        String body = firstNonNull(values.get(LogDetail.BODY), "");
+
+
+        if (isBinary || body.length() > MAX_LOGGABLE_BODY_SIZE) {
+            body = "[Body content omitted due to binary or size constraints]";
+        }
+
+        return RestQuery
+                .withMethod(method)
+                .andPath(ObjectUtils.firstNonNull(
+                        values.get(LogDetail.URI).replaceFirst("^Request URI:\t", ""), ""))
+                .withContentType(String.valueOf(ContentType.fromContentType(contentType)))
+                .withContent(body)
+                .withRequestCookies(firstNonNull(values.get(LogDetail.COOKIES), ""))
+                .withRequestHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""));
+    }
+
+    private boolean isBinaryContentType(String contentType) {
+        if (contentType == null) return false;
+        return contentType.startsWith("application/octet-stream") ||
+                contentType.startsWith("application/pdf") ||
+                contentType.startsWith("image/") ||
+                contentType.startsWith("video/") ||
+                contentType.startsWith("audio/");
     }
 
     public void registerCall(final RestMethod method, final Response response,

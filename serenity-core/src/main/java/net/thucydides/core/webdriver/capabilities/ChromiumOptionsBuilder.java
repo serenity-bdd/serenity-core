@@ -27,7 +27,9 @@ public class ChromiumOptionsBuilder {
                                                              ChromiumOptions<?> baseChromiumOptions,
                                                              String capabilitySectionName) {
         // General capabilities
-        ChromiumOptions<?> chromiumOptions = new ChromeOptions();
+        ChromiumOptions<?> chromiumOptions =
+                (capabilities.getBrowserName().equalsIgnoreCase("chrome") || capabilities.getBrowserName().equalsIgnoreCase("chromium")) ?
+                new ChromeOptions() : new EdgeOptions();
 
         // Process standard W3C capabilities
         Map<String, Object> standardCaps = capabilities.asMap();
@@ -117,7 +119,9 @@ public class ChromiumOptionsBuilder {
             }
 
             Map<String, Object> browserSpecificOptions = NestedMap.called(capabilitySectionName).from(chromiumOptions.asMap());
-            extraOptions.putAll(browserSpecificOptions);
+            if (browserSpecificOptions != null) {
+                extraOptions.putAll(browserSpecificOptions);
+            }
             Map<String, Object> distinctExtraOptions = extraOptions.entrySet().stream().distinct().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             chromiumOptions.setCapability(capabilitySectionName, distinctExtraOptions);
         }
@@ -152,6 +156,9 @@ public class ChromiumOptionsBuilder {
                                               ChromiumOptions<?> options) {
         LoggingPreferences logPrefs = new LoggingPreferences();
         Object loggingPreferenceValue = capabilities.getCapability(capabilityName);
+        if (loggingPreferenceValue == null) {
+            return;
+        }
         if (!(loggingPreferenceValue instanceof Map)) {
             throw new InvalidCapabilityException("Invalid W3C capability: " + capabilityName + " should be a map but was " + loggingPreferenceValue);
         }

@@ -6,46 +6,47 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Screenshots</title>
 
-<#include "libraries/favicon.ftl">
+    <#include "libraries/favicon.ftl">
+    <#include "libraries/common.ftl">
+    <#include "components/stacktrace.ftl">
 
-<#include "libraries/common.ftl">
-<#include "libraries/nivo-slider.ftl">
-
-<#include "components/stacktrace.ftl">
+    <!-- Swiper.js local styles and script -->
+    <link rel="stylesheet" href="swiper/swiper-bundle.min.css" />
+    <script src="swiper/swiper-bundle.min.js"></script>
 
     <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const startIndex = parseInt(urlParams.get("screenshot")) || 0;
 
-        function getUrlVars() {
-            var vars = {};
-            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-                vars[key] = value;
-            });
-            return vars;
-        }
-
-        var screenshotIndex = getUrlVars()["screenshot"];
-
-        $(window).load(function () {
-            $('#slider').nivoSlider({
-                startSlide: screenshotIndex,
+            new Swiper('.swiper', {
+                initialSlide: startIndex,
                 effect: 'fade',
-                animSpeed: 200,
-                manualAdvance: true
+                speed: 200,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                },
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                }
             });
-        });
-
-        $(window).keydown(function(e) {
-            switch(e.which) {
-                case 37:
-                    $('a.nivo-prevNav').click();
-                    break;
-                case 39:
-                    $('a.nivo-nextNav').click();
-                    break;
-            }
         });
     </script>
 
+    <style>
+        .swiper {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
 </head>
 
 <body>
@@ -224,26 +225,26 @@
                 </#if>
             </div>
         </#if>
-        <div class="slider-wrapper theme-default">
-            <div id="slider">
+    <!-- Swiper Carousel -->
+    <div class="swiper">
+        <div class="swiper-wrapper">
             <#foreach screenshot in screenshots>
                 <#if screenshot_has_next>
                     <#assign caption = "${screenshot.html.description}">
                 <#else>
-
                     <#if testOutcome.conciseErrorMessage??>
                         <#assign caption = "${screenshot.description}: <span class='${outcome_text}'>${testOutcome.result}</span>">
                     <#else>
                         <#assign caption = "${screenshot.description}">
                     </#if>
                 </#if>
-                <#list 0..<screenshot.depth as i></#list>
-                <img src="${screenshot.filename}" title="${(formatter.depthIndicatorForLevel(screenshot.depth))!} ${caption}" width="${screenshot.width?string.computer}"/>
+                <div class="swiper-slide">
+                    <img src="${screenshot.filename}" title="${(formatter.depthIndicatorForLevel(screenshot.depth))!} ${caption}" width="${screenshot.width?string.computer}" />
+                </div>
             </#foreach>
-            </div>
         </div>
-
-
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
     </div>
 </div>
 <#macro repeat input times>

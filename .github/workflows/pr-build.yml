@@ -1,6 +1,5 @@
 name: Pull Request Build - Java
 
-# Trigger the workflow on pull requests to the main branch
 on:
   pull_request:
     branches:
@@ -11,19 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up JDK 11
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
 
-      # Step 3: Cache Maven dependencies (optional but recommended)
-      - name: Cache Maven packages
+      - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -31,23 +27,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Step 4: Run Maven Verify
       - name: Run Maven Verify
-        run: mvn verify
-        continue-on-error: true  # Allow the workflow to continue even if the build fails
+        run: mvn --batch-mode verify
 
-      # Step 5: Upload test results (JUnit XML reports) if tests fail
-      - name: Upload Test Results
-        if: failure()  # Only upload if the build failed
+      - name: Upload Test Results (JUnit XML)
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: target/surefire-reports/*.xml  # Path to the test results
+          path: target/surefire-reports/*.xml
 
-      # Step 6: Always upload the full logs to help debug failures
       - name: Upload Build Logs
-        if: always()  # Always upload logs, even if the build passes
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: build-logs
-          path: target/*.log
+          path: |
+            target/*.log
+            target/logs/*.log  # in case your app uses a subfolder for logs

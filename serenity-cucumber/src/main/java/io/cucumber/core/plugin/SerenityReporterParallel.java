@@ -123,7 +123,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         StepEventBus.setCurrentBusToEventBusFor(prefixedPath);
     }
 
-    private void initialiseListenersFor(URI featurePath) {
+    protected void initialiseListenersFor(URI featurePath) {
         StepEventBus stepEventBus = getStepEventBus(featurePath);
         if (stepEventBus.isBaseStepListenerRegistered()) {
             return;

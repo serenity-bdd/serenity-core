@@ -45,24 +45,57 @@ public class MethodFinder {
         return methodFound;
     }
 
+    /**
+     * Finds a method by name and arguments, prioritizing methods from more specific (sub)classes.
+     *
+     * @param methodName the name of the method to find
+     * @param arguments  the arguments that will be passed to the method
+     * @return the most specific matching Method object, or null if no match found
+     */
     public Method getMethodNamed(String methodName, List<Object> arguments) {
-        List<Method> methodsFilteredByName = getAllMethods().stream()
-                .filter(m -> Objects.equals(methodName, m.getName()))
+        Class<?>[] argumentTypes = arguments.stream()
+                .map(a -> a == null ? null : a.getClass())
+                .toArray(Class<?>[]::new);
+
+        // Collect all candidate methods with matching name and parameter count
+        List<Method> candidates = getAllMethods().stream()
+                .filter(m -> methodName.equals(m.getName()))
+                .filter(m -> m.getParameterTypes().length == argumentTypes.length)
                 .collect(Collectors.toList());
-        if (methodsFilteredByName.isEmpty()) {
+
+        if (candidates.isEmpty()) {
             return null;
         }
-        Class[] argumentTypes = arguments.stream().map(a -> a == null ? null : a.getClass()).toArray(Class[]::new);
-        Method foundMethod = methodsFilteredByName.stream()
+
+        // Try to find exact parameter type match, preferring methods from subclasses
+        Optional<Method> exactMatch = candidates.stream()
                 .filter(m -> Arrays.equals(m.getParameterTypes(), argumentTypes))
-                .findFirst()
-                .orElse(null);
-        if (foundMethod == null) {
-            foundMethod = methodsFilteredByName.stream()
-                    .filter(m -> m.getParameterTypes().length == argumentTypes.length)
-                    .findFirst()
-                    .orElse(methodsFilteredByName.get(0));
+                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass()))); // Select method from the most specific class (deepest in hierarchy)
+
+        if (exactMatch.isPresent()) {
+            return exactMatch.get();
         }
-        return foundMethod;
+
+        // If no exact parameter type match, return method with matching parameter count from the most specific class
+        return candidates.stream()
+                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass())))
+                .orElse(null);
+    }
+
+    /**
+     * Calculates inheritance depth of a class.
+     *
+     * @param clazz the class to analyze
+     * @return number of superclasses between this class and Object (depth in hierarchy)
+     */
+    private int getClassDepth(Class<?> clazz) {
+        int depth = 0;
+
+        while (clazz != null) {
+            depth++;
+            clazz = clazz.getSuperclass();
+        }
+
+        return depth;
     }
 }

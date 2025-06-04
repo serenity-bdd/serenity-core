@@ -6,6 +6,8 @@ import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
+import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +35,7 @@ public class CompleteATodo {
     @Test
     public void should_be_able_to_complete_a_todo_with_page_objects() {
 
+        Assertions.assertThat()
         james.completes("Walk the dog");
 
         james.should_see_that_that_following_item_is_marked_as_complete("Walk the dog");

@@ -1923,6 +1923,7 @@ public class TestOutcome {
                         issues != null ? issues.stream() : issues().stream(),
                         thereAre(additionalIssues) ? additionalIssues.stream() : Stream.empty()
                 )
+                .filter(Objects::nonNull)
                 .distinct() // Ensure distinct values
                 .sorted()   // Sort the values naturally
                 .collect(Collectors.toList()); // Collect into a List

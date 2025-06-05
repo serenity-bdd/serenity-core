@@ -214,7 +214,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         private WebElement element;
 
         public SlowLoadingElement(Clock clock, int timeOutInSeconds) {
-            super(clock, timeOutInSeconds);
+            super(clock, Duration.ofSeconds(timeOutInSeconds));
         }
 
         @Override
@@ -258,7 +258,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         private List<WebElement> elements;
 
         public SlowLoadingElementList(Clock clock, int timeOutInSeconds) {
-            super(clock, timeOutInSeconds);
+            super(clock, Duration.ofSeconds(timeOutInSeconds));
         }
 
         @Override

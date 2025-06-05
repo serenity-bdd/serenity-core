@@ -267,7 +267,7 @@ public class WebDriverFactory {
         timeoutStack.popTimeoutFor(proxiedDriver);
         Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
         if ((currentTimeout != previousTimeout) && isNotAMocked(proxiedDriver)) {
-            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.toMillis(), TimeUnit.MILLISECONDS);
+            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout);
         }
         return previousTimeout;
     }

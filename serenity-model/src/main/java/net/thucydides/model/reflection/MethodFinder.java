@@ -55,31 +55,37 @@ public class MethodFinder {
     public Method getMethodNamed(String methodName, List<Object> arguments) {
         Class<?>[] argumentTypes = arguments.stream()
                 .map(a -> a == null ? null : a.getClass())
-                .toArray(Class<?>[]::new);
+                .toArray(Class[]::new);
 
-        // Collect all candidate methods with matching name and parameter count
-        List<Method> candidates = getAllMethods().stream()
+        // Step 1: Filter all methods by name
+        List<Method> methodsByName = getAllMethods().stream()
                 .filter(m -> methodName.equals(m.getName()))
-                .filter(m -> m.getParameterTypes().length == argumentTypes.length)
                 .collect(Collectors.toList());
 
-        if (candidates.isEmpty()) {
+        if (methodsByName.isEmpty()) {
             return null;
         }
 
-        // Try to find exact parameter type match, preferring methods from subclasses
-        Optional<Method> exactMatch = candidates.stream()
+        // Step 2: Try exact match on parameter types
+        Optional<Method> exactMatch = methodsByName.stream()
                 .filter(m -> Arrays.equals(m.getParameterTypes(), argumentTypes))
-                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass()))); // Select method from the most specific class (deepest in hierarchy)
+                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass())));
 
         if (exactMatch.isPresent()) {
             return exactMatch.get();
         }
 
-        // If no exact parameter type match, return method with matching parameter count from the most specific class
-        return candidates.stream()
-                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass())))
-                .orElse(null);
+        // Step 3: Fallback - match by parameter count
+        Optional<Method> fallbackMatch = methodsByName.stream()
+                .filter(m -> m.getParameterTypes().length == argumentTypes.length)
+                .max(Comparator.comparingInt(m -> getClassDepth(m.getDeclaringClass())));
+
+        if (fallbackMatch.isPresent()) {
+            return fallbackMatch.get();
+        }
+
+        // Step 4: Final fallback - return any method by name (e.g. no parameters)
+        return methodsByName.get(0);
     }
 
     /**

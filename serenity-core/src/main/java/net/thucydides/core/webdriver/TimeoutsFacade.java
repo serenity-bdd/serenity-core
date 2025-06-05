@@ -19,18 +19,34 @@ public class TimeoutsFacade implements WebDriver.Timeouts {
     }
 
     @Override
-    public WebDriver.Timeouts implicitlyWait(long timeoutValue, TimeUnit timeUnit) {
-        webDriverFacade.implicitTimeout = Duration.of(timeoutValue, TemporalUnitConverter.fromTimeUnit(timeUnit));
-        return (timeouts != null) ? timeouts.implicitlyWait(timeoutValue,timeUnit) : timeouts;
+    public WebDriver.Timeouts implicitlyWait(Duration timeout) {
+        webDriverFacade.implicitTimeout = timeout;
+        return (timeouts != null) ? timeouts.implicitlyWait(timeout) : timeouts;
     }
 
     @Override
-    public WebDriver.Timeouts setScriptTimeout(long timeoutValue, TimeUnit timeUnit) {
-        return (timeouts != null) ? timeouts.setScriptTimeout(timeoutValue, timeUnit) : timeouts;
+    public Duration getImplicitWaitTimeout() {
+        return WebDriver.Timeouts.super.getImplicitWaitTimeout();
     }
 
     @Override
-    public WebDriver.Timeouts pageLoadTimeout(long timeoutValue, TimeUnit timeUnit) {
-        return (timeouts != null) ? timeouts.pageLoadTimeout(timeoutValue,timeUnit) : timeouts;
+    public WebDriver.Timeouts scriptTimeout(Duration duration) {
+        webDriverFacade.implicitTimeout = duration;
+        return (timeouts != null) ? timeouts.scriptTimeout(duration) : timeouts;
+    }
+
+    @Override
+    public Duration getScriptTimeout() {
+        return WebDriver.Timeouts.super.getScriptTimeout();
+    }
+
+    @Override
+    public WebDriver.Timeouts pageLoadTimeout(Duration timeout) {
+        return (timeouts != null) ? timeouts.pageLoadTimeout(timeout) : timeouts;
+    }
+
+    @Override
+    public Duration getPageLoadTimeout() {
+        return WebDriver.Timeouts.super.getPageLoadTimeout();
     }
 }

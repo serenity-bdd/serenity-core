@@ -95,12 +95,6 @@
                     searchPlaceholder: "Filter",
                     search: ""
                 },
-                columnDefs: [
-                    {
-                        targets: 2,
-                        visible: false
-                    },
-                ]
             });
 
             $(".feature-coverage-table-with-pagination").DataTable({
@@ -111,12 +105,6 @@
                     searchPlaceholder: "Filter",
                     search: ""
                 },
-                columnDefs: [
-                    {
-                        targets: 2,
-                        visible: false
-                    },
-                ]
             });
         });
     </script>
@@ -362,7 +350,6 @@
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
                                                                             <th style="width:1em;">Scenarios</th>
-                                                                            <th style="width:1em;">StepsText</th>
                                                                             <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
@@ -387,7 +374,6 @@
                                                                                         </#if>
                                                                                     </td>
                                                                                     <td>${tagCoverage.scenarioCount}</td>
-                                                                                    <td>${tagCoverage.allStepsText}</td>
                                                                                     <td>${tagCoverage.testCount}</td>
                                                                                     <td>${tagCoverage.successRate}</td>
                                                                                     <td>
@@ -486,7 +472,6 @@
                                                                     <th class="test-name-column">Scenario</th>
                                                                     <th>Context</th>
                                                                     <th>Steps</th>
-                                                                    <th>StepsText</th>
                                                                     <th>Started</th>
                                                                     <th>Total Duration</th>
                                                                     <th>Result</th>
@@ -528,7 +513,6 @@
                                                                         <td>${context_icon}<span style="display:none">${context_label}</span>
                                                                         </td>
                                                                         <td>${scenario.stepCount}</td>
-                                                                        <td><#outputformat 'HTML'>${scenario.allStepsText}</#outputformat></td>
                                                                         <td data-order="${scenario.timestamp}">${scenario.formattedStartTime}</td>
                                                                         <td>${scenario.formattedDuration}</td>
                                                                         <td>${outcome_icon} <span

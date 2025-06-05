@@ -95,12 +95,6 @@
                     searchPlaceholder: "Filter",
                     search: ""
                 },
-                columnDefs: [
-                    {
-                        targets: 2,
-                        visible: false
-                    },
-                ]
             });
 
             $(".feature-coverage-table-with-pagination").DataTable({
@@ -362,7 +356,6 @@
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
                                                                             <th style="width:1em;">Scenarios</th>
-                                                                            <th style="width:1em;">StepsText</th>
                                                                             <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
@@ -387,7 +380,6 @@
                                                                                         </#if>
                                                                                     </td>
                                                                                     <td>${tagCoverage.scenarioCount}</td>
-                                                                                    <td>${tagCoverage.allStepsText}</td>
                                                                                     <td>${tagCoverage.testCount}</td>
                                                                                     <td>${tagCoverage.successRate}</td>
                                                                                     <td>

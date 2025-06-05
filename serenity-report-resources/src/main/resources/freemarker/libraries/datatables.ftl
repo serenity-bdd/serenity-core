@@ -1,7 +1,10 @@
 <!-- DataTables -->
-<link type="text/css" href="datatables/1.13.1/datatables.min.css" rel="stylesheet" />
-<script type="text/javascript" src="datatables/1.13.1/datatables.min.js"></script>
-<script type="text/javascript" src="datatables/1.13.1/time-elapsed-dhms.js"></script>
+<#--<link type="text/css" href="datatables/1.13.1/datatables.min.css" rel="stylesheet" />-->
+<#--<script type="text/javascript" src="datatables/1.13.1/datatables.min.js"></script>-->
+<#--<script type="text/javascript" src="datatables/1.13.1/time-elapsed-dhms.js"></script>-->
+<link type="text/css" href="datatables/2.3.1/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/2.3.1/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/2.3.1/time-elapsed-dhms.js"></script>
 
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script src="bootstrap/js/bootstrap.min.js"></script>

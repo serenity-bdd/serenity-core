@@ -738,7 +738,6 @@
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-spring</module>
         <module>serenity-shutterbug</module>
-        <module>serenity-shutterbug1x</module>
         <module>serenity-saucelabs</module>
         <module>serenity-ant-task</module>
         <module>serenity-cli</module>

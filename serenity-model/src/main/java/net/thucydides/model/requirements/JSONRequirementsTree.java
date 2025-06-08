@@ -18,6 +18,7 @@ import net.thucydides.model.requirements.reports.RequirementOutcome;
 import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 import net.thucydides.model.requirements.tree.Node;
 import net.thucydides.model.util.Inflector;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 
@@ -69,7 +70,7 @@ public class JSONRequirementsTree {
             Expression expression = TagParser.parseFromTagFilters(tags);
             List<String> tagsForThisRequirement = requirement.getAggregateTags()
                     .stream()
-                    .map(TestTag::getName)
+                    .map(testTag -> rawTagStringOrName(testTag))
                     .map(tag -> addTagPrefixTo(tag))
                     .collect(Collectors.toList());
 
@@ -84,6 +85,14 @@ public class JSONRequirementsTree {
         }
         // Otherwise, only show the requirement if it has tests
         return requirementsOutcomes.requirementOutcomeFor(requirement).getTestCount() > 0;
+    }
+
+    private String rawTagStringOrName(TestTag tag) {
+        if (StringUtils.isNotEmpty(tag.getRawStringFromValueTag())) {
+            return tag.getRawStringFromValueTag();
+        } else {
+            return tag.getName();
+        }
     }
 
     private String addTagPrefixTo(String tag) {

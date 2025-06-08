@@ -1,0 +1,100 @@
+{
+  "name": "Add buying milk to the list",
+  "id": "add-new-item-to-shopping-list;add-buying-milk-to-the-list",
+  "scenarioId": "classpath:features/shopping_list:Add buying milk to the list",
+  "methodName": "Add buying milk to the list",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given Rama is looking at his shopping list",
+      "duration": 37,
+      "startTime": "2025-06-01T21:14:12.816797398+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "When he adds \"Buy some milk\" to the list",
+      "duration": 1,
+      "startTime": "2025-06-01T21:14:12.854743404+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "Then he sees \"Buy some milk\" as an item in the shopping list",
+      "duration": 0,
+      "startTime": "2025-06-01T21:14:12.856343481+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    }
+  ],
+  "userStory": {
+    "id": "classpath:features/shopping_list",
+    "storyName": "Add new item to shopping list",
+    "displayName": "Add new item to shopping list",
+    "path": "shopping_list",
+    "pathElements": [
+      {
+        "name": "shopping_list",
+        "description": ""
+      }
+    ],
+    "type": "feature"
+  },
+  "title": "Add buying milk to the list",
+  "description": "",
+  "tags": [
+    {
+      "name": "add_item",
+      "type": "feature_equ",
+      "displayName": "add_item"
+    },
+    {
+      "name": "scenario_add_item",
+      "type": "tag",
+      "displayName": "scenario_add_item"
+    },
+    {
+      "name": "add_item",
+      "type": "feature_colon",
+      "displayName": "add_item"
+    },
+    {
+      "name": "milk",
+      "type": "scenario_equ",
+      "displayName": "milk"
+    },
+    {
+      "name": "milk",
+      "type": "scenario_colon",
+      "displayName": "milk"
+    },
+    {
+      "name": "scenario_milk",
+      "type": "tag",
+      "displayName": "scenario_milk"
+    },
+    {
+      "name": "feature_add_item",
+      "type": "tag",
+      "displayName": "feature_add_item"
+    },
+    {
+      "name": "shopping_list",
+      "type": "feature",
+      "displayName": "Add new item to shopping list"
+    }
+  ],
+  "startTime": "2025-06-01T21:14:12.793766427+02:00[Europe/Vienna]",
+  "endTime": "2025-06-01T21:14:12.859241021+02:00[Europe/Vienna]",
+  "duration": 65,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "SUCCESS"
+}

@@ -1,0 +1,100 @@
+{
+  "name": "Add buying eggs to the list",
+  "id": "add-new-item-to-shopping-list;add-buying-eggs-to-the-list",
+  "scenarioId": "classpath:features/shopping_list:Add buying eggs to the list",
+  "methodName": "Add buying eggs to the list",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given Rama is looking at his shopping list",
+      "duration": 2,
+      "startTime": "2025-06-01T21:14:12.820182741+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "When he adds \"Buy some eggs\" to the list",
+      "duration": 1,
+      "startTime": "2025-06-01T21:14:12.854238+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "Then he sees \"Buy some eggs\" as an item in the shopping list",
+      "duration": 1,
+      "startTime": "2025-06-01T21:14:12.856029557+02:00[Europe/Vienna]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    }
+  ],
+  "userStory": {
+    "id": "classpath:features/shopping_list",
+    "storyName": "Add new item to shopping list",
+    "displayName": "Add new item to shopping list",
+    "path": "shopping_list",
+    "pathElements": [
+      {
+        "name": "shopping_list",
+        "description": ""
+      }
+    ],
+    "type": "feature"
+  },
+  "title": "Add buying eggs to the list",
+  "description": "",
+  "tags": [
+    {
+      "name": "add_item",
+      "type": "feature_equ",
+      "displayName": "add_item"
+    },
+    {
+      "name": "eggs",
+      "type": "scenario_colon",
+      "displayName": "eggs"
+    },
+    {
+      "name": "scenario_add_item",
+      "type": "tag",
+      "displayName": "scenario_add_item"
+    },
+    {
+      "name": "add_item",
+      "type": "feature_colon",
+      "displayName": "add_item"
+    },
+    {
+      "name": "eggs",
+      "type": "scenario_equ",
+      "displayName": "eggs"
+    },
+    {
+      "name": "scenario_eggs",
+      "type": "tag",
+      "displayName": "scenario_eggs"
+    },
+    {
+      "name": "feature_add_item",
+      "type": "tag",
+      "displayName": "feature_add_item"
+    },
+    {
+      "name": "shopping_list",
+      "type": "feature",
+      "displayName": "Add new item to shopping list"
+    }
+  ],
+  "startTime": "2025-06-01T21:14:12.768914295+02:00[Europe/Vienna]",
+  "endTime": "2025-06-01T21:14:12.861015718+02:00[Europe/Vienna]",
+  "duration": 92,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "SUCCESS"
+}

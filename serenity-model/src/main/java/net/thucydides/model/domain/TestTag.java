@@ -22,21 +22,27 @@ public class TestTag implements Comparable<TestTag> {
     private final String name;
     private final String type;
     private final String displayName;
+    private final String rawStringFromValueTag;
 
     private transient String normalisedName;
     private transient String normalisedType;
 
     private TestTag(String name, String type) {
-        this(name, type, name);
+        this(name, type, name, null);
     }
 
     private TestTag(String name, String type, String displayName) {
+        this(name, type, displayName, null);
+    }
+
+    private TestTag(String name, String type, String displayName, String rawStringFromValueTag) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(type);
         Preconditions.checkNotNull(displayName);
         this.name = name;
         this.type = type;
         this.displayName = displayName;
+        this.rawStringFromValueTag = rawStringFromValueTag;
     }
 
     /**
@@ -95,19 +101,30 @@ public class TestTag implements Comparable<TestTag> {
         return name.contains("/") ? name.substring(name.indexOf("/") + 1) : name;
     }
 
+    public String getRawStringFromValueTag() {
+        return rawStringFromValueTag;
+    }
+
     public static TestTagBuilder withName(final String tagName) {
         return new TestTagBuilder(tagName);
     }
 
     public static TestTag withValue(String value) {
+        String rawStringFromValueTag = value;
         value = stripLeadingAtSymbol(value);
+        TestTag tag;
         if (value.contains(":")) {
-            return getTestTag(value, value.indexOf(":"));
+            tag = getTestTag(value, value.indexOf(":"));
         } else if (value.contains("=")) {
-            return getTestTag(value, value.indexOf("="));
+            tag = getTestTag(value, value.indexOf("="));
         } else {
-            return TestTag.withName(value.trim()).andType(DEFAULT_TAG_TYPE);
+            tag = TestTag.withName(value.trim()).andType(DEFAULT_TAG_TYPE);
         }
+        return tag.withRawStringFromValueTag(rawStringFromValueTag);
+    }
+
+    private TestTag withRawStringFromValueTag(String rawStringFromValueTag) {
+        return new TestTag(name, type, displayName, rawStringFromValueTag);
     }
 
     private static String stripLeadingAtSymbol(String value) {
@@ -152,7 +169,7 @@ public class TestTag implements Comparable<TestTag> {
         }
 
         public TestTag andType(String type) {
-            return new TestTag(name, withoutTagSymbol(type));
+            return new TestTag(name, withoutTagSymbol(type), name, null);
         }
 
         private String withoutTagSymbol(String type) {

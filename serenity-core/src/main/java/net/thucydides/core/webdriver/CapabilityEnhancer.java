@@ -9,14 +9,12 @@ import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
-import java.util.Optional;
 
-import static net.thucydides.model.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+
 
 /**
  * Created by john on 25/06/2016.
@@ -43,16 +41,15 @@ public class CapabilityEnhancer {
         AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
 
         if (StepEventBus.getParallelEventBus() != null && StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
-            Optional<TestOutcome> currentTestOutcome = StepEventBus.getParallelEventBus()
-                    .getBaseStepListener()
-                    .latestTestOutcome();
+            TestOutcome currentTestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
             // Technically not required but needed for some test scenarios
-            if ((currentTestOutcome != null) && (currentTestOutcome.isPresent())) {
+            if ((currentTestOutcome != null)) {
                 AddCustomDriverCapabilities.from(environmentVariables)
-                                .withTestDetails(driver, currentTestOutcome.get())
+                                .withTestDetails(driver, currentTestOutcome)
                                 .to(capabilities);
             }
         }
+
 
         // Add W3C capabilities defined in the "webdriver" section of the serenity.conf file for non-Appium drivers
         if (driver.isW3CCompliant()) {

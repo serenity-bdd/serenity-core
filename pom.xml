@@ -466,18 +466,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-<!--    <distributionManagement>-->
-<!--        <snapshotRepository>-->
-<!--            <id>ossrh-staging</id>-->
-<!--&lt;!&ndash;            <url>https://oss.sonatype.org/content/repositories/snapshots</url>&ndash;&gt;-->
-<!--            <url>https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots</url>-->
-<!--        </snapshotRepository>-->
-<!--        <repository>-->
-<!--            <id>ossrh-staging</id>-->
-<!--&lt;!&ndash;            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>&ndash;&gt;-->
-<!--            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>-->
-<!--        </repository>-->
-<!--    </distributionManagement>-->
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>

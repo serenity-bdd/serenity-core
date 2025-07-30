@@ -25,15 +25,18 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     public static final String ROOT_DIRECTORY = "annotatedstories"
 
-    List<RequirementsTagProvider> requirementsProviders
-    ReportNameProvider reportNameProvider
+    static List<RequirementsTagProvider> requirementsProviders
+    static ReportNameProvider reportNameProvider
 
-    def setup() {
+    def setupSpec() {
         FeatureCache.getCache().close()
+        RequirementCache.getInstance().clear()
         def vars = new MockEnvironmentVariables()
         vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_ANNOTATED_REQUIREMENTS_DIR.propertyName, ROOT_DIRECTORY)
-        requirementsProviders = [new FileSystemRequirementsTagProvider(), new PackageAnnotationBasedTagProvider(vars)]
+        vars.setProperty(ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.propertyName, "capability,feature")
+        requirementsProviders = [new FileSystemRequirementsTagProvider(vars), new PackageAnnotationBasedTagProvider(vars)]
         reportNameProvider =  new ReportNameProvider(NO_CONTEXT, ReportType.HTML, new MultiSourceRequirementsService())
+        requirementsProviders.each { it.getRequirements() }
     }
 
     def issueTracking = Mock(IssueTracking)

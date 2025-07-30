@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import com.google.common.eventbus.Subscribe;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.mac.Mac2Driver;
 import io.appium.java_client.windows.WindowsDriver;
 import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
@@ -71,6 +72,10 @@ public class AppiumDriverProvider implements DriverProvider {
             	WindowsDriver windowsDriver = new WindowsDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), REMOTE));
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(windowsDriver.getCapabilities()));
                 return windowsDriver;
+            case MAC:
+                Mac2Driver macDriver = new Mac2Driver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), REMOTE));
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(macDriver.getCapabilities()));
+                return macDriver;
         }
         throw new DriverConfigurationError(appiumTargetPlatform(environmentVariables).name());
     }
@@ -137,6 +142,18 @@ public class AppiumDriverProvider implements DriverProvider {
                 WebDriverInstanceEvents.bus().register(listenerFor(windowsDriver, deviceName));
                 LOGGER.info("  -> driver created" + windowsDriver);
                 return windowsDriver;
+            case MAC:
+                LOGGER.info("  - Using mac appium server at " + appiumUrl);
+                enhancedOptions = enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), REMOTE);
+                LOGGER.info("  - Using appium capabilities " +  enhancedOptions);
+                TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+                TestContext.forTheCurrentTest().recordCurrentPlatform();
+                Mac2Driver macDriver = new Mac2Driver(appiumUrl, enhancedOptions);
+
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(macDriver.getCapabilities()));
+                WebDriverInstanceEvents.bus().register(listenerFor(macDriver, deviceName));
+                LOGGER.info("  -> driver created" + macDriver);
+                return macDriver;
         }
         throw new DriverConfigurationError(appiumTargetPlatform(testEnvironmentVariables).name());
 

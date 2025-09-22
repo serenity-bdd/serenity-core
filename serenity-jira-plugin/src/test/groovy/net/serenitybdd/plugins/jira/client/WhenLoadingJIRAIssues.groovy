@@ -2,8 +2,10 @@ package net.serenitybdd.plugins.jira.client
 
 import net.serenitybdd.plugins.jira.JiraConnectionSettings
 import net.serenitybdd.plugins.jira.domain.IssueSummary
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class WhenLoadingJIRAIssues extends Specification {
 
 

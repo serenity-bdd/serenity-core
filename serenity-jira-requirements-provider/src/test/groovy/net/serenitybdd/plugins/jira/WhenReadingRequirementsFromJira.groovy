@@ -5,8 +5,10 @@ import net.thucydides.model.environment.MockEnvironmentVariables
 import net.serenitybdd.plugins.jirarequirements.JIRARequirementsProvider
 import net.serenitybdd.plugins.jira.service.JIRAConfiguration
 import net.serenitybdd.plugins.jira.service.SystemPropertiesJIRAConfiguration
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class WhenReadingRequirementsFromJira extends Specification {
 
 

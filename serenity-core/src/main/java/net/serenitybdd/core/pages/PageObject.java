@@ -1026,6 +1026,7 @@ public abstract class PageObject {
      *
      * @deprecated Use element(webElement).hasFocus() instead
      */
+    @Deprecated
     public boolean hasFocus(final WebElement webElement) {
         return element(webElement).hasFocus();
     }

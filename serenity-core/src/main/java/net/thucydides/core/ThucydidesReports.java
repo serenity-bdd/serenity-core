@@ -8,6 +8,7 @@ import net.thucydides.model.webdriver.Configuration;
 /** @deprecated Use SerenityListeners instead
  *
  */
+@Deprecated
 public class ThucydidesReports {
     public static ReportService getReportService(Configuration systemConfiguration) {
         return SerenityReports.getReportService(systemConfiguration);

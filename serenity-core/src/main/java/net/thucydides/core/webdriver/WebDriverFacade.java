@@ -834,6 +834,14 @@ public class WebDriverFacade implements WebDriver, JavascriptExecutor, HasCapabi
     }
 
     @Override
+    public boolean isDownloadsEnabled() {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            return ((HasDownloads) getProxiedDriver()).isDownloadsEnabled();
+        }
+        return false;
+    }
+
+    @Override
     public ScriptKey pin(String script) {
         if (getProxiedDriver() instanceof JavascriptExecutor) {
             return ((JavascriptExecutor) getProxiedDriver()).pin(script);

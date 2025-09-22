@@ -31,6 +31,7 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     /**
      * @deprecated
      */
+    @Deprecated
     public PageObjectDependencyInjector(Pages pages) {
 //        this.pages = pages;
         this();

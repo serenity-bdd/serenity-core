@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -31,20 +30,6 @@ public class FirefoxOptionsBuilder {
 
             for (String optionName : firefoxSpecificOptions) {
                 switch (optionName) {
-                    // Absolute path to the custom Firefox binary to use
-                    case "binary":
-                        FirefoxBinary binary = new FirefoxBinary(new File(options.get("binary").toString()));
-                        firefoxOptions.setBinary(binary);
-                        break;
-
-                    // Command line arguments to pass to the Firefox binary
-                    case "args":
-                        if (options.get("args") instanceof List) {
-                            List<String> args = ListOfValues.from(options).forProperty("args");
-                            firefoxOptions.getBinary().addCommandLineOptions(args.toArray(new String[]{}));
-                        }
-                        break;
-
                     // Overall log level
                     case "log":
                         Map<String, Object> logLevels = NestedMap.called("log").from(options);

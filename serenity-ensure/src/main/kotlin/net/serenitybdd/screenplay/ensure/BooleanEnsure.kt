@@ -12,7 +12,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>,
 
     constructor(value: Boolean?) : this(
         KnownValue<Boolean?>(value, if (value == null) "<null>" else "\"$value\""),
-        java.util.Comparator.naturalOrder<Boolean>()
+        Comparator.naturalOrder<Boolean>()
     )
     
     fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(), descriptionOf(value))

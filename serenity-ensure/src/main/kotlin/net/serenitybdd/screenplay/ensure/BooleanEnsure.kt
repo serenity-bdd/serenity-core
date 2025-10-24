@@ -2,10 +2,19 @@ package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
 
-class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<Boolean?, Boolean>(value) {
+class BooleanEnsure(override val value: KnowableValue<Boolean?>,
+                   comparator: Comparator<Boolean>,
+                   expectedDescription: String = descriptionOf(value)) : ComparableEnsure<Boolean>(value, comparator, expectedDescription) {
 
-    constructor(value: Boolean?) : this(KnownValue(value, value.toString()))
+    constructor(value: KnowableValue<Boolean?>) : this(value, Comparator.naturalOrder<Boolean>())
 
+    constructor(value: KnowableValue<Boolean?>, valueDescription: String) : this(value, Comparator.naturalOrder<Boolean>(), valueDescription)
+
+    constructor(value: Boolean?) : this(
+        KnownValue<Boolean?>(value, if (value == null) "<null>" else "\"$value\""),
+        java.util.Comparator.naturalOrder<Boolean>()
+    )
+    
     fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(), descriptionOf(value))
     fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated(), descriptionOf(value))
 //

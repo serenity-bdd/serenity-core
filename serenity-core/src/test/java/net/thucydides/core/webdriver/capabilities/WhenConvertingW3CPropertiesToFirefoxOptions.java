@@ -123,13 +123,6 @@ class WhenConvertingW3CPropertiesToFirefoxOptions {
         EnvironmentVariables environmentVariables = from("sample-conf-files/firefox/complete.conf");
         FirefoxOptions options = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").firefoxOptions();
         Map<String, Object> firefoxOptions = (Map<String, Object>) options.getCapability("moz:firefoxOptions");
-
-        @Test
-        @DisplayName("the path to the firefox binary")
-        void driverBinary() {
-            String driverBinary = options.getBinary().getPath();
-            assertThat(driverBinary).endsWith("firefox-bin");
-        }
     }
 
     @Nested

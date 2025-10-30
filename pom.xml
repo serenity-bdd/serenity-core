@@ -44,7 +44,7 @@
         <groovy.version>4.0.23</groovy.version>
         <spock.version>2.4-M1-groovy-4.0</spock.version>
         <byte-buddy.version>1.17.8</byte-buddy.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.5.0-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.16</slf4j.version>
         <cucumber.version>7.31.0</cucumber.version>
@@ -87,14 +87,14 @@
         <jbehave.version>4.8.3</jbehave.version>
         <ant.version>1.10.12</ant.version>
         <restassured.version>5.5.5</restassured.version>
-        <wiremock.version>3.13.0</wiremock.version>
+        <wiremock.version>4.0.0-beta.15</wiremock.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <javassist.version>3.29.2-GA</javassist.version>
-        <jackson.version>2.18.1</jackson.version>
+        <jackson.version>2.20.0</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
-        <kotlin.version>2.1.21</kotlin.version>
+        <kotlin.version>2.2.21</kotlin.version>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>

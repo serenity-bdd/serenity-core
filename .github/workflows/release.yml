@@ -16,6 +16,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       - name: Configure Maven Servers
         uses: s4u/maven-settings-action@v3.0.0
         with:
@@ -24,6 +31,18 @@ jobs:
               {"id": "central", "username": "${{ secrets.CENTRAL_TOKEN_USERNAME }}", "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}"},
               {"id": "gpg.passphrase", "passphrase": "${{ secrets.GPG_PASSPHRASE }}"}
             ]
+
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
 
       - name: Run Maven Release
         run: mvn release:prepare release:perform -Darguments='-Dmaven.test.skip=true' -Pdeploy

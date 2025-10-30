@@ -8,20 +8,22 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Configure Maven Servers
-        uses: s4u/maven-settings-action@v2.8.0
+        uses: s4u/maven-settings-action@v3.0.0
         with:
-          servers: '[{"id": "gpg.passphrase", "passphrase": "${{ secrets.SONATYPE_PASSPHRASE }}"},
-                   {"id": "sonatype-nexus-snapshots", "username": "${{ secrets.SONATYPE_USERNAME }}", "password": "${{ secrets.SONATYPE_PASSWORD }}"},
-                   {"id": "${{ secrets.SONATYPE_SERVER_ID }}", "username": "${{ secrets.SONATYPE_SERVER_USERNAME }}", "password": "${{ secrets.SONATYPE_SERVER_PASSWORD }}"}]'
+          servers: |
+            [
+              {"id": "central", "username": "${{ secrets.CENTRAL_TOKEN_USERNAME }}", "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}"},
+              {"id": "gpg.passphrase", "passphrase": "${{ secrets.GPG_PASSPHRASE }}"}
+            ]
 
       - name: Run Maven Release
         run: mvn release:prepare release:perform -Darguments='-Dmaven.test.skip=true' -Pdeploy

@@ -27,6 +27,7 @@ import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.TestSource;
+import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
@@ -87,7 +88,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     public synchronized void testPlanExecutionStarted(TestPlan testPlan) {
         this.summary = new SerenityTestExecutionSummary(testPlan);
         testPlan.getRoots().forEach(root -> {
-            Set<TestIdentifier> children = testPlan.getChildren(root.getUniqueId());
+            Set<TestIdentifier> children = testPlan.getChildren(root.getUniqueIdObject());
             children.stream().filter(this::isClassSource).filter(this::isASerenityTest).forEach(this::configureParameterizedTestDataFor);
         });
     }

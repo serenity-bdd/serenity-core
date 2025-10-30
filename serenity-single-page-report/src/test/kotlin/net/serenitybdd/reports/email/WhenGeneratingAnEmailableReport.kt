@@ -197,8 +197,9 @@ class WhenGeneratingAnEmailableReport {
                 reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
                 generatedReport = reporter.generateReport()
                 reportContents = generatedReport.toFile().readText()
-
                 parsedReport = parse(reportContents)
+
+                environmentVariables.clearProperty("report.scoreboard.size")
             }
 
 

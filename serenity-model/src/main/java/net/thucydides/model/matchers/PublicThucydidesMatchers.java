@@ -2,7 +2,6 @@ package net.thucydides.model.matchers;
 
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
-
 import org.hamcrest.Matcher;
 
 

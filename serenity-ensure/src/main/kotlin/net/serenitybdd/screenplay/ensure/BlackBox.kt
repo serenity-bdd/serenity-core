@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.thucydides.core.steps.StepEventBus
-import kotlin.collections.ArrayList
 
 object BlackBox {
     private val flightLog = ThreadLocal.withInitial { ArrayList<ResolvedAssertion>() }

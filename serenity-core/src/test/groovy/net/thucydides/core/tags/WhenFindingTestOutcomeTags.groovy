@@ -2,8 +2,8 @@ package net.thucydides.core.tags
 
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestTag
-import net.thucydides.model.statistics.service.FeatureStoryTagProvider
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.statistics.service.FeatureStoryTagProvider
 import spock.lang.Specification
 
 /**

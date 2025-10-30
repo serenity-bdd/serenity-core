@@ -1,10 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
@@ -12,7 +9,6 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
 public class WhenUsingTimeoutStack {
 
     @Mock

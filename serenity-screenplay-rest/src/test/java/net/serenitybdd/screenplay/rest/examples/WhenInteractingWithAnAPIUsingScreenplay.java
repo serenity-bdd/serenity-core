@@ -4,6 +4,8 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.NetworkAddressRules;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import io.restassured.builder.RequestSpecBuilder;
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.rest.RestDefaults;
 import net.serenitybdd.rest.SerenityRest;
@@ -18,7 +20,6 @@ import net.serenitybdd.screenplay.rest.interactions.Put;
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
 import net.serenitybdd.screenplay.rest.questions.RestQuestionBuilder;
 import net.serenitybdd.screenplay.rest.questions.TheResponse;
-import net.serenitybdd.annotations.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +31,6 @@ import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
-
-import io.restassured.builder.RequestSpecBuilder;
 
 @ExtendWith(SerenityJUnit5Extension.class)
 public class WhenInteractingWithAnAPIUsingScreenplay {

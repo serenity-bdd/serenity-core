@@ -1,12 +1,12 @@
 package net.thucydides.core.pages.integration
 
-import net.serenitybdd.core.pages.PageUrls
 import net.serenitybdd.annotations.DefaultUrl
 import net.serenitybdd.annotations.NamedUrl
 import net.serenitybdd.annotations.NamedUrls
+import net.serenitybdd.core.pages.PageUrls
 import net.thucydides.model.configuration.SystemPropertiesConfiguration
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -9,18 +9,14 @@ import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
 import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import static net.serenitybdd.rest.SerenityRest.*
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static net.serenitybdd.rest.JsonConverter.*;
-import static net.serenitybdd.rest.DecomposedContentType.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static net.serenitybdd.rest.DecomposedContentType.APPLICATION_JSON
+import static net.serenitybdd.rest.JsonConverter.formatted
+import static net.serenitybdd.rest.SerenityRest.get;
 
 /**
  * User: YamStranger

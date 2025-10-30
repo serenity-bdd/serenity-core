@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.ByAction;
-import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.By;
 
 import java.util.Collections;

@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver;
 
-import net.thucydides.core.webdriver.ProvidedDriver;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;

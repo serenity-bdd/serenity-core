@@ -1,13 +1,12 @@
 package net.serenitybdd.core.di.samples;
 
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.annotations.Pending;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.StepGroup;
 import net.serenitybdd.annotations.Title;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.questions
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.targets.Target
-
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
 import org.openqa.selenium.interactions.Coordinates

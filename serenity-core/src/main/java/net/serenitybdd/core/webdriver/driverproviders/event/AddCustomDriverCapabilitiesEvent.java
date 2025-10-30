@@ -3,8 +3,8 @@ package net.serenitybdd.core.webdriver.driverproviders.event;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.steps.events.StepEventBusEventBase;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 
 

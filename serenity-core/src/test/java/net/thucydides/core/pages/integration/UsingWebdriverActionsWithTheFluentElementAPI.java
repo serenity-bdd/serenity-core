@@ -1,9 +1,9 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;

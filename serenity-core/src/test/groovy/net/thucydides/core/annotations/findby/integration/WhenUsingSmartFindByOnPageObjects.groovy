@@ -1,12 +1,12 @@
 package net.thucydides.core.annotations.findby.integration
 
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.annotations.DefaultUrl
-import net.thucydides.model.environment.TestLocalEnvironmentVariables
+import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
+import net.thucydides.model.environment.TestLocalEnvironmentVariables
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Shared

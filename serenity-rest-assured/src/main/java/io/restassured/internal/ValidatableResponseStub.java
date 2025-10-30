@@ -1,8 +1,6 @@
 package io.restassured.internal;
 
 import io.restassured.http.ContentType;
-import io.restassured.internal.RestAssuredResponseOptionsImpl;
-import io.restassured.internal.ValidatableResponseImpl;
 import io.restassured.matcher.DetailedCookieMatcher;
 import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.parsing.Parser;

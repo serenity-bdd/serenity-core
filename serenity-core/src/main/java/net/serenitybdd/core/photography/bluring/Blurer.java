@@ -1,10 +1,10 @@
 package net.serenitybdd.core.photography.bluring;
 
 import com.jhlabs.image.BoxBlurFilter;
+import net.serenitybdd.annotations.BlurLevel;
 import net.serenitybdd.core.photography.AmendedPathBuilder;
 import net.serenitybdd.core.photography.PhotoFilter;
 import net.serenitybdd.core.photography.ScreenshotNegative;
-import net.serenitybdd.annotations.BlurLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

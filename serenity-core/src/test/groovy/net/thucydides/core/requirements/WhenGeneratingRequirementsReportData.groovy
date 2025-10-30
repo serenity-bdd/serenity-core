@@ -3,8 +3,9 @@ package net.thucydides.core.requirements
 import com.google.common.collect.Lists
 import net.thucydides.core.model.SampleTestResults
 import net.thucydides.model.ThucydidesSystemProperty
-import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.domain.*
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.html.ReportNameProvider
 import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
@@ -14,7 +15,6 @@ import net.thucydides.model.requirements.RequirementsTagProvider
 import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomes
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.requirements.reports.cucumber.FeatureCache
 import spock.lang.Ignore
 import spock.lang.Specification

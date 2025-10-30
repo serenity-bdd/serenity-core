@@ -1,9 +1,6 @@
 package net.serenitybdd.core.di
-import net.serenitybdd.core.di.samples.FlatScenarioStepsWithBrokenSpringDependencies
-import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringContextHierarchyDependencies
-import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringDependencies
-import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationContextHierarchyDependencies
-import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationDependencies
+
+import net.serenitybdd.core.di.samples.*
 import net.thucydides.core.pages.Pages
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService
 import spock.lang.Specification

@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners.integration;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.model.batches.SystemVariableBasedBatchManager;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.samples.SampleNonWebSteps;

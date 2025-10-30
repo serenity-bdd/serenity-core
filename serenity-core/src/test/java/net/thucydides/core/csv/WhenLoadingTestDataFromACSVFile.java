@@ -1,6 +1,5 @@
 package net.thucydides.core.csv;
 
-import au.com.bytecode.opencsv.CSVParser;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.ExtendedTemporaryFolder;

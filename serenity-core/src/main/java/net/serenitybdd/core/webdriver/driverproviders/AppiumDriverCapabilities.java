@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class AppiumDriverCapabilities implements DriverCapabilitiesProvider {

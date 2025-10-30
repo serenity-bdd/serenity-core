@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders.cache;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.WebDriverInitialisationException;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reflection.ClassFinder;

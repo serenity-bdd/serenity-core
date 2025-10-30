@@ -1,5 +1,5 @@
-import org.ajoberstar.grgit.*
 import org.ajoberstar.gradle.git.release.opinion.Strategies
+import org.ajoberstar.grgit.*
 
 /**
  * Deprecated: back to using Maven to genereate the Maven plugin

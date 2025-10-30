@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.actions.deselectactions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.annotations.Step;
 
 public class DeselectByIndexFromTarget implements Interaction {
     private Target target;

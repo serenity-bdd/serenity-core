@@ -3,8 +3,8 @@ package net.thucydides.core.webdriver
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.findby.FindBy
 import net.thucydides.core.pages.WebElementFacade
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import spock.lang.Specification

@@ -2,10 +2,10 @@ package net.serenitybdd.model.history;
 
 
 import net.serenitybdd.model.collect.NewMap;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.ReportNamer;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.AcceptanceTestLoader;
 import net.thucydides.model.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.model.reports.json.gson.GsonPreviousOutcomeConverter;

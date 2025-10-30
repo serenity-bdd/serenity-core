@@ -1,8 +1,8 @@
 package net.thucydides.core.util
 
 import net.thucydides.model.util.Acronym
-import spock.lang.Specification
 import net.thucydides.model.util.Inflector
+import spock.lang.Specification
 
 class WhenDisplayingTagNamesInAReadableForm extends Specification {
 

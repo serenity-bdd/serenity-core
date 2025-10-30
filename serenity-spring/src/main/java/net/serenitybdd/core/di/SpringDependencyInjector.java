@@ -1,12 +1,12 @@
 package net.serenitybdd.core.di;
 
-import java.lang.annotation.Annotation;
-
 import net.serenitybdd.model.di.DependencyInjector;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.TestContextManager;
+
+import java.lang.annotation.Annotation;
 
 public class SpringDependencyInjector implements DependencyInjector {
 

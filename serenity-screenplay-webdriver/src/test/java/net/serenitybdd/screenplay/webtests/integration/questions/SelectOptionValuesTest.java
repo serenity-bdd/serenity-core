@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.webtests.integration.questions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.questions.SelectOptionValues;
-import net.serenitybdd.screenplay.questions.SelectOptions;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
 import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;

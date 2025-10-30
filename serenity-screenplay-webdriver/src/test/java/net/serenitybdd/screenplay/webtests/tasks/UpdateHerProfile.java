@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.webtests.tasks;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.Settable;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
-import net.serenitybdd.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

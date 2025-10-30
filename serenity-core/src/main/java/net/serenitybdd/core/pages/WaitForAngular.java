@@ -2,7 +2,6 @@ package net.serenitybdd.core.pages;
 
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 
 public class WaitForAngular {
     private final JavascriptExecutor driver;

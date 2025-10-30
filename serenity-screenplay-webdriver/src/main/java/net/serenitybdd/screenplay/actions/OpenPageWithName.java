@@ -1,12 +1,11 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.annotations.Step;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.util.EnvironmentVariables;
 
 public class OpenPageWithName implements Interaction {
 

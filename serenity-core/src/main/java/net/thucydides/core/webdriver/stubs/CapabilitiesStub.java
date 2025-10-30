@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Platform;
 
 import java.util.HashMap;
 import java.util.HashSet;

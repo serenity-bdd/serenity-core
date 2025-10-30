@@ -1,11 +1,14 @@
 package io.cucumber.core.plugin;
 
-import io.cucumber.core.options.*;
+import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.messages.types.Examples;
 import io.cucumber.messages.types.TableRow;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class LineFilters {
 

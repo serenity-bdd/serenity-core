@@ -1,10 +1,10 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.serenitybdd.annotations.Fields;
-import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.serenitybdd.annotations.Shared;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.steps.UIInteractionSteps;
+import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.model.reflection.FieldSetter;
 import net.thucydides.model.util.Inflector;
 

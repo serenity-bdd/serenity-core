@@ -1,7 +1,10 @@
 package net.serenitybdd.junit5.samples.integration;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 

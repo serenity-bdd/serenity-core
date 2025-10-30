@@ -1,7 +1,6 @@
 package net.thucydides.model.matchers;
 
 import net.thucydides.model.domain.screenshots.Screenshot;
-
 import org.hamcrest.Matcher;
 
 import java.util.List;

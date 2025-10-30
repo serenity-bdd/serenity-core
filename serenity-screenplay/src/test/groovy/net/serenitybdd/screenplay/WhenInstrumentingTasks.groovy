@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay
 
 import net.serenitybdd.core.di.SerenityInfrastructure
-import net.thucydides.model.environment.TestLocalEnvironmentVariables
-import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.TestLocalEnvironmentVariables
 import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 

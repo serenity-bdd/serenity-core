@@ -1,14 +1,17 @@
 package net.serenitybdd.screenplay.webtests.integration.actions;
 
+import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.actions.*;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.HtmlAlert;
+import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.actions.Switch;
 import net.serenitybdd.screenplay.questions.page.TheWebPage;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.Link;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.serenitybdd.annotations.Managed;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

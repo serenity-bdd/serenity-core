@@ -1,10 +1,10 @@
 package net.serenitybdd.reports.asciidoc
 
 import net.serenitybdd.reports.graphs.ResultChart
+import net.thucydides.model.domain.TestResult.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import net.thucydides.model.domain.TestResult.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAChart {

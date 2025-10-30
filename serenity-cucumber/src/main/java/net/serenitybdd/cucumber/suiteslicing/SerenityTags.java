@@ -1,8 +1,8 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

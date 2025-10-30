@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.bitbar;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
-import net.thucydides.model.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 /**

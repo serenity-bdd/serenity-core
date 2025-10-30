@@ -2,9 +2,10 @@ package net.thucydides.core.requirements
 
 import net.thucydides.core.model.SampleTestResults
 import net.thucydides.model.ThucydidesSystemProperty
-import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.domain.ReportType
 import net.thucydides.model.domain.TestTagCache
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.html.ReportNameProvider
 import net.thucydides.model.requirements.MultiSourceRequirementsService
@@ -15,7 +16,6 @@ import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomes
 import net.thucydides.model.statistics.service.TagProvider
 import net.thucydides.model.statistics.service.TagProviderService
-import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT

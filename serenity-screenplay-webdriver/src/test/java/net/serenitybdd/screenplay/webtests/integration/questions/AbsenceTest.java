@@ -1,9 +1,7 @@
 package net.serenitybdd.screenplay.webtests.integration.questions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.Clear;
 import net.serenitybdd.screenplay.questions.Absence;
-import net.serenitybdd.screenplay.questions.Value;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
 import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;

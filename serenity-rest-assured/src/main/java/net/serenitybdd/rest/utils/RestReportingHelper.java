@@ -12,13 +12,13 @@ import net.serenitybdd.model.rest.RestQuery;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.event.RecordRestQueryEvent;
 import net.serenitybdd.rest.filters.FieldsRecordingFilter;
+import net.thucydides.core.steps.events.StepFailedEvent;
+import net.thucydides.core.steps.events.StepStartedEvent;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
-import net.thucydides.core.steps.events.StepFailedEvent;
-import net.thucydides.core.steps.events.StepStartedEvent;
-import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;

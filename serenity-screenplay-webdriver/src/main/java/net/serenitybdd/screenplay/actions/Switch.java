@@ -1,9 +1,10 @@
 package net.serenitybdd.screenplay.actions;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
 import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
+
+import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 /**
  * Switch to a different frame or window.

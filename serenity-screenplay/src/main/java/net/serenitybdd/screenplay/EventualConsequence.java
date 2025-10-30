@@ -1,8 +1,8 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.model.time.Stopwatch;
-import net.serenitybdd.markers.CanBeSilent;
 
 import java.util.ArrayList;
 import java.util.Arrays;

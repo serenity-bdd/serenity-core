@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.webtests.integration.questions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.questions.Attribute;
 import net.serenitybdd.screenplay.questions.CheckboxValue;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;

@@ -4,7 +4,6 @@ import net.serenitybdd.annotations.*;
 import net.serenitybdd.model.collect.NewList;
 import net.thucydides.model.adapters.JUnitStrategy;
 import net.thucydides.model.domain.TestTag;
-import net.thucydides.model.tags.Taggable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

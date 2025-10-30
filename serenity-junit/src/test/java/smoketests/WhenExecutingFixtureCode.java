@@ -1,12 +1,12 @@
 package smoketests;
 
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.annotations.DefaultUrl;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import org.junit.After;

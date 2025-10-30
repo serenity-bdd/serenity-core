@@ -6,8 +6,6 @@ import net.serenitybdd.screenplay.actions.deselectactions.DeselectByValueFromTar
 import net.serenitybdd.screenplay.actions.deselectactions.DeselectByVisibleTextFromTarget;
 import net.serenitybdd.screenplay.targets.Target;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
 public class DeselectFromOptions {
 
     private final SelectStrategy strategy;

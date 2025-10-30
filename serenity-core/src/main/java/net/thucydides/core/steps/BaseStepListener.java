@@ -1,35 +1,38 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.model.PendingStepException;
+import net.serenitybdd.annotations.TestAnnotations;
 import net.serenitybdd.core.annotations.events.AfterExample;
 import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.annotations.events.BeforeExample;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.model.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
-import net.serenitybdd.model.rest.RestQuery;
-import net.serenitybdd.model.strings.Joiner;
-import net.serenitybdd.model.time.SystemClock;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
+import net.serenitybdd.model.PendingStepException;
+import net.serenitybdd.model.exceptions.TheErrorType;
+import net.serenitybdd.model.rest.RestQuery;
+import net.serenitybdd.model.strings.Joiner;
+import net.serenitybdd.model.time.SystemClock;
+import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
 import net.thucydides.core.steps.events.UpdateCurrentStepFailureCause;
+import net.thucydides.core.steps.session.TestSession;
+import net.thucydides.core.webdriver.CloseBrowser;
+import net.thucydides.core.webdriver.SerenityWebdriverManager;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.serenitybdd.annotations.TestAnnotations;
-import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.model.domain.*;
 import net.thucydides.model.domain.failures.FailureAnalysis;
 import net.thucydides.model.domain.stacktrace.FailureCause;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.webdriver.*;
 import net.thucydides.model.screenshots.ScreenshotException;
 import net.thucydides.model.steps.*;
 import net.thucydides.model.util.ConfigCache;
@@ -50,10 +53,10 @@ import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.EXAMPLE;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.SCENARIO;
-import static net.thucydides.model.domain.Stories.findStoryFrom;
-import static net.thucydides.model.domain.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
+import static net.thucydides.model.domain.Stories.findStoryFrom;
+import static net.thucydides.model.domain.TestResult.*;
 
 /**
  * Observes the test run and stores test run details for later reporting.

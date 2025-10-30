@@ -5,16 +5,15 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
+import net.serenitybdd.annotations.Step
 import net.serenitybdd.model.rest.RestQuery
 import net.serenitybdd.rest.utils.RestExecutionHelper
-import net.serenitybdd.annotations.Step
-import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepFactory
+import net.thucydides.model.domain.TestResult
 import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.ExternalResource
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files

@@ -1,9 +1,9 @@
 package net.serenitybdd.reports.model
 
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.reports.TestOutcomes
-import net.thucydides.model.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

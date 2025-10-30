@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
+import net.serenitybdd.model.collect.NewList;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.model.util.EnvironmentVariables;
 

@@ -1,6 +1,5 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Optional;

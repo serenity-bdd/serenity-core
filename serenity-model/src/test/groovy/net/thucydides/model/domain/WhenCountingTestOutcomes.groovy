@@ -1,6 +1,6 @@
 package net.thucydides.model.domain
 
-import net.thucydides.model.domain.TestOutcome
+
 import net.thucydides.model.reports.TestOutcomes
 import spock.lang.Specification
 

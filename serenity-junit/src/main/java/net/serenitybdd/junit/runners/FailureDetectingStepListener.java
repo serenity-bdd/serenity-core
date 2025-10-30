@@ -2,7 +2,8 @@ package net.serenitybdd.junit.runners;
 
 import net.serenitybdd.model.collect.NewList;
 import net.thucydides.model.domain.TestOutcome;
-import net.thucydides.model.steps.*;
+import net.thucydides.model.steps.StepListenerAdapter;
+import net.thucydides.model.steps.TestFailureCause;
 
 import java.util.ArrayList;
 import java.util.List;

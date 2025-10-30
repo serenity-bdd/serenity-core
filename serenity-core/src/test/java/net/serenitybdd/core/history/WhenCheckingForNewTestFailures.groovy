@@ -7,9 +7,9 @@ import net.serenitybdd.model.history.TestOutcomeSummaryRecorder
 import net.thucydides.model.domain.Story
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.steps.TestFailureCause
 import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriverException
 import spock.lang.Specification
 

@@ -2,10 +2,10 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.model.di.ModelInfrastructure;
 import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.logging.ConsoleColors;
 import net.thucydides.model.logging.LoggingLevel;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.reports.ThucydidesReporter;
 import net.thucydides.model.reports.templates.TemplateManager;
 import net.thucydides.model.reports.util.CopyDirectory;

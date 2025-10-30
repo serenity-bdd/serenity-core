@@ -1,14 +1,13 @@
 package net.thucydides.core.model.screenshots
 
-
 import net.serenitybdd.annotations.Screenshots
 import net.serenitybdd.annotations.Step
-import net.thucydides.model.configuration.SystemPropertiesConfiguration
-import net.thucydides.model.domain.TakeScreenshots
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.domain.TakeScreenshots
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.webdriver.Configuration
 import spock.lang.Specification
 import spock.lang.Unroll

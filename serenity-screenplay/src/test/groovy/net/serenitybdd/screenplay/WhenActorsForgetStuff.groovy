@@ -4,7 +4,6 @@ import net.serenitybdd.screenplay.conditions.Check
 import net.serenitybdd.screenplay.questions.TheMemory
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
-import org.junit.Before
 import spock.lang.Specification
 
 import java.nio.file.Files

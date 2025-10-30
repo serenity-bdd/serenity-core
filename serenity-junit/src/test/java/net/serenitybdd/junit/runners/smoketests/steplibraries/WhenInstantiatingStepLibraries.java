@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners.smoketests.steplibraries;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

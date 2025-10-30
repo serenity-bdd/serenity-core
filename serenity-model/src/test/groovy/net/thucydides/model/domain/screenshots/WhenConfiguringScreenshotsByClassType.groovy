@@ -1,7 +1,6 @@
 package net.thucydides.model.domain.screenshots
 
 import net.thucydides.model.domain.TakeScreenshots
-import net.thucydides.model.domain.screenshots.ScreenshotPreferencesByClass
 import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 

@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.ensure.web
 
-import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.markers.CanBeSilent
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.ensure.*

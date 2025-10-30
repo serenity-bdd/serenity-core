@@ -1,20 +1,19 @@
 package net.thucydides.core.reports.integration;
 
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.OutcomeFormat;
 import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.jupiter.api.*;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
 
-import static net.thucydides.model.matchers.FileMatchers.exists;
 import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

@@ -1,9 +1,9 @@
 package net.thucydides.junit.runners;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.ManagedPages;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.samples.IndexPage;
 import net.thucydides.samples.SampleScenarioSteps;

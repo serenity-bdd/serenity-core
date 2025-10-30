@@ -1,8 +1,8 @@
 package net.serenitybdd.core.photography.bluring;
 
+import net.serenitybdd.annotations.BlurLevel;
 import net.serenitybdd.annotations.BlurScreenshots;
 import net.thucydides.model.reflection.StackTraceAnalyser;
-import net.serenitybdd.annotations.BlurLevel;
 
 import java.lang.reflect.Method;
 

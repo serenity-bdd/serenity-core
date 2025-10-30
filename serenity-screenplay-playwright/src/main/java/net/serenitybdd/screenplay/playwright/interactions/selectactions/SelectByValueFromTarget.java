@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.playwright.interactions.selectactions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
-import net.serenitybdd.annotations.Step;
 
 public class SelectByValueFromTarget implements Performable {
     private final Target target;

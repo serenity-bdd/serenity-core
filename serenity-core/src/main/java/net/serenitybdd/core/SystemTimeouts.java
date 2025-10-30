@@ -1,7 +1,7 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;

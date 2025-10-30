@@ -1,10 +1,10 @@
 package net.serenity.test.utils.rules;
 
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.steps.StepListener;
 import net.thucydides.core.steps.events.TestFinishedEvent;
 import net.thucydides.core.steps.events.TestStartedEvent;
 import net.thucydides.core.steps.session.TestSession;
+import net.thucydides.model.steps.StepListener;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

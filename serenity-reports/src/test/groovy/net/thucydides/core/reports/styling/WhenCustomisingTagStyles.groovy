@@ -2,8 +2,8 @@ package net.thucydides.core.reports.styling
 
 import net.serenitybdd.core.reports.styling.TagStylist
 import net.thucydides.model.domain.TestTag
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

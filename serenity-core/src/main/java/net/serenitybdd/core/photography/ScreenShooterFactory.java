@@ -1,8 +1,10 @@
 package net.serenitybdd.core.photography;
 
 import net.thucydides.model.util.EnvironmentVariables;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_SCREENSHOOTER;
 
 public class ScreenShooterFactory {

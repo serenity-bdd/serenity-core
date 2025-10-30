@@ -1,15 +1,15 @@
 package net.serenitybdd.junit5;
 
-import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.annotations.Pending;
 import net.serenitybdd.annotations.Steps;
-import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.serenitybdd.core.steps.Instrumented;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
 import net.thucydides.model.domain.TestTag;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.samples.SampleNonWebSteps;
 import net.thucydides.samples.SamplePassingNonWebScenarioWithManualTests;
 import org.hamcrest.Matchers;

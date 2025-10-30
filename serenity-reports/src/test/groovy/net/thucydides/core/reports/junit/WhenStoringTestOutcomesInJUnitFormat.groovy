@@ -1,13 +1,9 @@
 package net.thucydides.core.reports.junit
 
-import net.thucydides.model.domain.TestOutcome
-import net.thucydides.model.domain.TestTag
-import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.junit.JUnitXMLOutcomeReporter
-import net.thucydides.model.steps.TestFailureCause
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files

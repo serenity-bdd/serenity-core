@@ -1,10 +1,12 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityValue;
+import net.thucydides.model.util.EnvironmentVariables;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Read browser preferences from a part of the serenity.conf file via the environment variables.

@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import org.openqa.selenium.Proxy;
-import net.thucydides.core.webdriver.capabilities.InvalidCapabilityException;
 
 import java.util.Arrays;
 import java.util.Map;

@@ -1,12 +1,12 @@
 package net.serenitybdd.screenplay.shopping.tasks;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.annotations.Step;
 
-import static net.serenitybdd.screenplay.shopping.tasks.PlaceInBasket.placed_the_item_in_her_basket;
 import static net.serenitybdd.screenplay.GivenWhenThen.andThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
+import static net.serenitybdd.screenplay.shopping.tasks.PlaceInBasket.placed_the_item_in_her_basket;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

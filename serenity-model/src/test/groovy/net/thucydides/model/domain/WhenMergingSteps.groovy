@@ -1,6 +1,6 @@
 package net.thucydides.model.domain
 
-import net.thucydides.model.domain.TestOutcome
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

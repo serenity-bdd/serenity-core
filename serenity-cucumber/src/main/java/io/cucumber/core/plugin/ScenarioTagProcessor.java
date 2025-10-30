@@ -1,8 +1,8 @@
 package io.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Tag;
-import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.TestResult;
 
 import java.net.URI;
 import java.util.List;

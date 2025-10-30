@@ -1,7 +1,7 @@
 package net.thucydides.model.requirements.classpath;
 
-import net.serenitybdd.model.strings.Joiner;
 import net.serenitybdd.annotations.Narrative;
+import net.serenitybdd.model.strings.Joiner;
 import net.thucydides.model.requirements.annotations.NarrativeFinder;
 
 import java.util.Optional;

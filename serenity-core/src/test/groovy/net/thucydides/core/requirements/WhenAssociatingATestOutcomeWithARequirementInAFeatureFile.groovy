@@ -3,10 +3,10 @@ package net.thucydides.core.requirements
 import net.thucydides.model.domain.Story
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestTag
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.model.requirements.model.Requirement
 import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specification {

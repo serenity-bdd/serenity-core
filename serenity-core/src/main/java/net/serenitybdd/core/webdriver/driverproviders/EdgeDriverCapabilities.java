@@ -1,10 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.edge.EdgeOptions;

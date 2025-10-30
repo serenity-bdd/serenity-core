@@ -4,8 +4,6 @@ import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
-import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
-
 /**
  * Interact with a label element
  * This can be useful when the input element itself is not accessible

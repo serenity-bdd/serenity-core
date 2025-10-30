@@ -2,8 +2,8 @@ package net.serenitybdd.screenplay.questions
 
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
-import net.thucydides.model.domain.Story
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.domain.Story
 import spock.lang.Specification
 
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat

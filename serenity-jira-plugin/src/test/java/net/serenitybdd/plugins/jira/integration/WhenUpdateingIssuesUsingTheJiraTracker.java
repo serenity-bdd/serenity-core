@@ -2,7 +2,6 @@ package net.serenitybdd.plugins.jira.integration;
 
 import net.serenitybdd.plugins.jira.JiraConnectionSettings;
 import net.serenitybdd.plugins.jira.client.JIRAConfigurationError;
-import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
 import net.serenitybdd.plugins.jira.domain.IssueComment;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.domain.IssueTransition;

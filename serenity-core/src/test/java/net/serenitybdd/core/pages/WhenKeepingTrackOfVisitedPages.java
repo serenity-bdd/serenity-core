@@ -1,14 +1,14 @@
 package net.serenitybdd.core.pages;
 
 
-import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.pages.ApacheHomePage;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
-import net.thucydides.model.environment.MockEnvironmentVariables;
-import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

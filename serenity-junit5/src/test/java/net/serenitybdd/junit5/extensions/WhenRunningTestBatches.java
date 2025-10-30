@@ -2,19 +2,12 @@ package net.serenitybdd.junit5.extensions;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
-import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
 

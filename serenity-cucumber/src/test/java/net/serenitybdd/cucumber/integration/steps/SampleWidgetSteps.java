@@ -3,12 +3,12 @@ package net.serenitybdd.cucumber.integration.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.cucumber.integration.steps.thucydides.WidgetSteps;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.Task;
-import net.serenitybdd.annotations.Steps;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;

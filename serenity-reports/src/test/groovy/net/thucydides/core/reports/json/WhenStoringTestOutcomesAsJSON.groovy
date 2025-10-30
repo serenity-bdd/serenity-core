@@ -1,22 +1,22 @@
 package net.thucydides.core.reports.json
 
-import net.serenitybdd.model.rest.RestMethod
-import net.serenitybdd.model.rest.RestQuery
 import net.serenitybdd.annotations.Feature
 import net.serenitybdd.annotations.Issue
 import net.serenitybdd.annotations.Issues
 import net.serenitybdd.annotations.WithTag
-import net.thucydides.model.issues.IssueTracking
+import net.serenitybdd.model.rest.RestMethod
+import net.serenitybdd.model.rest.RestQuery
+import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.model.domain.*
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.AcceptanceTestLoader
 import net.thucydides.model.reports.AcceptanceTestReporter
 import net.thucydides.model.reports.TestOutcomes
-import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.model.reports.json.JSONTestOutcomeReporter
 import net.thucydides.model.reports.json.gson.GsonJSONConverter
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.model.steps.TestSourceType
-import net.thucydides.model.environment.MockEnvironmentVariables
 import org.junit.ComparisonFailure
 import spock.lang.Specification
 import spock.lang.Unroll

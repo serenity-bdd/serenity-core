@@ -2,11 +2,11 @@ package net.thucydides.model.reports.html;
 
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.RequirementsService;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;

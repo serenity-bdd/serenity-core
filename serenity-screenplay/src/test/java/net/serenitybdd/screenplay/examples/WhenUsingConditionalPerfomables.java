@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.examples;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.EatsAnApple;
 import net.serenitybdd.screenplay.conditions.Check;
 import org.junit.Test;
 import org.junit.runner.RunWith;

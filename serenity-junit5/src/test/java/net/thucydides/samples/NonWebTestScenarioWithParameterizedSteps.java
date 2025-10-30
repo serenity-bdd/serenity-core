@@ -1,10 +1,11 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SerenityJUnit5Extension.class)

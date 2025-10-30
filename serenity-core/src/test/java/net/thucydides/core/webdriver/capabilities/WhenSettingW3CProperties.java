@@ -3,7 +3,6 @@ package net.thucydides.core.webdriver.capabilities;
 import com.google.common.io.Resources;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
@@ -12,14 +11,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assume.assumeThat;
 
 public class WhenSettingW3CProperties {
 

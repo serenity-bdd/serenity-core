@@ -1,12 +1,12 @@
 package net.serenitybdd.plugins.jirarequirements;
 
 import com.google.common.collect.Lists;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.plugins.jira.client.JIRAAuthenticationError;
 import net.serenitybdd.plugins.jira.client.JIRAConfigurationError;
 import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.model.JQLException;
-import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

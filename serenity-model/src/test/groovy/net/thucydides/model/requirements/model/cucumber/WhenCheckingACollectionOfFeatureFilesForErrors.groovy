@@ -2,7 +2,6 @@ package net.thucydides.model.requirements.model.cucumber
 
 import spock.lang.Specification
 
-import java.nio.file.NoSuchFileException
 import java.util.stream.Collectors
 
 class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {

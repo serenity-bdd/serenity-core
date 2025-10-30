@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.integration
 
 import net.serenitybdd.model.SerenitySystemProperties
-import net.thucydides.model.ThucydidesSystemProperty
-import net.thucydides.model.issues.IssueTracking
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
+import net.thucydides.model.ThucydidesSystemProperty
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver

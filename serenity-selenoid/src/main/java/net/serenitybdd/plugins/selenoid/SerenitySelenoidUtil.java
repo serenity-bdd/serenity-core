@@ -1,9 +1,11 @@
 package net.serenitybdd.plugins.selenoid;
 
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.ExternalLink;
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,9 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SerenitySelenoidUtil {
 

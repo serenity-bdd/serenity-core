@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.servicepools
 
 import net.serenitybdd.model.CurrentOS
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Path

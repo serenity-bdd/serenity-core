@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.actions.deselectactions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actions.ByAction;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.annotations.Step;
 
 public class DeselectAllOptions extends ByAction {
 

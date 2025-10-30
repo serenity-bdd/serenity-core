@@ -1,10 +1,11 @@
 package net.thucydides.model.adapters;
 
 
+import net.thucydides.model.domain.TestTag;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
-import net.thucydides.model.domain.TestTag;
 
 public interface JUnitStrategy {
 

@@ -1,8 +1,8 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.model.domain.*;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.*;
 import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.ParameterizedTest;

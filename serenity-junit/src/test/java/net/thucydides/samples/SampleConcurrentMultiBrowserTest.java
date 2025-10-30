@@ -1,10 +1,10 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.ManagedPages;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithDriver;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;

@@ -1,11 +1,11 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
+import net.serenitybdd.model.model.TestOutcomeName;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.ExternalLink;
 import net.thucydides.model.domain.TestOutcome;
-import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.entity.StringEntity;

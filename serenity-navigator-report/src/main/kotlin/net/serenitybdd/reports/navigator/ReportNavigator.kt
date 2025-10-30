@@ -1,8 +1,7 @@
 package net.serenitybdd.reports.navigator
 
-import net.serenitybdd.model.environment.ConfiguredEnvironment
-import net.serenitybdd.reports.configuration.*
-import net.thucydides.model.ThucydidesSystemProperty.*
+import net.serenitybdd.reports.configuration.ConfiguredOutputDirectoryProperty
+import net.serenitybdd.reports.configuration.ReportProperty
 import java.nio.file.Path
 
 

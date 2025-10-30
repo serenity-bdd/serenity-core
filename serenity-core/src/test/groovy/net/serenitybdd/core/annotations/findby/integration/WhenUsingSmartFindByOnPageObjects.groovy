@@ -1,9 +1,9 @@
 package net.serenitybdd.core.annotations.findby.integration
 
+import net.serenitybdd.annotations.DefaultUrl
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.annotations.DefaultUrl
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver

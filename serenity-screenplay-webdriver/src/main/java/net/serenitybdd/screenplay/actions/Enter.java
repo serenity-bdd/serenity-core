@@ -5,7 +5,6 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

@@ -2,11 +2,11 @@ package net.serenitybdd.crossbrowsertesting;
 
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Platform;

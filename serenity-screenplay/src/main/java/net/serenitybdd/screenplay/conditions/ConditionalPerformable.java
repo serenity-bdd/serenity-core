@@ -1,7 +1,5 @@
 package net.serenitybdd.screenplay.conditions;
 
-import java.util.HashMap;
-
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;

@@ -5,8 +5,8 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.HasTeardown
 import net.serenitybdd.screenplay.Task
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.steps.ExecutedStepDescription
 import spock.lang.Specification
 
 import java.nio.file.Files

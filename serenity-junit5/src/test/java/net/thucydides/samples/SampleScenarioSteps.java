@@ -1,10 +1,10 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.serenitybdd.annotations.Pending;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.steps.UIInteractionSteps;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Assumptions;
 import org.openqa.selenium.ElementNotInteractableException;

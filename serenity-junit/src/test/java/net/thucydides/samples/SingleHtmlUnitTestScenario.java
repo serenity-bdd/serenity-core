@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.annotations.*;
-import net.thucydides.core.pages.Pages;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.pages.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;

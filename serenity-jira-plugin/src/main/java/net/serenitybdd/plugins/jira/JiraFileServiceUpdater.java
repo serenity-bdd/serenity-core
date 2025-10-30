@@ -2,7 +2,6 @@ package net.serenitybdd.plugins.jira;
 
 
 import com.google.common.collect.Lists;
-
 import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;

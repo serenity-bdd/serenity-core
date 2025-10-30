@@ -2,9 +2,9 @@ package net.thucydides.samples;
 
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.StepGroup;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-import net.serenitybdd.junit.runners.SerenityRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

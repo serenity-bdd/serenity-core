@@ -4,7 +4,6 @@ import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.model.images.ResizableImage;
 import net.thucydides.model.images.ResizedImage;
 import net.thucydides.model.util.FileSystemUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,8 +18,8 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

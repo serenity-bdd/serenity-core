@@ -1,11 +1,11 @@
 package net.serenitybdd.plugins.crossbrowsertesting;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;

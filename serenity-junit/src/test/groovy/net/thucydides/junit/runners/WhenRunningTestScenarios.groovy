@@ -3,10 +3,10 @@ package net.thucydides.junit.runners
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.model.domain.TestResult
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.samples.*
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Ignore
@@ -17,8 +17,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import static net.thucydides.model.domain.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
+import static net.thucydides.model.domain.TestResult.*
 
 class WhenRunningTestScenarios extends Specification {
 

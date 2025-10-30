@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_COMPRESS_SCREENSHOTS;

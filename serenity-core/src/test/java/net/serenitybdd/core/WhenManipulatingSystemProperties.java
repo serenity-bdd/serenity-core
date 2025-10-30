@@ -1,8 +1,8 @@
 package net.serenitybdd.core;
 
 import net.serenitybdd.model.SerenitySystemProperties;
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.junit.rules.SaveWebdriverSystemPropertiesRule;
+import net.thucydides.model.ThucydidesSystemProperty;
 import org.junit.Rule;
 import org.junit.Test;
 

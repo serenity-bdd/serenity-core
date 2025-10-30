@@ -15,11 +15,8 @@ import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.rest.SerenityRest.*
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger

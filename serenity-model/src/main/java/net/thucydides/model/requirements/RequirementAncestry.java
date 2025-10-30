@@ -2,11 +2,7 @@ package net.thucydides.model.requirements;
 
 import net.thucydides.model.requirements.model.Requirement;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static java.util.Collections.unmodifiableList;
 
 public class RequirementAncestry {
 

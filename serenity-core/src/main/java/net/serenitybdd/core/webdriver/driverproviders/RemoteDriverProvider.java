@@ -1,16 +1,16 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
-import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumOptions;

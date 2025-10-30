@@ -1,13 +1,13 @@
 package net.thucydides.model.steps;
 
-import net.thucydides.model.logging.ConsoleEvent;
-import net.thucydides.model.logging.ConsoleHeading;
-import net.thucydides.model.logging.ConsoleLoggingListener;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestStepFactory;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.logging.ConsoleEvent;
+import net.thucydides.model.logging.ConsoleHeading;
+import net.thucydides.model.logging.ConsoleLoggingListener;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

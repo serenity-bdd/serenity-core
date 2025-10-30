@@ -2,12 +2,12 @@ package net.thucydides.model.requirements.reports;
 
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.collect.NewSet;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestType;
 import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.TestOutcomeCounter;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.html.RequirementsFilter;

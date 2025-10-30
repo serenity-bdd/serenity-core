@@ -13,13 +13,9 @@ import org.junit.Rule
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.post
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import static net.serenitybdd.rest.SerenityRest.rest
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import static net.serenitybdd.rest.SerenityRest.rest
 
 /**
  * User: YamStranger

@@ -4,16 +4,16 @@ import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
-import net.serenitybdd.core.webdriver.driverproviders.*;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -25,10 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-import static net.thucydides.model.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 /**
  * Provides an instance of a supported WebDriver.

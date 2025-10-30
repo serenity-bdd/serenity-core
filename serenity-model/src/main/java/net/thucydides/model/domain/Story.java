@@ -1,10 +1,10 @@
 package net.thucydides.model.domain;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.model.strings.FirstLine;
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.serenitybdd.annotations.AnnotatedDescription;
 import net.serenitybdd.annotations.Feature;
+import net.serenitybdd.model.strings.FirstLine;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.features.ApplicationFeature;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
@@ -13,7 +13,6 @@ import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;

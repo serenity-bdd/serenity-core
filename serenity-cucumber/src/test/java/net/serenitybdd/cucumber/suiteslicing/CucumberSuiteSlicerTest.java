@@ -7,8 +7,8 @@ import org.junit.Test;
 import java.net.URI;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.MatcherAssert.*;
 
 public class CucumberSuiteSlicerTest {
 

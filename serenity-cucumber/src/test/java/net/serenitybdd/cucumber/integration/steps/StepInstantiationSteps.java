@@ -2,8 +2,8 @@ package net.serenitybdd.cucumber.integration.steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import net.serenitybdd.cucumber.integration.steps.thucydides.SampleSteps;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.cucumber.integration.steps.thucydides.SampleSteps;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

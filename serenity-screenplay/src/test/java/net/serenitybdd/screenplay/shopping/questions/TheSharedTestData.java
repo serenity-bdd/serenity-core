@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.shopping.questions;
 
+import net.serenitybdd.annotations.Shared;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.shopping.tasks.TestData;
-import net.serenitybdd.annotations.Shared;
 
 public class TheSharedTestData {
 

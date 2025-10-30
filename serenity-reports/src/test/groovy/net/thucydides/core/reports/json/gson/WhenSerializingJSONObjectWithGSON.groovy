@@ -1,11 +1,11 @@
 package net.thucydides.core.reports.json.gson
 
-import net.thucydides.model.domain.TestOutcome
 import net.thucydides.core.reports.integration.TestStepFactory
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.json.AScenarioHasNoNameException
 import net.thucydides.model.reports.json.gson.GsonJSONConverter
 import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets

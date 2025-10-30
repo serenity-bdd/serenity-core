@@ -8,8 +8,6 @@ import net.thucydides.samples.IndexPage;
 import net.thucydides.samples.SampleScenarioSteps;
 import org.openqa.selenium.WebDriver;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 
 public class WhenInstantiatingTopLevelPageObjects {
     

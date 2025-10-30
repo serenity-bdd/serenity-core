@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.questions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Question;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -20,13 +20,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static net.serenitybdd.model.rest.RestMethod.DELETE;
-import static net.serenitybdd.model.rest.RestMethod.GET;
-import static net.serenitybdd.model.rest.RestMethod.HEAD;
-import static net.serenitybdd.model.rest.RestMethod.OPTIONS;
-import static net.serenitybdd.model.rest.RestMethod.PATCH;
-import static net.serenitybdd.model.rest.RestMethod.POST;
-import static net.serenitybdd.model.rest.RestMethod.PUT;
+import static net.serenitybdd.model.rest.RestMethod.*;
 import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 import static org.apache.http.util.Args.notNull;
 

@@ -1,16 +1,10 @@
 package net.thucydides.core.webdriver.shadowdom;
 
 import net.serenitybdd.core.annotations.findby.By;
-import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 

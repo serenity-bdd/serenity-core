@@ -3,16 +3,16 @@ package net.serenitybdd.junit5.datadriven;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit5.datadriven.samples.*;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
@@ -22,9 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
-import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
@@ -38,7 +35,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTest {
 

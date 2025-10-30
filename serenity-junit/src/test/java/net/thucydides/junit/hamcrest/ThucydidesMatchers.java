@@ -1,7 +1,6 @@
 package net.thucydides.junit.hamcrest;
 
 import net.thucydides.model.reports.AcceptanceTestReporter;
-
 import org.hamcrest.Matcher;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;

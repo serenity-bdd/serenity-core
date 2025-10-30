@@ -2,10 +2,10 @@ package net.serenitybdd.core.junit.rules;
 
 
 import net.serenitybdd.model.SerenitySystemProperties;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.junit.rules.SaveWebdriverSystemPropertiesRule;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

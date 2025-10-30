@@ -7,14 +7,13 @@ import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.model.domain.ExternalLink;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Base64;

@@ -1,10 +1,10 @@
 package net.thucydides.model.reports;
 
 import com.google.common.base.Splitter;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.domain.TestType;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.reports.CompoundDuration;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

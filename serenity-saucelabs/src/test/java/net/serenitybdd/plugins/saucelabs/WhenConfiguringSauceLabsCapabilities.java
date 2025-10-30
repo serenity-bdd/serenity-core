@@ -1,12 +1,11 @@
 package net.serenitybdd.plugins.saucelabs;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.MutableCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

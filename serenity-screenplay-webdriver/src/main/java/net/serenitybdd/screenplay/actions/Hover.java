@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;

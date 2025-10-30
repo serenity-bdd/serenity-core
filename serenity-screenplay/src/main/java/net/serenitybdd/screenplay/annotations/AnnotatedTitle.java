@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.annotations;
 
-import net.serenitybdd.screenplay.Uninstrumented;
 import net.serenitybdd.annotations.Fields;
+import net.serenitybdd.screenplay.Uninstrumented;
 import org.apache.commons.lang3.StringUtils;
 import org.opentest4j.AssertionFailedError;
 

@@ -1,12 +1,8 @@
 package net.serenitybdd.screenplay.questions;
 
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Question;
 import org.hamcrest.Matcher;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

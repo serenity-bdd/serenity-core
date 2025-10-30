@@ -1,6 +1,7 @@
 package net.thucydides.core.steps.session;
 
 import net.thucydides.core.steps.StepEventBus;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PlaybackSessionContext {

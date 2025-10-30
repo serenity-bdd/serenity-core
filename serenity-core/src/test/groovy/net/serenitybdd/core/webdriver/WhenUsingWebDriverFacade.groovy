@@ -1,11 +1,11 @@
 package net.serenitybdd.core.webdriver
 
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SupportedWebDriver
 import net.thucydides.core.webdriver.WebDriverFactory
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.openqa.selenium.remote.RemoteWebDriver

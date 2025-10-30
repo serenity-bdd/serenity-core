@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.remoteTesting;
 
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.reports.remoteTesting.BrowserStackLinkGenerator;
 import net.thucydides.model.reports.remoteTesting.RemoteTestingLinkManager;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

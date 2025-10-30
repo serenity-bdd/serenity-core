@@ -1,12 +1,13 @@
 package net.serenitybdd.screenplay
+
 import net.serenitybdd.core.Serenity
-import net.thucydides.model.domain.TestResult
-import static net.thucydides.model.domain.TestResult.*
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.domain.TestResult
 import spock.lang.Specification
 
 import static net.serenitybdd.screenplay.EventualConsequence.eventually
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat
+import static net.thucydides.model.domain.TestResult.*
 import static org.hamcrest.Matchers.equalTo
 
 class WhenWaitingForDelayedResults extends Specification {

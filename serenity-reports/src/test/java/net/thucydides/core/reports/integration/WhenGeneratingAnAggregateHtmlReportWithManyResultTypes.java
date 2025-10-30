@@ -3,11 +3,11 @@ package net.thucydides.core.reports.integration;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.issues.IssueTracking;
-import net.thucydides.model.domain.TestResult;
-import net.thucydides.model.reports.TestOutcomeLoader;
-import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;

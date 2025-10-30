@@ -2,18 +2,10 @@ package net.serenitybdd.plugins.zalenium;
 
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.util.Properties;
 
 public class AfterAZaleniumScenario implements AfterAWebdriverScenario {
 

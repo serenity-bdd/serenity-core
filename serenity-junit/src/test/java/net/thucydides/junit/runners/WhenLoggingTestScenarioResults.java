@@ -1,11 +1,11 @@
 package net.thucydides.junit.runners;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.samples.MultipleNonWebTestScenario;
 import net.thucydides.samples.SingleNonWebTestScenario;
 import org.junit.Before;

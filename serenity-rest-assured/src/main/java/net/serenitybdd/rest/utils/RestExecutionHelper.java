@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
 import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
 
 
 /**

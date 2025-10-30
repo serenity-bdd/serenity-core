@@ -1,11 +1,11 @@
 package net.thucydides.junit.runners;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.samples.SamplePassingScenario;
 import org.junit.After;
 import org.junit.Before;

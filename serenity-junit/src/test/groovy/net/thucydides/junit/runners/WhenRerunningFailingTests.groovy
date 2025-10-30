@@ -2,8 +2,8 @@ package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier

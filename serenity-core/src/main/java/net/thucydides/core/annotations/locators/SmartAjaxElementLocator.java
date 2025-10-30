@@ -2,12 +2,11 @@ package net.thucydides.core.annotations.locators;
 
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.core.WebdriverCollectionStrategy;
 import net.thucydides.core.annotations.ElementIsUsable;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -15,9 +14,10 @@ import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutError;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
 
 import java.lang.reflect.Field;

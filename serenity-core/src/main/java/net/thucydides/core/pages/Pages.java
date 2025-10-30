@@ -1,14 +1,14 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.annotations.Fields;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
-import net.serenitybdd.annotations.Fields;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.core.steps.EnclosingClass;
-import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.model.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;

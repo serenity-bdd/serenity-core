@@ -1,9 +1,9 @@
 package net.serenitybdd.junit5;
 
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.environment.MockEnvironmentVariables;
-import net.thucydides.core.steps.StepEventBus;
 import org.junit.Before;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;

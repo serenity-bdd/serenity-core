@@ -1,11 +1,11 @@
 package net.thucydides.core.steps.samples;
 
+import net.serenitybdd.annotations.BlurLevel;
 import net.serenitybdd.annotations.BlurScreenshots;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
-import net.serenitybdd.annotations.BlurLevel;
 import net.thucydides.core.steps.ScenarioSteps;
 
 public class NestedScenarioSteps extends ScenarioSteps {

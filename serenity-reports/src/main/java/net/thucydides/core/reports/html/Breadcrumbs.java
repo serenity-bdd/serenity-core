@@ -1,8 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Splitter;
-import net.thucydides.model.domain.PathElement;
-import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.requirements.model.Requirement;
 

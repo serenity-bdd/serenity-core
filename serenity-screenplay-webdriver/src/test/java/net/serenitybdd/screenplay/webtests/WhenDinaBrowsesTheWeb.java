@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.webtests;
 
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
@@ -20,8 +22,6 @@ import net.serenitybdd.screenplay.webtests.questions.BankBalanceQuestion;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
-import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -32,8 +32,8 @@ import java.util.Collection;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
-import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.hasValue;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.hasValue;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -3,9 +3,9 @@ package net.serenitybdd.cucumber.smoketests;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

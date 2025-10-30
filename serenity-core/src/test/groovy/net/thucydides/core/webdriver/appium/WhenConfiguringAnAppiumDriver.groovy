@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver.appium
 
 import net.thucydides.core.util.FileSeparatorUtil
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification

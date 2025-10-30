@@ -6,6 +6,7 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
+import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
@@ -13,11 +14,6 @@ import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
-import net.serenitybdd.screenplay.events.ActorPerforms;
-import net.serenitybdd.screenplay.events.ActorAsksQuestion;
-import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
-import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
-import net.serenitybdd.screenplay.events.ActorPerformanceEvent;
 /**
  * Gives an actor the ability to browse theValue web.
  * This extends the classic Serenity PageObject class.

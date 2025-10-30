@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.ensure
 import net.serenitybdd.markers.CanBeSilent
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
-import java.time.LocalDate
 
 fun pluralFormOf(targetName: String) = targetName.replace("web element ", "web elements ")
 

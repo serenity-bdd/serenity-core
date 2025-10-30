@@ -1,17 +1,13 @@
 package net.serenitybdd.screenplay.webtests.integration.questions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.questions.Absence;
 import net.serenitybdd.screenplay.questions.Attribute;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
 import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-
-import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

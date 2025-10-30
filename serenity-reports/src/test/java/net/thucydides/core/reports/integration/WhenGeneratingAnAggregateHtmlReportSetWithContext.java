@@ -3,12 +3,7 @@ package net.thucydides.core.reports.integration;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.issues.IssueTracking;
-import net.thucydides.model.reports.ResultChecker;
-import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,8 +16,6 @@ import java.io.IOException;
 import static net.thucydides.model.matchers.FileMatchers.exists;
 import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 public class WhenGeneratingAnAggregateHtmlReportSetWithContext {

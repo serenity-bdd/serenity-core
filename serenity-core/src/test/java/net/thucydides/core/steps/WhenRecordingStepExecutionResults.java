@@ -1,30 +1,31 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.annotations.Feature;
+import net.serenitybdd.annotations.Story;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.core.ListenerInWrongPackage;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.samples.FlatScenarioSteps;
+import net.thucydides.core.steps.samples.NestedScenarioSteps;
+import net.thucydides.core.steps.samples.StepsDerivedFromADifferentDomain;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.serenitybdd.annotations.Feature;
-import net.serenitybdd.annotations.Story;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.domain.features.ApplicationFeature;
-import net.thucydides.core.pages.Pages;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.screenshots.ScreenshotException;
-import net.thucydides.core.steps.samples.FlatScenarioSteps;
-import net.thucydides.core.steps.samples.NestedScenarioSteps;
-import net.thucydides.core.steps.samples.StepsDerivedFromADifferentDomain;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepListener;
 import net.thucydides.model.util.FileSystemUtils;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.junit.*;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.OutputType;
@@ -41,7 +42,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.*;
 /**
  * We record step execution results using a StepListener.
@@ -1324,7 +1324,7 @@ public class WhenRecordingStepExecutionResults {
         steps.pendingStep();
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
-        verify(driver, never()).getScreenshotAs((OutputType<?>) anyObject());
+        verify(driver, never()).getScreenshotAs((OutputType<?>) ArgumentMatchers.any());
     }
 
 

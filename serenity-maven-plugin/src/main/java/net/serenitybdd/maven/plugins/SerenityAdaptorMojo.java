@@ -1,7 +1,7 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.reports.TestOutcomeAdaptorReporter;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.adaptors.AdaptorService;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.maven.plugin.AbstractMojo;

@@ -1,13 +1,13 @@
 package net.serenitybdd.screenplay.webtests;
 
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.questions.ContactPreferences;
 import net.serenitybdd.screenplay.webtests.questions.CountryQuestion;
 import net.serenitybdd.screenplay.webtests.tasks.*;
-import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;

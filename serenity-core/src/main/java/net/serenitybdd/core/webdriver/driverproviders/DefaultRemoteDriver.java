@@ -1,11 +1,11 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.DriverConfigurationError;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.InvalidArgumentException;

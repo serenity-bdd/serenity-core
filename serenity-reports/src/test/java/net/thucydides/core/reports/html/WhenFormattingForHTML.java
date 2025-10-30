@@ -1,15 +1,15 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.model.collect.NewList;
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.NumericalFormatter;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.html.DescriptionSplitter;
 import net.thucydides.model.requirements.reports.RenderMarkdown;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

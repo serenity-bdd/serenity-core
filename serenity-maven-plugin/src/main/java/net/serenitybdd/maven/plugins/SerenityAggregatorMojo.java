@@ -9,7 +9,6 @@ import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.ResultChecker;
-import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.UserStoryTestReporter;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;

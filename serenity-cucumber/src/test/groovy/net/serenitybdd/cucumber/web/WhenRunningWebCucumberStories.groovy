@@ -1,13 +1,12 @@
 package net.serenitybdd.cucumber.web
 
-
 import net.serenitybdd.cucumber.integration.*
 import net.thucydides.model.ThucydidesSystemProperty
 import net.thucydides.model.configuration.SystemPropertiesConfiguration
 import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification

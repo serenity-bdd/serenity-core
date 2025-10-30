@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
-import net.thucydides.core.steps.StepEventBus
 
 object CommonPreconditions {
 

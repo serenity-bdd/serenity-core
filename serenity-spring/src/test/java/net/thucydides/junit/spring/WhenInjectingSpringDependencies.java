@@ -2,8 +2,8 @@ package net.thucydides.junit.spring;
 
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.ManagedPages;
-import net.thucydides.core.pages.Pages;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.spring.samples.dao.GizmoDao;
 import net.thucydides.junit.spring.samples.service.BazingaService;
 import net.thucydides.junit.spring.samples.service.GizmoService;

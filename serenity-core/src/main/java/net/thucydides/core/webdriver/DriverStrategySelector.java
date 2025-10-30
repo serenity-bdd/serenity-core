@@ -1,8 +1,8 @@
 package net.thucydides.core.webdriver;
 
+import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;

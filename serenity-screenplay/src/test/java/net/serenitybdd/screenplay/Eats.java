@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.annotations.Step;
+import net.serenitybdd.markers.IsHidden;
 
 public class Eats implements Performable, IsHidden {
 

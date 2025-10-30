@@ -1,7 +1,6 @@
 package net.thucydides.model.reports.remoteTesting;
 
 
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;
 

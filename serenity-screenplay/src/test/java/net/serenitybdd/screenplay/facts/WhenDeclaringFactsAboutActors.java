@@ -4,10 +4,10 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.model.exceptions.TestCompromisedException;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.CastMember;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
-import net.thucydides.core.steps.StepEventBus;
 import org.junit.Before;
 import org.junit.Test;
 

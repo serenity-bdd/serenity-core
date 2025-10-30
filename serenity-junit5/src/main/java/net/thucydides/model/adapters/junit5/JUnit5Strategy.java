@@ -1,8 +1,8 @@
 package net.thucydides.model.adapters.junit5;
 
-import net.thucydides.model.adapters.JUnitStrategy;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
+import net.thucydides.model.adapters.JUnitStrategy;
 import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

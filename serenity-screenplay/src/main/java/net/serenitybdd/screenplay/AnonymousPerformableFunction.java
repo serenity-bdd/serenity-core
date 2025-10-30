@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.annotations.Step;
+import net.serenitybdd.markers.CanBeSilent;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;

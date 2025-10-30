@@ -2,9 +2,9 @@ package net.thucydides.core.reports.integration;
 
 import net.serenitybdd.annotations.Story;
 import net.serenitybdd.annotations.Title;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.issues.SystemPropertiesIssueTracking;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.reports.TestOutcomes;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;

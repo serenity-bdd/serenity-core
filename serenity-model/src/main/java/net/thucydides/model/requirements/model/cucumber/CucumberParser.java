@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.System.lineSeparator;
-import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static net.thucydides.model.requirements.model.cucumber.FeatureFileAnaysisErrors.*;
 

@@ -4,9 +4,7 @@ import net.serenitybdd.core.Serenity;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
 
-import java.io.File;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**

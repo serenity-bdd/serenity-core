@@ -3,7 +3,6 @@ package net.thucydides.model.util;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
-import io.cucumber.java.sl.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

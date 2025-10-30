@@ -1,9 +1,9 @@
 package net.thucydides.core.model;
 
+import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.model.util.FileSystemUtils;
 import org.junit.Rule;
 import org.junit.Test;

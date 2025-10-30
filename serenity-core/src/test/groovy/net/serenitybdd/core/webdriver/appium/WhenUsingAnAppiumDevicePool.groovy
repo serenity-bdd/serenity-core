@@ -1,11 +1,11 @@
 package net.serenitybdd.core.webdriver.appium
 
-import net.serenitybdd.core.webdriver.driverproviders.AppiumDriverProvider
 import net.serenitybdd.annotations.Shared
+import net.serenitybdd.core.webdriver.driverproviders.AppiumDriverProvider
 import net.thucydides.core.events.TestLifecycleEvents
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverInstanceEvents
 import net.thucydides.core.webdriver.WebDriverLifecycleEvent
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 

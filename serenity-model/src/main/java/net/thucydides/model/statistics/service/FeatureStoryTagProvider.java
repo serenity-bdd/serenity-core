@@ -2,11 +2,11 @@ package net.thucydides.model.statistics.service;
 
 import net.serenitybdd.model.collect.NewSet;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.domain.features.ApplicationFeature;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.CoreTagProvider;
 import net.thucydides.model.util.EnvironmentVariables;
 

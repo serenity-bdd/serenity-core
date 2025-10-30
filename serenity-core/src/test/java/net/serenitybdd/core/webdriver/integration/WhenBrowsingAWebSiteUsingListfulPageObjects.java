@@ -9,7 +9,6 @@ import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

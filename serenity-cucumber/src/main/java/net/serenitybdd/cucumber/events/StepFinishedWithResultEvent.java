@@ -1,16 +1,19 @@
 package net.serenitybdd.cucumber.events;
 
 import io.cucumber.core.plugin.SerenityReporterParallel;
-import io.cucumber.plugin.event.*;
+import io.cucumber.plugin.event.Result;
+import io.cucumber.plugin.event.Status;
+import io.cucumber.plugin.event.TestStep;
+import net.thucydides.core.steps.events.StepEventBusEventBase;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.stacktrace.RootCauseAnalyzer;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
-import net.thucydides.core.steps.events.StepEventBusEventBase;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 

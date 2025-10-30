@@ -1,13 +1,13 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverService;

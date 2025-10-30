@@ -1,7 +1,7 @@
 package net.serenitybdd.core.steps
 
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.annotations.Steps
+import net.serenitybdd.core.pages.PageObject
 import spock.lang.Specification
 
 class WhenInstantiatingAnInstrumentedStepLibrary extends Specification {

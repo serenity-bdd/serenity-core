@@ -1,9 +1,9 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.PagesAnnotatedField;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.StepsClassResolver;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

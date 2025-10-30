@@ -1,10 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub;
 import net.thucydides.core.webdriver.stubs.IOSWebDriverStub;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 public class RemoteWebdriverStub {

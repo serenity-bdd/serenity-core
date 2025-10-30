@@ -1,10 +1,10 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTagValuesOf;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;

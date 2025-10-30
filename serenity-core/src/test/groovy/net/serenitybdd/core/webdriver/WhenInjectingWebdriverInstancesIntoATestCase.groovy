@@ -1,16 +1,16 @@
 package net.serenitybdd.core.webdriver
 
-import net.serenitybdd.model.environment.ConfiguredEnvironment
-import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment
 import net.serenitybdd.annotations.Managed
+import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment
+import net.serenitybdd.model.environment.ConfiguredEnvironment
 import net.thucydides.core.annotations.TestCaseAnnotations
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DriverConfiguration
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import net.thucydides.core.webdriver.WebDriverFactory
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 
 class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {

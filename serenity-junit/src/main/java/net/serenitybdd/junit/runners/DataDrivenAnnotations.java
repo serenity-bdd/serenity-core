@@ -1,14 +1,14 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.base.Splitter;
-import net.thucydides.model.configuration.FilePathParser;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.domain.DataTable;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
+import net.thucydides.model.configuration.FilePathParser;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;

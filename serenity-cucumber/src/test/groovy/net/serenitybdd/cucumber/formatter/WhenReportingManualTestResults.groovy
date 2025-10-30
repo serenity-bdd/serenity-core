@@ -2,13 +2,12 @@ package net.serenitybdd.cucumber.formatter
 
 import io.cucumber.core.plugin.ManualScenarioChecker
 import io.cucumber.core.plugin.TaggedScenario
+import io.cucumber.messages.types.Location
+import io.cucumber.messages.types.Tag
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import io.cucumber.messages.types.Location
-import io.cucumber.messages.types.Tag
 
 class WhenReportingManualTestResults extends Specification {
 

@@ -9,12 +9,11 @@ import com.google.gson.JsonObject
 import io.restassured.response.ValidatableResponse
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.annotations.Step
-import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepFactory
+import net.thucydides.model.domain.TestResult
 import org.hamcrest.Matchers
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files

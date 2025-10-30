@@ -7,10 +7,10 @@ import io.cucumber.core.exception.CucumberException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.model.domain.TestOutcome;
 
 import java.lang.reflect.Constructor;
 import java.util.*;

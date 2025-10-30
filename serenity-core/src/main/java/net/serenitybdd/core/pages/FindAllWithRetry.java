@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import net.thucydides.model.util.EnvironmentVariables;
-import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.function.Function;
 

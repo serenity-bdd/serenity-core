@@ -10,9 +10,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 @ExtendWith(SerenityJUnit5Extension.class)
 public class Junit5ParameterizedArgumentsTest {
 

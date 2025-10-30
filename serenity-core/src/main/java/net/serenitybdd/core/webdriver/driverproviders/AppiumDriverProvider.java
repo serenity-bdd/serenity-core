@@ -5,19 +5,19 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.mac.Mac2Driver;
 import io.appium.java_client.windows.WindowsDriver;
-import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
 import net.serenitybdd.core.webdriver.appium.AppiumServerPool;
-import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -26,10 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
+import static net.thucydides.core.webdriver.SupportedWebDriver.*;
 import static net.thucydides.model.ThucydidesSystemProperty.MANAGE_APPIUM_SERVERS;
-import static net.thucydides.core.webdriver.SupportedWebDriver.ANDROID;
-import static net.thucydides.core.webdriver.SupportedWebDriver.IPHONE;
-import static net.thucydides.core.webdriver.SupportedWebDriver.REMOTE;
 
 public class AppiumDriverProvider implements DriverProvider {
 

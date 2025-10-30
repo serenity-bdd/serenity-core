@@ -2,12 +2,12 @@ package net.thucydides.core.webdriver.integration;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
-import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.pages.WebElementFacadeImpl;
+import net.thucydides.core.webelements.RadioButtonGroup;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
-import net.thucydides.core.webelements.RadioButtonGroup;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

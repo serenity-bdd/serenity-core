@@ -1,16 +1,16 @@
 package net.serenitybdd.plugins.jira.workflow;
 
-import net.serenitybdd.plugins.jira.JiraStepListener;
-import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.annotations.Feature;
 import net.serenitybdd.annotations.Issue;
 import net.serenitybdd.annotations.Issues;
 import net.serenitybdd.annotations.Story;
+import net.serenitybdd.plugins.jira.JiraStepListener;
+import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;

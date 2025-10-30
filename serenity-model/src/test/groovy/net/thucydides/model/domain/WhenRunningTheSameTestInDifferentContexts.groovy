@@ -1,7 +1,7 @@
 package net.thucydides.model.domain
 
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 
 class WhenRunningTheSameTestInDifferentContexts extends Specification {

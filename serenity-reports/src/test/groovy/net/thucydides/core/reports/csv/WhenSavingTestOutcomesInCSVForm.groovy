@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.csv
 
 import com.opencsv.CSVReader
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.reports.TestOutcomes
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.csv.CSVReporter
 import spock.lang.Specification
 

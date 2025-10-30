@@ -1,22 +1,17 @@
 package net.thucydides.model.requirements;
 
 import net.thucydides.model.reports.TestOutcomeLoader;
-import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.reports.RequirementsOutcomes;
-import net.thucydides.model.requirements.reports.ScenarioOutcome;
 import net.thucydides.model.requirements.reports.ScenarioOutcomes;
 import net.thucydides.model.requirements.reports.cucumber.FeatureCache;
-import net.thucydides.model.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 
 public class WhenReportingScenarioOutcomes {
 

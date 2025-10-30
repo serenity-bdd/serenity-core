@@ -3,10 +3,10 @@ package net.thucydides.core.releases
 import net.thucydides.model.domain.Story
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestTag
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.releases.ReleaseManager
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.html.ReportNameProvider
-import net.thucydides.model.environment.MockEnvironmentVariables
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification

@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.steps.ExampleTables;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;

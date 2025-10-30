@@ -1,12 +1,9 @@
 package net.thucydides.model.requirements.model.cucumber
 
 //import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
-import io.cucumber.messages.IdGenerator
-import io.cucumber.messages.types.Envelope
+
 import io.cucumber.messages.types.Feature
 import spock.lang.Specification
-
-import java.util.stream.Collectors
 
 class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 

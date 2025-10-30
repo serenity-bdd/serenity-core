@@ -1,17 +1,17 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.serenitybdd.annotations.Feature;
 import net.serenitybdd.annotations.Story;
-import net.thucydides.model.issues.IssueTracking;
-import net.thucydides.model.issues.SystemPropertiesIssueTracking;
+import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
+import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.model.reports.AcceptanceTestReporter;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.util.FileSystemUtils;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;

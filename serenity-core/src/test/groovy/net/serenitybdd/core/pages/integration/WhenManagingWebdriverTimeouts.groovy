@@ -1,19 +1,19 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.model.time.Stopwatch
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
+import net.serenitybdd.model.time.Stopwatch
 import net.thucydides.core.pages.integration.StaticSitePage
-import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.model.steps.StepFailure
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.steps.ExecutedStepDescription
+import net.thucydides.model.steps.StepFailure
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException

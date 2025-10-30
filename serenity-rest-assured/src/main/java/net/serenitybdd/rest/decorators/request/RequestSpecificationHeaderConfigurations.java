@@ -2,10 +2,10 @@ package net.serenitybdd.rest.decorators.request;
 
 import com.google.common.base.Preconditions;
 import io.restassured.http.ContentType;
-import io.restassured.internal.MapCreator;
-import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
+import io.restassured.internal.MapCreator;
+import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.serenitybdd.rest.HeaderNames.*;
+import static net.serenitybdd.rest.HeaderNames.ACCEPT;
 
 /**
  * User: YamStranger

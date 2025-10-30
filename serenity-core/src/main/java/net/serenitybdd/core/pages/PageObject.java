@@ -1,37 +1,37 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
+import net.serenitybdd.annotations.WhenPageOpens;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
-import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.model.time.SystemClock;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.serenitybdd.annotations.WhenPageOpens;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.pages.components.Dropdown;
 import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
-import net.thucydides.model.reflection.MethodFinder;
 import net.thucydides.core.scheduling.FluentWaitWithRefresh;
 import net.thucydides.core.scheduling.SerenityFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.PageObjectStepDelayer;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.WaitForBuilder;
-import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.util.Inflector;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.reflection.MethodFinder;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.interactions.Actions;
@@ -60,8 +60,8 @@ import java.util.stream.Stream;
 
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
-import static net.thucydides.model.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 /**
  * A base class representing a WebDriver page object.

@@ -3,9 +3,9 @@ package net.serenitybdd.core.webdriver
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
-import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.RemoteWebDriver

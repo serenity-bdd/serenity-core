@@ -3,8 +3,6 @@ package net.thucydides.core.reports.adaptors.specflow
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor
 import net.thucydides.model.reports.adaptors.specflow.SpecflowAdaptor
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files

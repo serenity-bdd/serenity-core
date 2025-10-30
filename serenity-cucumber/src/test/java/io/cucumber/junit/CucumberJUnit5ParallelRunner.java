@@ -8,7 +8,8 @@ import java.io.File;
 import static io.cucumber.core.options.Constants.PLUGIN_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PUBLISH_QUIET_PROPERTY_NAME;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.*;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathResource;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectFile;
 
 
 public class CucumberJUnit5ParallelRunner {

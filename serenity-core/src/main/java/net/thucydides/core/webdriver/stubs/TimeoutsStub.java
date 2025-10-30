@@ -3,7 +3,6 @@ package net.thucydides.core.webdriver.stubs;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class TimeoutsStub implements WebDriver.Timeouts {
     @Override

@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors
 
-import net.thucydides.model.domain.TestOutcome
 import net.thucydides.core.reports.TestOutcomeAdaptorReporter
+import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor
 import spock.lang.Specification
 

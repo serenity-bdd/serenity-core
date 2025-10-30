@@ -12,7 +12,10 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;

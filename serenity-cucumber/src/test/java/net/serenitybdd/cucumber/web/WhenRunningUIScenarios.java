@@ -1,13 +1,16 @@
 package net.serenitybdd.cucumber.web;
 
-import net.serenitybdd.cucumber.integration.*;
+import net.serenitybdd.cucumber.integration.SimpleScenario;
+import net.serenitybdd.cucumber.integration.SimpleSeleniumFailingAndPassingScenario;
+import net.serenitybdd.cucumber.integration.SimpleSeleniumFailingScenario;
+import net.serenitybdd.cucumber.integration.SimpleSeleniumScenario;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.reports.OutcomeFormat;
 import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.assertj.core.util.Files;
 import org.junit.Before;
 import org.junit.Test;

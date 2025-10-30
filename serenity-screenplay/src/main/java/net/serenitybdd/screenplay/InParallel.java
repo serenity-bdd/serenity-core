@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.model.exceptions.SerenityManagedException;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Collection;

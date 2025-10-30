@@ -1,16 +1,15 @@
 package net.serenitybdd.screenplay.actions;
 
-import java.util.Set;
-
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Task;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.annotations.Step;
+import java.util.Set;
 
 /**
  * If you just opened a (second?) new window and want to switch to it.

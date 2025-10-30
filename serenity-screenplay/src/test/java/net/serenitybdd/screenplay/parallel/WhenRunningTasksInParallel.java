@@ -5,10 +5,10 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.InParallel;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
-import net.thucydides.core.steps.StepEventBus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

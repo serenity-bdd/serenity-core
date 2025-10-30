@@ -1,10 +1,13 @@
 package net.serenitybdd.plugins.browserstack;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import net.serenitybdd.model.model.TestOutcomeName;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
-import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;

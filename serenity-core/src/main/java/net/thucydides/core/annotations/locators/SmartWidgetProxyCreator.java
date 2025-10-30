@@ -1,10 +1,10 @@
 package net.thucydides.core.annotations.locators;
 
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.WidgetObject;
-import net.thucydides.model.webdriver.Configuration;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.core.webdriver.ElementLocatorFactorySelector;
 import net.thucydides.core.webdriver.WidgetProxyCreator;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;

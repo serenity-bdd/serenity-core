@@ -1,10 +1,10 @@
 package net.serenitybdd.rest.decorators.request;
 
 import com.google.common.base.Preconditions;
-import io.restassured.internal.MapCreator;
-import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
+import io.restassured.internal.MapCreator;
+import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;

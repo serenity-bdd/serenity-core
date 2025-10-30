@@ -2,10 +2,10 @@ package net.thucydides.core.pages.integration.browsers;
 
 
 import net.thucydides.core.pages.integration.StaticSitePage;
-import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

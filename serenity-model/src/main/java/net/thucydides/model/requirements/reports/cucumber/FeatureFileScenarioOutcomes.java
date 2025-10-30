@@ -3,11 +3,11 @@ package net.thucydides.model.requirements.reports.cucumber;
 
 import io.cucumber.messages.types.*;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestResultList;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.html.CucumberTagConverter;
 import net.thucydides.model.reports.html.ReportNameProvider;

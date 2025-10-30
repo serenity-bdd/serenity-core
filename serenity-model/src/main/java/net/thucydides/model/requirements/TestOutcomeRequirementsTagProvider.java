@@ -6,12 +6,10 @@ import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.*;
-
 import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.model.RequirementsConfiguration;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

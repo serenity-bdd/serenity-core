@@ -5,7 +5,7 @@ import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import static net.thucydides.model.ThucydidesSystemProperty.*;
+import static net.thucydides.model.ThucydidesSystemProperty.FIREFOX_LOG_LEVEL;
 
 public class FirefoxOptionsEnhancer {
     private final FirefoxOptions options;

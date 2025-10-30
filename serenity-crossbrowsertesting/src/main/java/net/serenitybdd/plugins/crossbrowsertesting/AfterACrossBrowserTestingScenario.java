@@ -1,8 +1,8 @@
 package net.serenitybdd.plugins.crossbrowsertesting;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.domain.ExternalLink;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;

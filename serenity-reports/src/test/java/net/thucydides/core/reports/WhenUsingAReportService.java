@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class WhenUsingAReportService {
@@ -76,8 +75,7 @@ public class WhenUsingAReportService {
         reportService.subscribe(reporter);
 
         reportService.generateReportsFor(testOutcomeResults);
-
-        verify(reporter, times(100)).generateReportFor(Matchers.any(TestOutcome.class));
+        verify(reporter, times(100)).generateReportFor(ArgumentMatchers.any(TestOutcome.class));
     }
 
 

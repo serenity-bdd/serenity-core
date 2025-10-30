@@ -1,11 +1,11 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.thucydides.model.tags.OutcomeTagFilter;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 import net.thucydides.model.requirements.reports.ScenarioOutcome;
 import net.thucydides.model.requirements.reports.ScenarioOutcomes;
+import net.thucydides.model.tags.OutcomeTagFilter;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;

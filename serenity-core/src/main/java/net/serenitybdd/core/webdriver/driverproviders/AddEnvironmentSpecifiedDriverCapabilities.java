@@ -1,9 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 

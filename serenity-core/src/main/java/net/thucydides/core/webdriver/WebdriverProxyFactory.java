@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.webdriver.Configuration;
-import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;

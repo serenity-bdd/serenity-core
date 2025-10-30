@@ -1,12 +1,11 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
@@ -15,9 +14,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.thucydides.model.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.REMOTE_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 public class DriverCapabilities {
 

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
-import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
-import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
 /**
  * Return the selected value of a SELECT dropdown list.

@@ -1,8 +1,8 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestResult
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.requirements.model.Requirement
 import net.thucydides.model.requirements.reports.RequirementOutcome

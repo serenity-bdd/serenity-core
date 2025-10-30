@@ -1,16 +1,16 @@
 package net.thucydides.core.webdriver.appium;
 
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.driverproviders.AddLoggingPreferences;
 import net.serenitybdd.core.webdriver.driverproviders.SetProxyConfiguration;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
 import net.thucydides.core.webdriver.capabilities.CapabilityProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;

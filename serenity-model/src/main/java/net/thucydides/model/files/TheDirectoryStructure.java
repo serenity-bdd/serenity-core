@@ -1,7 +1,5 @@
 package net.thucydides.model.files;
 
-import com.google.common.base.Splitter;
-import net.thucydides.model.requirements.FileSystemRequirementsTagProvider;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;

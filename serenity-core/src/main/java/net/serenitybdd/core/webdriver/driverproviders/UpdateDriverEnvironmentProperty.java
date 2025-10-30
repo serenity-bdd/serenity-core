@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.model.CurrentOS;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.CurrentOS;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.util.EnvironmentVariables;
 

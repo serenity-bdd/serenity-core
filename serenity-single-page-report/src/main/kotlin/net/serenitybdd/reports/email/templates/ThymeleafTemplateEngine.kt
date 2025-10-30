@@ -1,10 +1,8 @@
 package net.serenitybdd.reports.email.templates
 
-import net.thucydides.model.util.EnvironmentVariables
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
-import org.thymeleaf.templateresolver.DefaultTemplateResolver
 import java.io.Writer
 
 

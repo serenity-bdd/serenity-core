@@ -1,13 +1,11 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableSet;
 import net.serenitybdd.model.di.ModelInfrastructure;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Capabilities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_ADD_OS_TAG;
 

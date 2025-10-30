@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.annotations.Step;
 
 public class SelectByVisibleTextFromTarget implements Interaction {
     private Target target;

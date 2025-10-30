@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.serenitybdd.annotations.Step;
+import net.serenitybdd.core.steps.HasCustomFieldValues;
 
 import java.util.HashMap;
 import java.util.List;

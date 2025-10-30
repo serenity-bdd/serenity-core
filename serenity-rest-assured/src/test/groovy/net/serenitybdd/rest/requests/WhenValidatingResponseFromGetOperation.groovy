@@ -12,9 +12,7 @@ import org.junit.Rule
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static net.serenitybdd.rest.SerenityRest.reset
-import static net.serenitybdd.rest.SerenityRest.given
-import static net.serenitybdd.rest.SerenityRest.expect
+import static net.serenitybdd.rest.SerenityRest.*
 
 /**
  * User: YamStranger

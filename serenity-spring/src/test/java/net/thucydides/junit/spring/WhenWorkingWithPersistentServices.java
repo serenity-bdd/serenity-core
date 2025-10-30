@@ -2,8 +2,8 @@ package net.thucydides.junit.spring;
 
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.annotations.ManagedPages;
-import net.thucydides.core.pages.Pages;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.spring.samples.domain.User;
 import net.thucydides.junit.spring.samples.service.UserService;
 import org.junit.Before;
@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

@@ -1,8 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import net.thucydides.model.domain.TestResult;
-import net.thucydides.model.domain.TestType;
-import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 
 import java.util.ArrayList;

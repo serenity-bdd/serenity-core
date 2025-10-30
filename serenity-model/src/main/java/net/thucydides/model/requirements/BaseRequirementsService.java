@@ -5,7 +5,6 @@ import net.thucydides.model.domain.Release;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
-
 import net.thucydides.model.releases.ReleaseManager;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.model.Requirement;

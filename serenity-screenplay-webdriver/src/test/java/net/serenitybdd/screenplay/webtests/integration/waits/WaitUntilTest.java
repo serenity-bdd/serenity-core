@@ -2,12 +2,8 @@ package net.serenitybdd.screenplay.webtests.integration.waits;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.actions.Click;
-import net.serenitybdd.screenplay.matchers.WebElementStateMatchers;
-import net.serenitybdd.screenplay.questions.Absence;
 import net.serenitybdd.screenplay.questions.CurrentVisibility;
 import net.serenitybdd.screenplay.questions.Text;
-import net.serenitybdd.screenplay.questions.Visibility;
-import net.serenitybdd.screenplay.targets.EnsureFieldVisible;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.Button;
 import net.serenitybdd.screenplay.ui.PageElement;
@@ -17,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 

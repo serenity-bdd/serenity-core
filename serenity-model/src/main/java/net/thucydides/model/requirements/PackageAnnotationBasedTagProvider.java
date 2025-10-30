@@ -1,14 +1,14 @@
 package net.thucydides.model.requirements;
 
+import net.serenitybdd.annotations.Narrative;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.strings.Joiner;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.adapters.TestFramework;
-import net.serenitybdd.annotations.Narrative;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.annotations.NarrativeFinder;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;

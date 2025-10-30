@@ -1,7 +1,6 @@
 package net.serenitybdd.junit5.samples.integration.displayName;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

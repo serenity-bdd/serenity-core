@@ -1,12 +1,9 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.annotations.Step
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.model.steps.ExecutedStepDescription
-import net.thucydides.model.steps.StepFailure
 
 private fun handleException(errorMsg: String) {
     takeScreenshot()

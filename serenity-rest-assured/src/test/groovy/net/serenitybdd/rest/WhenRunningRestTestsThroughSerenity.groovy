@@ -6,33 +6,19 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.model.rest.RestQuery
 import net.serenitybdd.annotations.Step
-import net.thucydides.model.domain.TestResult
+import net.serenitybdd.model.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepFactory
+import net.thucydides.model.domain.TestResult
 import org.hamcrest.Matchers
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.delete
-import static com.github.tomakehurst.wiremock.client.WireMock.get
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.patch
-import static com.github.tomakehurst.wiremock.client.WireMock.post
-import static com.github.tomakehurst.wiremock.client.WireMock.put
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import static net.serenitybdd.model.rest.RestMethod.DELETE
-import static net.serenitybdd.model.rest.RestMethod.GET
-import static net.serenitybdd.model.rest.RestMethod.PATCH
-import static net.serenitybdd.model.rest.RestMethod.POST
-import static net.serenitybdd.model.rest.RestMethod.PUT
+import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static net.serenitybdd.model.rest.RestMethod.*
 import static net.serenitybdd.rest.SerenityRest.rest
 import static net.serenitybdd.rest.SerenityRest.then
 

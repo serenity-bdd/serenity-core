@@ -1,12 +1,12 @@
 package net.serenitybdd.screenplay.webtests.tasks;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.webtests.model.BankAccount;
 import net.serenitybdd.screenplay.webtests.pages.BankAccountEntry;
-import net.serenitybdd.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

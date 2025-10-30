@@ -2,7 +2,7 @@ package net.serenitybdd.rest;
 
 import io.restassured.authentication.*;
 import io.restassured.config.RestAssuredConfig;
-import io.restassured.specification.*;
+import io.restassured.specification.Argument;
 
 import java.util.List;
 

@@ -1,13 +1,14 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.annotations.Pending;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.samples.SampleScenarioSteps;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
 import java.util.stream.Stream;
 
 

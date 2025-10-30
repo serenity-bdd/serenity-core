@@ -1,6 +1,6 @@
 package net.serenitybdd.rest;
 
-import io.restassured.authentication.*;
+import io.restassured.authentication.AuthenticationScheme;
 import io.restassured.config.LogConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
@@ -8,7 +8,9 @@ import io.restassured.filter.Filter;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.parsing.Parser;
-import io.restassured.specification.*;
+import io.restassured.specification.ProxySpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import java.io.File;
 import java.net.URI;

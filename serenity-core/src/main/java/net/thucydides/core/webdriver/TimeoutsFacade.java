@@ -3,7 +3,6 @@ package net.thucydides.core.webdriver;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by john on 30/01/15.

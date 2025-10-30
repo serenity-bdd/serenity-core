@@ -4,10 +4,10 @@ import net.serenitybdd.annotations.ClearCookiesPolicy;
 import net.serenitybdd.annotations.UsePersistantStepLibraries;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.model.requirements.SerenityTestCaseFinder;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.model.requirements.SerenityTestCaseFinder;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 

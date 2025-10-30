@@ -2,7 +2,6 @@ package net.thucydides.model.reports.json.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.flags.Flag;

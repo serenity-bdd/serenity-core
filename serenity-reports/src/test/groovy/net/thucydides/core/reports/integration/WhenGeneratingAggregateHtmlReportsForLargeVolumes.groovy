@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.integration
 
-import net.thucydides.model.issues.IssueTracking
-import net.thucydides.model.reports.FormatConfiguration
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.reports.FormatConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 

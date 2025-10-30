@@ -3,10 +3,9 @@ package net.serenitybdd.screenplay.formatting;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Consequence;
+import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.model.util.EnvironmentVariables;
 
 public class FormattedTitle {

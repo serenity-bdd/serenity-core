@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package net.thucydides.junit.runners
 
-import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.annotations.Pending
 import net.serenitybdd.annotations.Steps
+import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.samples.SampleScenarioSteps

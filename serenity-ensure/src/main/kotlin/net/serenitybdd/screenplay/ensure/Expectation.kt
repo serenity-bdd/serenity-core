@@ -1,9 +1,6 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
-import net.thucydides.model.steps.ExecutedStepDescription
-import net.thucydides.core.steps.StepEventBus
-import java.time.LocalDate
 
 typealias BooleanPredicate<A> = (actor: Actor?, actual: A) -> Boolean
 typealias SingleValuePredicate<A, E> = (actor: Actor?, actual: A, expected: E) -> Boolean

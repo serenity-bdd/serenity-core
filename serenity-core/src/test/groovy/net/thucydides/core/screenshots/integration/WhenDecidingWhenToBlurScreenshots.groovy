@@ -1,7 +1,7 @@
 package net.thucydides.core.screenshots.integration
 
-import net.serenitybdd.annotations.BlurScreenshots
 import net.serenitybdd.annotations.BlurLevel
+import net.serenitybdd.annotations.BlurScreenshots
 import net.thucydides.core.screenshots.ScreenshotBlurCheck
 import spock.lang.Specification
 

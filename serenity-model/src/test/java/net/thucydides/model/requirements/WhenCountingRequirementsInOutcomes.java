@@ -7,7 +7,6 @@ import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.reports.RequirementOutcome;
 import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;

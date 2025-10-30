@@ -1,17 +1,17 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * HTMLUnit provider.

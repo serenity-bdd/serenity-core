@@ -1,10 +1,8 @@
 package net.thucydides.model.requirements.model.cucumber;
 
 
-
 import io.cucumber.messages.types.Examples;
 import io.cucumber.messages.types.Feature;
-import io.cucumber.messages.types.Scenario;
 import net.thucydides.model.digest.Digest;
 
 import static net.thucydides.model.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;

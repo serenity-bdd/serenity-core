@@ -1,7 +1,6 @@
 package net.thucydides.model.reports;
 
 import com.google.common.base.Splitter;
-
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;

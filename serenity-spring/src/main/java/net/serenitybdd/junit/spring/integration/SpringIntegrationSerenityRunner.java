@@ -1,13 +1,14 @@
 package net.serenitybdd.junit.spring.integration;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.junit.spring.SpringIntegration;
 import org.junit.rules.MethodRule;
 import org.junit.rules.TestRule;
 import org.junit.runners.model.InitializationError;
 import org.springframework.test.context.TestContextManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A serenity runner that automatically adds rules {@link SpringIntegrationMethodRule} and {@link SpringIntegrationClassRule}.

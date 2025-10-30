@@ -2,14 +2,16 @@ package net.thucydides.model.requirements;
 
 import com.google.common.base.Splitter;
 import com.google.gson.Gson;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Document;
 import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestResultList;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.reports.html.ResultIconFormatter;
 import net.thucydides.model.requirements.model.Requirement;
@@ -26,9 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
 
 import static net.thucydides.model.util.NameConverter.humanize;
 

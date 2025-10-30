@@ -1,13 +1,13 @@
 package net.serenitybdd.screenplay.webtests;
 
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Screenshots;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.annotations.Screenshots;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

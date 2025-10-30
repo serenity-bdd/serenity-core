@@ -1,22 +1,22 @@
 package io.cucumber.core.plugin;
 
 
-import io.cucumber.plugin.event.Status;
-import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
-import net.serenitybdd.model.exceptions.SerenityManagedException;
-import net.thucydides.core.steps.events.StepEventBusEvent;
 import io.cucumber.messages.types.Scenario;
 import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
+import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestCase;
 import io.cucumber.plugin.event.TestStep;
+import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
+import net.thucydides.core.steps.BaseStepListener;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.events.StepEventBusEvent;
 import net.thucydides.core.steps.session.PlaybackSession;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.DataTableRow;
 import net.thucydides.model.domain.TestTag;
-import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.session.TestSession;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

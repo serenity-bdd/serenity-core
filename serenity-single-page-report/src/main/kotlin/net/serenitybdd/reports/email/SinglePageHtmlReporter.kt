@@ -1,12 +1,9 @@
 package net.serenitybdd.reports.email
 
 import net.serenitybdd.model.di.ModelInfrastructure
-import net.serenitybdd.reports.model.*
 import net.serenitybdd.reports.email.templates.ThymeleafTemplateEngine
 import net.serenitybdd.reports.io.testOutcomesIn
-import net.serenitybdd.reports.model.averageDurationOf
-import net.serenitybdd.reports.model.formattedDuration
-import net.serenitybdd.reports.model.maxDurationOf
+import net.serenitybdd.reports.model.*
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.util.EnvironmentVariables

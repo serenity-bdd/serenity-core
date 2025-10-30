@@ -1,10 +1,10 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.annotations.DefaultUrl;
 import net.serenitybdd.annotations.NamedUrl;
 import net.serenitybdd.annotations.NamedUrls;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;

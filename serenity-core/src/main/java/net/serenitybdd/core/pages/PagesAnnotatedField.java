@@ -3,8 +3,8 @@ package net.serenitybdd.core.pages;
 import net.serenitybdd.annotations.Fields;
 import net.serenitybdd.annotations.ManagedPages;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.model.reflection.FieldSetter;
 import net.thucydides.core.steps.InvalidManagedPagesFieldException;
+import net.thucydides.model.reflection.FieldSetter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

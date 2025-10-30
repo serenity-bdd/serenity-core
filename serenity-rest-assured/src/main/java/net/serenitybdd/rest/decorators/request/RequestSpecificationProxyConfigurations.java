@@ -2,12 +2,8 @@ package net.serenitybdd.rest.decorators.request;
 
 import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.specification.FilterableRequestSpecification;
-import io.restassured.specification.ProxySpecification;
-import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URI;
 
 /**
  * User: YamStranger

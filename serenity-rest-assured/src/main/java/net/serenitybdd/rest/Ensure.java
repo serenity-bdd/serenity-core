@@ -1,15 +1,15 @@
 package net.serenitybdd.rest;
 
 import io.restassured.response.ValidatableResponse;
-import net.thucydides.model.domain.TestResult;
-import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.model.steps.StepFailure;
 import net.thucydides.core.steps.events.StepFailedEvent;
 import net.thucydides.core.steps.events.StepFinishedEvent;
 import net.thucydides.core.steps.events.StepStartedEvent;
 import net.thucydides.core.steps.session.TestSession;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
 
 import java.util.List;
 import java.util.function.Consumer;

@@ -1,13 +1,13 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.model.di.ModelInfrastructure;
-import net.thucydides.core.reports.ReportInfrastructure;
 import net.thucydides.model.reports.ReportGenerationFailedError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystemException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;

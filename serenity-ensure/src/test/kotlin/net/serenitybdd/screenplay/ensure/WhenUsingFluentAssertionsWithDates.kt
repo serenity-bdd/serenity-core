@@ -6,7 +6,6 @@ import org.junit.jupiter.api.TestInstance
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
-import java.util.Comparator
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithDates {

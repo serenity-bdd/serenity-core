@@ -1,9 +1,6 @@
 package net.thucydides.model.reflection
 
 import junit.framework.Assert
-import net.thucydides.model.reflection.samples.SomeClass
-import net.thucydides.model.reflection.samples.SomeOtherClass
-import net.thucydides.model.reflection.samples.SomeTestClass
 import net.thucydides.sampletests.SomeTest
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4

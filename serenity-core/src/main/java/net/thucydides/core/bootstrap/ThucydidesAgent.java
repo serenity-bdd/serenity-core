@@ -1,7 +1,7 @@
 package net.thucydides.core.bootstrap;
 
-import net.thucydides.model.domain.Story;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.Story;
 import net.thucydides.model.steps.StepListener;
 
 import java.util.Optional;

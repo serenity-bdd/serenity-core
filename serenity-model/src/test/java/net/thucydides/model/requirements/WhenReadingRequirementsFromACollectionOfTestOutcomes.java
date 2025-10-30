@@ -1,19 +1,20 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

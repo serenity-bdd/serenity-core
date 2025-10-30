@@ -1,13 +1,13 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.annotations.Fields;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.steps.UIInteractionSteps;
-import net.serenitybdd.annotations.Fields;
-import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.model.webdriver.Configuration;

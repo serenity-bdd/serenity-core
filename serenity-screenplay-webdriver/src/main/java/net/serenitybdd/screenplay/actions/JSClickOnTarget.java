@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.annotations.Step;
 
 public class JSClickOnTarget implements Interaction {
     private final Target target;

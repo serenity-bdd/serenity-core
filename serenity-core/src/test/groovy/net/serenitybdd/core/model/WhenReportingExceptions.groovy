@@ -1,13 +1,13 @@
 package net.serenitybdd.core.model
 
 import io.cucumber.java.PendingException
+import net.serenitybdd.core.model.sampleexceptions.MyFailureException
 import net.serenitybdd.model.PendingStepException
 import net.serenitybdd.model.exceptions.TestCompromisedException
-import net.serenitybdd.core.model.sampleexceptions.MyFailureException
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.domain.failures.FailureAnalysis
-import net.thucydides.model.steps.StepFailureException
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.steps.StepFailureException
 import net.thucydides.model.webdriver.WebdriverAssertionError
 import org.assertj.core.api.SoftAssertionError
 import org.junit.internal.ArrayComparisonFailure

@@ -6,7 +6,8 @@ import net.serenitybdd.rest.rules.RestConfigurationRule
 import org.junit.Rule
 import spock.lang.Specification
 
-import static net.serenitybdd.rest.SerenityRest.*
+import static net.serenitybdd.rest.SerenityRest.given
+import static net.serenitybdd.rest.SerenityRest.reset
 
 /**
  * User: YamStranger

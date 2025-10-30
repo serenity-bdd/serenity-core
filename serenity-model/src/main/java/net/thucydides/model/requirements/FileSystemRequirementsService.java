@@ -1,8 +1,8 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.collect.NewList;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

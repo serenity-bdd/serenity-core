@@ -4,13 +4,14 @@ import net.serenitybdd.screenplay.shopping.BitesTheBanana;
 import net.serenitybdd.screenplay.shopping.ChewsTheBanana;
 import net.serenitybdd.screenplay.shopping.PeelABanana;
 import net.thucydides.core.steps.BaseStepListener;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.TestResult;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
+
 import java.io.File;
 import java.nio.file.Files;
-import net.thucydides.core.steps.StepEventBus;
 
 public class WhenPerformingCompositeTasks {
 

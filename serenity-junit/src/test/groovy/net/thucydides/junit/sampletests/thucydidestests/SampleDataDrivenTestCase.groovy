@@ -1,8 +1,8 @@
 package net.thucydides.junit.sampletests.thucydidestests
 
 import net.serenitybdd.annotations.Steps
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.thucydides.junit.annotations.UseTestDataFrom
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import org.junit.Test
 import org.junit.runner.RunWith
 

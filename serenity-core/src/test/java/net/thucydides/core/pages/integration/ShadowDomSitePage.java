@@ -1,7 +1,7 @@
 package net.thucydides.core.pages.integration;
 
-import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.annotations.DefaultUrl;
+import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 

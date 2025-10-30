@@ -2,8 +2,8 @@ package net.thucydides.model.reports;
 
 
 import net.serenitybdd.model.collect.NewList;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.model.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.model.util.EnvironmentVariables;

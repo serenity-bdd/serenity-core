@@ -1,19 +1,18 @@
 package net.thucydides.core.requirements.integration
 
 import com.google.common.collect.Lists
-import net.thucydides.model.issues.IssueTracking
+import net.thucydides.core.requirements.reportpages.RequirementsReport
 import net.thucydides.model.domain.*
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.history.DateProvider
 import net.thucydides.model.reports.html.ReportNameProvider
 import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.model.requirements.model.Requirement
-import net.thucydides.core.requirements.reportpages.RequirementsReport
 import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomes
 import org.joda.time.DateTime
-import org.junit.Rule
 import spock.lang.Specification
 
 import java.nio.file.Files

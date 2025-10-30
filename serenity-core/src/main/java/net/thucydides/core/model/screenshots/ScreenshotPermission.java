@@ -1,13 +1,13 @@
 package net.thucydides.core.model.screenshots;
 
+import net.serenitybdd.annotations.Screenshots;
 import net.serenitybdd.markers.DisableScreenshots;
 import net.serenitybdd.markers.IsSilent;
-import net.serenitybdd.annotations.Screenshots;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.TakeScreenshots;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.screenshots.ScreenshotPreferencesByClass;
 import net.thucydides.model.reflection.StackTraceAnalyser;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.webdriver.Configuration;
 
 import java.lang.reflect.Method;

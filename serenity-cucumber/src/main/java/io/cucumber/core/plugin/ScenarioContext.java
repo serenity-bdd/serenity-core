@@ -6,10 +6,10 @@ import io.cucumber.messages.types.Scenario;
 import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestStep;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.DataTableRow;
 import net.thucydides.model.domain.TestTag;
-import net.thucydides.core.steps.StepEventBus;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;

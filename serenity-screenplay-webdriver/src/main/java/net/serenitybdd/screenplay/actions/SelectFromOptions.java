@@ -6,11 +6,7 @@ import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static java.util.Arrays.asList;
-import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.actions.SelectStrategy.*;
 
 public class SelectFromOptions {

@@ -5,12 +5,9 @@ import net.serenitybdd.screenplay.questions.Displayed;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
 import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-
-import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

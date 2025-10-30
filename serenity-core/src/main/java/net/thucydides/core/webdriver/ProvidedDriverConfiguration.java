@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.util.EnvironmentVariables;
 
-import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE;
 
 /**
  * A description goes here.

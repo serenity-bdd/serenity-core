@@ -1,14 +1,14 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Preconditions;
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.core.reports.styling.TagStylist;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.time.Stopwatch;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.*;
 import net.thucydides.model.domain.formatters.ReportFormatter;
 import net.thucydides.model.domain.screenshots.Screenshot;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.AcceptanceTestReporter;
 import net.thucydides.model.reports.OutcomeFormat;
 import net.thucydides.model.reports.ReportOptions;
@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

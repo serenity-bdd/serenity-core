@@ -1,10 +1,10 @@
 package net.serenitybdd.plugins.jira
 
-import net.thucydides.model.requirements.model.Requirement
-import net.thucydides.model.environment.MockEnvironmentVariables
-import net.serenitybdd.plugins.jirarequirements.JIRARequirementsProvider
 import net.serenitybdd.plugins.jira.service.JIRAConfiguration
 import net.serenitybdd.plugins.jira.service.SystemPropertiesJIRAConfiguration
+import net.serenitybdd.plugins.jirarequirements.JIRARequirementsProvider
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.model.Requirement
 import spock.lang.Ignore
 import spock.lang.Specification
 

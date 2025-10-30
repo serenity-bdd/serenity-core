@@ -1,16 +1,16 @@
 package net.serenitybdd.plugins.browserstack;
 
 import net.serenitybdd.core.environment.CustomDriverConfig;
-import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.TestLocalEnvironmentVariables;
-import net.thucydides.model.domain.TestOutcome;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.model.TestOutcomeName;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.HashMap;

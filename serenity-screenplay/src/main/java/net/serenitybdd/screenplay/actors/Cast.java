@@ -1,12 +1,11 @@
 package net.serenitybdd.screenplay.actors;
 
 import net.serenitybdd.model.collect.NewList;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;

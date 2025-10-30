@@ -1,18 +1,18 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.model.buildinfo.BuildInfoProvider;
 import net.serenitybdd.model.buildinfo.BuildProperties;
 import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
 import net.thucydides.core.reports.html.accessibility.ChartColorScheme;
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.NumericalFormatter;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.ReportOptions;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.html.ReportNameProvider;

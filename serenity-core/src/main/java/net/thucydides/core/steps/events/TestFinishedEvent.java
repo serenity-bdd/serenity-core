@@ -8,8 +8,6 @@ import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 
-import java.time.ZonedDateTime;
-
 
 public class TestFinishedEvent extends StepEventBusEventBase {
 

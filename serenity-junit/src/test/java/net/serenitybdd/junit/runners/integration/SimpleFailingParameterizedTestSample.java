@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners.integration;
 
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Ignore;
 import org.junit.Test;

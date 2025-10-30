@@ -1,10 +1,10 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Pending;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Assume;
@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

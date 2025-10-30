@@ -1,8 +1,7 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.stubs.WebDriverStub
-import org.openqa.selenium.chrome.ChromeDriver
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenProvidingYourOwnWebdriverInstance extends Specification {

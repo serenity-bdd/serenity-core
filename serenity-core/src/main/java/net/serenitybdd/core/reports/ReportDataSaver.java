@@ -1,12 +1,12 @@
 package net.serenitybdd.core.reports;
 
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.session.PlaybackSession;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.ReportData;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.session.TestSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

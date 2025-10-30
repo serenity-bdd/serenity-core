@@ -5,17 +5,16 @@ import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.options.RuntimeOptionsBuilder;
 import io.cucumber.core.plugin.SerenityReporter;
-import io.cucumber.core.runtime.Runtime;
 import io.cucumber.core.runtime.*;
+import io.cucumber.core.runtime.Runtime;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.thucydides.model.webdriver.Configuration;
+import org.junit.runners.model.InitializationError;
+
 import java.time.Clock;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Supplier;
-
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.model.webdriver.Configuration;
-import org.junit.runners.model.InitializationError;
 
 /**
  * Glue code for running Cucumber via Serenity.

@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.thucydides.model.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 import static net.thucydides.model.ThucydidesSystemProperty.HEADLESS_MODE;
 
 public class ConfigureChromiumOptions {

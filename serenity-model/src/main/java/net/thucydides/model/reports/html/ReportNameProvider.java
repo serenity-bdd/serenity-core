@@ -1,14 +1,14 @@
 package net.thucydides.model.reports.html;
 
 import net.serenitybdd.model.di.ModelInfrastructure;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.issues.IssueTracking;
-import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.model.domain.Release;
 import net.thucydides.model.domain.ReportNamer;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.model.requirements.RequirementsService;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;

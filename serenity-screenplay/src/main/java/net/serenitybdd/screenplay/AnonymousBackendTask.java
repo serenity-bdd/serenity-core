@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.DisableScreenshots;
 
 import java.util.List;

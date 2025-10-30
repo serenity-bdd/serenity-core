@@ -7,7 +7,6 @@ import net.serenitybdd.screenplay.questions.Value;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.Collection;
-import java.util.List;
 
 @Subject("#target")
 public class TargetValues implements Question<Collection<String>> {

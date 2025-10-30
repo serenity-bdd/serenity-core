@@ -2,9 +2,9 @@ package net.serenitybdd.core.webdriver.integration;
 
 import com.google.common.io.Resources;
 import net.serenitybdd.core.webdriver.driverproviders.FirefoxDriverProvider;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;

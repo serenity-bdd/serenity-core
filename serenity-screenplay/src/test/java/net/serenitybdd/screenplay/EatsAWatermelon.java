@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.annotations.Step;
+import net.serenitybdd.markers.CanBeSilent;
 
 class EatsAWatermelon implements Performable, CanBeSilent {
 

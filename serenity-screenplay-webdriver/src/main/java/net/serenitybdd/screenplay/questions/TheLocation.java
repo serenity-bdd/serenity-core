@@ -6,7 +6,6 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.interactions.Coordinates;
 
 import java.util.List;
 import java.util.stream.Collectors;

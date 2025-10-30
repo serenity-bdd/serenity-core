@@ -1,10 +1,11 @@
 package net.thucydides.core.steps
-import net.serenitybdd.core.pages.PageObject
+
 import net.serenitybdd.annotations.Step
+import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.Pages
+import net.thucydides.core.webdriver.DriverConfiguration
 import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.webdriver.Configuration
-import net.thucydides.core.webdriver.DriverConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 

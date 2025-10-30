@@ -1,14 +1,11 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.ImplementedBy;
-import net.serenitybdd.core.selectors.Selectors;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -16,7 +13,6 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @ImplementedBy(WebElementFacadeImpl.class)
 public interface WebElementFacade extends WebElement, WrapsElement, WebElementState, Locatable, ConfigurableTimeouts {

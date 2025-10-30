@@ -1,7 +1,5 @@
 package net.serenitybdd.core.annotations.environment;
 
-import net.serenitybdd.core.pages.WebElementFacadeImpl;
-
 import java.lang.annotation.*;
 
 /**

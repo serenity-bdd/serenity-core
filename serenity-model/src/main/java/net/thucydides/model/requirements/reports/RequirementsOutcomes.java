@@ -5,7 +5,6 @@ import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.*;
 import net.thucydides.model.issues.IssueTracking;
-
 import net.thucydides.model.releases.ReleaseManager;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.reports.html.ReportNameProvider;

@@ -1,12 +1,8 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.model.requirements.DefaultCapabilityTypes
-import net.thucydides.model.requirements.FileSystemRequirements
-import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.model.requirements.Requirements
-import net.thucydides.model.requirements.RequirementsTagProvider
-import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.*
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 
 class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {

@@ -1,16 +1,16 @@
 package net.serenitybdd.core.reports.integration
 
-import net.thucydides.model.issues.IssueTracking
-import net.thucydides.model.issues.SystemPropertiesIssueTracking
+import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.issues.SystemPropertiesIssueTracking
 import net.thucydides.model.reports.AcceptanceTestLoader
 import net.thucydides.model.reports.AcceptanceTestReporter
 import net.thucydides.model.reports.TestOutcomeStream
 import net.thucydides.model.reports.TestOutcomes
-import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
 import net.thucydides.model.reports.json.JSONTestOutcomeReporter
-import net.thucydides.model.environment.MockEnvironmentVariables
 import org.assertj.core.util.Files
 import spock.lang.Shared
 import spock.lang.Specification
@@ -18,6 +18,7 @@ import spock.lang.Specification
 import java.nio.file.Path
 
 import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
+
 /**
  * Created by john on 5/07/2016.
  */

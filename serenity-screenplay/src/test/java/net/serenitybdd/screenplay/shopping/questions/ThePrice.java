@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.shopping.questions;
 
-import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 
 public class ThePrice {

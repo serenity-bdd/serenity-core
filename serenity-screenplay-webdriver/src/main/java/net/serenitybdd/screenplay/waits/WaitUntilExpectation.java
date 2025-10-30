@@ -4,7 +4,6 @@ import net.serenitybdd.markers.IsSilent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 

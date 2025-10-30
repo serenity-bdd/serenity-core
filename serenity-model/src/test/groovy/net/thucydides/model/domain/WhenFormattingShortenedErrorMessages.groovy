@@ -1,6 +1,6 @@
 package net.thucydides.model.domain
 
-import net.thucydides.model.domain.ErrorMessageFormatter
+
 import spock.lang.Specification
 
 class WhenFormattingShortenedErrorMessages extends Specification {

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 /**
  * User: YamStranger

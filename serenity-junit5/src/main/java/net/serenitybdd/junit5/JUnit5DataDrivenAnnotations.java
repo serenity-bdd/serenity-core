@@ -1,17 +1,14 @@
 package net.serenitybdd.junit5;
 
 import au.com.bytecode.opencsv.CSVParser;
-import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
-import net.bytebuddy.implementation.MethodCall;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.slf4j.Logger;

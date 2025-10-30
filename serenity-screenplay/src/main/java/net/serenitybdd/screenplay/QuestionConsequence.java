@@ -1,4 +1,5 @@
 package net.serenitybdd.screenplay;
+
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.conditions.SilentPerformable;
@@ -9,8 +10,6 @@ import org.hamcrest.Matcher;
 
 import java.util.Optional;
 
-
-import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
 import static net.serenitybdd.screenplay.questions.QuestionHints.addHints;
 import static net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
 import static org.hamcrest.MatcherAssert.assertThat;

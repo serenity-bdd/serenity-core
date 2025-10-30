@@ -2,8 +2,6 @@ package net.thucydides.core.reports
 
 import net.thucydides.model.digest.Digest
 import net.thucydides.model.reports.html.ReportNameProvider
-import net.thucydides.model.requirements.model.Requirement
-import net.thucydides.model.reports.html.ReportNameProvider
 import spock.lang.Specification
 
 class WhenNamingReports extends Specification {

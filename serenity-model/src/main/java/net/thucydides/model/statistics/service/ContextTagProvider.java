@@ -1,10 +1,10 @@
 package net.thucydides.model.statistics.service;
 
 import com.google.common.base.Splitter;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.ContextIcon;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.CoreTagProvider;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;

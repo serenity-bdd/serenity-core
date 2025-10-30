@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.shopping.questions;
 
-import net.serenitybdd.screenplay.shopping.PeopleAreSoRude;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.QuestionDiagnostics;
+import net.serenitybdd.screenplay.shopping.PeopleAreSoRude;
 
 public class ThankYouMessage implements QuestionDiagnostics, Question<String> {
 

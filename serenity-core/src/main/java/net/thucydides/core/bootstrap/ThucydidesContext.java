@@ -1,14 +1,14 @@
 package net.thucydides.core.bootstrap;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.model.reports.ReportService;
 import net.thucydides.core.steps.*;
-import net.thucydides.model.steps.StepListener;
-import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;

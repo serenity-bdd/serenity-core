@@ -3,12 +3,12 @@ package net.thucydides.core.reports
 import net.thucydides.model.domain.TestOutcome
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.domain.TestTag
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.ReportLoadingFailedError
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Paths

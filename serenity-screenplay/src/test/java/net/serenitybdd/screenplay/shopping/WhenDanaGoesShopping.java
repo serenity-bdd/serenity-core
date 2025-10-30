@@ -1,20 +1,21 @@
 package net.serenitybdd.screenplay.shopping;
 
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
-import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.annotations.Step;
-import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theCorrectTotalCost;
-import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
-import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.shopping.tasks.Purchase.andPurchased;
+import static net.serenitybdd.screenplay.shopping.tasks.Purchase.purchased;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SerenityRunner.class)

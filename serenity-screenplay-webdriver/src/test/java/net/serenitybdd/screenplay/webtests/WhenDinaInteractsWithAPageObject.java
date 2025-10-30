@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.webtests;
 
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -9,8 +11,6 @@ import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
 import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
-import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;

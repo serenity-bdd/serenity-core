@@ -2,14 +2,17 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
+import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
+import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.configuration.FilePathParser;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
-import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;

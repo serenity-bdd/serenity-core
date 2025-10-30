@@ -1,14 +1,14 @@
 package net.serenitybdd.junit.spring;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PassFailureCountingRule implements MethodRule {
     private static final Logger LOG = LoggerFactory.getLogger(PassFailureCountingRule.class);

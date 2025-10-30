@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.shopping;
 
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
-import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,8 +13,8 @@ import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theT
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
 import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 @RunWith(SerenityRunner.class)
 public class DanaGoesShoppingQuicklySample {

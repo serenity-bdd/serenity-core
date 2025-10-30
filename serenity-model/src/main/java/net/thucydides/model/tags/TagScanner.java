@@ -1,8 +1,8 @@
 package net.thucydides.model.tags;
 
+import net.serenitybdd.annotations.TestAnnotations;
 import net.serenitybdd.model.tags.EnvironmentDefinedTags;
 import net.thucydides.model.adapters.TestFramework;
-import net.serenitybdd.annotations.TestAnnotations;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.reports.html.CucumberCompatibleFilter;
 import net.thucydides.model.util.EnvironmentVariables;

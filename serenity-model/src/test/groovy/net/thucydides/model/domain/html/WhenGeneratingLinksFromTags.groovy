@@ -3,8 +3,8 @@ package net.thucydides.model.domain.html
 import net.thucydides.model.domain.ReportNamer
 import net.thucydides.model.domain.ReportType
 import net.thucydides.model.domain.TestTag
-import net.thucydides.model.reports.html.ReportNameProvider
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.html.ReportNameProvider
 import spock.lang.Specification
 
 class WhenGeneratingLinksFromTags extends Specification {

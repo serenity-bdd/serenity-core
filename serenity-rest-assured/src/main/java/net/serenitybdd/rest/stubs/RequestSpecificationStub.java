@@ -2,22 +2,12 @@ package net.serenitybdd.rest.stubs;
 
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.Filter;
-import io.restassured.http.ContentType;
-import io.restassured.http.Cookie;
-import io.restassured.http.Cookies;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
-import io.restassured.http.Method;
+import io.restassured.http.*;
 import io.restassured.internal.RequestLogSpecificationImpl;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
-import io.restassured.specification.AuthenticationSpecification;
-import io.restassured.specification.MultiPartSpecification;
-import io.restassured.specification.ProxySpecification;
-import io.restassured.specification.RequestLogSpecification;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
+import io.restassured.specification.*;
 
 import java.io.File;
 import java.io.InputStream;

@@ -1,10 +1,10 @@
 package net.serenitybdd.core.model
 
 import net.serenitybdd.core.Serenity
-import net.thucydides.model.domain.*
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.domain.*
+import net.thucydides.model.steps.ExecutedStepDescription
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets

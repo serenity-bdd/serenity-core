@@ -1,12 +1,12 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.model.domain.DataTable;
-import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.junit.annotations.Qualifier;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import net.thucydides.junit.runners.PersonTestScenario;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 

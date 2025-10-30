@@ -1,9 +1,9 @@
 package net.thucydides.model.matchers.dates;
 
-import java.util.Map;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.Map;
 
 public class BeanFields {
 

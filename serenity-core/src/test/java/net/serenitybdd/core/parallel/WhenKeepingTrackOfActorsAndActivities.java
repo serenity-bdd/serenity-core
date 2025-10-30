@@ -1,10 +1,10 @@
 package net.serenitybdd.core.parallel;
 
 import net.serenitybdd.core.Serenity;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

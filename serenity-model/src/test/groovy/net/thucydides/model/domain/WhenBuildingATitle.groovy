@@ -1,7 +1,6 @@
 package net.thucydides.model.domain
 
-import net.thucydides.model.domain.TestOutcome
-import net.thucydides.model.domain.TitleBuilder
+
 import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 

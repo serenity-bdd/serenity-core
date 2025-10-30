@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.WebElement;
 
 public class MoveMouseToWebElement extends ChainablePerformable {

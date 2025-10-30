@@ -8,7 +8,6 @@ import net.thucydides.model.steps.ExecutedStepDescription;
 import org.jbehave.core.annotations.Given;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -1,10 +1,9 @@
 package net.serenitybdd.core.webdriver
 
-
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.annotations.DefaultUrl
-import net.thucydides.model.util.EnvironmentVariables
+import net.serenitybdd.core.pages.PageObject
 import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 

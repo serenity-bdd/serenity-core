@@ -1,12 +1,13 @@
 package net.thucydides.core.pages;
 
 
-import net.serenitybdd.core.pages.PagesAnnotatedField;
 import net.serenitybdd.annotations.ManagedPages;
-import net.thucydides.model.reflection.FieldSetter;
+import net.serenitybdd.core.pages.PagesAnnotatedField;
 import net.thucydides.core.steps.InvalidManagedPagesFieldException;
+import net.thucydides.model.reflection.FieldSetter;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -14,7 +15,6 @@ import java.lang.reflect.Field;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.doThrow;
 
 public class WhenUsingThePagesAnnotation {
@@ -84,7 +84,7 @@ public class WhenUsingThePagesAnnotation {
     @Test(expected = InvalidManagedPagesFieldException.class)
     public void should_throw_exception_if_pages_object_field_cannot_be_accessed() throws Exception {
 
-        doThrow(new IllegalAccessException()).when(fieldSetter).to(anyObject());
+        doThrow(new IllegalAccessException()).when(fieldSetter).to(ArgumentMatchers.any());
 
         Field field = null;
         TestPagesAnnotatedField testField = new TestPagesAnnotatedField(field, managedPages);

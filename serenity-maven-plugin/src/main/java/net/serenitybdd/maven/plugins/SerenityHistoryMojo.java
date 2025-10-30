@@ -1,9 +1,9 @@
 package net.serenitybdd.maven.plugins;
 
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.history.FileSystemTestOutcomeSummaryRecorder;
 import net.serenitybdd.model.history.TestOutcomeSummaryRecorder;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;

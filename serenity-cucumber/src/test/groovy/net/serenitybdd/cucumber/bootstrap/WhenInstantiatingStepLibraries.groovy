@@ -1,8 +1,8 @@
 package net.serenitybdd.cucumber.bootstrap
 
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.annotations.Step
 import net.serenitybdd.annotations.Steps
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.pages.PageObject
 import spock.lang.Specification
 

@@ -1,15 +1,14 @@
 package net.serenitybdd.junit.runners;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.thucydides.core.webdriver.DriverConfigurationError;
+import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.model.batches.SystemVariableBasedBatchManager;
 import net.thucydides.model.batches.TestCountBasedBatchManager;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.DriverConfigurationError;
-import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.samples.SuccessfulSingleTestScenario;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithABrowser;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithWrongBrowser;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;

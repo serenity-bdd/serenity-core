@@ -1,7 +1,7 @@
 package net.thucydides.model.steps;
 
-import net.serenitybdd.model.strings.Joiner;
 import net.serenitybdd.annotations.Fields;
+import net.serenitybdd.model.strings.Joiner;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

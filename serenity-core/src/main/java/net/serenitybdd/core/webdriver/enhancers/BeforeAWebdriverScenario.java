@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.enhancers;
 
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
 /**

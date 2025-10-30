@@ -1,21 +1,18 @@
 package net.thucydides.junit.spring;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-
-import javax.annotation.Resource;
-
+import net.serenitybdd.annotations.Step;
+import net.thucydides.junit.spring.samples.dao.GizmoDao;
+import net.thucydides.junit.spring.samples.service.BazingaService;
+import net.thucydides.junit.spring.samples.service.GizmoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
 
-import net.serenitybdd.annotations.Step;
-import net.thucydides.junit.spring.samples.dao.GizmoDao;
-import net.thucydides.junit.spring.samples.service.BazingaService;
-import net.thucydides.junit.spring.samples.service.GizmoService;
+import javax.annotation.Resource;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(classes=SpringBootTestAnnotatedStepLibrary.Config.class)
 public class SpringBootTestAnnotatedStepLibrary {

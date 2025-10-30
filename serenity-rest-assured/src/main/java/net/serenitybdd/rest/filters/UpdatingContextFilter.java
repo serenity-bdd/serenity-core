@@ -6,10 +6,10 @@ import io.restassured.internal.filter.FilterContextImpl;
 import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
-import net.serenitybdd.rest.utils.RestRuntimeException;
 import net.serenitybdd.rest.stubs.ResponseStub;
 import net.serenitybdd.rest.utils.ReflectionHelper;
 import net.serenitybdd.rest.utils.RestExecutionHelper;
+import net.serenitybdd.rest.utils.RestRuntimeException;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -1,8 +1,8 @@
 package net.serenitybdd.rest.filters;
 
-import java.util.*;
-
 import io.restassured.filter.Filter;
+
+import java.util.*;
 
 /**
  * User: YamStranger

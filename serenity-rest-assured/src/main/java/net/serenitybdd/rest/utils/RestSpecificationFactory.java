@@ -5,11 +5,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.internal.filter.SendRequestFilter;
-import io.restassured.specification.FilterableRequestSpecification;
-import io.restassured.specification.FilterableResponseSpecification;
-import io.restassured.specification.RequestSenderOptions;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
+import io.restassured.specification.*;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.VisibilityBridgeStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -29,12 +25,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static io.restassured.filter.log.LogDetail.BODY;
-import static io.restassured.filter.log.LogDetail.COOKIES;
-import static io.restassured.filter.log.LogDetail.HEADERS;
-import static io.restassured.filter.log.LogDetail.METHOD;
-import static io.restassured.filter.log.LogDetail.PARAMS;
-import static io.restassured.filter.log.LogDetail.URI;
+import static io.restassured.filter.log.LogDetail.*;
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 

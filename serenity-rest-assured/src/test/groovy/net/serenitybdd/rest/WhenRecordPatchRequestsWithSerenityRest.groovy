@@ -10,19 +10,13 @@ import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.model.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.model.rest.RestMethod.PATCH
-import static net.serenitybdd.rest.SerenityRest.*
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static net.serenitybdd.rest.JsonConverter.*
-import static net.serenitybdd.rest.DecomposedContentType.*
+import static net.serenitybdd.rest.DecomposedContentType.APPLICATION_JSON
+import static net.serenitybdd.rest.JsonConverter.formatted
+import static net.serenitybdd.rest.SerenityRest.given
 
 
 /**

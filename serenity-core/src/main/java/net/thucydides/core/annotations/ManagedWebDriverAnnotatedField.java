@@ -1,9 +1,9 @@
 package net.thucydides.core.annotations;
 
 import net.serenitybdd.annotations.ClearCookiesPolicy;
+import net.serenitybdd.annotations.Fields;
 import net.serenitybdd.annotations.Managed;
 import net.thucydides.core.webdriver.WebDriverFacade;
-import net.serenitybdd.annotations.Fields;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;

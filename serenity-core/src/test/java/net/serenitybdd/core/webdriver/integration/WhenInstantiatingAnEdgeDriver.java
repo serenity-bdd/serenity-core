@@ -1,19 +1,16 @@
 package net.serenitybdd.core.webdriver.integration;
 
 import com.google.common.io.Resources;
-import net.serenitybdd.core.webdriver.driverproviders.ChromeDriverProvider;
 import net.serenitybdd.core.webdriver.driverproviders.EdgeDriverProvider;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

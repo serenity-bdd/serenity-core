@@ -1,7 +1,10 @@
 package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.*;
+import net.serenitybdd.screenplay.actions.AlertText;
+import net.serenitybdd.screenplay.actions.ContextClick;
+import net.serenitybdd.screenplay.actions.Drag;
+import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
@@ -9,7 +12,6 @@ import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTest
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

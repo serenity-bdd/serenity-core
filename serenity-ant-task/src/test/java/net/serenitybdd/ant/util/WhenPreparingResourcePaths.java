@@ -1,6 +1,5 @@
 package net.serenitybdd.ant.util;
 
-import net.serenitybdd.ant.util.PathProcessor;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

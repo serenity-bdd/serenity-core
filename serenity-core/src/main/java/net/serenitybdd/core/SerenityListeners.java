@@ -1,10 +1,10 @@
 package net.serenitybdd.core;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.steps.StepListener;
 import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;

@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.ensure
 
-import org.assertj.core.util.Lists.emptyList
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

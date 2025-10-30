@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import io.restassured.http.ContentType
 import io.restassured.specification.FilterableRequestSpecification
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.rest.HeaderNames
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
@@ -14,9 +13,9 @@ import org.junit.Rule
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static net.serenitybdd.rest.HeaderNames.CONTENT_TYPE
 import static net.serenitybdd.rest.SerenityRest.given
 import static net.serenitybdd.rest.SerenityRest.reset
-import static net.serenitybdd.rest.HeaderNames.*;
 
 /**
  * User: YamStranger

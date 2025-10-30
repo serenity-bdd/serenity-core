@@ -12,12 +12,8 @@ import net.serenitybdd.cucumber.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -124,14 +120,14 @@ public class CucumberScenarioLoader {
         return statistics.scenarioWeightFor(feature.getName(), scenarioDefinition.getName());
     }
 
-    private static Envelope readEnvelopeFromPath(Path path) {
-        try {
-            byte[] bytes = Files.readAllBytes(path);
-            String data = new String(bytes, StandardCharsets.UTF_8);
-            return Envelope.of(new Source(path.toString(), data, SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN));
-        } catch (IOException e) {
-            throw new GherkinException(e.getMessage(), e);
-        }
-    }
+//    private static Envelope readEnvelopeFromPath(Path path) {
+//        try {
+//            byte[] bytes = Files.readAllBytes(path);
+//            String data = new String(bytes, StandardCharsets.UTF_8);
+//            return Envelope.of(new Source(path.toString(), data, SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN));
+//        } catch (IOException e) {
+//            throw new GherkinException(e.getMessage(), e);
+//        }
+//    }
 
 }

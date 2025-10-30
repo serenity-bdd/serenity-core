@@ -1,9 +1,9 @@
 package net.thucydides.core.annotations;
 
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.DriverStrategySelector;
 import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;

@@ -1,9 +1,9 @@
 
 package net.serenitybdd.screenplay.shopping.tasks;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
-import net.serenitybdd.annotations.Step;
 
 public class DeliveryCostQuestion implements Question<Integer> {
 

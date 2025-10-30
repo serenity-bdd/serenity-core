@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -13,9 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static net.thucydides.model.ThucydidesSystemProperty.RECORD_FAILURES;
 import static net.thucydides.model.ThucydidesSystemProperty.REPLAY_FAILURES;

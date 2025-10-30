@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.TestOutcomes;
 import net.thucydides.model.requirements.RequirementsService;
 import net.thucydides.model.util.EnvironmentVariables;
@@ -10,11 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HtmlTestOutcomeReportingTask implements ReportingTask {

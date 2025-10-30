@@ -1,21 +1,20 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
-
 import io.cucumber.core.resource.ClassLoaders;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.model.collect.NewList;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.parallel.Agency;
 import net.serenitybdd.core.parallel.Agent;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.core.events.TestLifecycleEvents;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.*;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.environment.TestLocalEnvironmentVariables;
-import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
 import net.thucydides.model.steps.StepListener;

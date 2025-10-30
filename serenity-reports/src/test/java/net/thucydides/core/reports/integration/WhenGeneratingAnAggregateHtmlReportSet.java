@@ -2,11 +2,11 @@ package net.thucydides.core.reports.integration;
 
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.core.reports.html.ReportProperties;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.issues.IssueTracking;
 import net.thucydides.model.reports.ResultChecker;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

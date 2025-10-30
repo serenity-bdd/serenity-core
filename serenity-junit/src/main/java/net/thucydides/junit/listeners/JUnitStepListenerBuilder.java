@@ -2,10 +2,10 @@ package net.thucydides.junit.listeners;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
-import net.thucydides.model.domain.DataTable;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
+import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.steps.StepListener;
 
 import java.io.File;

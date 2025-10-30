@@ -1,14 +1,14 @@
 package net.thucydides.core.requirements
 
 import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.model.reports.html.ReportNameProvider
-import net.thucydides.model.requirements.model.Example
-import net.thucydides.model.requirements.model.Requirement
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.model.requirements.PackageAnnotationBasedTagProvider
+import net.thucydides.model.requirements.model.Example
+import net.thucydides.model.requirements.model.Requirement
 import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomes

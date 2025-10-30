@@ -1,9 +1,8 @@
 package net.serenitybdd.screenplay.rest.examples;
 
-import io.restassured.filter.session.SessionFilter;
-
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import io.restassured.filter.session.SessionFilter;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi;

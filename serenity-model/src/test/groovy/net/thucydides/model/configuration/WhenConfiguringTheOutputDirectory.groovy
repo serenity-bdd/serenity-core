@@ -2,7 +2,7 @@ package net.thucydides.model.configuration
 
 import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.model.util.EnvironmentVariables
-import org.apache.commons.lang.SystemUtils
+import org.apache.commons.lang3.SystemUtils
 import spock.lang.Specification
 
 import java.nio.file.Paths

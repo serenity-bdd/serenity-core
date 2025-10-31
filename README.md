@@ -97,6 +97,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [4.3.0](docs/release-notes/4.3.0.md)
 * [4.0.1](docs/release-notes/4.0.1.md)
 * [3.2.4](docs/release-notes/3.2.4.md)
 * [3.2.0](docs/release-notes/3.2.0.md)
@@ -112,14 +113,15 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 ### Serenity with JUnit
 
-| serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
-|---------------|-----------------------|------------------|---------------------|-----------------------|
-| 4.2.26        | 4.2.26                | 4.32.0           | 5.5.2               | 8.3.0                 |
-| 4.1.3         | 4.1.3                 | 4.18.1           | 5.3.1               | 8.3.0                 |
-| 4.1.0         | 4.1.0                 | 4.16.0           | 5.3.1               | 8.3.0                 |
-| 4.0.12        | 4.0.12                | 4.12.1           | 5.3.1               | 8.3.0                 |
-| 4.0.1         | 4.0.1                 | 4.12.0           | 5.3.1               | 8.3.0                 |
-| 3.9.8         | 3.9.8                 | 4.11.0           | 5.2.0               | 8.3.0                 |
+| serenity-core | serenity-maven-plugin | JUnit version | Selenium version | RestAssured version | Appium client version |
+|---------------|-----------------------|---------------|------------------|---------------------|-----------------------|
+| 4.3.0         | 4.3.0                 | 6.0.0         | 4.38.0           | 5.5.2               | 8.3.0                 |
+| 4.2.26        | 4.2.26                | 4.13.2        | 4.32.0           | 5.5.2               | 8.3.0                 |
+| 4.1.3         | 4.1.3                 | 4.13.2        | 4.18.1           | 5.3.1               | 8.3.0                 |
+| 4.1.0         | 4.1.0                 | 4.13.2        | 4.16.0           | 5.3.1               | 8.3.0                 |
+| 4.0.12        | 4.0.12                | 4.13.2        | 4.12.1           | 5.3.1               | 8.3.0                 |
+| 4.0.1         | 4.0.1                 | 4.13.2        | 4.12.0           | 5.3.1               | 8.3.0                 |
+| 3.9.8         | 3.9.8                 | 4.13.2        | 4.11.0           | 5.2.0               | 8.3.0                 |
 | 3.6.12        | 3.6.12                | 4.8.0            | 5.2.0               | 8.3.0                 |
 | 3.6.12        | 3.6.12                | 4.8.0            | 5.2.0               | 8.3.0                 |
 | 3.3.10        | 3.3.10                | 4.5.2            | 5.2.0               | 8.2.0                 |
@@ -156,6 +158,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 4.3.0         | 4.3.0                 | 4.3.0             | 7.31.1   |
 | 4.2.26        | 4.2.26                | 4.2.26            | 7.22.2   |
 | 4.1.3         | 4.1.3                 | 4.1.3             | 7.15.0   |
 | 4.0.12        | 4.0.12                | 4.0.12            | 7.14.0   |

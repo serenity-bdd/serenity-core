@@ -23,14 +23,24 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Configure Maven Servers
-        uses: s4u/maven-settings-action@v3.0.0
-        with:
-          servers: |
-            [
-              {"id": "central", "username": "${{ secrets.CENTRAL_TOKEN_USERNAME }}", "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}"},
-              {"id": "gpg.passphrase", "passphrase": "${{ secrets.GPG_PASSPHRASE }}"}
-            ]
+      - name: Configure Maven Settings
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${{ secrets.CENTRAL_TOKEN_USERNAME }}</username>
+                <password>${{ secrets.CENTRAL_TOKEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>gpg.passphrase</id>
+                <passphrase>${{ secrets.GPG_PASSPHRASE }}</passphrase>
+              </server>
+            </servers>
+          </settings>
+          EOF
 
       - name: Import GPG key
         env:

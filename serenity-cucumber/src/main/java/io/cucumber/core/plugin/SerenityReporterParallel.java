@@ -488,6 +488,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         LOGGER.debug("SRP:handleTestRunFinished " + Thread.currentThread() + " " + contextURISet);
 
         for (URI featurePath : contextURISet) {
+            getStepEventBus(featurePath).dropListener(SerenityInfrastructure.getLoggingListener());
             getContext(featurePath).playAllTestEvents();
         }
         enrichOutcomes();

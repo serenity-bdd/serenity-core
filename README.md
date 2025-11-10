@@ -97,6 +97,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [4.3.3](docs/release-notes/4.3.3.md)
 * [4.3.2](docs/release-notes/4.3.2.md)
 * [4.0.1](docs/release-notes/4.0.1.md)
 * [3.2.4](docs/release-notes/3.2.4.md)

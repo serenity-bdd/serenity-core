@@ -33,8 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTest {
 
@@ -573,6 +572,39 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         assertThat(reportContents.size(), is(2));
 
+    }
+
+    @Test
+    public void tags_from_parameterized_test_outcomes_should_be_added_to_aggregated_outcome() {
+        // Given: Create test outcomes with tags
+        TestOutcome outcome1 = TestOutcome.forTest("paramTest", this.getClass());
+        outcome1.addTag(net.thucydides.model.domain.TestTag.withName("Smoke Test").andType("type"));
+        outcome1.addTag(net.thucydides.model.domain.TestTag.withName("Critical").andType("priority"));
+
+        TestOutcome outcome2 = TestOutcome.forTest("paramTest", this.getClass());
+        outcome2.addTag(net.thucydides.model.domain.TestTag.withName("Smoke Test").andType("type"));
+        outcome2.addTag(net.thucydides.model.domain.TestTag.withName("High").andType("priority"));
+
+        TestOutcome outcome3 = TestOutcome.forTest("paramTest", this.getClass());
+        outcome3.addTag(net.thucydides.model.domain.TestTag.withName("Regression").andType("type"));
+
+        List<TestOutcome> testOutcomes = new ArrayList<>();
+        testOutcomes.add(outcome1);
+        testOutcomes.add(outcome2);
+        testOutcomes.add(outcome3);
+
+        // When: Aggregate the outcomes
+        ParameterizedTestsOutcomeAggregator aggregator = new ParameterizedTestsOutcomeAggregator(testOutcomes);
+        List<TestOutcome> aggregatedOutcomes = aggregator.aggregateTestOutcomesByTestMethods();
+
+        // Then: The aggregated outcome should contain all tags from individual outcomes
+        assertThat(aggregatedOutcomes.size(), is(1));
+        TestOutcome aggregatedOutcome = aggregatedOutcomes.get(0);
+
+        assertThat(aggregatedOutcome.getTags(), hasItem(net.thucydides.model.domain.TestTag.withName("Smoke Test").andType("type")));
+        assertThat(aggregatedOutcome.getTags(), hasItem(net.thucydides.model.domain.TestTag.withName("Critical").andType("priority")));
+        assertThat(aggregatedOutcome.getTags(), hasItem(net.thucydides.model.domain.TestTag.withName("High").andType("priority")));
+        assertThat(aggregatedOutcome.getTags(), hasItem(net.thucydides.model.domain.TestTag.withName("Regression").andType("type")));
     }
 
 

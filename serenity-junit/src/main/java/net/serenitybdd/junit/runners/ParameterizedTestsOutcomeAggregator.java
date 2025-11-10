@@ -44,6 +44,7 @@ public class ParameterizedTestsOutcomeAggregator {
             if (testOutcome.isDataDriven()) {
                 scenarioOutcome.addDataFrom(testOutcome.getDataTable());
             }
+            scenarioOutcome.setTags(testOutcome.getTags());
         }
 
         List<TestOutcome> aggregatedScenarioOutcomes = new ArrayList<>();

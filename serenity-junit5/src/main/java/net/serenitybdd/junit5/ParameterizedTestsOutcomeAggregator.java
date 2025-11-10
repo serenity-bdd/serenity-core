@@ -107,7 +107,10 @@ public class ParameterizedTestsOutcomeAggregator {
             nestedStep.setDuration(testOutcome.getDuration());
         }
 
+        // Record the test outcome as a step in the scenario outcome
         scenarioOutcome.recordStep(nestedStep);
+        // Add any scenario outcome tags to the main test outcome
+        testOutcome.getTags().forEach(scenarioOutcome::addTag);
     }
 
     private TestOutcome scenarioOutcomeFor(String normalizedMethodName, TestOutcome testOutcome, Map<String, TestOutcome> scenarioOutcomes) {

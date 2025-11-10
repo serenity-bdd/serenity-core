@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 

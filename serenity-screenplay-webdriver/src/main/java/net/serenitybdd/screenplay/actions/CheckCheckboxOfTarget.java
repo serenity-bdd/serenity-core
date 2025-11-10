@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.targets.Target;

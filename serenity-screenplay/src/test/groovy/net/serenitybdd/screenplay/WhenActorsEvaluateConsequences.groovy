@@ -103,6 +103,25 @@ class WhenActorsEvaluateConsequences extends Specification{
         outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, ERROR]
     }
 
+    def "should not run step after a broken anonymous task"() {
+        when:
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldNotRunStepAfterABrokenAnonymousTask"]
+        outcome.result == ERROR
+        outcome.testSteps.collect { it.result } == [SUCCESS, ERROR]
+    }
+
+    def "should not run step after a broken non-anonymous task"() {
+        when:
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldNotRunStepAfterABrokenNonAnonymousTask"]
+        outcome.result == ERROR
+        outcome.testSteps.collect { it.result } == [SUCCESS]
+        // TODO: check if it should be: [SUCCESS, ERROR] - same as with anonymous task
+    }
+
     def "should report assertion failures that happen inside a question"() {
         when:
         def results = resultsFrom(runner.testOutcomes)

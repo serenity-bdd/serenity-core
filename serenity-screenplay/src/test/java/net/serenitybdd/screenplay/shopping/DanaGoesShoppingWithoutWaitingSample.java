@@ -6,7 +6,9 @@ import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.ThisTakesTooLong;
+import net.serenitybdd.screenplay.shopping.tasks.BrokenAnonymousPerformable;
 import net.serenitybdd.screenplay.shopping.questions.BrokenQuestion;
+import net.serenitybdd.screenplay.shopping.tasks.BrokenNonAnonymousTask;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
@@ -260,6 +262,22 @@ public class DanaGoesShoppingWithoutWaitingSample {
                 purchase().aPear().thatCosts(5).dollars());
 
         then(dana).should(seeThat(BrokenQuestion.thatThrowsAnException(), equalTo(10)));
+    }
+
+    // Expected to fail with a broken anonymous task
+    @Test
+    public void shouldNotRunStepAfterABrokenAnonymousTask() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(14).dollars());
+        when(dana).attemptsTo(BrokenAnonymousPerformable.thatThrowsAnException());
+        then(dana).should(seeThat(theTotalCost(), equalTo(14)));
+    }
+
+    // Expected to fail with a broken non-anonymous task
+    @Test
+    public void shouldNotRunStepAfterABrokenNonAnonymousTask() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(14).dollars());
+        when(dana).attemptsTo(BrokenNonAnonymousTask.thatThrowsAnException());
+        then(dana).should(seeThat(theTotalCost(), equalTo(14)));
     }
 
     @Test

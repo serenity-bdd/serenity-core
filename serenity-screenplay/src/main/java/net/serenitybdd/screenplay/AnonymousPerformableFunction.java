@@ -24,7 +24,7 @@ public class AnonymousPerformableFunction implements Performable, CanBeSilent {
         try {
             actions.accept(actor);
         } catch (Throwable e) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(e.getMessage()), e));
+            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(e.getMessage()), e));
             throw e;
         }
     }

@@ -336,6 +336,7 @@ public class ScenarioContextParallel {
         List<StepEventBusEvent> eventList = highPriorityEventBusEvents.computeIfAbsent(scenarioId, k -> Collections.synchronizedList(new LinkedList<>()));
         eventList.add(event);
         event.setStepEventBus(stepEventBus);
+        event.play();
     }
 
     public void addStepEventBusEvent(StepEventBusEvent event) {
@@ -348,6 +349,7 @@ public class ScenarioContextParallel {
             }
             TestSession.addEvent(event);
             event.setStepEventBus(stepEventBus);
+            event.play();
         } else {
             LOGGER.debug("SRP:ignored event " + event + " " + Thread.currentThread() + " because session not opened ", new Exception());
         }

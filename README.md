@@ -79,6 +79,22 @@ It is easier for us to fix something we can see breaking. If someone has to volu
 
 Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
 
+## Tidelift Subscription
+
+Serenity BDD is available as part of the Tidelift Subscription.
+
+Tidelift helps organizations use Serenity BDD with confidence by providing
+enterprise-grade security updates, maintenance assurances and compliance
+guidance.  
+
+Learn more at: https://tidelift.com/subscription/pkg/maven-net.serenity-bdd
+
+## Security contact information
+
+To report a security vulnerability, please use the
+[Tidelift security contact](https://tidelift.com/security).
+Tidelift will coordinate the fix and disclosure.
+
 ## Need Commercial Support?
 
 If you are using Serenity for your company projects and need faster or more in-depth support, including training and coaching, why not ask your company to explore our **[commercial support options](https://www.serenitydojo.academy/serenity-bdd-support-packages)**? We recognize that businesses have unique needs and require specialized attention. That's why we've designed a comprehensive range of support options tailored to your requirements. Whether it's prioritized tickets for pressing issues, custom Serenity work to integrate seamlessly with your existing systems, or remote mentoring and pair programming sessions to enhance your team's capabilities, we've got you covered. Our packages even include options for unlimited email support and additional live support hours at competitive rates. With monthly and annual payment plans, our support models aim to supercharge your Serenity experience, reducing downtime, accelerating development, and ensuring you get the most value out of your automation efforts. Let's chat and find the right fit for your needs!

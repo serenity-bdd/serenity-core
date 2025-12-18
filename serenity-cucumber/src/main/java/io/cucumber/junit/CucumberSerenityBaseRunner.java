@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static io.cucumber.core.runtime.SynchronizedEventBus.synchronize;
-import static io.cucumber.junit.FileNameCompatibleNames.uniqueSuffix;
+import static net.serenitybdd.cucumber.util.CucumberInternalUtils.uniqueSuffix;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -126,7 +126,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
         RuntimeOptionsBuilder runtimeOptionsBuilder = new RuntimeOptionsBuilder();
         Collection<String> tagFilters = environmentSpecifiedTags(runtimeOptions.getTagExpressions());
         for (String tagFilter : tagFilters) {
-            runtimeOptionsBuilder.addTagFilter(new LiteralExpression(tagFilter));
+            runtimeOptionsBuilder.addTagFilter(new net.serenitybdd.cucumber.util.CucumberInternalUtils.LiteralExpression(tagFilter));
         }
         return runtimeOptionsBuilder.build(runtimeOptions);
     }
@@ -285,10 +285,10 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
     private Function<ParentRunner<?>, Optional<ParentRunner<?>>> toPossibleFeatureRunner(WeightedCucumberScenarios weightedCucumberScenarios, AtomicInteger filteredInScenarioCount) {
         return featureRunner -> {
             int initialScenarioCount = featureRunner.getDescription().getChildren().size();
-            String featureName = FeatureRunnerExtractors.extractFeatureName(featureRunner);
+            String featureName = net.serenitybdd.cucumber.util.CucumberInternalUtils.extractFeatureName(featureRunner);
             try {
                 ScenarioFilter filter = weightedCucumberScenarios.createFilterContainingScenariosIn(featureName);
-                String featurePath = FeatureRunnerExtractors.featurePathFor(featureRunner);
+                String featurePath = net.serenitybdd.cucumber.util.CucumberInternalUtils.featurePathFor(featureRunner);
                 featureRunner.filter(filter);
                 if (!filter.scenariosIncluded().isEmpty()) {
                     LOGGER.info("{} scenario(s) included for '{}' in {}", filter.scenariosIncluded().size(), featureName, featurePath);
@@ -311,8 +311,8 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
 
     private Predicate<ParentRunner<?>> forIncludedFeatures(WeightedCucumberScenarios weightedCucumberScenarios) {
         return featureRunner -> {
-            String featureName = FeatureRunnerExtractors.extractFeatureName(featureRunner);
-            String featurePath = PathUtils.getAsFile(FeatureRunnerExtractors.featurePathFor(featureRunner)).getName();
+            String featureName = net.serenitybdd.cucumber.util.CucumberInternalUtils.extractFeatureName(featureRunner);
+            String featurePath = PathUtils.getAsFile(net.serenitybdd.cucumber.util.CucumberInternalUtils.featurePathFor(featureRunner)).getName();
             boolean matches = weightedCucumberScenarios.scenarios.stream().anyMatch(scenario -> featurePath.equals(scenario.featurePath));
             LOGGER.debug("{} in filtering '{}' in {}", matches ? "Including" : "Not including", featureName, featurePath);
             return matches;

@@ -41,7 +41,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <junit.version>4.13.2</junit.version>
-        <groovy.version>4.0.23</groovy.version>
+        <groovy.version>4.0.29</groovy.version>
         <spock.version>2.4-M1-groovy-4.0</spock.version>
         <byte-buddy.version>1.17.8</byte-buddy.version>
         <guava.version>33.5.0-jre</guava.version>
@@ -497,7 +497,7 @@
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>4.0.1</version>
+                    <version>4.2.1</version>
                     <executions>
                         <execution>
                             <goals>

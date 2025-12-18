@@ -8,6 +8,7 @@ import io.cucumber.core.plugin.SerenityReporter;
 import io.cucumber.core.runtime.*;
 import io.cucumber.core.runtime.Runtime;
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.cucumber.util.CucumberInternalUtils;
 import net.thucydides.model.webdriver.Configuration;
 import org.junit.runners.model.InitializationError;
 
@@ -30,7 +31,7 @@ public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
      */
     public CucumberSerenityRunner(Class clazz) throws InitializationError {
         super(clazz);
-        Assertions.assertNoCucumberAnnotatedMethods(clazz);
+        CucumberInternalUtils.assertNoCucumberAnnotatedMethods(clazz);
 
         RuntimeOptions runtimeOptions = createRuntimeOptions(clazz);
         JUnitOptions junitOptions = createJUnitOptions(clazz);
@@ -63,7 +64,7 @@ public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
         RuntimeOptionsBuilder runtimeOptionsBuilder = new RuntimeOptionsBuilder();
         Collection<String> allTagFilters = environmentSpecifiedTags(runtimeOptions.getTagExpressions());
         for (String tagFilter : allTagFilters) {
-            runtimeOptionsBuilder.addTagFilter(new LiteralExpression(tagFilter));
+            runtimeOptionsBuilder.addTagFilter(new CucumberInternalUtils.LiteralExpression(tagFilter));
         }
         runtimeOptionsBuilder.build(runtimeOptions);
         setRuntimeOptions(runtimeOptions);

@@ -1,4 +1,4 @@
-package io.cucumber.core.plugin;
+package net.serenitybdd.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Tag;
 import net.thucydides.model.domain.TestResult;
@@ -23,15 +23,15 @@ public class TaggedScenario {
         MANUAL_TEST_RESULTS.put("compromised", TestResult.COMPROMISED);
     }
 
-    static boolean isPending(List<Tag> tags) {
+    public static boolean isPending(List<Tag> tags) {
         return hasTag("@pending", tags);
     }
 
-    static boolean isManual(List<Tag> tags) {
+    public static boolean isManual(List<Tag> tags) {
         return tags.stream().anyMatch(tag -> isManualTag(tag.getName()));
     }
 
-    static boolean isManualTag(String tagName) {
+    public static boolean isManualTag(String tagName) {
         return tagName.equalsIgnoreCase("@manual")
                 || tagName.toLowerCase().startsWith("@manual:")
                 || tagName.toLowerCase().startsWith("@manual-")
@@ -56,7 +56,7 @@ public class TaggedScenario {
         }
     }
 
-    static boolean isSkippedOrWIP(List<Tag> tags) {
+    public static boolean isSkippedOrWIP(List<Tag> tags) {
         for (Tag tag : tags) {
             if (SKIPPED_TAGS.contains(tag.getName().toLowerCase())) {
                 return true;
@@ -65,7 +65,7 @@ public class TaggedScenario {
         return false;
     }
 
-    static boolean isIgnored(List<Tag> tags) {
+    public static boolean isIgnored(List<Tag> tags) {
         for (Tag tag : tags) {
             if (IGNORED_TAGS.contains(tag.getName().toLowerCase())) {
                 return true;

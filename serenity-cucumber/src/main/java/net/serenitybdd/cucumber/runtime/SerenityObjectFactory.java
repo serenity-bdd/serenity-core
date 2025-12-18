@@ -1,4 +1,4 @@
-package cucumber.runtime;
+package net.serenitybdd.cucumber.runtime;
 
 //import io.cucumber.core.backend.Backend.ObjectFactory;
 

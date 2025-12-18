@@ -59,14 +59,6 @@ public class FeatureFileLoader {
         testSources.addTestSourceReadEvent(event.getUri(), event);
     }
 
-    public String getFeatureName(URI featureFileUri) {
-        return testSources.getFeature(featureFileUri).getName();
-    }
-
-    public Feature getFeature(URI featureFileUri) {
-        return testSources.getFeature(featureFileUri);
-    }
-
     TestSourcesModel.AstNode getAstNode(URI path, int line) {
         return testSources.getAstNode(path, line);
     }

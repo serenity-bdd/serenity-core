@@ -20,7 +20,9 @@ import java.util.function.Supplier;
 /**
  * Glue code for running Cucumber via Serenity.
  * Sets up Serenity reporting and instrumentation.
+ * @deprecated Use JUnit 5 Cucumber runners instead
  */
+@Deprecated(since="4.3.5")
 public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
 
     /**

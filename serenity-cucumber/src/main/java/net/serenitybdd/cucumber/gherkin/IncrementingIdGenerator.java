@@ -1,4 +1,4 @@
-package io.cucumber.gherkin;
+package net.serenitybdd.cucumber.gherkin;
 
 import io.cucumber.messages.IdGenerator;
 

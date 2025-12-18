@@ -5,6 +5,7 @@ import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
 import io.cucumber.messages.types.*;
+import net.serenitybdd.cucumber.gherkin.IncrementingIdGenerator;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenario;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
@@ -41,6 +42,7 @@ public class CucumberScenarioLoader {
     }
 
     public WeightedCucumberScenarios load() {
+
         LOGGER.debug("Feature paths are {}", featurePaths);
         FeatureParser parser = new FeatureParser(UUID::randomUUID);
         Options featureOptions = () -> featurePaths;
@@ -119,15 +121,4 @@ public class CucumberScenarioLoader {
     private BigDecimal scenarioWeightFor(Feature feature, Scenario scenarioDefinition) {
         return statistics.scenarioWeightFor(feature.getName(), scenarioDefinition.getName());
     }
-
-//    private static Envelope readEnvelopeFromPath(Path path) {
-//        try {
-//            byte[] bytes = Files.readAllBytes(path);
-//            String data = new String(bytes, StandardCharsets.UTF_8);
-//            return Envelope.of(new Source(path.toString(), data, SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN));
-//        } catch (IOException e) {
-//            throw new GherkinException(e.getMessage(), e);
-//        }
-//    }
-
 }

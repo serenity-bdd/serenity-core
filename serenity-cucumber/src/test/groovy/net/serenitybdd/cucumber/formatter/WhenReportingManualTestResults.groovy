@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.formatter
 
-import io.cucumber.core.plugin.ManualScenarioChecker
-import io.cucumber.core.plugin.TaggedScenario
+import net.serenitybdd.cucumber.core.plugin.ManualScenarioChecker
+import net.serenitybdd.cucumber.core.plugin.TaggedScenario
 import io.cucumber.messages.types.Location
 import io.cucumber.messages.types.Tag
 import net.thucydides.model.domain.TestResult

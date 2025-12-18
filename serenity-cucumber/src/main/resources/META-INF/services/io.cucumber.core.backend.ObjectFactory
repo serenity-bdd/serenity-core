@@ -1,1 +1,1 @@
-cucumber.runtime.SerenityObjectFactory
+net.serenitybdd.cucumber.runtime.SerenityObjectFactory

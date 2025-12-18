@@ -7,6 +7,7 @@ import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.FeatureChild;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Scenario;
+import net.serenitybdd.cucumber.gherkin.IncrementingIdGenerator;
 import net.serenitybdd.cucumber.suiteslicing.TestScenarioResult;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.thucydides.model.util.Inflector;

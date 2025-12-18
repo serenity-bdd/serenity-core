@@ -7,6 +7,7 @@ import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestCase;
 import io.cucumber.plugin.event.TestStep;
+import net.serenitybdd.cucumber.core.plugin.FeaturePathFormatter;
 import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.steps.BaseStepListener;

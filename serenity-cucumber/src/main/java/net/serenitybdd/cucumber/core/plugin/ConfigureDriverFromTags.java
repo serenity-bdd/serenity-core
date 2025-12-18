@@ -1,4 +1,4 @@
-package io.cucumber.core.plugin;
+package net.serenitybdd.cucumber.core.plugin;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;

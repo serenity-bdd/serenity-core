@@ -1,4 +1,4 @@
-package io.cucumber.core.plugin;
+package net.serenitybdd.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Tag;
 import net.thucydides.core.steps.BaseStepListener;

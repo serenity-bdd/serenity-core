@@ -113,7 +113,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
-* [5.0.0](docs/release-notes/5.0.0.md) ⚠️ **Breaking Changes** - See migration guide
+* [5.0.0](docs/release-notes/5.0.0.md) ⚠️ **Breaking Changes** - See [migration guide](../../serenity-cucumber/MIGRATION_5.0.0.md)
 * [4.3.4](docs/release-notes/4.3.4.md)
 * [4.3.3](docs/release-notes/4.3.3.md)
 * [4.3.2](docs/release-notes/4.3.2.md)

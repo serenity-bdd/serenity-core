@@ -29,6 +29,8 @@
                     renderBullet: function (index, className) {
                         return '<span class="' + className + '">' + (index + 1) + "</span>";
                     },
+                    dynamicBullets: true,
+                    dynamicMainBullets: 3  // Shows 3 main bullets + 2 smaller ones on sides
                 },
                 navigation: {
                     nextEl: '.swiper-button-next',

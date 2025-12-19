@@ -536,7 +536,7 @@
                         <#if testOutcome.hasScreenshots()>
                             <td width="160" class="${step.result}-text">
                                 <#if step.hasMultipleScreenshots() >
-                                    <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
+                                    <a href="${relativeLink!}${testOutcome.screenshotReportName}.html?screenshot=${screenshotCount}">
                                         <img src="${step.earliestScreenshot.filename}"
                                              href="${step.earliestScreenshot.filename}"
                                              class="screenshot"
@@ -547,7 +547,7 @@
 
                                 <#if step.latestScreenshot?has_content>
                                     <#assign actualScreenshotCount = screenshotCount + step.actualScreenshotCount />
-                                    <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${actualScreenshotCount}">
+                                    <a href="${relativeLink!}${testOutcome.screenshotReportName}.html?screenshot=${actualScreenshotCount}">
                                         <img src="${step.latestScreenshot.filename}"
                                              href="${step.latestScreenshot.filename}"
                                              class="screenshot"

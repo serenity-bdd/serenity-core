@@ -38,14 +38,47 @@
     <#assign failingManualTests = (manualTests.withResult("FAILURE") > 0)>
 
     <script class="code" type="text/javascript">$(document).ready(function () {
+            $.fn.dataTable.ext.type.order['test-result-pre'] = function(data) {
+                // Extract the text from the hidden span (SUCCESS, FAILURE, etc.)
+                var match = data.match(/<span[^>]*style="display:none"[^>]*>(.*?)<\/span>/);
+                var result = match ? match[1].trim() : '';
+
+                // Define sort priority (failures first when ascending)
+                var order = {
+                    'FAILURE': 1,
+                    'ERROR': 2,
+                    'BROKEN': 3,
+                    'COMPROMISED': 4,
+                    'PENDING': 5,
+                    'IGNORED': 6,
+                    'SKIPPED': 7,
+                    'ABORTED': 8,
+                    'SUCCESS': 9
+                };
+
+                return order[result] || 99;
+            };
+
+            // Then modify your DataTable initialization
             $("#scenario-results").DataTable({
-                "order": [[0, "asc",], [3, "asc",]],
+                "order": [[0, "asc"], [1, "asc"], [2, "asc"]], // Keep your default sort order
                 "language": {
                     searchPlaceholder: "Filter",
                     search: ""
                 },
                 columnDefs: [
-                    {type: 'time-elapsed-dhms', targets: 4}
+                    {
+                        targets: 4, // Started column
+                        visible: false
+                    },
+                    {
+                        type: 'time-elapsed-dhms',
+                        targets: 5 // Total Duration column (adjusted from 6 to 5)
+                    },
+                    {
+                        type: 'test-result',
+                        targets: 6 // Result column (changed from 7 to 6)
+                    }
                 ]
             })
             $("#manual-scenario-results").DataTable({
@@ -350,8 +383,7 @@
                                                                             <td>${scenario.stepCount}</td>
                                                                             <td>${scenario.formattedStartTime}</td>
                                                                             <td>${scenario.formattedDuration}</td>
-                                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
-                                                                            </td>
+                                                                            <td class="test-result-cell"><span style="display:none">${scenario.result}</span> ${outcome_icon}</td>
                                                                         </tr>
                                                                     </#if>
                                                                 </#list>
@@ -397,8 +429,7 @@
                                                                             </#if>
                                                                         </td>
                                                                         <td>${scenario.stepCount}</td>
-                                                                        <td>${outcome_icon} <span
-                                                                                    style="display:none">${scenario.result}</span>
+                                                                        <td class="test-result-cell"><span style="display:none">${scenario.result}</span> ${outcome_icon}
                                                                         </td>
                                                                     </tr>
                                                                 </#list>

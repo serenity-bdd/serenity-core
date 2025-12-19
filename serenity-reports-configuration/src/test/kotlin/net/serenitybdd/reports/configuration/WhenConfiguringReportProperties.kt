@@ -90,8 +90,8 @@ class WhenConfiguringReportProperties {
     @Nested
     inner class ForTemplateFiles {
 
-        val absoluteTemplateFile = createTempFile("templates",".ftl")
-        val absoluteTemplateDir = createTempDir("templates")
+        val absoluteTemplateFile = kotlin.io.path.createTempFile("templates",".ftl")
+        val absoluteTemplateDir =  kotlin.io.path.createTempFile("templates")
         val relativeTemplateFile = "src/test/resources/sample-template.ftl"
 
         @BeforeEach

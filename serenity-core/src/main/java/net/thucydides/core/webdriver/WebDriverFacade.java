@@ -511,6 +511,15 @@ public class WebDriverFacade implements WebDriver, JavascriptExecutor, HasCapabi
     }
 
     @Override
+    public List<DownloadedFile> getDownloadedFiles() {
+        if (getProxiedDriver() instanceof HasDownloads) {
+            return ((HasDownloads) getProxiedDriver()).getDownloadedFiles();
+        } else {
+            throw new IllegalStateException("Webdriver class " + getProxiedDriver().getClass() + " does not implement HasDownloads");
+        }
+    }
+
+    @Override
     public void downloadFile(String fileName, Path targetLocation) throws IOException {
         if (getProxiedDriver() instanceof HasDownloads) {
             ((HasDownloads) getProxiedDriver()).downloadFile(fileName, targetLocation);

@@ -40,7 +40,6 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
             stepResults == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.FAILURE, TestResult.SKIPPED]
     }
 
-
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
         Configuration configuration = SerenityInfrastructure.configuration
@@ -73,6 +72,4 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
         and:
         testOutcome.testSteps.collect { step -> step.result } == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS]
     }
-
-
 }

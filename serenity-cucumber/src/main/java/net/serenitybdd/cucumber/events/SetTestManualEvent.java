@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.events;
 
 
-import io.cucumber.core.plugin.ScenarioContextParallel;
+import net.serenitybdd.cucumber.core.plugin.ScenarioContextParallel;
 import net.serenitybdd.cucumber.core.plugin.TaggedScenario;
 import net.serenitybdd.cucumber.core.plugin.UpdateManualScenario;
 import io.cucumber.messages.types.Tag;

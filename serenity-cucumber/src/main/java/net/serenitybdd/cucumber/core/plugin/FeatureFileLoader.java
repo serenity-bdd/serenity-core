@@ -1,6 +1,4 @@
-package io.cucumber.core.plugin;
-
-
+package net.serenitybdd.cucumber.core.plugin;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.plugin.event.TestSourceRead;
 import net.thucydides.model.util.Inflector;

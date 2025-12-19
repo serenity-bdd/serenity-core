@@ -1,11 +1,11 @@
-package io.cucumber.gherkin;
+package net.serenitybdd.cucumber.gherkin;
 
 import com.google.common.collect.FluentIterable;
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
+import io.cucumber.gherkin.GherkinParser;
 import io.cucumber.messages.types.*;
-import net.serenitybdd.cucumber.gherkin.IncrementingIdGenerator;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenario;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
@@ -13,8 +13,11 @@ import net.serenitybdd.cucumber.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -54,17 +57,15 @@ public class CucumberScenarioLoader {
             .forEach(i ->
             {
                 io.cucumber.core.gherkin.Feature feature = supplier.get().get(i);
-                Parser<GherkinDocument> gherkinParser = new Parser<>(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
-                mapsForFeatures.put(gherkinParser.parse(feature.getSource(),feature.getUri().toString()).getFeature().get(),
-                                    feature.getUri());
+                GherkinDocument gherkinDocument = GherkinDocumentParser.getDocument(feature);
+                mapsForFeatures.put(gherkinDocument.getFeature().get(), feature.getUri());
             });
 
 
         List<Feature> features = new ArrayList<>();
         List<io.cucumber.core.gherkin.Feature> gherkinFeatures = supplier.get();
         for(io.cucumber.core.gherkin.Feature gherkinFeature  : gherkinFeatures) {
-            Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
-            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(),gherkinFeature.getUri().toString());
+            GherkinDocument gherkinDocument = GherkinDocumentParser.getDocument(gherkinFeature);
             features.add(gherkinDocument.getFeature().get());
         }
 
@@ -121,4 +122,5 @@ public class CucumberScenarioLoader {
     private BigDecimal scenarioWeightFor(Feature feature, Scenario scenarioDefinition) {
         return statistics.scenarioWeightFor(feature.getName(), scenarioDefinition.getName());
     }
+
 }

@@ -2,7 +2,7 @@ package net.serenitybdd.cucumber.suiteslicing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.cucumber.gherkin.CucumberScenarioLoader;
+import net.serenitybdd.cucumber.gherkin.CucumberScenarioLoader;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.util.EnvironmentVariables;

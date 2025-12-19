@@ -1,4 +1,4 @@
-package io.cucumber.gherkin;
+package net.serenitybdd.cucumber.gherkin;
 
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
@@ -7,7 +7,6 @@ import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.FeatureChild;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Scenario;
-import net.serenitybdd.cucumber.gherkin.IncrementingIdGenerator;
 import net.serenitybdd.cucumber.suiteslicing.TestScenarioResult;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.thucydides.model.util.Inflector;
@@ -35,8 +34,7 @@ public class ScenarioLineCountStatistics implements TestStatistics {
         List<Feature> features = new ArrayList<>();
         List<io.cucumber.core.gherkin.Feature> gherkinFeatures = supplier.get();
         for(io.cucumber.core.gherkin.Feature gherkinFeature  : gherkinFeatures) {
-            Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
-            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(),gherkinFeature.getUri().toString());
+            GherkinDocument gherkinDocument = GherkinDocumentParser.getDocument(gherkinFeature);
             features.add(gherkinDocument.getFeature().get());
         }
         this.results = features.stream()

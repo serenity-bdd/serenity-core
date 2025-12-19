@@ -1,9 +1,9 @@
 package net.serenitybdd.cucumber.events;
 
-import io.cucumber.core.plugin.SerenityReporterParallel;
 import io.cucumber.plugin.event.Result;
 import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestStep;
+import net.serenitybdd.cucumber.core.plugin.SerenityReporterParallel;
 import net.thucydides.core.steps.events.StepEventBusEventBase;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.stacktrace.RootCauseAnalyzer;

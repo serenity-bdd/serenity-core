@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import io.cucumber.gherkin.ScenarioLineCountStatistics;
+import net.serenitybdd.cucumber.gherkin.ScenarioLineCountStatistics;
 import org.junit.Before;
 import org.junit.Test;
 

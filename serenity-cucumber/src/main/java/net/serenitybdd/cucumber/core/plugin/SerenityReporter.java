@@ -1,4 +1,4 @@
-package io.cucumber.core.plugin;
+package net.serenitybdd.cucumber.core.plugin;
 
 import com.google.common.collect.Lists;
 import io.cucumber.messages.types.*;
@@ -19,7 +19,6 @@ import net.serenitybdd.core.SerenityReports;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
-import net.serenitybdd.cucumber.core.plugin.*;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
@@ -48,9 +47,9 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-import static net.serenitybdd.cucumber.core.plugin.TaggedScenario.*;
 import static java.util.stream.Collectors.toList;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.FEATURE;
+import static net.serenitybdd.cucumber.core.plugin.TaggedScenario.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

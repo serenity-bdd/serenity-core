@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import io.cucumber.gherkin.ScenarioLineCountStatistics;
+import net.serenitybdd.cucumber.gherkin.ScenarioLineCountStatistics;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import java.math.BigDecimal;

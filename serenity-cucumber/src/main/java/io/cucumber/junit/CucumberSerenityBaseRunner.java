@@ -48,6 +48,17 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static net.thucydides.model.ThucydidesSystemProperty.*;
 
+/**
+ * Base runner for Cucumber with Serenity using JUnit 4.
+ *
+ * @deprecated JUnit 4 Cucumber support is deprecated and will be removed in Serenity 6.0.0.
+ *             Please migrate to JUnit 5. See the Serenity documentation for migration guidance.
+ *
+ *             This class must remain in the io.cucumber.junit package to access package-private
+ *             Cucumber classes (FeatureRunner, PickleRunners). This creates a split package
+ *             violation that will prevent JPMS compatibility when Cucumber migrates to Java 17+.
+ */
+@Deprecated(since="5.0.0", forRemoval = true)
 public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberSerenityBaseRunner.class);

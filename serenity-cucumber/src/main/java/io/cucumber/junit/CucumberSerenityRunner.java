@@ -18,11 +18,18 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
- * Glue code for running Cucumber via Serenity.
+ * Glue code for running Cucumber via Serenity with JUnit 4.
  * Sets up Serenity reporting and instrumentation.
- * @deprecated Use JUnit 5 Cucumber runners instead
+ *
+ * @deprecated JUnit 4 Cucumber support is deprecated and will be removed in Serenity 6.0.0.
+ *             Please migrate to JUnit 5 (released in 2017). See the Serenity documentation
+ *             for migration guidance. 
+ *
+ *             This class must remain in the io.cucumber.junit package to access package-private
+ *             Cucumber classes (FeatureRunner, PickleRunners). This creates a split package
+ *             violation that will prevent JPMS compatibility when Cucumber migrates to Java 17+.
  */
-@Deprecated(since="4.3.5")
+@Deprecated(since="4.3.5", forRemoval = true)
 public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
 
     /**

@@ -12,7 +12,7 @@ The Cucumber plugin class has been moved from `io.cucumber.core.plugin` to `net.
 ```java
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features")
+@SelectClasspathResource("path/to/features")
 @ConfigurationParameter(
     key = PLUGIN_PROPERTY_NAME,
     value = "io.cucumber.core.plugin.SerenityReporterParallel"
@@ -24,7 +24,7 @@ public class CucumberTestSuite {}
 ```java
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features")
+@SelectClasspathResource("path/to/features")
 @ConfigurationParameter(
     key = PLUGIN_PROPERTY_NAME,
     value = "net.serenitybdd.cucumber.core.plugin.SerenityReporterParallel"
@@ -110,7 +110,7 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features")
+@SelectClasspathResource("path/to/features")
 @ConfigurationParameter(
     key = PLUGIN_PROPERTY_NAME,
     value = "net.serenitybdd.cucumber.core.plugin.SerenityReporterParallel"
@@ -150,7 +150,7 @@ JUnit 5 has excellent parallel execution support:
 ```java
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features")
+@SelectClasspathResource("path/to/features")
 @ConfigurationParameter(
     key = PLUGIN_PROPERTY_NAME,
     value = "net.serenitybdd.cucumber.core.plugin.SerenityReporterParallel"

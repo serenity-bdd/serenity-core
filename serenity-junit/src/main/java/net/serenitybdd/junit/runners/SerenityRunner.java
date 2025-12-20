@@ -54,7 +54,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * can extended by subscribing more reporter implementations to the test runner.
  *
  * @author johnsmart
+ * @deprecated JUnit 4 support is deprecated and will be removed in Serenity 6.0.0.
+ *             Please migrate to JUnit 5 using SerenityJUnit5Extension. JUnit 5 has been
+ *             stable since 2017 and offers superior parallel execution, modern extension
+ *             model, and better IDE support. See the Serenity documentation for migration guidance.
  */
+@Deprecated(since="5.0.0", forRemoval = true)
 public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private final ThreadLocal<Pages> pages = new ThreadLocal<>();

@@ -61,6 +61,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final FormatConfiguration formatConfiguration;
     private boolean generateTestOutcomeReports = false;
 
+    private static final String DOCS_URL = "https://serenity-bdd.github.io";
+
     public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 
     public HtmlAggregateStoryReporter(final String projectName) {
@@ -181,12 +183,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
             List<String> requirementTypes = requirementsConfiguration.getRequirementTypes();
             LOGGER.info("");
-            LOGGER.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            LOGGER.info("Generating Serenity Reports");
-            LOGGER.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            LOGGER.info("");
-            LOGGER.info("Test Results: {} tests completed " +
-                            "({} passed, {} failed, {} with errors, {} compromised, {} pending, {} aborted)",
+            LOGGER.info("------------------------------------------------------------------------");
+            LOGGER.info("Serenity BDD Test Results");
+            LOGGER.info("  - Report guide: {}", DOCS_URL);
+            LOGGER.info("  - Results: {} tests | {} passed | {} failed | {} errors | {} compromised | {} pending | {} aborted",
                 testOutcomes.getTestCount(),
                 testOutcomes.getPassingTests().getTestCount(),
                 testOutcomes.getFailingTests().getTestCount(),
@@ -194,6 +194,26 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 testOutcomes.getCompromisedTests().getTestCount(),
                 testOutcomes.getPendingTests().getTestCount(),
                 testOutcomes.getAbortedTests().getTestCount());
+
+            // Only show expanded details if something needs attention
+            boolean hasIssues =
+                    !testOutcomes.getFailingTests().isEmpty() ||
+                    !testOutcomes.getErrorTests().isEmpty() ||
+                    !testOutcomes.getCompromisedTests().isEmpty() ||
+                    !testOutcomes.getPendingTests().isEmpty() ||
+                    !testOutcomes.getAbortedTests().isEmpty();
+
+            if (hasIssues) {
+                LOGGER.info("  - Issues detected:");
+                logIfNonZero("Failed      ", testOutcomes.getFailingTests().getTestCount());
+                logIfNonZero("Errors      ", testOutcomes.getErrorTests().getTestCount());
+                logIfNonZero("Compromised ", testOutcomes.getCompromisedTests().getTestCount());
+                logIfNonZero("Pending     ", testOutcomes.getPendingTests().getTestCount());
+                logIfNonZero("Aborted     ", testOutcomes.getAbortedTests().getTestCount());
+            }
+            LOGGER.info("------------------------------------------------------------------------");
+            LOGGER.info("");
+            LOGGER.info("Generating Serenity BDD Reports");
 
             reporter.generateReportsFor(
                     Stream.of(
@@ -252,6 +272,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             LOGGER.info("  ✓ Error reports");
             LOGGER.info("");
             LOGGER.info("Reports generated in {}", stopwatch.executionTimeFormatted());
+        }
+    }
+
+    private void logIfNonZero(String label, long value) {
+        if (value > 0) {
+            LOGGER.info("    - {}: {}", label, value);
         }
     }
 

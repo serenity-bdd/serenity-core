@@ -309,10 +309,6 @@ public class SerenityAggregatorMojo extends AbstractMojo {
                     LOGGER.info("📄 {}: {}", report.getDescription(), generatedReport.toUri());
                 }
         );
-
-        LOGGER.info("");
-        LOGGER.info("Documentation: https://serenity-bdd.github.io");
-        LOGGER.info("");
     }
 
     private File sourceOfTestResult() {

@@ -289,8 +289,9 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         getReporter().setGenerateTestOutcomeReports();
         getReporter().generateReportsForTestResultsFrom(sourceDirectory);
 
+        LOGGER.info("");
         Path index = outputDirectory.toPath().resolve("index.html");
-        LOGGER.info("  - Full Report: {}",  index.toUri());
+        LOGGER.info("📊 Interactive Report: {}", index.toUri());
     }
 
     private void generateExtraReports() {
@@ -305,9 +306,13 @@ public class SerenityAggregatorMojo extends AbstractMojo {
                     report.setSourceDirectory(sourceDirectory.toPath());
                     report.setOutputDirectory(outputDirectory.toPath());
                     Path generatedReport = report.generateReport();
-                    LOGGER.info("  - {}: {}", report.getDescription(), generatedReport.toUri());
+                    LOGGER.info("📄 {}: {}", report.getDescription(), generatedReport.toUri());
                 }
         );
+
+        LOGGER.info("");
+        LOGGER.info("Documentation: https://serenity-bdd.github.io");
+        LOGGER.info("");
     }
 
     private File sourceOfTestResult() {

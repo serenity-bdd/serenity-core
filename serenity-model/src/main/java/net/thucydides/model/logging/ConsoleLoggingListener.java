@@ -47,14 +47,14 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
                     "[__  |___ |__/ |___ |\\ | |  |   \\_/     |__] |  \\ |  \\ \n" +
                     "___] |___ |  \\ |___ | \\| |  |    |      |__] |__/ |__/ \n" +
                     "                                                                                     \n" +
-                    " News and tutorials at https://serenity-bdd.info                                     \n" +
+                    " News and tutorials at https://serenity-bdd.github.io                                \n" +
                     " Documentation at https://serenity-bdd.github.io                                     \n" +
                     " Test Automation Training and Coaching: https://www.serenity-dojo.com                \n" +
                     " Commercial Support: https://www.serenity-dojo.com/serenity-bdd-enterprise-support   \n" +
                     " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
                     "-------------------------------------------------------------------------------------\n";
 
-    public static final String SERENITY_NONE_BANNER = "Serenity BDD. Home page at http://www.serenity-bdd.info";
+    public static final String SERENITY_NONE_BANNER = "Serenity BDD. Home page at https://serenity-bdd.github.io";
 
     // MAIN BANNERS
     private static final List<String> BANNER_HEADINGS = NewList.of(
@@ -86,7 +86,7 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
     }
 
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, LoggerFactory.getLogger(""));
+        this(environmentVariables, LoggerFactory.getLogger(ConsoleLoggingListener.class));
     }
 
     protected Logger getLogger() {

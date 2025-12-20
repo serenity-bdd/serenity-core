@@ -180,8 +180,20 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             }
 
             List<String> requirementTypes = requirementsConfiguration.getRequirementTypes();
-            LOGGER.info("GENERATING SUMMARY REPORTS...");
-            LOGGER.debug("Detected requirement types: {}", requirements.getRequirementsService().getRequirementTypes());
+            LOGGER.info("");
+            LOGGER.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            LOGGER.info("Generating Serenity Reports");
+            LOGGER.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            LOGGER.info("");
+            LOGGER.info("Test Results: {} tests completed " +
+                            "({} passed, {} failed, {} with errors, {} compromised, {} pending, {} aborted)",
+                testOutcomes.getTestCount(),
+                testOutcomes.getPassingTests().getTestCount(),
+                testOutcomes.getFailingTests().getTestCount(),
+                testOutcomes.getErrorTests().getTestCount(),
+                testOutcomes.getCompromisedTests().getTestCount(),
+                testOutcomes.getPendingTests().getTestCount(),
+                testOutcomes.getAbortedTests().getTestCount());
 
             reporter.generateReportsFor(
                     Stream.of(
@@ -205,9 +217,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                             tagReports(durationDistribution, testOutcomes, context, requirementTypes, knownRequirementReportNames)
                     ).flatMap(stream -> stream)
             );
+            LOGGER.info("  ✓ Summary reports");
 
             // REQUIREMENTS REPORTS
-            LOGGER.info("GENERATING REQUIREMENTS REPORTS...");
             reporter.generateReportsFor(
                     RequirementsReports.requirementsReportsFor(
                             context, environmentVariables, getOutputDirectory(),
@@ -219,13 +231,13 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                             requirementsOutcomes
                     )
             );
+            LOGGER.info("  ✓ Requirements reports");
 
             // REPORTS FOR EACH RESULT
-            LOGGER.info("GENERATING RESULT REPORTS...");
             reporter.generateReportsFor(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
+            LOGGER.info("  ✓ Result reports");
 
             // ERROR REPORTS
-            LOGGER.info("GENERATING ERROR REPORTS...");
             List<FrequentFailure> failures = FrequentFailures.from(testOutcomes).withMaxOf(REPORT_SCOREBOARD_SIZE.integerFrom(environmentVariables, 5));
             reporter.generateReportsFor(
                     failures.stream()
@@ -237,8 +249,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                     testOutcomes.withErrorType(failure.getType()).withLabel("Tests with error: " + failure.getName()),
                                     failure.getType()))
             );
+            LOGGER.info("  ✓ Error reports");
+            LOGGER.info("");
+            LOGGER.info("Reports generated in {}", stopwatch.executionTimeFormatted());
         }
-        LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
     private Stream<ReportingTask> tagReports(DurationDistribution durationDistribution,

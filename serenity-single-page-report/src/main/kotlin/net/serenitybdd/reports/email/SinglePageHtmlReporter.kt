@@ -39,12 +39,12 @@ class SinglePageHtmlReporter(
 
     override fun generateReport(): Path {
 
-        logger.info("GENERATING SINGLE PAGE HTML REPORT FROM {}", sourceDirectory.toAbsolutePath().toString())
-        logger.info("OUTPUT WILL BE GENERATED IN {}", outputDirectory.toAbsolutePath().toString())
+        logger.debug("Generating single page HTML report from {}", sourceDirectory.toAbsolutePath().toString())
+        logger.debug("Output will be generated in {}", outputDirectory.toAbsolutePath().toString())
         // Fetch the test outcomes
         val testOutcomes = testOutcomesIn(sourceDirectory).filteredByEnvironmentTags()
 
-        logger.info("FOUND {} TEST OUTCOMES", testOutcomes.total);
+        logger.debug("Found {} test outcomes", testOutcomes.total);
 
         // Prepare the parameters
         val fields = templateFields(environmentVariables, testOutcomes)

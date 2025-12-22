@@ -107,6 +107,12 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
         return LoggingLevel.definedIn(environmentVariables).isAtLeast(minimumLoggingLevel);
     }
 
+    private void resetScenarioState() {
+        flaggedSteps.clear();
+        nestedSteps.clear();
+        currentStep = null;
+    }
+
     public void testSuiteStarted(Class<?> storyClass) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("Test Suite Started: " + NameConverter.humanize(storyClass.getSimpleName()));
@@ -127,9 +133,8 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
     }
 
     public void testStarted(String description) {
-        flaggedSteps.clear();
+        resetScenarioState();
         reportedOutcomes.clear();
-        nestedSteps.clear();
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info(consoleHeading.bannerFor(TEST_STARTED, description));
         }
@@ -137,6 +142,8 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
 
     @Override
     public void testStarted(String description, String id) {
+        resetScenarioState();
+        reportedOutcomes.clear();
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info(consoleHeading.bannerFor(TEST_STARTED, description + "(" + id + ")"));
         }
@@ -145,6 +152,17 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
     @Override
     public void testStarted(String description, String id, ZonedDateTime startTime) {
         testStarted(description,id);
+    }
+
+    @Override
+    public void exampleStarted(Map<String, String> data) {
+        resetScenarioState();
+    }
+
+    @Override
+    public void exampleFinished() {
+        nestedSteps.clear();
+        currentStep = null;
     }
 
     public void testStarted(final String testMethod, ZonedDateTime startTime) {

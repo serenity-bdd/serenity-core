@@ -95,10 +95,25 @@ public class RestReportingHelper {
                 LogDetail.HEADERS, LogDetail.COOKIES);
         final Map<LogDetail, String> values = helper.print(response);
         if (shouldRecordResponseBodyFor(response)) {
-            String renderedBody = new Prettifier().getPrettifiedBodyIfPossible(
-                    (ResponseOptions) response.getBody(), response.getBody());
+            String responseContentType = response.contentType();
+            boolean isBinaryResponse = isBinaryContentType(responseContentType);
 
-            restQuery = restQuery.withResponse(renderedBody.isEmpty() ? response.asString() : renderedBody);
+            if (isBinaryResponse) {
+                // Don't record binary response bodies - they bloat reports and aren't human-readable
+                restQuery = restQuery.withResponse("[Binary content omitted - Content-Type: " + responseContentType + "]");
+            } else {
+                String renderedBody = new Prettifier().getPrettifiedBodyIfPossible(
+                        (ResponseOptions) response.getBody(), response.getBody());
+                String responseBody = renderedBody.isEmpty() ? response.asString() : renderedBody;
+
+                // Truncate large responses to prevent massive report files
+                if (responseBody.length() > MAX_LOGGABLE_BODY_SIZE) {
+                    responseBody = responseBody.substring(0, MAX_LOGGABLE_BODY_SIZE) +
+                                   "\n\n[Response truncated - exceeded " + MAX_LOGGABLE_BODY_SIZE + " bytes]";
+                }
+
+                restQuery = restQuery.withResponse(responseBody);
+            }
         }
         restQuery = restQuery.withStatusCode(response.getStatusCode())
                 .withResponseHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""))

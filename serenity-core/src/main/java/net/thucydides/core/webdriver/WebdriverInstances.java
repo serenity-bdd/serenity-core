@@ -220,9 +220,10 @@ public class WebdriverInstances {
 
     public List<WebDriver> getCurrentDrivers() {
         if (currentActiveDriver == null) {
-            return getActiveDriverMap().entrySet().stream()
-                    .map(entry -> entry.getValue())
-                    .collect(Collectors.toList());
+            // Only return the current driver, not all active drivers
+            // This prevents screenshot hangs in multi-actor scenarios
+            WebDriver current = getCurrentDriver();
+            return current != null ? List.of(current) : Collections.emptyList();
         } else {
             return List.of(currentActiveDriver);
         }

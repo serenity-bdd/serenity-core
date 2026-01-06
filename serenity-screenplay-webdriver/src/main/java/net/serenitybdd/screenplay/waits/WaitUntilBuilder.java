@@ -7,6 +7,8 @@ import net.serenitybdd.screenplay.SilentInteraction;
 import net.serenitybdd.screenplay.targets.Target;
 import org.hamcrest.Matcher;
 
+import java.time.Duration;
+
 import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
@@ -26,7 +28,10 @@ public class WaitUntilBuilder {
         return new SilentInteraction() {
             @Override
             public <T extends Actor> void performAs(T actor) {
-                actor.should(eventually(seeThat(the(target), expectedState))
+                // Set timeout on the target itself, not just on the EventualConsequence wrapper
+                // This ensures element lookups respect the specified timeout
+                Target targetWithTimeout = target.waitingForNoMoreThan(Duration.ofSeconds(amount));
+                actor.should(eventually(seeThat(the(targetWithTimeout), expectedState))
                         .withNoReporting()
                         .waitingForNoLongerThan(amount).seconds());
             }
@@ -37,7 +42,10 @@ public class WaitUntilBuilder {
         return new SilentInteraction() {
             @Override
             public <T extends Actor> void performAs(T actor) {
-                actor.should(eventually(seeThat(the(target), expectedState))
+                // Set timeout on the target itself, not just on the EventualConsequence wrapper
+                // This ensures element lookups respect the specified timeout
+                Target targetWithTimeout = target.waitingForNoMoreThan(Duration.ofMillis(amount));
+                actor.should(eventually(seeThat(the(targetWithTimeout), expectedState))
                         .withNoReporting()
                         .waitingForNoLongerThan(amount).milliseconds());
             }

@@ -206,7 +206,23 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
 
         listeners.forEach(listener -> listener.end(obj, method, args, zuperMethod));
 
+        if (isATopLevelStepInADataDrivenTest()) {
+            throwNestedExceptions();
+        }
         return result;
+    }
+
+    private boolean isATopLevelStepInADataDrivenTest() {
+        boolean isDataDriven = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome().getDataTable() != null;
+        boolean isTopLevelStep = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentLevel() <= 1;
+        return isDataDriven && isTopLevelStep;
+    }
+
+
+    private void throwNestedExceptions() {
+        if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed() && !StepEventBus.getEventBus().softAssertsActive()) {
+            throw StepEventBus.getEventBus().getBaseStepListener().getTestFailureCause().asRuntimeException();
+        }
     }
 
     private Object runOrSkipMethod(Object obj, Method method, Object[] args, Method zuperMethod) throws Throwable {

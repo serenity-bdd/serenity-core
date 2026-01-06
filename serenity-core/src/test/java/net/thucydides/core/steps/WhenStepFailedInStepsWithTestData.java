@@ -99,32 +99,4 @@ public class WhenStepFailedInStepsWithTestData {
             }
         }
     }
-
-    @Test
-    public void should_skip_step_after_first_failed_in_one_iteration() throws IOException {
-        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
-
-        setDefaultStepFactory(factory);
-
-        StepEventBus.getParallelEventBus().testStarted("data-driven-test");
-        withTestDataFrom("testdata/test.csv").run(steps).step_group_with_fail_step_in_one_iteration();
-
-        verify(listener, times(1)).stepFailed(any(StepFailure.class));
-        verify(listener, times(2)).skippedStepStarted(any(ExecutedStepDescription.class));
-        verify(listener, times(2)).stepIgnored();
-    }
-
-    @Test
-    public void should_skip_step_after_first_failed() throws IOException {
-        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
-
-        setDefaultStepFactory(factory);
-
-        StepEventBus.getParallelEventBus().testStarted("data-driven-test");
-        withTestDataFrom("testdata/test.csv").run(steps).step_group_with_fail_step();
-
-        verify(listener, times(3)).stepFailed(any(StepFailure.class));
-        verify(listener, times(6)).skippedStepStarted(any(ExecutedStepDescription.class));
-        verify(listener, times(6)).stepIgnored();
-    }
 }

@@ -534,6 +534,17 @@ public class StepEventBus {
         stepFailed = false;
     }
 
+    /**
+     * Clears the assumption violation state.
+     * Called when starting a new example in a parameterized test to ensure
+     * previous skipped examples don't affect subsequent examples.
+     * See: https://github.com/serenity-bdd/serenity-core/issues/3691
+     */
+    public void clearAssumptionViolated() {
+        assumptionViolated = false;
+        assumptionViolatedMessage = "";
+    }
+
     public boolean aStepInTheCurrentTestHasFailed() {
         return stepFailed;
     }

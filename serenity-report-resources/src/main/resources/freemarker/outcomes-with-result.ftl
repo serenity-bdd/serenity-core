@@ -70,16 +70,16 @@
                 },
                 columnDefs: [
                     {
-                        targets: 4, // Started column
+                        targets: 3, // Started column (Feature=0, Scenario=1, Steps=2, Started=3)
                         visible: false
                     },
                     {
                         type: 'time-elapsed-dhms',
-                        targets: 5 // Total Duration column (adjusted from 6 to 5)
+                        targets: 4 // Total Duration column
                     },
                     {
                         type: 'test-result',
-                        targets: 6 // Result column (changed from 7 to 6)
+                        targets: 5 // Result column
                     }
                 ]
             })

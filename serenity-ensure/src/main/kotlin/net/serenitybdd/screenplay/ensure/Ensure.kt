@@ -121,3 +121,108 @@ fun reportSoftAssertions() = BlackBox.reportAnySoftAssertions()
 // */
 //fun that(description: String, check: Consumer<ValidatableResponse>) = net.serenitybdd.rest.Ensure.that(description, check)
 
+/**
+ * Kotlin-friendly object that provides the `Ensure.that(...)` syntax.
+ *
+ * This allows Kotlin developers to use the more discoverable pattern:
+ * ```kotlin
+ * import net.serenitybdd.screenplay.ensure.Ensure
+ *
+ * Ensure.that("hello").isNotEmpty()
+ * Ensure.that(someQuestion).isEqualTo(expectedValue)
+ * ```
+ *
+ * Java developers continue using the static methods directly, which work
+ * identically due to `@file:JvmName("Ensure")`.
+ *
+ * See: https://github.com/serenity-bdd/serenity-core/issues/3682
+ */
+object EnsureObject {
+    // Basic type assertions
+    fun that(value: String?) = StringEnsure(value)
+    fun that(value: LocalDate?) = DateEnsure(value)
+    fun that(value: LocalTime?) = TimeEnsure(value)
+    fun that(value: Boolean?) = BooleanEnsure(value)
+    fun that(value: Float?) = FloatEnsure(value)
+    fun that(value: Double?) = DoubleEnsure(value)
+    fun <A> that(value: Comparable<A>) = ComparableEnsure(value)
+    fun <A> that(value: Collection<A>?) = CollectionEnsure(value)
+
+    // Question-based assertions for Boolean
+    fun <A : Boolean?> that(description: String, question: Question<Boolean?>) =
+        BooleanEnsure(KnowableBooleanAnswer(question, description))
+    fun <A : Boolean?> that(question: Question<Boolean?>) =
+        BooleanEnsure(KnowableBooleanAnswer(question, question.subject))
+
+    // Predicate-based assertions
+    fun <A> that(question: Question<A>, predicate: (actual: A) -> Boolean) =
+        net.serenitybdd.screenplay.ensure.that(question, predicate)
+    fun <A> that(description: String, question: Question<A>, predicate: (actual: A) -> Boolean) =
+        net.serenitybdd.screenplay.ensure.that(description, question, predicate)
+
+    // Question-based assertions for String
+    fun <A : String?> that(description: String, question: Question<String?>) =
+        StringEnsure(KnowableStringAnswer(question, description))
+    fun <A : String?> that(question: Question<String?>) =
+        StringEnsure(KnowableStringAnswer(question, question.subject))
+
+    // Question-based assertions for Comparable
+    fun <A : Comparable<A>> that(description: String, question: Question<A>) =
+        ComparableEnsure(KnowableComparableAnswer(question, description), null, description)
+    fun <A : Comparable<A>> that(question: Question<A>) =
+        net.serenitybdd.screenplay.ensure.that(question.subject, question)
+
+    // Question-based assertions for Collection
+    fun <A> that(description: String, question: Question<Collection<A>>) =
+        CollectionEnsure(KnowableCollectionAnswer(question, description), description)
+    fun <A> that(question: Question<Collection<A>>) =
+        net.serenitybdd.screenplay.ensure.that(question.subject, question)
+
+    // List assertions
+    fun <A> thatTheListOf(description: String, question: Question<List<A>>) =
+        CollectionEnsure(KnowableListAnswer(question, description), description)
+    fun <A> thatTheListOf(question: Question<List<A>>) =
+        net.serenitybdd.screenplay.ensure.thatTheListOf(question.subject, question)
+
+    // Page and web element assertions
+    fun thatTheCurrentPage() = PageObjectEnsure()
+    fun that(value: Target) = TargetEnsure(value)
+    fun that(value: By) = TargetEnsure(value)
+
+    // Collection matchers for web elements
+    fun thatTheListOf(value: Target) =
+        CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+    fun thatTheListOf(value: By) =
+        CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+    fun thatAmongst(value: Target) =
+        CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+    fun thatAmongst(value: By) =
+        CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+
+    // Soft assertions
+    fun enableSoftAssertions() = BlackBox.startSoftAssertions()
+    fun reportSoftAssertions() = BlackBox.reportAnySoftAssertions()
+}
+
+/**
+ * Kotlin-friendly entry point for Ensure assertions.
+ *
+ * Usage:
+ * ```kotlin
+ * import net.serenitybdd.screenplay.ensure.Ensure
+ *
+ * Ensure.that("hello").isNotEmpty()
+ * Ensure.that(someQuestion).isEqualTo(expectedValue)
+ * Ensure.thatTheCurrentPage().title().isEqualTo("Home")
+ * ```
+ *
+ * This property is hidden from Java via `@JvmSynthetic` since Java developers
+ * already have access to the same API through the static methods generated
+ * by `@file:JvmName("Ensure")`.
+ *
+ * See: https://github.com/serenity-bdd/serenity-core/issues/3682
+ */
+@Suppress("ObjectPropertyName")
+@get:JvmSynthetic
+val Ensure: EnsureObject get() = EnsureObject
+

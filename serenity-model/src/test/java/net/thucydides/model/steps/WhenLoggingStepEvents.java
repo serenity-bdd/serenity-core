@@ -294,5 +294,51 @@ public class WhenLoggingStepEvents {
         return testOutcome;
     }
 
+    /**
+     * Tests for GitHub issue #3705 - nested steps state should reset between parameterized test iterations.
+     * The nestedSteps stack should be cleared when exampleStarted() is called to prevent
+     * incorrect indentation across parameter rows.
+     */
+    @Test
+    public void should_clear_nested_steps_when_example_starts() {
+        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
+
+        // Simulate first parameterized iteration with nested steps
+        consoleLoggingListener.testStarted("Parameterized test");
+        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("Step 1"));
+        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("Nested Step 1.1"));
+        // Simulate incomplete step (no stepFinished called - simulating an error scenario)
+
+        // Start second example - this should clear the nested steps state
+        consoleLoggingListener.exampleStarted(java.util.Collections.singletonMap("param", "value2"));
+
+        // Now start a new step - it should be at the correct indentation level (not nested)
+        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("Step in iteration 2"));
+
+        // Verify the step is logged with correct (non-nested) indentation
+        // The indentation for level 1 should be "|-- " (2 dashes)
+        verify(logger, atLeastOnce()).info(contains("|-- Step in iteration 2"));
+    }
+
+    @Test
+    public void should_clear_flagged_steps_when_example_starts() {
+        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
+
+        // Simulate first parameterized iteration
+        consoleLoggingListener.testStarted("Parameterized test");
+        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("Step 1"));
+        consoleLoggingListener.stepIgnored(); // This flags the step
+
+        // Start second example - flagged steps should be cleared
+        consoleLoggingListener.exampleStarted(java.util.Collections.singletonMap("param", "value2"));
+
+        // Execute the same step again in second iteration
+        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("Step 1"));
+        consoleLoggingListener.stepIgnored();
+
+        // Should log "STEP IGNORED" twice (once per iteration), not just once
+        verify(logger, times(2)).info(contains("STEP IGNORED"));
+    }
+
 }
 

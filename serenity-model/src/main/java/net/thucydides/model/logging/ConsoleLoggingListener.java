@@ -381,6 +381,17 @@ public class ConsoleLoggingListener extends StepListenerAdapter {
         }
     }
 
+    /**
+     * Called when a new example (parameter row) starts in a parameterized test.
+     * Clears the nested steps state to ensure correct indentation for each iteration.
+     * See: https://github.com/serenity-bdd/serenity-core/issues/3705
+     */
+    @Override
+    public void exampleStarted(Map<String, String> data) {
+        nestedSteps.clear();
+        flaggedSteps.clear();
+    }
+
     @Override
     public void testSkipped() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {

@@ -125,7 +125,10 @@ class WhenGeneratingAJsonSummaryReport {
                 frequentFailureNames.add(failure.asJsonObject.get("name").asString)
             }
 
-            assertThat(frequentFailureNames).containsExactly("Assertion error", "Illegal argument exception", "Test compromised exception")
+            assertThat(frequentFailureNames).containsExactly(
+                  "Assertion error: expected:<[fals]e> but was:<[tru]e>",
+                  "Illegal argument exception: Broken test",
+                  "Test compromised exception: Test compromised")
         }
 
         @Test
@@ -175,5 +178,3 @@ class WhenGeneratingAJsonSummaryReport {
         }
     }
 }
-
-

@@ -110,25 +110,33 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (!isSerenityTest) return;
         List<TestIdentifier> testIdentifiers = new ArrayList<>();
         List<TestIdentifier> parameterizedTestIdentifiers = new ArrayList<>();
+        List<TestIdentifier> dynamicTestIdentifiers = new ArrayList<>();
 
         //TODO use getDescendants()
         testPlan.getRoots().forEach(testIdentifier -> {
-            generateReportsForTest(testPlan, testIdentifier, testIdentifiers, parameterizedTestIdentifiers);
+            generateReportsForTest(testPlan, testIdentifier, testIdentifiers, parameterizedTestIdentifiers, dynamicTestIdentifiers);
         });
         testIdentifiers.forEach(this::generateReports);
         generateReportsForParameterizedTests(parameterizedTestIdentifiers);
+        generateReportsForDynamicTests(dynamicTestIdentifiers);
 
         logger.debug("->TestPlanExecutionFinished " + testPlan);
     }
 
-    private void generateReportsForTest(TestPlan testPlan, TestIdentifier testIdentifier, List<TestIdentifier> testIdentifiers, List<TestIdentifier> parameterizedTestIdentifiers) {
+    private void generateReportsForTest(TestPlan testPlan, TestIdentifier testIdentifier, List<TestIdentifier> testIdentifiers, List<TestIdentifier> parameterizedTestIdentifiers, List<TestIdentifier> dynamicTestIdentifiers) {
         logger.debug("->GenerateReportsForTest  " + testIdentifier);
         if (testIdentifier.getUniqueId().contains("test-template-invocation")) {
             parameterizedTestIdentifiers.add(testIdentifier);
+        } else if (isDynamicTest(testIdentifier)) {
+            dynamicTestIdentifiers.add(testIdentifier);
         } else {
             testIdentifiers.add(testIdentifier);
         }
-        testPlan.getChildren(testIdentifier).forEach(ti -> generateReportsForTest(testPlan, ti, testIdentifiers, parameterizedTestIdentifiers));
+        testPlan.getChildren(testIdentifier).forEach(ti -> generateReportsForTest(testPlan, ti, testIdentifiers, parameterizedTestIdentifiers, dynamicTestIdentifiers));
+    }
+
+    private boolean isDynamicTest(TestIdentifier testIdentifier) {
+        return testIdentifier.getUniqueId().contains("[dynamic-test:");
     }
 
     @Override
@@ -539,6 +547,26 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = new ParameterizedTestsOutcomeAggregator(allTestOutcomes);
 
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
+
+        testIdentifiers.stream().map(TestIdentifier::getUniqueId).forEach(StepEventBus::clearEventBusFor);
+    }
+
+    private void generateReportsForDynamicTests(List<TestIdentifier> testIdentifiers) {
+        logger.trace("GENERATE REPORTS FOR DYNAMIC TESTS " + testIdentifiers);
+        if (testIdentifiers.isEmpty()) {
+            return;
+        }
+
+        // Collect all test outcomes from dynamic tests
+        List<TestOutcome> allTestOutcomes = testIdentifiers
+                .stream()
+                .map(this::getTestOutcomes)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        // Aggregate outcomes by their parent TestFactory method
+        DynamicTestsOutcomeAggregator dynamicTestsOutcomeAggregator = new DynamicTestsOutcomeAggregator(allTestOutcomes);
+        generateReportsFor(dynamicTestsOutcomeAggregator.aggregateTestOutcomesByTestFactory());
 
         testIdentifiers.stream().map(TestIdentifier::getUniqueId).forEach(StepEventBus::clearEventBusFor);
     }

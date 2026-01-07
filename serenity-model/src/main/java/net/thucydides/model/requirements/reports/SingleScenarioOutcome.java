@@ -36,6 +36,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private ExternalLink externalLink;
     private final Collection<TestTag> scenarioTags;
     private final String context;
+    private final int failingStepIndex;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -55,7 +56,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  Rule rule,
                                  ExternalLink externalLink,
                                  Collection<TestTag> scenarioTags,
-                                 String context) {
+                                 String context,
+                                 int failingStepIndex) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -76,6 +78,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.externalLink = externalLink;
         this.scenarioTags = scenarioTags;
         this.context = context;
+        this.failingStepIndex = failingStepIndex;
     }
 
     public String toString() {
@@ -227,5 +230,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     @Override
     public String getContext() {
         return context;
+    }
+
+    @Override
+    public int getFailingStepIndex() {
+        return failingStepIndex;
     }
 }

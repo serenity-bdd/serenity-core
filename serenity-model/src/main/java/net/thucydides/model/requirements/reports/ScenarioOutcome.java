@@ -79,4 +79,13 @@ public interface ScenarioOutcome {
     }
 
     String getContext();
+
+    /**
+     * Returns the 0-based index of the first failing Gherkin step, or -1 if none.
+     * Used to highlight the failing step inline within the Gherkin step list.
+     * See: https://github.com/serenity-bdd/serenity-core/issues/3690
+     */
+    default int getFailingStepIndex() {
+        return -1;
+    }
 }

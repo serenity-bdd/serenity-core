@@ -98,7 +98,8 @@ public class ScenarioOutcomes {
                 testOutcome.getRule(),
                 testOutcome.getExternalLink(),
                 scenarioTags,
-                testOutcome.getContext());
+                testOutcome.getContext(),
+                testOutcome.getFirstFailingStepIndex());
     }
 
     private static List<TestTag> getTestTags(RequirementsService requirements, TestOutcome testOutcome) {
@@ -152,7 +153,8 @@ public class ScenarioOutcomes {
                 testOutcome.getStartTime(),
                 testOutcome.getDuration(),
                 scenarioTags,
-                testOutcome.getContext());
+                testOutcome.getContext(),
+                testOutcome.getFirstFailingStepIndex());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

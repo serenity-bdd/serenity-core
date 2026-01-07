@@ -138,7 +138,8 @@ public class FeatureFileScenarioOutcomes {
                 startTimeOfFirstTestIn(outcomes),
                 totalDurationOf(outcomes),
                 Collections.emptyList(),
-                firstContextIn(testOutcomes));
+                firstContextIn(testOutcomes),
+                firstFailingStepIndexIn(outcomes));
     }
 
     private ZonedDateTime startTimeOfFirstTestIn(List<TestOutcome> outcomes) {
@@ -153,6 +154,45 @@ public class FeatureFileScenarioOutcomes {
         return outcomes.stream()
                 .mapToLong(TestOutcome::getDuration)
                 .sum();
+    }
+
+    /**
+     * Get the failing step index without adjustment (for Background scenarios).
+     */
+    private int firstFailingStepIndexIn(List<TestOutcome> outcomes) {
+        return firstFailingStepIndexIn(outcomes, 0);
+    }
+
+    /**
+     * Get the adjusted failing step index, accounting for Background steps.
+     * TestOutcome includes Background steps in its step list, but the rendered
+     * scenario steps don't include Background (it's displayed separately).
+     * We need to subtract the Background step count from the failing index.
+     *
+     * @param outcomes the test outcomes
+     * @param backgroundStepCount number of Background steps to subtract
+     * @return the adjusted failing step index, or -1 if no failure
+     */
+    private int firstFailingStepIndexIn(List<TestOutcome> outcomes, int backgroundStepCount) {
+        return outcomes.stream()
+                .map(TestOutcome::getFirstFailingStepIndex)
+                .filter(index -> index >= 0)
+                .map(index -> index - backgroundStepCount)
+                .filter(index -> index >= 0)
+                .findFirst()
+                .orElse(-1);
+    }
+
+    /**
+     * Count the number of Background steps in a Feature.
+     * Background steps are executed before each scenario but displayed separately.
+     */
+    private int countBackgroundStepsIn(Feature feature) {
+        return feature.getChildren().stream()
+                .filter(child -> child.getBackground() != null && child.getBackground().isPresent())
+                .findFirst()
+                .map(child -> child.getBackground().get().getSteps().size())
+                .orElse(0);
     }
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
@@ -215,6 +255,10 @@ public class FeatureFileScenarioOutcomes {
 
         outcomeTags.addAll(scenarioTags);
 
+        // Adjust failing step index by subtracting Background steps
+        // TestOutcome includes Background steps, but renderedSteps doesn't
+        int backgroundStepCount = countBackgroundStepsIn(feature);
+
         return new ScenarioSummaryOutcome(scenarioTitle,
                 scenario.getKeyword(),
                 result,
@@ -234,7 +278,8 @@ public class FeatureFileScenarioOutcomes {
                 startTimeOfFirstTestIn(outcomes),
                 totalDurationOf(outcomes),
                 scenarioTags,
-                firstContextIn(testOutcomes));
+                firstContextIn(testOutcomes),
+                firstFailingStepIndexIn(outcomes, backgroundStepCount));
     }
 
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {

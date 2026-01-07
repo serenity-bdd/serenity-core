@@ -524,6 +524,15 @@ i.tag {
     color: #FF6108;
 }
 
+.failing-step {
+    color: #c0392b;
+    font-weight: 500;
+    background-color: #fdecea;
+    border-left: 3px solid #e74c3c;
+    padding-left: 0.5em;
+    margin-left: -0.5em;
+}
+
 .flag-color {
     color:#ff1631
 }

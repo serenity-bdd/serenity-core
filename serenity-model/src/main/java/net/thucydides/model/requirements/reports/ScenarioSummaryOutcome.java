@@ -34,6 +34,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Collection<TestTag> scenarioTags;
 
     private final String context;
+    private final int failingStepIndex;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -54,7 +55,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   ZonedDateTime startTime,
                                   Long duration,
                                   Collection<TestTag> scenarioTags,
-                                  String context) {
+                                  String context,
+                                  int failingStepIndex) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -76,6 +78,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.duration = duration;
         this.scenarioTags = scenarioTags;
         this.context = context;
+        this.failingStepIndex = failingStepIndex;
     }
 
     public String toString() {
@@ -254,5 +257,10 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     @Override
     public String getContext() {
         return context;
+    }
+
+    @Override
+    public int getFailingStepIndex() {
+        return failingStepIndex;
     }
 }

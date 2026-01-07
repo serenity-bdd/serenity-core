@@ -1828,6 +1828,59 @@ public class TestOutcome {
                 .findFirst();
     }
 
+    /**
+     * Returns the 0-based index of the first Gherkin step that failed (or contains a failing child),
+     * or -1 if no step failed.
+     * This is used to highlight the failing Gherkin step in feature reports.
+     * See: https://github.com/serenity-bdd/serenity-core/issues/3690
+     *
+     * For data-driven tests (Scenario Outlines), the top-level testSteps are example rows,
+     * not Gherkin steps. In this case, we look at the children of the first failing example row
+     * to find the actual failing Gherkin step index.
+     */
+    public int getFirstFailingStepIndex() {
+        List<TestStep> steps = getTestSteps();
+
+        if (isDataDriven()) {
+            // For data-driven tests, find the first failing example row,
+            // then return the index of the failing Gherkin step within that row
+            for (TestStep exampleRow : steps) {
+                if (stepOrDescendantFailed(exampleRow)) {
+                    // Look at the children (Gherkin steps) of this example row
+                    List<TestStep> gherkinSteps = exampleRow.getChildren();
+                    for (int i = 0; i < gherkinSteps.size(); i++) {
+                        if (stepOrDescendantFailed(gherkinSteps.get(i))) {
+                            return i;
+                        }
+                    }
+                    // If we get here, the example row itself failed but no child step failed
+                    return 0;
+                }
+            }
+            return -1;
+        }
+
+        // For non-data-driven tests, iterate through the Gherkin steps directly
+        for (int i = 0; i < steps.size(); i++) {
+            if (stepOrDescendantFailed(steps.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private boolean stepOrDescendantFailed(TestStep step) {
+        if (step.getResult() != null && step.getResult().isUnsuccessful()) {
+            return true;
+        }
+        for (TestStep child : step.getChildren()) {
+            if (stepOrDescendantFailed(child)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<String> stepErrorMessages() {
         return getLatestFlattenedTestSteps().stream()
                 .map(TestStep::getErrorMessage)

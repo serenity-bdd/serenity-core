@@ -533,7 +533,12 @@
                                                                     </div>
                                                                 </#if>
                                                                 <#list scenario.steps as step>
-                                                                    <p>${formatter.renderHtmlEscapedDescription(step)}</p>
+                                                                    <#assign stepIndex = step?index />
+                                                                    <#if scenario.failingStepIndex gte 0 && stepIndex == scenario.failingStepIndex>
+                                                                        <p class="failing-step">${formatter.renderHtmlEscapedDescription(step)}</p>
+                                                                    <#else>
+                                                                        <p>${formatter.renderHtmlEscapedDescription(step)}</p>
+                                                                    </#if>
                                                                 </#list>
                                                                 <div class="examples">
                                                                     <#list scenario.examples as example>

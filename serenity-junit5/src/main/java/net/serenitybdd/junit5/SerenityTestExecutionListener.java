@@ -170,15 +170,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     }
                 }).collect(Collectors.toList());
             }
-            try {
-                if (isIgnored(getProcessedMethod(className, methodName, methodParameterClasses))) {
-                    startTestAtEventBus(testIdentifier);
-                    eventBusFor(testIdentifier).testIgnored();
-                    eventBusFor(testIdentifier).testFinished();
-                }
-            } catch (ClassNotFoundException | NoSuchMethodException exception) {
-                logger.error("Exception when processing method annotations", exception);
-            }
+            // Trust JUnit's decision to skip the test - don't require @Disabled annotation.
+            // This ensures conditionally disabled tests (@EnabledIf, @DisabledOnOs, etc.)
+            // appear in reports as IGNORED rather than being omitted entirely.
+            // See: https://github.com/serenity-bdd/serenity-core/issues/3572
+            startTestAtEventBus(testIdentifier);
+            eventBusFor(testIdentifier).testIgnored();
+            eventBusFor(testIdentifier).testFinished();
         }
     }
 

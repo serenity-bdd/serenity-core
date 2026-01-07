@@ -16,6 +16,7 @@ import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -199,6 +200,49 @@ public class WhenRunningJUnit5TestScenarios extends AbstractTestStepRunnerTest {
         runTestForClass(ADisabledTest.class);
         TestOutcome testOutcome = getTestOutcomeFor("a_disabled_test");
         assertThat(testOutcome.getResult(), is(TestResult.IGNORED));
+    }
+
+    /**
+     * Tests for GitHub issue #3572 - conditionally disabled tests should appear in reports.
+     * Tests disabled via @EnabledIf, @DisabledIf, @EnabledOnOs, etc. should be marked as IGNORED,
+     * not completely omitted from reports.
+     */
+    @ExtendWith(SerenityJUnit5Extension.class)
+    public static final class AConditionallyDisabledTest {
+        @Test
+        public void previous_test() {
+        }
+
+        // This test will be skipped because the condition always returns false
+        @EnabledIf("conditionallyDisabled")
+        @Test
+        public void a_conditionally_disabled_test() {
+        }
+
+        @Test
+        public void following_test() {
+        }
+
+        static boolean conditionallyDisabled() {
+            return false; // Always returns false, so test is always disabled
+        }
+    }
+
+    @Test
+    public void conditionally_disabled_tests_should_be_marked_as_ignored() {
+        // Given a test class with a conditionally disabled test (not using @Disabled)
+        runTestForClass(AConditionallyDisabledTest.class);
+
+        // Then the conditionally disabled test should still appear in reports as IGNORED
+        TestOutcome conditionallyDisabledTest = getTestOutcomeFor("a_conditionally_disabled_test");
+        assertThat("Conditionally disabled tests should be marked as IGNORED",
+                conditionallyDisabledTest.getResult(), is(TestResult.IGNORED));
+
+        // And the other tests should run normally
+        TestOutcome previousTest = getTestOutcomeFor("previous_test");
+        TestOutcome followingTest = getTestOutcomeFor("following_test");
+        assertThat(previousTest.getResult(), is(TestResult.SUCCESS));
+        assertThat(followingTest.getResult(), is(TestResult.SUCCESS));
     }
 
 

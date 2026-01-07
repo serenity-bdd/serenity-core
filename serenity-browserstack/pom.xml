@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>5.0.5-SNAPSHOT</version>
+        <version>5.0.5</version>
     </parent>
     <artifactId>serenity-browserstack</artifactId>
     <packaging>jar</packaging>

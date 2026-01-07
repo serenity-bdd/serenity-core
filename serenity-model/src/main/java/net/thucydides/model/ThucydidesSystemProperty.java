@@ -359,6 +359,14 @@ public enum ThucydidesSystemProperty {
     SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS,
 
     /**
+     * Set to false to hide example tables from Scenario Outline reports.
+     * Useful when you have many examples (50+) and the tables create visual clutter.
+     * Default is true (tables are shown).
+     * See: https://github.com/serenity-bdd/serenity-core/issues/3677
+     */
+    SERENITY_REPORT_SHOW_EXAMPLE_TABLES,
+
+    /**
      * Restart the browser every so often during data-driven tests.
      */
     SERENITY_RESTART_BROWSER_FREQUENCY,

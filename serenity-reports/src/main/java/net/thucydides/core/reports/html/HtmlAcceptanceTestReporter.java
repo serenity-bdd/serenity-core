@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_SHOW_EXAMPLE_TABLES;
 import static net.thucydides.model.domain.ReportType.HTML;
 import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -186,6 +187,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("tagInflector", new TagInflector(environmentVariables));
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("requirementTypes", requirementsService.getRequirementTypes());
+        context.put("showExampleTables", SERENITY_REPORT_SHOW_EXAMPLE_TABLES.booleanFrom(environmentVariables, true));
 
         addParentRequirmentFieldToContext(testOutcome, context);
         addTimestamp(testOutcome, context);

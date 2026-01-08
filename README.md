@@ -114,6 +114,7 @@ Check out Serenity BDD in more detail here:
 ## Release Notes
 Release notes are available for major releases:
 * [5.1.0](docs/release-notes/5.1.0.md) - New Playwright integration for step libraries
+* [5.0.5](docs/release-notes/5.0.5.md) - Improved failure reporting in Gherkin scenarios
 * [5.0.4](docs/release-notes/5.0.4.md)
 * [5.0.3](docs/release-notes/5.0.3.md)
 * [5.0.2](docs/release-notes/5.0.2.md)
@@ -139,6 +140,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 | serenity-core | serenity-maven-plugin | JUnit version | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|---------------|------------------|---------------------|-----------------------|
 | 5.1.0         | 5.1.0                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
+| 5.0.5         | 5.0.5                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.0.4         | 5.0.4                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.0.3         | 5.0.3                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.0.2         | 5.0.2                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
@@ -192,6 +194,7 @@ Sample project: [Serenity Playwright Starter Project](https://github.com/serenit
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
 | 5.1.0         | 5.1.0                 | 5.1.0             | 7.33.0   |
+| 5.0.5         | 5.0.5                 | 5.0.5             | 7.33.0   |
 | 5.0.4         | 5.0.4                 | 5.0.4             | 7.33.0   |
 | 5.0.3         | 5.0.3                 | 5.0.3             | 7.33.0   |
 | 5.0.2         | 5.0.2                 | 5.0.2             | 7.33.0   |

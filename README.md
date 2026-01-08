@@ -180,6 +180,14 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 
+### Serenity with Playwright
+
+| serenity-core | serenity-playwright | Playwright version |
+|---------------|---------------------|--------------------|
+| 5.1.0         | 5.1.0               | 1.57.0             |
+
+Sample project: [Serenity Playwright Starter Project](https://github.com/serenity-bdd/serenity-playwright-starter).
+
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|

@@ -604,7 +604,30 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     static boolean isSerenityTestClass(Class<?> testClass) {
-        return classNestStructure(testClass).stream().flatMap(clazz -> Stream.of(clazz.getAnnotationsByType(ExtendWith.class))).anyMatch(annotation -> Arrays.asList(annotation.value()).contains(SerenityJUnit5Extension.class));
+        return classNestStructure(testClass).stream().anyMatch(SerenityTestExecutionListener::hasSerenityExtension);
+    }
+
+    /**
+     * Check if a class has @ExtendWith(SerenityJUnit5Extension.class) either directly
+     * or via a meta-annotation (e.g., @SerenityPlaywright).
+     */
+    private static boolean hasSerenityExtension(Class<?> clazz) {
+        // Check direct @ExtendWith annotations
+        for (ExtendWith extendWith : clazz.getAnnotationsByType(ExtendWith.class)) {
+            if (Arrays.asList(extendWith.value()).contains(SerenityJUnit5Extension.class)) {
+                return true;
+            }
+        }
+        // Check meta-annotations (annotations on the class's annotations)
+        for (java.lang.annotation.Annotation annotation : clazz.getAnnotations()) {
+            Class<? extends java.lang.annotation.Annotation> annotationType = annotation.annotationType();
+            for (ExtendWith extendWith : annotationType.getAnnotationsByType(ExtendWith.class)) {
+                if (Arrays.asList(extendWith.value()).contains(SerenityJUnit5Extension.class)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     static private List<Class<?>> classNestStructure(Class<?> testClass) {

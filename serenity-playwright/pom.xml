@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>serenity-bdd</artifactId>
+        <groupId>net.serenity-bdd</groupId>
+        <version>5.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>serenity-playwright</artifactId>
+    <packaging>jar</packaging>
+    <name>Serenity Playwright Step Library Integration</name>
+    <description>Lightweight Playwright integration for Serenity step libraries with automatic screenshot capture</description>
+
+    <properties>
+        <playwright.version>1.57.0</playwright.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>net.serenitybdd.playwright</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <parallel>all</parallel>
+                    <threadCount>8</threadCount>
+                    <perCoreThreadCount>true</perCoreThreadCount>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Core Serenity -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Playwright -->
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${playwright.version}</version>
+        </dependency>
+
+        <!-- JUnit 5 support (optional) -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Serenity JUnit 5 support (optional - for @SerenityPlaywright annotation) -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-junit5</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

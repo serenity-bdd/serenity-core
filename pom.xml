@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>5.0.6-SNAPSHOT</version>
+    <version>5.1.0-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -731,6 +731,7 @@
         <module>serenity-ant-task</module>
         <module>serenity-cli</module>
         <module>serenity-screenplay-playwright</module>
+        <module>serenity-playwright</module>
         <module>serenity-bitbar</module>
         <module>serenity-selenoid</module>
     </modules>
@@ -771,6 +772,7 @@
                 <module>serenity-ant-task</module>
                 <module>serenity-cli</module>
                 <module>serenity-screenplay-playwright</module>
+                <module>serenity-playwright</module>
                 <module>serenity-bitbar</module>
             </modules>
         </profile>
@@ -912,6 +914,7 @@
                 <module>serenity-smoketests</module>
                 <module>serenity-shutterbug</module>
                 <module>serenity-screenplay-playwright</module>
+                <module>serenity-playwright</module>
                 <module>serenity-cucumber</module>
             </modules>
         </profile>

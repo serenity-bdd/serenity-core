@@ -138,9 +138,11 @@ class WhenGeneratingAnEmailableReport {
                     .getElementsByClass("frequent-failure")
                     .map { it.text() }
 
-            assertThat(unstableFeatures).containsExactly("Assertion error: expected:<[fals]e> but was:<[tru]e>",
-                                                         "Illegal argument exception: Broken test",
-                                                         "Test compromised exception: Test compromised")
+            assertThat(unstableFeatures).containsExactly(
+                "Assertion error: expected:<[fals]e> but was:<[tru]e>",
+                "Illegal argument exception: Broken test",
+                "Test compromised exception: Test compromised"
+            )
         }
 
         @Test
@@ -177,9 +179,11 @@ class WhenGeneratingAnEmailableReport {
             val unstableFeatures = parsedReport.getElementsByClass("failure-scoreboard")[0]
                     .getElementsByClass("frequent-failure")
                     .map { it.text() }
-            assertThat(unstableFeatures).containsExactly("Assertion error: expected:<[fals]e> but was:<[tru]e>",
-                                                          "Illegal argument exception: Broken test",
-                                                          "Test compromised exception: Test compromised")
+            assertThat(unstableFeatures).containsExactly(
+                "Assertion error: expected:<[fals]e> but was:<[tru]e>",
+                "Illegal argument exception: Broken test",
+                "Test compromised exception: Test compromised"
+            )
         }
 
         @Test
@@ -268,3 +272,4 @@ class WhenGeneratingAnEmailableReport {
 }
 
 fun parse(html: String): Document = Jsoup.parse(html)
+

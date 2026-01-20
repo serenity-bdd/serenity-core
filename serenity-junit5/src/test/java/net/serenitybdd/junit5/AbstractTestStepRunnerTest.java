@@ -5,13 +5,14 @@ import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
+import org.junit.platform.engine.discovery.ClassSelector;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
+import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public abstract class AbstractTestStepRunnerTest {
 
@@ -56,13 +57,17 @@ public abstract class AbstractTestStepRunnerTest {
         }
     }
 
-    public void runTestForClass(Class testClass){
+    public void runTestForClass(Class<?>... testClass){
+        List<ClassSelector> selectors = Arrays.stream(testClass)
+                .map(DiscoverySelectors::selectClass)
+                .toList();
+
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                .selectors(selectClass(testClass))
+                .selectors(selectors)
                 .build();
+
         LauncherFactory.create().execute(request);
     }
-
 
     public static TestOutcome getTestOutcomeFor(String testName) {
         return StepEventBus.eventBusForTest(testName).get().getBaseStepListener().getTestOutcomes().get(0);

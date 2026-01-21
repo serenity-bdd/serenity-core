@@ -32,14 +32,14 @@ jobs:
 
       - name: Upload Test Results (JUnit XML)
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports/*.xml
 
       - name: Upload Build Logs
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-logs
           path: |

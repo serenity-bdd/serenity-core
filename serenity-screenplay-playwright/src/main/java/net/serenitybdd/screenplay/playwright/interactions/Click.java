@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -30,7 +31,7 @@ public class Click implements Performable {
     }
 
     private Target target;
-    private Page.ClickOptions options;
+    private Locator.ClickOptions options;
 
     public Click(Target target) {
         this.target = target;
@@ -44,7 +45,7 @@ public class Click implements Performable {
         return new Click(target);
     }
 
-    public Performable withOptions(Page.ClickOptions options) {
+    public Performable withOptions(Locator.ClickOptions options) {
         this.options = options;
         return this;
     }
@@ -52,7 +53,8 @@ public class Click implements Performable {
     @Override
     @Step("{0} clicks on #target")
     public <T extends Actor> void performAs(T actor) {
-        BrowseTheWebWithPlaywright.as(actor).getCurrentPage().click(target.asSelector(), options);
+        Page page = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+        target.resolveFor(page).click(options);
         BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

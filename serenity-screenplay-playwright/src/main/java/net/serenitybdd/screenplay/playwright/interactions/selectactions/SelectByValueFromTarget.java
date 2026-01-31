@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions.selectactions;
 
+import com.microsoft.playwright.Page;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
@@ -17,7 +18,8 @@ public class SelectByValueFromTarget implements Performable {
 
     @Step("{0} selects #values in #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWebWithPlaywright.as(theUser).getCurrentPage().selectOption(target.asSelector(), values);
+        Page page = BrowseTheWebWithPlaywright.as(theUser).getCurrentPage();
+        target.resolveFor(page).selectOption(values);
         BrowseTheWebWithPlaywright.as(theUser).notifyScreenChange();
     }
 }

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions.selectactions;
 
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.SelectOption;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -18,8 +19,8 @@ public class SelectByIndexFromTarget implements Interaction {
 
     @Step("{0} selects index #index in #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWebWithPlaywright.as(theUser).getCurrentPage()
-            .selectOption(target.asSelector(), new SelectOption().setIndex(index));
+        Page page = BrowseTheWebWithPlaywright.as(theUser).getCurrentPage();
+        target.resolveFor(page).selectOption(new SelectOption().setIndex(index));
         BrowseTheWebWithPlaywright.as(theUser).notifyScreenChange();
     }
 }

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions.selectactions;
 
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.SelectOption;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -18,8 +19,8 @@ public class SelectByVisibleTextFromTarget implements Interaction {
 
     @Step("{0} selects #option on #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWebWithPlaywright.as(theUser).getCurrentPage()
-            .selectOption(target.asSelector(), new SelectOption().setLabel(option));
+        Page page = BrowseTheWebWithPlaywright.as(theUser).getCurrentPage();
+        target.resolveFor(page).selectOption(new SelectOption().setLabel(option));
         BrowseTheWebWithPlaywright.as(theUser).notifyScreenChange();
     }
 }

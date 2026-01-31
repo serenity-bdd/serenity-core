@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -14,7 +15,7 @@ import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywrigh
 public class DoubleClick implements Performable {
 
     private final Target target;
-    private Page.DblclickOptions options;
+    private Locator.DblclickOptions options;
 
     public DoubleClick(Target target) {
         this.target = target;
@@ -28,7 +29,7 @@ public class DoubleClick implements Performable {
         return new DoubleClick(target);
     }
 
-    public Performable withOptions(Page.DblclickOptions options) {
+    public Performable withOptions(Locator.DblclickOptions options) {
         this.options = options;
         return this;
     }
@@ -36,7 +37,8 @@ public class DoubleClick implements Performable {
     @Override
     @Step("{0} double clicks on #target")
     public <T extends Actor> void performAs(T actor) {
-        BrowseTheWebWithPlaywright.as(actor).getCurrentPage().dblclick(target.asSelector(), options);
+        Page page = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+        target.resolveFor(page).dblclick(options);
         BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

@@ -4,8 +4,10 @@ import com.google.common.eventbus.Subscribe;
 import com.microsoft.playwright.*;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.playwright.PlaywrightSerenity;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.HasTeardown;
 import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.playwright.Photographer;
@@ -41,7 +43,7 @@ import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationPrope
  * - webdriver.chrome.binary: path to the chrome binary
  * -
  */
-public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
+public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTeardown {
     private static final Logger LOGGER = LoggerFactory.getLogger(BrowseTheWebWithPlaywright.class);
 
     /**
@@ -157,6 +159,9 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             }
 
             currentPage = getCurrentContext().newPage();
+
+            // Register the page with PlaywrightSerenity for screenshot capture integration
+            PlaywrightSerenity.registerPage(currentPage);
         }
         return currentPage;
     }
@@ -318,16 +323,10 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      */
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
-        // Stop tracing before browser is closed
-        if (currentContext != null && tracingEnabled) {
-            currentContext.tracing().stop(
-                new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
-            );
-        }
-        if (playwright != null) {
+        // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
+        if (playwright != null && currentPage != null) {
             BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
             ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
-            // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
             if (baseStepListener.currentTestFailed() && screenshots.areAllowed(TakeScreenshots.FOR_FAILURES)) {
                 ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
@@ -335,10 +334,71 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
                     step -> step.addScreenshot(screenshotAndHtmlSource)
                 );
             }
+        }
 
-            playwright.close();
-            currentPage = null;
+        // Perform cleanup
+        tearDown();
+    }
+
+    /**
+     * Clean up Playwright resources. This method is called by the Screenplay framework
+     * when actor.wrapUp() is invoked, and also automatically at test completion.
+     */
+    @Override
+    public void tearDown() {
+        // Stop tracing before browser is closed
+        if (currentContext != null && tracingEnabled) {
+            try {
+                currentContext.tracing().stop(
+                    new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
+                );
+            } catch (Exception e) {
+                LOGGER.debug("Failed to stop tracing: {}", e.getMessage());
+            }
+        }
+
+        // Unregister and close all pages in the context
+        if (currentContext != null) {
+            for (Page page : currentContext.pages()) {
+                PlaywrightSerenity.unregisterPage(page);
+                try {
+                    if (!page.isClosed()) {
+                        page.close();
+                    }
+                } catch (Exception e) {
+                    LOGGER.debug("Failed to close page: {}", e.getMessage());
+                }
+            }
+        }
+        currentPage = null;
+
+        // Close the browser context
+        if (currentContext != null) {
+            try {
+                currentContext.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close browser context: {}", e.getMessage());
+            }
             currentContext = null;
+        }
+
+        // Close the browser
+        if (browser != null) {
+            try {
+                browser.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close browser: {}", e.getMessage());
+            }
+            browser = null;
+        }
+
+        // Close Playwright
+        if (playwright != null) {
+            try {
+                playwright.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close Playwright: {}", e.getMessage());
+            }
             playwright = null;
         }
     }
@@ -369,5 +429,105 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public BrowseTheWebWithPlaywright withHeadlessMode(Boolean headless) {
         return new BrowseTheWebWithPlaywright(environmentVariables, launchOptions.setHeadless(headless), browserType.orElse(null));
+    }
+
+    /**
+     * Get all pages (tabs) in the current browser context.
+     */
+    public java.util.List<Page> getAllPages() {
+        return getCurrentContext().pages();
+    }
+
+    /**
+     * Switch to a different page by index.
+     * Note: All pages in the context remain registered with PlaywrightSerenity
+     * since they are all valid pages that can take screenshots.
+     */
+    public void switchToPage(int index) {
+        java.util.List<Page> pages = getAllPages();
+        if (index < 0 || index >= pages.size()) {
+            throw new IllegalArgumentException("Page index " + index + " is out of bounds. Available pages: " + pages.size());
+        }
+        currentPage = pages.get(index);
+    }
+
+    /**
+     * Switch to the page containing the given title.
+     */
+    public void switchToPageWithTitle(String title) {
+        for (Page page : getAllPages()) {
+            if (page.title().contains(title)) {
+                currentPage = page;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("No page found with title containing: " + title);
+    }
+
+    /**
+     * Switch to the page with the given URL substring.
+     */
+    public void switchToPageWithUrl(String urlSubstring) {
+        for (Page page : getAllPages()) {
+            if (page.url().contains(urlSubstring)) {
+                currentPage = page;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("No page found with URL containing: " + urlSubstring);
+    }
+
+    /**
+     * Open a new page (tab) in the current context.
+     */
+    public Page openNewPage() {
+        Page newPage = getCurrentContext().newPage();
+        PlaywrightSerenity.registerPage(newPage);
+        currentPage = newPage;
+        return newPage;
+    }
+
+    /**
+     * Close the current page and switch to the previous one if available.
+     */
+    public void closeCurrentPage() {
+        if (currentPage != null && !currentPage.isClosed()) {
+            PlaywrightSerenity.unregisterPage(currentPage);
+            currentPage.close();
+        }
+        java.util.List<Page> remainingPages = getAllPages();
+        if (!remainingPages.isEmpty()) {
+            currentPage = remainingPages.get(remainingPages.size() - 1);
+        } else {
+            currentPage = null;
+        }
+    }
+
+    /**
+     * Get all cookies from the current context.
+     */
+    public java.util.List<com.microsoft.playwright.options.Cookie> getCookies() {
+        return getCurrentContext().cookies();
+    }
+
+    /**
+     * Add a cookie to the current context.
+     */
+    public void addCookie(com.microsoft.playwright.options.Cookie cookie) {
+        getCurrentContext().addCookies(java.util.Collections.singletonList(cookie));
+    }
+
+    /**
+     * Add multiple cookies to the current context.
+     */
+    public void addCookies(java.util.List<com.microsoft.playwright.options.Cookie> cookies) {
+        getCurrentContext().addCookies(cookies);
+    }
+
+    /**
+     * Clear all cookies from the current context.
+     */
+    public void clearCookies() {
+        getCurrentContext().clearCookies();
     }
 }

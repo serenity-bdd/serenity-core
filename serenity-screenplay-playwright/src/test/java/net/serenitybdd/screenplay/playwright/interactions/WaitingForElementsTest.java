@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
-import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.Locator;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -34,7 +34,7 @@ public class WaitingForElementsTest {
         fred.attemptsTo(
                 Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
                 Click.on("text='Add Element'"),
-                WaitFor.selector("text='Delete'").andThen(ElementHandle::click),
+                WaitFor.selector("text='Delete'").andThen(Locator::click),
                 Ensure.that("text='Delete'").isHidden()
         );
     }

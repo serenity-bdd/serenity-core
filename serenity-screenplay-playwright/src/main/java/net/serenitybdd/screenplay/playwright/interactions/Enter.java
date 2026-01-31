@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -35,7 +36,7 @@ public class Enter implements Performable {
 
     private String value;
     private Target target;
-    private Page.FillOptions options;
+    private Locator.FillOptions options;
 
     public Enter(String value) {
         this.value = value;
@@ -55,7 +56,7 @@ public class Enter implements Performable {
         return this;
     }
 
-    public Performable withOptions(Page.FillOptions options) {
+    public Performable withOptions(Locator.FillOptions options) {
         this.options = options;
         return this;
     }
@@ -63,7 +64,8 @@ public class Enter implements Performable {
     @Override
     @Step("{0} enters #value into #target")
     public <T extends Actor> void performAs(T actor) {
-        BrowseTheWebWithPlaywright.as(actor).getCurrentPage().fill(target.asSelector(), value, options);
+        Page page = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+        target.resolveFor(page).fill(value, options);
         BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

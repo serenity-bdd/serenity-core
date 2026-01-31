@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -30,7 +31,7 @@ public class Check implements Performable {
     }
 
     private Target target;
-    private Page.CheckOptions options;
+    private Locator.CheckOptions options;
 
     public Check(Target target) {
         this.target = target;
@@ -44,7 +45,7 @@ public class Check implements Performable {
         return new Check(target);
     }
 
-    public Performable withOptions(Page.CheckOptions options) {
+    public Performable withOptions(Locator.CheckOptions options) {
         this.options = options;
         return this;
     }
@@ -52,7 +53,8 @@ public class Check implements Performable {
     @Override
     @Step("{0} checks #target")
     public <T extends Actor> void performAs(T actor) {
-        BrowseTheWebWithPlaywright.as(actor).getCurrentPage().check(target.asSelector(), options);
+        Page page = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+        target.resolveFor(page).check(options);
         BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

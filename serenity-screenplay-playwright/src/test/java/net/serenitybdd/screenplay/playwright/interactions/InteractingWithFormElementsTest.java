@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
-import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Locator;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -26,7 +26,7 @@ public class InteractingWithFormElementsTest {
             Ensure.that("text='Delete'").isHidden(),
             Click.on("text='Add Element'"),
             Ensure.that("text='Delete'").isVisible(),
-            Click.on("text='Delete'").withOptions(new Page.ClickOptions().setClickCount(2)),
+            Click.on("text='Delete'").withOptions(new Locator.ClickOptions().setClickCount(2)),
             Ensure.that("text='Delete'").isHidden()
         );
     }
@@ -36,8 +36,9 @@ public class InteractingWithFormElementsTest {
         fred.attemptsTo(
             Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
             Ensure.that("text='Delete'").isHidden(),
-            Click.on("text='Add Element'").withOptions(new Page.ClickOptions().setClickCount(2)),
-            Ensure.that("text='Delete'").isVisible()
+            // Double-click to add two elements, then verify at least one Delete button is visible
+            Click.on("text='Add Element'").withOptions(new Locator.ClickOptions().setClickCount(2)),
+            Ensure.that("text='Delete' >> nth=0").isVisible()
         );
     }
 
@@ -45,9 +46,10 @@ public class InteractingWithFormElementsTest {
     public void clickingOnCheckboxes() {
         fred.attemptsTo(
             Open.url("http://the-internet.herokuapp.com/checkboxes"),
-            Ensure.that("#checkboxes input").isNotChecked(),
-            Click.on("#checkboxes input"),
-            Ensure.that("#checkboxes input").isChecked()
+            // Use first checkbox specifically
+            Ensure.that("#checkboxes input >> nth=0").isNotChecked(),
+            Click.on("#checkboxes input >> nth=0"),
+            Ensure.that("#checkboxes input >> nth=0").isChecked()
         );
     }
 

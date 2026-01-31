@@ -13,7 +13,7 @@
     <name>Serenity Screenplay Playwright Integration</name>
 
     <properties>
-        <playwright.version>1.52.0</playwright.version>
+        <playwright.version>1.57.0</playwright.version>
     </properties>
 
     <build>
@@ -51,7 +51,17 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-playwright</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>serenity-junit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-junit5</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

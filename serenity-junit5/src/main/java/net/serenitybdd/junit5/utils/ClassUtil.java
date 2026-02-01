@@ -4,7 +4,9 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class ClassUtil {
 
@@ -128,6 +130,66 @@ public class ClassUtil {
         for (Class<?> clazz : commonClasses) {
             commonClassCache.put(clazz.getName(), clazz);
         }
+    }
+
+    /**
+     * Get all methods declared in the given class and all its superclasses.
+     * This walks up the class hierarchy to find methods that may be declared
+     * in parent classes.
+     *
+     * @param clazz the class to inspect
+     * @return a stream of all methods in the class hierarchy
+     */
+    public static Stream<Method> getAllDeclaredMethods(Class<?> clazz) {
+        List<Method> methods = new ArrayList<>();
+        Class<?> currentClass = clazz;
+        while (currentClass != null && currentClass != Object.class) {
+            methods.addAll(Arrays.asList(currentClass.getDeclaredMethods()));
+            currentClass = currentClass.getSuperclass();
+        }
+        return methods.stream();
+    }
+
+    /**
+     * Find a method by name in the given class or any of its superclasses.
+     * This is useful when getDeclaredMethod fails because the method is
+     * defined in a parent class.
+     *
+     * @param clazz the class to start searching from
+     * @param methodName the name of the method to find
+     * @return an Optional containing the method if found
+     */
+    public static Optional<Method> findMethodInHierarchy(Class<?> clazz, String methodName) {
+        Class<?> currentClass = clazz;
+        while (currentClass != null && currentClass != Object.class) {
+            for (Method method : currentClass.getDeclaredMethods()) {
+                if (method.getName().equals(methodName)) {
+                    return Optional.of(method);
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Find a method by name and parameter types in the given class or any of its superclasses.
+     *
+     * @param clazz the class to start searching from
+     * @param methodName the name of the method to find
+     * @param parameterTypes the parameter types of the method
+     * @return an Optional containing the method if found
+     */
+    public static Optional<Method> findMethodInHierarchy(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        Class<?> currentClass = clazz;
+        while (currentClass != null && currentClass != Object.class) {
+            try {
+                return Optional.of(currentClass.getDeclaredMethod(methodName, parameterTypes));
+            } catch (NoSuchMethodException e) {
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+        return Optional.empty();
     }
 
     static {

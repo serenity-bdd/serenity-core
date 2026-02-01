@@ -182,15 +182,18 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private Method getProcessedMethod(String className, String methodName, List<Class> methodParameterClasses) throws NoSuchMethodException, ClassNotFoundException {
+        Class<?> clazz = Class.forName(className);
         if (!isNullOrEmpty(methodParameterClasses)) {
             Class[] classesArray = new Class[methodParameterClasses.size()];
-            return Class.forName(className).getMethod(methodName, methodParameterClasses.toArray(classesArray));
+            return clazz.getMethod(methodName, methodParameterClasses.toArray(classesArray));
         }
         // check whether the class with name className has a method with name methodName and return it if it exists
-        if (Arrays.stream(Class.forName(className).getDeclaredMethods()).anyMatch(method -> method.getName().equals(methodName))) {
-            return Class.forName(className).getDeclaredMethod(methodName);
+        // Use ClassUtil.getAllDeclaredMethods to find methods in superclasses as well (see issue #3715)
+        Optional<Method> foundMethod = ClassUtil.findMethodInHierarchy(clazz, methodName);
+        if (foundMethod.isPresent()) {
+            return foundMethod.get();
         }
-        return Class.forName(className).getMethod(methodName);
+        return clazz.getMethod(methodName);
     }
 
     private boolean isNullOrEmpty(List<Class> methodParameterClasses) {

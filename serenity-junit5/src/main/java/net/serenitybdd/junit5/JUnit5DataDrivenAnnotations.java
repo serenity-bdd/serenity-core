@@ -3,6 +3,7 @@ package net.serenitybdd.junit5;
 import au.com.bytecode.opencsv.CSVParser;
 import com.google.common.base.Splitter;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
+import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
@@ -204,9 +205,8 @@ public class JUnit5DataDrivenAnnotations {
 
         List<Method> dataDrivenMethods = new ArrayList<>();
 
-        // Add all the data driven methods in this class
-        List<Method> allMethods = Arrays.asList(testClass.getDeclaredMethods());
-        allMethods.stream().filter(this::findParameterizedTests).forEach(dataDrivenMethods::add);
+        // Add all the data driven methods in this class and its superclasses (see issue #3715)
+        ClassUtil.getAllDeclaredMethods(testClass).filter(this::findParameterizedTests).forEach(dataDrivenMethods::add);
 
         // Add all the data driven methods in any nested classes
         List<Class<?>> nestedClasses = Arrays.asList(testClass.getDeclaredClasses());

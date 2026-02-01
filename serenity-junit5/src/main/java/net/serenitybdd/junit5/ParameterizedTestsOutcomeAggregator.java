@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5;
 
+import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.*;
@@ -182,7 +183,7 @@ public class ParameterizedTestsOutcomeAggregator {
         if (testOutcome.getTestCase() == null) {
             return false;
         }
-        String parameterizedTestName = Arrays.stream(testOutcome.getTestCase().getDeclaredMethods())
+        String parameterizedTestName = ClassUtil.getAllDeclaredMethods(testOutcome.getTestCase())
                 .filter(method -> method.getName().equals(testOutcome.getMethodName()))
                 .filter(method -> method.isAnnotationPresent(ParameterizedTest.class))
                 .map(method -> method.getAnnotation(ParameterizedTest.class).name())

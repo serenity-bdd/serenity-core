@@ -181,4 +181,44 @@ public class JUnitAdapterUnitTest {
 
     }
 
+    // Test classes for issue #3715 - inherited test methods from superclasses
+    // The test method is defined in the grandparent class (2 levels up)
+
+    static class GrandparentTestClass {
+        @org.junit.jupiter.api.Test
+        void inheritedTestMethod() {
+            // Test method defined in grandparent
+        }
+    }
+
+    static class ParentTestClass extends GrandparentTestClass {
+        // No test methods defined here
+    }
+
+    static class ChildTestClass extends ParentTestClass {
+        // No test methods defined here - inherits from grandparent
+    }
+
+    @org.junit.Test
+    public void shouldDetectInheritedTestMethodsFromGrandparentClass() {
+        // Issue #3715: getDeclaredMethods() only finds methods in the immediate class,
+        // not inherited methods from superclasses. This test verifies the fix.
+        assertThat(TestFramework.support().isTestClass(ChildTestClass.class))
+                .as("ChildTestClass should be detected as a test class even though the test method is in grandparent")
+                .isTrue();
+
+        assertThat(TestFramework.support().isSerenityTestCase(ChildTestClass.class))
+                .as("ChildTestClass should be detected as a Serenity test case")
+                .isTrue();
+
+        // Also verify the intermediate parent class works
+        assertThat(TestFramework.support().isTestClass(ParentTestClass.class))
+                .as("ParentTestClass should be detected as a test class")
+                .isTrue();
+
+        assertThat(TestFramework.support().isSerenityTestCase(ParentTestClass.class))
+                .as("ParentTestClass should be detected as a Serenity test case")
+                .isTrue();
+    }
+
 }

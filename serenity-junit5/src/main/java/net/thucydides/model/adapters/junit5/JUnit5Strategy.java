@@ -2,6 +2,7 @@ package net.thucydides.model.adapters.junit5;
 
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
+import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.model.adapters.JUnitStrategy;
 import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,7 @@ class JUnit5Strategy implements JUnitStrategy {
     }
 
     private boolean hasTestMethods(final Class<?> testClass) {
-        return stream(testClass.getDeclaredMethods()).anyMatch(this::isTestMethod);
+        return ClassUtil.getAllDeclaredMethods(testClass).anyMatch(this::isTestMethod);
     }
 
     private boolean isNestedTestClass(Class testClass) {
@@ -66,7 +67,7 @@ class JUnit5Strategy implements JUnitStrategy {
 
     @Override
     public boolean isSerenityTestCase(Class<?> testClass) {
-        return stream(testClass.getDeclaredMethods()).anyMatch(this::isTestMethod);
+        return ClassUtil.getAllDeclaredMethods(testClass).anyMatch(this::isTestMethod);
     }
 
     @Override

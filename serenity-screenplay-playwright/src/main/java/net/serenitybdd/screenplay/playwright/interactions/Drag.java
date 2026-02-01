@@ -17,6 +17,12 @@ import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywrigh
  *         Drag.from("#source").to("#target"),
  *         Drag.from(SOURCE_ELEMENT).to(TARGET_ELEMENT)
  *     );
+ *
+ *     // Alternative fluent API using the/onto aliases
+ *     actor.attemptsTo(
+ *         Drag.the("#source").onto("#target"),
+ *         Drag.the(SOURCE_ELEMENT).onto(TARGET_ELEMENT)
+ *     );
  * </pre>
  */
 public class Drag {
@@ -42,6 +48,22 @@ public class Drag {
     }
 
     /**
+     * Start a drag operation from the specified selector.
+     * Alias for {@link #from(String)} providing alternative fluent API.
+     */
+    public static Drag the(String selector) {
+        return from(selector);
+    }
+
+    /**
+     * Start a drag operation from the specified Target.
+     * Alias for {@link #from(Target)} providing alternative fluent API.
+     */
+    public static Drag the(Target source) {
+        return from(source);
+    }
+
+    /**
      * Complete the drag operation by dropping onto the specified selector.
      */
     public Performable to(String selector) {
@@ -53,6 +75,22 @@ public class Drag {
      */
     public Performable to(Target destination) {
         return new DragTo(source, destination);
+    }
+
+    /**
+     * Complete the drag operation by dropping onto the specified selector.
+     * Alias for {@link #to(String)} providing alternative fluent API.
+     */
+    public Performable onto(String selector) {
+        return to(selector);
+    }
+
+    /**
+     * Complete the drag operation by dropping onto the specified Target.
+     * Alias for {@link #to(Target)} providing alternative fluent API.
+     */
+    public Performable onto(Target destination) {
+        return to(destination);
     }
 
     private static class DragTo implements Performable {

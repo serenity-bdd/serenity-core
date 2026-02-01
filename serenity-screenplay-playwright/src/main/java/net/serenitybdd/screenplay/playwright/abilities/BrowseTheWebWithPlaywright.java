@@ -203,9 +203,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
         if (launchOptions.chromiumSandbox == null) {
             CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setChromiumSandbox);
         }
-        if (launchOptions.devtools == null) {
-            DEVTOOLS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setChromiumSandbox);
-        }
+        // Note: devtools option was removed in Playwright 1.58.0
         if (launchOptions.downloadsPath == null) {
             DOWNLOADS_PATH.asPathFrom(environmentVariables).ifPresent(launchOptions::setDownloadsPath);
         }

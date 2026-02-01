@@ -237,7 +237,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         if (isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             testClass = ((ClassSource) testIdentifier.getSource().get()).getJavaClass();
-            isSerenityTest = isSerenityTestClass(testClass);
+            isSerenityTest = isSerenityTest || isSerenityTestClass(testClass);
             if (!isSerenityTest) {
                 logger.trace("-->Execution started but no SerenityClass " + testClass);
                 return;

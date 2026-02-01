@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * This class simplifies Screenplay tests by managing actor lifecycle and Playwright browser instances.
  * Actors created through this Cast will automatically have the BrowseTheWebWithPlaywright ability.
  * <p>
- * Usage with OnStage:
+ * <h2>Usage with JUnit 5:</h2>
  * <pre>{@code
  * @BeforeEach
  * void setupStage() {
@@ -35,6 +35,30 @@ import java.util.function.Consumer;
  *         SearchFor.product("Widget")
  *     );
  * }
+ * }</pre>
+ * <p>
+ * <h2>Usage with Cucumber:</h2>
+ * <p>
+ * Create a hooks class in your step definitions package:
+ * <pre>{@code
+ * public class PlaywrightHooks {
+ *
+ *     @Before(order = 0)
+ *     public void setTheStage(Scenario scenario) {
+ *         OnStage.setTheStage(new PlaywrightCast());
+ *     }
+ *
+ *     @ParameterType(".*")
+ *     public Actor actor(String actorName) {
+ *         return OnStage.theActorCalled(actorName);
+ *     }
+ * }
+ * }</pre>
+ * <p>
+ * The cleanup is handled automatically by Serenity's StageDirector when you include
+ * {@code net.serenitybdd.cucumber.actors} in your Cucumber glue path:
+ * <pre>{@code
+ * @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "your.steps,net.serenitybdd.cucumber.actors")
  * }</pre>
  * <p>
  * The OnStage.drawTheCurtain() call will automatically clean up all browser resources.

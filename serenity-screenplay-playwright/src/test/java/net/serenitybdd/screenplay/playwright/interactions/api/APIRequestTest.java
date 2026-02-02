@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.playwright.interactions.api;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
+import net.serenitybdd.screenplay.playwright.interactions.ManageCookies;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
 import net.serenitybdd.screenplay.playwright.questions.api.LastAPIResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -256,15 +257,24 @@ public class APIRequestTest {
     @Test
     @DisplayName("Should share cookies with browser context")
     void should_share_cookies_with_browser() {
-        // First, navigate to a page that might set cookies
+        // First, navigate to httpbin.org to establish the domain context
         alice.attemptsTo(
-            Open.url("https://httpbin.org/cookies/set/testcookie/testvalue")
+            Open.url("https://httpbin.org/html")
+        );
+
+        // Set a cookie programmatically (more reliable than using /cookies/set)
+        alice.attemptsTo(
+            ManageCookies.addCookie("testcookie", "testvalue").forDomain("httpbin.org")
         );
 
         // API request should include the cookie
         alice.attemptsTo(
             APIRequest.get("https://httpbin.org/cookies")
         );
+
+        // Verify the response is OK before parsing
+        Integer statusCode = alice.asksFor(LastAPIResponse.statusCode());
+        assertThat(statusCode).isEqualTo(200);
 
         Map<String, Object> response = alice.asksFor(LastAPIResponse.jsonBody());
         @SuppressWarnings("unchecked")

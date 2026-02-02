@@ -24,6 +24,8 @@ import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.serenitybdd.screenplay.playwright.evidence.PlaywrightFailureEvidence;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -321,16 +323,28 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
      */
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
-        // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
+        // Take screenshot and capture evidence for failed test
         if (playwright != null && currentPage != null) {
             BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
-            ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
-            if (baseStepListener.currentTestFailed() && screenshots.areAllowed(TakeScreenshots.FOR_FAILURES)) {
-                ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
-                baseStepListener.firstFailingStep().ifPresent(
-                    step -> step.addScreenshot(screenshotAndHtmlSource)
-                );
+            if (baseStepListener.currentTestFailed()) {
+                // Capture screenshot if allowed
+                ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
+                if (screenshots.areAllowed(TakeScreenshots.FOR_FAILURES)) {
+                    ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
+                    baseStepListener.firstFailingStep().ifPresent(
+                        step -> step.addScreenshot(screenshotAndHtmlSource)
+                    );
+                }
+
+                // Capture additional failure evidence (console errors, failed network requests)
+                if (actor != null) {
+                    try {
+                        PlaywrightFailureEvidence.captureAndAttach(actor, currentPage);
+                    } catch (Exception e) {
+                        LOGGER.debug("Failed to capture failure evidence: {}", e.getMessage());
+                    }
+                }
             }
         }
 
@@ -527,5 +541,27 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
      */
     public void clearCookies() {
         getCurrentContext().clearCookies();
+    }
+
+    /**
+     * Set a restored browser context and page.
+     * Used internally by RestoreSessionState to apply saved session state.
+     *
+     * @param context The new browser context with restored state
+     * @param page The new page in the restored context
+     */
+    public void setRestoredContext(BrowserContext context, Page page) {
+        this.currentContext = context;
+        this.currentPage = page;
+    }
+
+    /**
+     * Get the APIRequestContext for making API calls within the browser session.
+     * This allows API testing with the same cookies and authentication as the browser.
+     *
+     * @return The APIRequestContext for the current browser context
+     */
+    public com.microsoft.playwright.APIRequestContext getAPIRequestContext() {
+        return getCurrentContext().request();
     }
 }

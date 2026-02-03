@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.lessThan
 class WhenConsequenceOutcomesAreReported extends Specification {
 
     @Unroll
-    def "consequences should be rendered in readable form for '#consequence"() {
+    def "consequences should be rendered in readable form for '#consequence'"() {
         expect:
         consequence.toString() == renderedConsequence
         where:

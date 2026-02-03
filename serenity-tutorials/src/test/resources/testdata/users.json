@@ -1,0 +1,7 @@
+[
+    {"userId": 1, "expectedName": "Leanne Graham", "expectedEmail": "Sincere@april.biz"},
+    {"userId": 2, "expectedName": "Ervin Howell", "expectedEmail": "Shanna@melissa.tv"},
+    {"userId": 3, "expectedName": "Clementine Bauch", "expectedEmail": "Nathan@yesenia.net"},
+    {"userId": 4, "expectedName": "Patricia Lebsack", "expectedEmail": "Julianne.OConner@kory.org"},
+    {"userId": 5, "expectedName": "Chelsey Dietrich", "expectedEmail": "Lucio_Hettinger@annie.ca"}
+]

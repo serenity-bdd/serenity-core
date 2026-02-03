@@ -918,5 +918,24 @@
                 <module>serenity-cucumber</module>
             </modules>
         </profile>
+        <!-- Tutorials profile - runs tutorial examples separately from main build -->
+        <profile>
+            <id>tutorials</id>
+            <modules>
+                <module>serenity-report-resources</module>
+                <module>serenity-model</module>
+                <module>serenity-core</module>
+                <module>serenity-screenplay</module>
+                <module>serenity-rest-assured</module>
+                <module>serenity-reports</module>
+                <module>serenity-reports-configuration</module>
+                <module>serenity-stats</module>
+                <module>serenity-junit5</module>
+                <module>serenity-screenplay-rest</module>
+                <module>serenity-cucumber</module>
+                <module>serenity-maven-plugin</module>
+                <module>serenity-tutorials</module>
+            </modules>
+        </profile>
     </profiles>
 </project>

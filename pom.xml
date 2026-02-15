@@ -698,6 +698,7 @@
         </plugins>
     </reporting>
     <modules>
+        <module>serenity-bom</module>
         <module>serenity-report-resources</module>
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
@@ -739,6 +740,7 @@
         <profile>
             <id>all</id>
             <modules>
+                <module>serenity-bom</module>
                 <module>serenity-report-resources</module>
                 <module>serenity-sample-alternative-resources</module>
                 <module>serenity-model</module>
@@ -850,6 +852,7 @@
                 </plugins>
             </build>
             <modules>
+                <module>serenity-bom</module>
                 <module>serenity-report-resources</module>
                 <module>serenity-sample-alternative-resources</module>
                 <module>serenity-model</module>
@@ -886,6 +889,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <modules>
+                <module>serenity-bom</module>
                 <module>serenity-report-resources</module>
                 <module>serenity-sample-alternative-resources</module>
                 <module>serenity-model</module>

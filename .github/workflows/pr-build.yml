@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run Maven Verify
-        run: mvn --batch-mode verify
+        run: ./mvnw --batch-mode verify
 
       - name: Upload Test Results (JUnit XML)
         if: failure()

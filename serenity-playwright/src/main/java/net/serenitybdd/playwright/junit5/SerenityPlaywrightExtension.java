@@ -1,13 +1,15 @@
 package net.serenitybdd.playwright.junit5;
 
 import com.microsoft.playwright.Page;
-import net.serenitybdd.playwright.PlaywrightPageRegistry;
+import com.microsoft.playwright.junit.UsePlaywright;
 import net.serenitybdd.playwright.PlaywrightSerenity;
 import org.junit.jupiter.api.extension.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,23 +20,39 @@ import java.util.List;
  * to automatically register Playwright Page instances with Serenity for screenshot capture.
  * </p>
  * <p>
- * Usage with @UsePlaywright:
+ * When {@code @UsePlaywright} is present, Playwright manages the full browser lifecycle
+ * (Playwright, Browser, BrowserContext, Page) and this extension automatically intercepts
+ * the Page instances injected into {@code @BeforeEach} and {@code @Test} methods to register
+ * them with Serenity for screenshot capture at step boundaries.
+ * </p>
+ * <p>
+ * Usage with @UsePlaywright and a custom OptionsFactory:
  * <pre>
  * &#64;ExtendWith(SerenityJUnit5Extension.class)
  * &#64;ExtendWith(SerenityPlaywrightExtension.class)
- * &#64;UsePlaywright
+ * &#64;UsePlaywright(ChromeHeadlessOptions.class)
  * class MyPlaywrightTest {
+ *
+ *     &#64;Steps
+ *     MySteps steps;
+ *
+ *     &#64;BeforeEach
+ *     void setUp(Page page) {
+ *         // Page is created and managed by Playwright
+ *         // and automatically registered with Serenity for screenshots
+ *     }
  *
  *     &#64;Test
  *     void testSomething(Page page) {
- *         // Page is automatically registered for screenshots
  *         page.navigate("https://example.com");
+ *         steps.verifyPageLoaded(page);
  *     }
  * }
  * </pre>
  * </p>
  * <p>
- * The extension can also auto-detect Page fields in test instances and register them:
+ * The extension can also be used without {@code @UsePlaywright} by auto-detecting
+ * Page fields in the test instance:
  * <pre>
  * &#64;ExtendWith(SerenityJUnit5Extension.class)
  * &#64;ExtendWith(SerenityPlaywrightExtension.class)
@@ -58,10 +76,10 @@ public class SerenityPlaywrightExtension implements
         BeforeEachCallback,
         BeforeTestExecutionCallback,
         AfterEachCallback,
-        ParameterResolver {
+        ParameterResolver,
+        InvocationInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerenityPlaywrightExtension.class);
-    private static final String PAGES_KEY = "playwright.pages";
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
@@ -91,21 +109,64 @@ public class SerenityPlaywrightExtension implements
         PlaywrightSerenity.clear();
     }
 
+    // ---- ParameterResolver ----
+
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
-        // Support injection of Page parameters
+        // When @UsePlaywright is present, Playwright's own PageExtension handles Page parameter resolution.
+        // We must not compete with it or JUnit 5 will throw ParameterResolutionException.
+        if (hasUsePlaywrightAnnotation(extensionContext)) {
+            return false;
+        }
         return Page.class.isAssignableFrom(parameterContext.getParameter().getType());
     }
 
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
-        // Return the current page if one is registered
-        Page currentPage = PlaywrightSerenity.getCurrentPage();
-        if (currentPage != null) {
-            return currentPage;
+        // Return the current page if one is registered (only called when @UsePlaywright is NOT present)
+        return PlaywrightSerenity.getCurrentPage();
+    }
+
+    // ---- InvocationInterceptor ----
+    // When @UsePlaywright is present, Playwright resolves Page parameters for @BeforeEach and @Test methods.
+    // We intercept these invocations to register the Page with Serenity for screenshot capture.
+
+    @Override
+    public void interceptBeforeEachMethod(InvocationInterceptor.Invocation<Void> invocation,
+                                          ReflectiveInvocationContext<Method> invocationContext,
+                                          ExtensionContext extensionContext) throws Throwable {
+        // Register Page arguments before @BeforeEach runs so that any step methods
+        // called within setUp() will have screenshots captured
+        registerPageArguments(invocationContext);
+        invocation.proceed();
+    }
+
+    @Override
+    public void interceptTestMethod(InvocationInterceptor.Invocation<Void> invocation,
+                                    ReflectiveInvocationContext<Method> invocationContext,
+                                    ExtensionContext extensionContext) throws Throwable {
+        // Register Page arguments before the test method runs
+        registerPageArguments(invocationContext);
+        invocation.proceed();
+    }
+
+    // ---- Private helpers ----
+
+    private void registerPageArguments(ReflectiveInvocationContext<Method> invocationContext) {
+        for (Object arg : invocationContext.getArguments()) {
+            if (arg instanceof Page) {
+                Page page = (Page) arg;
+                PlaywrightSerenity.registerPage(page);
+                LOGGER.debug("Auto-registered Playwright Page from method parameter: {}",
+                        invocationContext.getExecutable().getName());
+            }
         }
-        // If no page is registered yet, return null and let @UsePlaywright handle it
-        return null;
+    }
+
+    private boolean hasUsePlaywrightAnnotation(ExtensionContext extensionContext) {
+        return extensionContext.getTestClass()
+                .map(clazz -> clazz.isAnnotationPresent(UsePlaywright.class))
+                .orElse(false);
     }
 
     private void registerPagesFromTestInstance(Object testInstance) {

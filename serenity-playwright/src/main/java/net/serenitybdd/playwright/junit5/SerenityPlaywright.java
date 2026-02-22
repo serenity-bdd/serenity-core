@@ -53,20 +53,25 @@ import java.lang.annotation.Target;
  * </pre>
  * </p>
  * <p>
- * For use with Playwright's {@code @UsePlaywright} annotation, the Page field will
- * be automatically detected and registered:
+ * For use with Playwright's {@code @UsePlaywright} annotation, Playwright manages the
+ * full browser lifecycle and Page instances are automatically registered with Serenity:
  * <pre>
  * &#64;SerenityPlaywright
- * &#64;UsePlaywright
+ * &#64;UsePlaywright(ChromeHeadlessOptions.class)
  * class MyPlaywrightTest {
  *
  *     &#64;Steps
  *     MySteps steps;
  *
+ *     &#64;BeforeEach
+ *     void setUp(Page page) {
+ *         // Page is created by Playwright and auto-registered with Serenity
+ *     }
+ *
  *     &#64;Test
  *     void canSearchForProducts(Page page) {
- *         // Page is auto-registered for screenshots
- *         steps.openHomePage();
+ *         page.navigate("https://example.com");
+ *         steps.verifyPageLoaded(page);
  *     }
  * }
  * </pre>

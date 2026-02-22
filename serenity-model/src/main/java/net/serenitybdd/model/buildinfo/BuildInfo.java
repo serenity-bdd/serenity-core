@@ -1,7 +1,8 @@
 package net.serenitybdd.model.buildinfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
+//import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.serenitybdd.model.di.ModelInfrastructure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

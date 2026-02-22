@@ -22,11 +22,11 @@
 
         <!-- Serenity and Playwright versions -->
         <serenity.version>5.1.0-SNAPSHOT</serenity.version>
-        <playwright.version>1.57.0</playwright.version>
+        <playwright.version>1.58.0</playwright.version>
 
         <!-- Test dependencies -->
-        <junit.version>6.0.1</junit.version>
-        <assertj.version>3.27.3</assertj.version>
+        <junit.version>6.0.3</junit.version>
+        <assertj.version>3.27.7</assertj.version>
 
         <!-- Plugin versions -->
         <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>

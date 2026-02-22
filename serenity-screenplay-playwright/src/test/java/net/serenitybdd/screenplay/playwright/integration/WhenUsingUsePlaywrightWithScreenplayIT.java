@@ -4,7 +4,9 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.playwright.PlaywrightSerenity;
+import net.serenitybdd.playwright.junit5.SerenityPlaywrightExtension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Page via {@link BrowseTheWebWithPlaywright#withPage(Page)}, reusing the external browser
  * session instead of creating a duplicate.
  */
+@ExtendWith(SerenityJUnit5Extension.class)
+@ExtendWith(SerenityPlaywrightExtension.class)
 @UsePlaywright
 @DisplayName("@UsePlaywright + Screenplay integration")
 public class WhenUsingUsePlaywrightWithScreenplayIT {

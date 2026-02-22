@@ -67,6 +67,13 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
     private static final String DEFAULT_BROWSER_TYPE = "chromium";
 
     /**
+     * Tracks whether the Page is owned externally (e.g. provided by @UsePlaywright).
+     * When true, tearDown() will not close the Page, Context, Browser, or Playwright
+     * since the external owner is responsible for their lifecycle.
+     */
+    private boolean externallyManaged = false;
+
+    /**
      * A Browser refers to an instance of Chromium, Firefox or WebKit.
      */
     private Browser browser;
@@ -120,7 +127,11 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
 
     public Browser getBrowser() {
         if (browser == null) {
-            browser = initialiseBrowser();
+            if (currentPage != null) {
+                browser = currentPage.context().browser();
+            } else {
+                browser = initialiseBrowser();
+            }
         }
         return browser;
     }
@@ -130,12 +141,19 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
      */
     private BrowserContext getCurrentContext() {
         if (currentContext == null) {
-            currentContext = getBrowser().newContext(contextOptions);
+            if (currentPage != null) {
+                currentContext = currentPage.context();
+            } else {
+                currentContext = getBrowser().newContext(contextOptions);
+            }
         }
         return currentContext;
     }
 
     public Page getCurrentPage() {
+        if (externallyManaged && currentPage != null) {
+            return currentPage;
+        }
         if (currentPage == null) {
             // Add tracing details to debug tests with trace viewer: https://playwright.dev/java/docs/trace-viewer
             tracingEnabled = TRACING.asBooleanFrom(environmentVariables).orElse(false);
@@ -324,7 +342,9 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
         // Take screenshot and capture evidence for failed test
-        if (playwright != null && currentPage != null) {
+        boolean hasPage = currentPage != null && !currentPage.isClosed();
+        boolean hasPlaywrightOrExternal = playwright != null || externallyManaged;
+        if (hasPlaywrightOrExternal && hasPage) {
             BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
 
             if (baseStepListener.currentTestFailed()) {
@@ -358,6 +378,18 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
      */
     @Override
     public void tearDown() {
+        if (externallyManaged) {
+            // Only unregister pages from PlaywrightSerenity — do NOT close
+            // Page/Context/Browser/Playwright since the external owner manages their lifecycle.
+            if (currentPage != null) {
+                PlaywrightSerenity.unregisterPage(currentPage);
+            }
+            currentPage = null;
+            currentContext = null;
+            browser = null;
+            return;
+        }
+
         // Stop tracing before browser is closed
         if (currentContext != null && tracingEnabled) {
             try {
@@ -441,6 +473,32 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
 
     public BrowseTheWebWithPlaywright withHeadlessMode(Boolean headless) {
         return new BrowseTheWebWithPlaywright(environmentVariables, launchOptions.setHeadless(headless), browserType.orElse(null));
+    }
+
+    /**
+     * Create a lightweight BrowseTheWebWithPlaywright ability that wraps an externally-provided Page.
+     * <p>
+     * Use this when Playwright manages its own lifecycle externally (e.g. via {@code @UsePlaywright})
+     * and you want Screenplay actors to reuse the existing browser session instead of creating a new one.
+     * </p>
+     * <p>
+     * The returned ability will NOT close the Page, BrowserContext, Browser, or Playwright instance
+     * on teardown, since those are owned by the external provider.
+     * </p>
+     *
+     * @param page the externally-managed Playwright Page to wrap
+     * @return a BrowseTheWebWithPlaywright ability backed by the given page
+     */
+    public static BrowseTheWebWithPlaywright withPage(Page page) {
+        BrowseTheWebWithPlaywright ability = new BrowseTheWebWithPlaywright(
+            SystemEnvironmentVariables.currentEnvironmentVariables()
+        );
+        ability.externallyManaged = true;
+        ability.currentPage = page;
+        ability.currentContext = page.context();
+        ability.browser = page.context().browser();
+        PlaywrightSerenity.registerPage(page);
+        return ability;
     }
 
     /**

@@ -113,6 +113,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [5.2.4](docs/release-notes/5.2.4.md) - Screenplay + `@UsePlaywright` integration, report labeling fix
 * [5.2.3](docs/release-notes/5.2.3.md) - `@UsePlaywright` support for simplified browser lifecycle management
 * [5.2.2](docs/release-notes/5.2.2.md) - Session persistence, API testing, and failure evidence capture
 * [5.2.1](docs/release-notes/5.2.1.md) - UI element factories, visual testing, accessibility, and advanced capabilities
@@ -143,6 +144,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | JUnit version | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|---------------|------------------|---------------------|-----------------------|
+| 5.2.4         | 5.2.4                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.2.3         | 5.2.3                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.2.2         | 5.2.2                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
 | 5.2.1         | 5.2.1                 | 6.0.1         | 4.39.0           | 6.0.0               | 10.0.0                |
@@ -194,6 +196,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 
 | serenity-core | serenity-playwright | Playwright version |
 |---------------|---------------------|--------------------|
+| 5.2.4         | 5.2.4               | 1.58.0             |
 | 5.2.3         | 5.2.3               | 1.58.0             |
 | 5.2.2         | 5.2.2               | 1.58.0             |
 | 5.2.1         | 5.2.1               | 1.58.0             |
@@ -205,6 +208,7 @@ Sample project: [Serenity Playwright Starter Project](https://github.com/serenit
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 5.2.4         | 5.2.4                 | 5.2.4             | 7.33.0   |
 | 5.2.3         | 5.2.3                 | 5.2.3             | 7.33.0   |
 | 5.2.2         | 5.2.2                 | 5.2.2             | 7.33.0   |
 | 5.2.1         | 5.2.1                 | 5.2.1             | 7.33.0   |

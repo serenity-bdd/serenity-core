@@ -59,8 +59,8 @@
                     </td>
                     <td>${endTimestamp}</td>
                     <td>
-                        <i class="bi bi-stopwatch-fill"></i> Total
-                        Execution Time
+                        <i class="bi bi-stopwatch-fill"></i> Cumulative Test Time
+                        <br/><small class="text-muted">(sum of all individual test durations)</small>
                     </td>
                     <td>${totalTestDuration}</td>
                 </tr>

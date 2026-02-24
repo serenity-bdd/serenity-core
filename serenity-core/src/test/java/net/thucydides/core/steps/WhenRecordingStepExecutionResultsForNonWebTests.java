@@ -48,7 +48,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     class AnotherStory {
     }
 
-    @Story(AStory.class)
+    @Story(storyClass = AStory.class)
     class ATestCase {
         public void app_should_work() {
         }
@@ -95,13 +95,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     class MyOtherStory {
     }
 
-    @Story(MyStory.class)
+    @Story(storyClass = MyStory.class)
     class MyTestCase {
         public void app_should_work() {
         }
     }
 
-    @Story(MyOtherStory.class)
+    @Story(storyClass = MyOtherStory.class)
     class MyOtherTestCase {
         public void app_should_work() {
         }

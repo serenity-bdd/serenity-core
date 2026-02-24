@@ -59,7 +59,7 @@ public class AbstractReportGenerationTest {
     protected class AUserStory {
     }
 
-    @Story(WhenGeneratingAnHtmlReport.AUserStory.class)
+    @Story(storyClass = WhenGeneratingAnHtmlReport.AUserStory.class)
     protected class SomeTestScenario {
         public void a_simple_test_case() {
         }
@@ -79,7 +79,7 @@ public class AbstractReportGenerationTest {
 
     }
 
-    @Story(WhenGeneratingAnHtmlReport.AFeature.AUserStoryInAFeature.class)
+    @Story(storyClass = WhenGeneratingAnHtmlReport.AFeature.AUserStoryInAFeature.class)
     protected class SomeTestScenarioInAFeature {
         public void should_do_this() {
         }

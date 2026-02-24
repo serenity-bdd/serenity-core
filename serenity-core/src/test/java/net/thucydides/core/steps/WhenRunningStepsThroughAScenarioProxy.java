@@ -448,7 +448,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     class AStory {}
 
-    @Story(AStory.class)
+    @Story(storyClass = AStory.class)
     class ATestCase {
         public void app_should_work() {}
     }

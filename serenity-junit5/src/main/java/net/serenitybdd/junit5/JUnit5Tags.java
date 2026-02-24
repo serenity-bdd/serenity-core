@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5;
 
+import net.serenitybdd.annotations.EpicFeatureStoryAnnotations;
 import net.serenitybdd.annotations.SingleBrowser;
 import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.Tag;
@@ -25,6 +26,7 @@ public class JUnit5Tags {
         tags.addAll(singleClassLevelTagAnnotationsIn(method.getDeclaringClass()));
         tags.addAll(multipleClassLevelTagAnnotationsIn(method.getDeclaringClass()));
         tags.addAll(customAnnotationsAsClassLevelTagsIn(method.getDeclaringClass()));
+        tags.addAll(EpicFeatureStoryAnnotations.forMethod(method));
         return tags;
     }
 

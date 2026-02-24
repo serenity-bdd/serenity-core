@@ -42,7 +42,7 @@ public class WhenListeningForTestEvents {
 
     class MyStory {}
 
-    @Story(MyStory.class)
+    @Story(storyClass = MyStory.class)
     final static class MyTestCase {
         public void app_should_work() {}
     }

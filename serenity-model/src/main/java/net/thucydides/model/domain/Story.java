@@ -5,6 +5,7 @@ import net.serenitybdd.annotations.AnnotatedDescription;
 import net.serenitybdd.annotations.Feature;
 import net.serenitybdd.model.strings.FirstLine;
 import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.annotations.Epic;
 import net.thucydides.model.domain.features.ApplicationFeature;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
@@ -295,15 +296,136 @@ public class Story {
 
     /**
      * Returns the class representing the story that is tested by a given test class
-     * This is indicated by the Story annotation.
+     * This is indicated by the Story annotation's storyClass attribute.
      */
     public static Class<?> testedInTestCase(Class<?> testClass) {
         net.serenitybdd.annotations.Story story = testClass.getAnnotation(net.serenitybdd.annotations.Story.class);
-        if (story != null) {
+        if (story != null && story.storyClass() != void.class) {
+            return story.storyClass();
+        }
+        return null;
+    }
+
+    /**
+     * Returns the string-based story name defined on a class via {@code @Story("name")}, or null if not present.
+     */
+    public static String storyNameDefinedIn(Class<?> testClass) {
+        net.serenitybdd.annotations.Story story = testClass.getAnnotation(net.serenitybdd.annotations.Story.class);
+        if (story != null && !story.value().isEmpty()) {
             return story.value();
-        } else {
+        }
+        return null;
+    }
+
+    /**
+     * Returns the string-based story name defined on a method via {@code @Story("name")}, or null if not present.
+     */
+    public static String storyNameDefinedIn(java.lang.reflect.Method method) {
+        net.serenitybdd.annotations.Story story = method.getAnnotation(net.serenitybdd.annotations.Story.class);
+        if (story != null && !story.value().isEmpty()) {
+            return story.value();
+        }
+        return null;
+    }
+
+    /**
+     * Builds a Story with a proper requirements hierarchy from string-based {@code @Epic}, {@code @Feature},
+     * and {@code @Story} annotations on the given class. Walks the superclass chain so that annotations
+     * on parent classes are inherited. Returns null if no string-based annotations are present.
+     *
+     * <p>The hierarchy is: Epic &gt; Feature &gt; Story. The path is built from whichever levels are present.</p>
+     */
+    public static Story fromAnnotationsOn(Class<?> testClass) {
+        return fromAnnotationsOn(testClass, null);
+    }
+
+    /**
+     * Builds a Story with a proper requirements hierarchy from string-based {@code @Epic}, {@code @Feature},
+     * and {@code @Story} annotations on the given class. When {@code @Story} is absent but {@code @Feature}
+     * or {@code @Epic} is present, uses the {@code defaultStoryName} (typically from {@code @DisplayName})
+     * as the story name, nesting it under the feature/epic in the hierarchy.
+     *
+     * @param testClass the test class to read annotations from
+     * @param defaultStoryName fallback story name when no {@code @Story} annotation is present (e.g. from {@code @DisplayName})
+     * @return a Story with the requirements hierarchy, or null if no annotations are present
+     */
+    public static Story fromAnnotationsOn(Class<?> testClass, String defaultStoryName) {
+        String storyName = null;
+        String featureName = null;
+        String epicName = null;
+
+        // Walk the class hierarchy to find the first occurrence of each annotation
+        Class<?> current = testClass;
+        while (current != null && current != Object.class) {
+            if (storyName == null) {
+                net.serenitybdd.annotations.Story storyAnn = current.getAnnotation(net.serenitybdd.annotations.Story.class);
+                if (storyAnn != null && !storyAnn.value().isEmpty()) {
+                    storyName = storyAnn.value();
+                }
+            }
+            if (featureName == null) {
+                Feature featureAnn = current.getAnnotation(Feature.class);
+                if (featureAnn != null && !featureAnn.value().isEmpty()) {
+                    featureName = featureAnn.value();
+                }
+            }
+            if (epicName == null) {
+                Epic epicAnn = current.getAnnotation(Epic.class);
+                if (epicAnn != null) {
+                    epicName = epicAnn.value();
+                }
+            }
+            current = current.getSuperclass();
+        }
+
+        if (storyName == null && featureName == null && epicName == null) {
             return null;
         }
+
+        // When @Story is absent but @Feature/@Epic is present, use the default story name
+        if (storyName == null && defaultStoryName != null && (featureName != null || epicName != null)) {
+            storyName = defaultStoryName;
+        }
+
+        // Use the most specific annotation as the story name, falling back up the hierarchy
+        String effectiveStoryName = (storyName != null) ? storyName
+                : (featureName != null) ? featureName
+                : epicName;
+
+        // Build the path from the hierarchy levels that are present
+        StringBuilder pathBuilder = new StringBuilder();
+        if (epicName != null) {
+            pathBuilder.append(epicName);
+        }
+        if (featureName != null) {
+            if (pathBuilder.length() > 0) { pathBuilder.append("/"); }
+            pathBuilder.append(featureName);
+        }
+        if (storyName != null) {
+            if (pathBuilder.length() > 0) { pathBuilder.append("/"); }
+            pathBuilder.append(storyName);
+        }
+        String path = pathBuilder.toString();
+
+        // Build path elements with proper display names
+        List<PathElement> elements = new ArrayList<>();
+        if (epicName != null) {
+            elements.add(new PathElement(epicName, epicName));
+        }
+        if (featureName != null) {
+            elements.add(new PathElement(featureName, featureName));
+        }
+        if (storyName != null) {
+            elements.add(new PathElement(storyName, storyName));
+        }
+        PathElements pathElements = PathElements.from(elements);
+
+        // Build parent feature if @Feature is present
+        ApplicationFeature feature = (featureName != null)
+                ? new ApplicationFeature(featureName, featureName) : null;
+
+        return new Story(effectiveStoryName, effectiveStoryName, null, effectiveStoryName,
+                path, pathElements, feature, null, FeatureType.STORY.toString());
     }
 
     /**

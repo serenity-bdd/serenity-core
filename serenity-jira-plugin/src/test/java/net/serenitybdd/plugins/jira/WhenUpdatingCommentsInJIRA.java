@@ -39,7 +39,7 @@ public class WhenUpdatingCommentsInJIRA {
         public class SampleStory2 {}
     }
 
-    @Story(SampleFeature.SampleStory.class)
+    @Story(storyClass = SampleFeature.SampleStory.class)
     private static final class SampleTestSuite {
 
         @Title("Test for issue #MYPROJECT-123")
@@ -51,7 +51,7 @@ public class WhenUpdatingCommentsInJIRA {
         public void anotherTest() {}
     }
 
-    @Story(SampleFeature.SampleStory.class)
+    @Story(storyClass = SampleFeature.SampleStory.class)
     private static final class SampleTestSuiteWithoutPrefixes {
 
         @Title("Test for issue #123")
@@ -63,7 +63,7 @@ public class WhenUpdatingCommentsInJIRA {
         public void anotherTest() {}
     }
 
-    @Story(SampleFeature.SampleStory.class)
+    @Story(storyClass = SampleFeature.SampleStory.class)
     private static final class SampleTestSuiteWithIssueAnnotation {
 
         @Issue("#MYPROJECT-123")

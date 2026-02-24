@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class WhenStepsExtends {
 
-    @Story(WhenRecordingStepExecutionResults.MyStory.class)
+    @Story(storyClass = WhenRecordingStepExecutionResults.MyStory.class)
     class MyTestCase {
         public void app_should_work() {
         }

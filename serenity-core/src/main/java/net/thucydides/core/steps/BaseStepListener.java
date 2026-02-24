@@ -446,9 +446,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testSuiteStarted(final Class<?> startedTestSuite, String testName) {
         testSuite = startedTestSuite;
-        testedStory = findStoryFrom(startedTestSuite)
-                .withStoryName(testName)
-                .withDisplayName(testName);
+        testedStory = findStoryFrom(startedTestSuite);
+        boolean hasExplicitStory = net.thucydides.model.domain.Story.storyNameDefinedIn(startedTestSuite) != null
+                || net.thucydides.model.domain.Story.testedInTestCase(startedTestSuite) != null;
+        if (!hasExplicitStory) {
+            // No explicit @Story — use @DisplayName as the story name.
+            // If @Feature/@Epic is present, nest the display name under them in the hierarchy.
+            net.thucydides.model.domain.Story annotationStory =
+                    net.thucydides.model.domain.Story.fromAnnotationsOn(startedTestSuite, testName);
+            if (annotationStory != null) {
+                testedStory = annotationStory;
+            } else {
+                testedStory = testedStory.withStoryName(testName).withDisplayName(testName);
+            }
+        }
         suiteStarted = true;
         clearStorywideTagsAndIssues();
     }

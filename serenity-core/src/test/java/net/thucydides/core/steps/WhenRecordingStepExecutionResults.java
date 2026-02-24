@@ -77,7 +77,7 @@ public class WhenRecordingStepExecutionResults {
     class AnotherStory {
     }
 
-    @Story(AStory.class)
+    @Story(storyClass = AStory.class)
     class ATestCase {
         public void app_should_work() {
         }
@@ -143,13 +143,13 @@ public class WhenRecordingStepExecutionResults {
     class MyOtherStory {
     }
 
-    @Story(MyStory.class)
+    @Story(storyClass = MyStory.class)
     class MyTestCase {
         public void app_should_work() {
         }
     }
 
-    @Story(MyOtherStory.class)
+    @Story(storyClass = MyOtherStory.class)
     class MyOtherTestCase {
         public void app_should_work() {
         }
@@ -484,7 +484,7 @@ public class WhenRecordingStepExecutionResults {
         }
     }
 
-    @Story(MyFeature.MyStoryInAFeature.class)
+    @Story(storyClass = MyFeature.MyStoryInAFeature.class)
     class MyTestCaseForAFeature {
     }
 

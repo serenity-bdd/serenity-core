@@ -30,6 +30,8 @@ public class PackageBasedLeafRequirements {
         Story story;
         if (Story.testedInTestCase(testCase) != null) {
             story = Story.from(Story.testedInTestCase(testCase)).withType(typeFrom(testCase.getName()));
+        } else if (Story.fromAnnotationsOn(testCase) != null) {
+            story = Story.fromAnnotationsOn(testCase);
         } else if (containsJUnitTestCases(testCase)) {
 //            story = Story.from(testCase).withType(FeatureType.STORY.toString())
             story = Story.from(testCase).withType(FeatureType.FEATURE.toString())

@@ -1,5 +1,6 @@
 package net.thucydides.model.adapters.junit5;
 
+import net.serenitybdd.annotations.EpicFeatureStoryAnnotations;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.utils.ClassUtil;
@@ -162,6 +163,7 @@ class JUnit5Strategy implements JUnitStrategy {
                 Arrays.stream(allTags).forEach(tag -> tags.add(TestTag.withValue(tag.value())));
             }
         }
+        tags.addAll(EpicFeatureStoryAnnotations.forMethod(testMethod));
         return tags;
     }
 }

@@ -30,7 +30,7 @@ public class WhenUpdatingIssueStatus {
         public class SampleStory2 {}
     }
 
-    @Story(SampleFeature.SampleStory.class)
+    @Story(storyClass = SampleFeature.SampleStory.class)
     static class SampleTestCase {
 
         @Issue("#MYPROJECT-123")
@@ -42,7 +42,7 @@ public class WhenUpdatingIssueStatus {
         public void anotherTest() {}
     }
 
-    @Story(SampleFeature.SampleStory2.class)
+    @Story(storyClass = SampleFeature.SampleStory2.class)
     static class SampleTestCase2 {
 
         @Issue("#MYPROJECT-789")

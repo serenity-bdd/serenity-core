@@ -50,7 +50,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     class AUserStory {
     }
 
-    @net.serenitybdd.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(storyClass = AUserStory.class)
     class SomeTestScenario {
         void a_simple_test_case() {
         }
@@ -82,7 +82,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @net.serenitybdd.annotations.Story(AFeature.AUserStoryInAFeature.class)
+    @net.serenitybdd.annotations.Story(storyClass = AFeature.AUserStoryInAFeature.class)
     class SomeTestScenarioInAFeature {
         void should_do_this() {
         }
@@ -102,7 +102,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @net.serenitybdd.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(storyClass = AUserStory.class)
     @Issues(["#123", "#456"])
     class ATestScenarioWithIssues {
         void a_simple_test_case() {
@@ -117,7 +117,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     }
 
 
-    @net.serenitybdd.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(storyClass = AUserStory.class)
     @Issues(["PROJ-123", "PROJ-456"])
     class ATestScenarioWithLongIssues {
         void a_simple_test_case() {
@@ -131,7 +131,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @net.serenitybdd.annotations.Story(AUserStory.class)
+    @net.serenitybdd.annotations.Story(storyClass = AUserStory.class)
     class SomeNestedTestScenario {
         void a_nested_test_case() {
         };

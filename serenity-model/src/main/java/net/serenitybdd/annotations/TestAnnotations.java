@@ -271,6 +271,7 @@ public class TestAnnotations {
         addTagValues(tags, testClass.getAnnotation(WithTagValuesOf.class));
         addTags(tags, testClass.getAnnotation(WithTags.class));
         addTag(tags, testClass.getAnnotation(WithTag.class));
+        tags.addAll(EpicFeatureStoryAnnotations.tagsFromElement(testClass));
         if (testClass.getSuperclass() != Object.class) {
             tags.addAll(getClassTags(testClass.getSuperclass()));
         }

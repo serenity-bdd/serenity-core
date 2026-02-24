@@ -39,13 +39,13 @@ public class WhenGroupingUserStoriesByFeature {
         class DisplayWidgets{}
     }
 
-    @net.serenitybdd.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
+    @net.serenitybdd.annotations.Story(storyClass = WidgetFeature.PurchaseNewWidget.class)
     class WhenUserPurchasesNewWidgetsTestCase {
         public void shouldDoThis(){}
         public void shouldDoThat(){}
     }
 
-    @net.serenitybdd.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
+    @net.serenitybdd.annotations.Story(storyClass = WidgetFeature.PurchaseNewWidget.class)
     class WhenUserPurchasesLotsOfNewWidgetsTestCase {
         public void shouldDoSomethingElse(){}
     }

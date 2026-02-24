@@ -130,7 +130,7 @@ public class WhenTallyingTestStepResults {
 
     class MyStory {}
 
-    @Story(MyStory.class)
+    @Story(storyClass = MyStory.class)
     class MyTestCase {
         public void app_should_work() {}
         @Ignore

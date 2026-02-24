@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.containsString;
 
 public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTest {
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     protected class JIRAAnnotatedTestScenario {
 
         @Title("a simple test case (#1234)")

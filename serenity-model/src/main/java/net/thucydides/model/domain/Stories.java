@@ -15,9 +15,12 @@ public class Stories {
     public static Story findStoryFrom(final Class<?> testClass) {
         if (storyIsDefinedIn(testClass)) {
             return storyFrom(testClass);
-        } else {
-            return Story.from(testClass);
         }
+        Story annotationStory = Story.fromAnnotationsOn(testClass);
+        if (annotationStory != null) {
+            return annotationStory;
+        }
+        return Story.from(testClass);
     }
 
     public static String reportFor(final Story story, final ReportType type) {

@@ -17,13 +17,13 @@ public class WhenDefiningUserStoriesForTests {
         class DisplayWidgets{}
     }
 
-    @Story(MyUserStories.PurchaseNewWidget.class)
+    @Story(storyClass = MyUserStories.PurchaseNewWidget.class)
     class WhenUserPurchasesNewWidgets {
         public void shouldDoThis(){}
         public void shouldDoThat(){}
     }
 
-    @Story(MyUserStories.PurchaseNewWidget.class)
+    @Story(storyClass = MyUserStories.PurchaseNewWidget.class)
     class WhenUserPurchasesLotsOfNewWidgets {
 
     }

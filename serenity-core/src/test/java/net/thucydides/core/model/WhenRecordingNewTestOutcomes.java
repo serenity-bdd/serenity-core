@@ -67,7 +67,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     @Issue("#ISSUE-123")
     class SomeTestScenario {
         @Issue("#ISSUE-123")
@@ -86,7 +86,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     @Issues({"#ISSUE-123", "#ISSUE-456"})
     class SomeOtherTestScenario {
         @Issues({"#ISSUE-123", "#ISSUE-789"})
@@ -101,7 +101,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     class SomeAnnotatedTestScenario {
         @Title("Really should do this!")
         public void should_do_this() {
@@ -111,7 +111,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     class SomeAnnotatedTestScenarioWithAnIssue {
         @Title("Really should do this! (#ISSUE-123)")
         public void should_do_this() {
@@ -124,7 +124,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     class SomeAnnotatedTestScenarioWithManyIssues {
         @Issue("#ISSUE-456")
         @Issues({"#ISSUE-100", "#ISSUE-200"})
@@ -136,7 +136,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     @Issue("#ISSUE-100")
     class SomeAnnotatedTestScenarioWithDuplicatedIssues {
         @Issues({"#ISSUE-100", "#ISSUE-200"})
@@ -147,7 +147,7 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
-    @Story(AUserStory.class)
+    @Story(storyClass = AUserStory.class)
     @Issue("#123")
     class ATestScenarioWithIssuesWithNoPrefix {
         public void should_do_this() {

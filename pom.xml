@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>5.2.5-SNAPSHOT</version>
+    <version>5.3.0-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>

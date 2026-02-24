@@ -354,28 +354,34 @@ public class Story {
         String featureName = null;
         String epicName = null;
 
-        // Walk the class hierarchy to find the first occurrence of each annotation
-        Class<?> current = testClass;
-        while (current != null && current != Object.class) {
-            if (storyName == null) {
-                net.serenitybdd.annotations.Story storyAnn = current.getAnnotation(net.serenitybdd.annotations.Story.class);
-                if (storyAnn != null && !storyAnn.value().isEmpty()) {
-                    storyName = storyAnn.value();
+        // Walk the class hierarchy (superclass chain) and enclosing class chain
+        // to find the first occurrence of each annotation. This ensures annotations
+        // on outer classes are inherited by JUnit 5 @Nested inner classes.
+        Class<?> classToScan = testClass;
+        while (classToScan != null) {
+            Class<?> current = classToScan;
+            while (current != null && current != Object.class) {
+                if (storyName == null) {
+                    net.serenitybdd.annotations.Story storyAnn = current.getAnnotation(net.serenitybdd.annotations.Story.class);
+                    if (storyAnn != null && !storyAnn.value().isEmpty()) {
+                        storyName = storyAnn.value();
+                    }
                 }
-            }
-            if (featureName == null) {
-                Feature featureAnn = current.getAnnotation(Feature.class);
-                if (featureAnn != null && !featureAnn.value().isEmpty()) {
-                    featureName = featureAnn.value();
+                if (featureName == null) {
+                    Feature featureAnn = current.getAnnotation(Feature.class);
+                    if (featureAnn != null && !featureAnn.value().isEmpty()) {
+                        featureName = featureAnn.value();
+                    }
                 }
-            }
-            if (epicName == null) {
-                Epic epicAnn = current.getAnnotation(Epic.class);
-                if (epicAnn != null) {
-                    epicName = epicAnn.value();
+                if (epicName == null) {
+                    Epic epicAnn = current.getAnnotation(Epic.class);
+                    if (epicAnn != null) {
+                        epicName = epicAnn.value();
+                    }
                 }
+                current = current.getSuperclass();
             }
-            current = current.getSuperclass();
+            classToScan = classToScan.getEnclosingClass();
         }
 
         if (storyName == null && featureName == null && epicName == null) {

@@ -165,8 +165,23 @@ public class SerenityPlaywrightExtension implements
 
     private boolean hasUsePlaywrightAnnotation(ExtensionContext extensionContext) {
         return extensionContext.getTestClass()
-                .map(clazz -> clazz.isAnnotationPresent(UsePlaywright.class))
+                .map(this::classOrEnclosingClassHasUsePlaywright)
                 .orElse(false);
+    }
+
+    /**
+     * Check whether the given class or any of its enclosing classes has the {@code @UsePlaywright} annotation.
+     * This is necessary because JUnit 5 {@code @Nested} inner classes do not inherit annotations from
+     * their enclosing class through Java's standard {@code @Inherited} mechanism.
+     */
+    private boolean classOrEnclosingClassHasUsePlaywright(Class<?> clazz) {
+        while (clazz != null) {
+            if (clazz.isAnnotationPresent(UsePlaywright.class)) {
+                return true;
+            }
+            clazz = clazz.getEnclosingClass();
+        }
+        return false;
     }
 
     private void registerPagesFromTestInstance(Object testInstance) {

@@ -2,6 +2,8 @@ package net.serenitybdd.screenplay.playwright.abilities;
 
 import com.google.common.eventbus.Subscribe;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.junit.Options;
+import com.microsoft.playwright.junit.OptionsFactory;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.playwright.PlaywrightSerenity;
@@ -37,13 +39,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.*;
+import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.BROWSER_TYPE;
+import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.HEADLESS;
+import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.TRACING;
 
 /**
- * This ability wraps the Playwright Browser object.
- * The following options can be used to configure the Chrome instance:
- * - webdriver.chrome.binary: path to the chrome binary
- * -
+ * A Screenplay ability that wraps the Playwright Browser object.
+ * <p>
+ * The browser type is read from {@code playwright.browsertype} and headless mode from
+ * {@code playwright.headless}. For additional launch options, use {@link #withOptions(BrowserType.LaunchOptions)}.
+ * </p>
  */
 public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTeardown {
     private static final Logger LOGGER = LoggerFactory.getLogger(BrowseTheWebWithPlaywright.class);
@@ -63,6 +68,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
     String traceName;
 
     private final Optional<String> browserType;
+    private Options playwrightOptions;
 
     private static final String DEFAULT_BROWSER_TYPE = "chromium";
 
@@ -144,10 +150,18 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
             if (currentPage != null) {
                 currentContext = currentPage.context();
             } else {
-                currentContext = getBrowser().newContext(contextOptions);
+                Browser.NewContextOptions ctxOptions = resolveContextOptions();
+                currentContext = getBrowser().newContext(ctxOptions);
             }
         }
         return currentContext;
+    }
+
+    private Browser.NewContextOptions resolveContextOptions() {
+        if (playwrightOptions != null) {
+            return net.serenitybdd.playwright.PlaywrightOptionsResolver.resolveContextOptions(playwrightOptions);
+        }
+        return contextOptions;
     }
 
     public Page getCurrentPage() {
@@ -200,70 +214,46 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
      */
     private Browser initialiseBrowser() {
         if (playwright == null) {
-            playwright = Playwright.create();
+            playwright = (playwrightOptions != null)
+                    ? net.serenitybdd.playwright.PlaywrightOptionsResolver.createPlaywright(playwrightOptions)
+                    : Playwright.create();
         }
-        final BrowserType.LaunchOptions options = launchOptionsDefinedIn(environmentVariables);
         if (!OPEN_BROWSER.containsKey(configuredBrowser())) {
             throw new InvalidPlaywrightBrowserType(configuredBrowser());
         }
-        return OPEN_BROWSER.get(configuredBrowser()).apply(playwright).launch(options);
+        BrowserType bt = OPEN_BROWSER.get(configuredBrowser()).apply(playwright);
+        BrowserType.LaunchOptions resolved = resolveLaunchOptions();
+        if (playwrightOptions != null) {
+            return net.serenitybdd.playwright.PlaywrightOptionsResolver.launchOrConnect(playwrightOptions, bt, resolved);
+        }
+        return bt.launch(resolved);
     }
 
     private String configuredBrowser() {
         return browserType.orElse(DEFAULT_BROWSER_TYPE);
     }
 
-    private BrowserType.LaunchOptions launchOptionsDefinedIn(EnvironmentVariables environmentVariables) {
-        if (launchOptions.args == null) {
-            ARGS.asListOfStringsFrom(environmentVariables).ifPresent(launchOptions::setArgs);
+    /**
+     * Builds the effective launch options. When {@code playwrightOptions} is present,
+     * delegates to {@link net.serenitybdd.playwright.PlaywrightOptionsResolver} for
+     * shorthand resolution. Otherwise the instance's own {@code launchOptions} field
+     * is used. Serenity properties are applied as fallbacks.
+     */
+    private BrowserType.LaunchOptions resolveLaunchOptions() {
+        BrowserType.LaunchOptions effective;
+        if (playwrightOptions != null) {
+            effective = net.serenitybdd.playwright.PlaywrightOptionsResolver.resolveLaunchOptions(playwrightOptions);
+        } else {
+            effective = launchOptions;
         }
-        if (launchOptions.channel == null) {
-            BROWSER_CHANNEL.asStringFrom(environmentVariables).ifPresent(launchOptions::setChannel);
+        // Serenity property fallbacks
+        if (effective.headless == null) {
+            HEADLESS.asBooleanFrom(environmentVariables).ifPresent(effective::setHeadless);
         }
-        if (launchOptions.chromiumSandbox == null) {
-            CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setChromiumSandbox);
+        if (effective.tracesDir == null && TRACING.asBooleanFrom(environmentVariables).orElse(false)) {
+            effective.setTracesDir(Paths.get(TRACES_PATH));
         }
-        // Note: devtools option was removed in Playwright 1.58.0
-        if (launchOptions.downloadsPath == null) {
-            DOWNLOADS_PATH.asPathFrom(environmentVariables).ifPresent(launchOptions::setDownloadsPath);
-        }
-        if (launchOptions.env == null) {
-            ENV.asJsonMapFrom(environmentVariables).ifPresent(launchOptions::setEnv);
-        }
-        if (launchOptions.executablePath == null) {
-            EXECUTABLE_PATH.asPathFrom(environmentVariables).ifPresent(launchOptions::setExecutablePath);
-        }
-        if (launchOptions.handleSIGHUP == null) {
-            HANDLE_SIGHUP.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGHUP);
-        }
-        if (launchOptions.handleSIGINT == null) {
-            HANDLE_SIGINT.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGINT);
-        }
-        if (launchOptions.handleSIGTERM == null) {
-            HANDLE_SIGTERM.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGTERM);
-        }
-        if (launchOptions.headless == null || !launchOptions.headless) {
-            HEADLESS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHeadless);
-        }
-        if (launchOptions.ignoreAllDefaultArgs == null) {
-            IGNORE_ALL_DEFAULT_APPS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setIgnoreAllDefaultArgs);
-        }
-        if (launchOptions.ignoreDefaultArgs == null) {
-            IGNORE_DEFAULT_APPS.asListOfStringsFrom(environmentVariables).ifPresent(launchOptions::setIgnoreDefaultArgs);
-        }
-        if (launchOptions.proxy == null) {
-            PROXY.asProxyFrom(environmentVariables).ifPresent(launchOptions::setProxy);
-        }
-        if (launchOptions.slowMo == null) {
-            SLOW_MO.asDoubleFrom(environmentVariables).ifPresent(launchOptions::setSlowMo);
-        }
-        if (launchOptions.timeout == null) {
-            TIMEOUT.asDoubleFrom(environmentVariables).ifPresent(launchOptions::setTimeout);
-        }
-        if (launchOptions.tracesDir == null && TRACING.asBooleanFrom(environmentVariables).isPresent()) {
-            launchOptions.setTracesDir(Paths.get(TRACES_PATH));
-        }
-        return launchOptions;
+        return effective;
     }
 
     public Photographer getPhotographer() {
@@ -460,6 +450,27 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
 
     public static BrowseTheWebWithPlaywright withOptions(BrowserType.LaunchOptions options) {
         return new BrowseTheWebWithPlaywright(SystemEnvironmentVariables.currentEnvironmentVariables(), options);
+    }
+
+    /**
+     * Create a new Playwright ability using configuration from a Playwright {@link OptionsFactory}.
+     * <p>
+     * This allows reusing the same {@code OptionsFactory} that you use with {@code @UsePlaywright}
+     * in Screenplay tests.
+     * </p>
+     */
+    public static BrowseTheWebWithPlaywright withOptions(OptionsFactory optionsFactory) {
+        Options options = optionsFactory.getOptions();
+        EnvironmentVariables env = SystemEnvironmentVariables.currentEnvironmentVariables();
+
+        String browserType = (options.browserName != null)
+                ? options.browserName
+                : BROWSER_TYPE.asStringFrom(env).orElse(null);
+
+        BrowseTheWebWithPlaywright ability = new BrowseTheWebWithPlaywright(
+                env, new BrowserType.LaunchOptions(), null, browserType);
+        ability.playwrightOptions = options;
+        return ability;
     }
 
     public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {

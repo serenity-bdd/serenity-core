@@ -113,6 +113,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [5.3.2](docs/release-notes/5.3.2.md) - Fix `NoClassDefFoundError: ParentRunner` when using Cucumber with JUnit 5
 * [5.3.1](docs/release-notes/5.3.1.md) - `@Nested` class support for `@Epic`, `@Feature`, `@Story` annotation inheritance
 * [5.3.0](docs/release-notes/5.3.0.md) - ⚠️ String-based `@Epic`, `@Feature`, `@Story` annotations — see [migration guide](docs/release-notes/5.3.0.md#migration-guide)
 * [5.2.4](docs/release-notes/5.2.4.md) - Screenplay + `@UsePlaywright` integration, report labeling fix, dependency updates
@@ -146,6 +147,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | JUnit version | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|---------------|------------------|---------------------|-----------------------|
+| 5.3.2         | 5.3.2                 | 6.0.3         | 4.41.0           | 6.0.0               | 10.0.0                |
 | 5.3.1         | 5.3.1                 | 6.0.3         | 4.41.0           | 6.0.0               | 10.0.0                |
 | 5.3.0         | 5.3.0                 | 6.0.3         | 4.41.0           | 6.0.0               | 10.0.0                |
 | 5.2.4         | 5.2.4                 | 6.0.3         | 4.41.0           | 6.0.0               | 10.0.0                |
@@ -200,6 +202,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 
 | serenity-core | serenity-playwright | Playwright version |
 |---------------|---------------------|--------------------|
+| 5.3.2         | 5.3.2               | 1.58.0             |
 | 5.3.1         | 5.3.1               | 1.58.0             |
 | 5.3.0         | 5.3.0               | 1.58.0             |
 | 5.2.4         | 5.2.4               | 1.58.0             |
@@ -214,6 +217,7 @@ Sample project: [Serenity Playwright Starter Project](https://github.com/serenit
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 5.3.2         | 5.3.2                 | 5.3.2             | 7.34.2   |
 | 5.3.1         | 5.3.1                 | 5.3.1             | 7.34.2   |
 | 5.3.0         | 5.3.0                 | 5.3.0             | 7.34.2   |
 | 5.2.4         | 5.2.4                 | 5.2.4             | 7.34.2   |

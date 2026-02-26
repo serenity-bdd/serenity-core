@@ -23,13 +23,13 @@ public interface Interaction extends Performable {
         return Instrumented.instanceOf(AnonymousInteraction.class).withProperties(title, Arrays.asList(steps));
     }
 
-    static <T extends Performable> AnonymousPerformableFunction where(Consumer<Actor> performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(HumanReadableTaskName.forCurrentMethod(),
+    static <T extends Performable> AnonymousInteractionFunction where(Consumer<Actor> performableOperation) {
+        return Instrumented.instanceOf(AnonymousInteractionFunction.class).withProperties(HumanReadableTaskName.forCurrentMethod(),
                                                                                           performableOperation);
     }
 
-    static <T extends Performable> AnonymousPerformableFunction where(String title, Consumer<Actor> performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(title, performableOperation);
+    static <T extends Performable> AnonymousInteractionFunction where(String title, Consumer<Actor> performableOperation) {
+        return Instrumented.instanceOf(AnonymousInteractionFunction.class).withProperties(title, performableOperation);
     }
 
     static <T extends Performable> AnonymousPerformableRunnable thatPerforms(Runnable performableOperation) {

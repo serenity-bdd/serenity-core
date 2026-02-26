@@ -19,7 +19,7 @@ import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberRuntimeOptions;
 import net.serenitybdd.cucumber.events.SetTestManualEvent;
 import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
@@ -619,10 +619,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
     private List<Expression> getCucumberRuntimeTags() {
-        if (CucumberWithSerenity.currentRuntimeOptions() == null) {
+        if (CucumberRuntimeOptions.currentRuntimeOptions() == null) {
             return new ArrayList<>();
         } else {
-            return CucumberWithSerenity.currentRuntimeOptions().getTagExpressions();
+            return CucumberRuntimeOptions.currentRuntimeOptions().getTagExpressions();
         }
     }
 

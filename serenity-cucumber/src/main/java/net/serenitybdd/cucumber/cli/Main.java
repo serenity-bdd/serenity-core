@@ -4,7 +4,7 @@ import io.cucumber.core.options.CommandlineOptionsParser;
 import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberRuntimeOptions;
 import net.serenitybdd.cucumber.CucumberWithSerenityRuntime;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class Main {
 
     public static byte run(String[] argv, Supplier<ClassLoader> classLoaderSupplier) throws IOException {
         RuntimeOptions  runtimeOptions = new CommandlineOptionsParser(System.out).parse(argv).build() ;
-        CucumberWithSerenity.setRuntimeOptions(runtimeOptions);
+        CucumberRuntimeOptions.setRuntimeOptions(runtimeOptions);
         Runtime runtime = CucumberWithSerenityRuntime.using(classLoaderSupplier, runtimeOptions);
 
         runtime.run();

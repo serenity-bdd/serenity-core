@@ -75,8 +75,12 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
     private boolean multiThreadingAssumed = false;
 
 
+    /** @deprecated Use {@link net.serenitybdd.cucumber.CucumberRuntimeOptions} directly */
+    @Deprecated
     static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>(); // NOSONAR
 
+    /** @deprecated Use {@link net.serenitybdd.cucumber.CucumberRuntimeOptions} directly */
+    @Deprecated
     private static RuntimeOptions DEFAULT_RUNTIME_OPTIONS; // NOSONAR
 
     public CucumberSerenityBaseRunner(Class clazz) throws InitializationError {
@@ -207,13 +211,22 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
     }
 
 
+    /**
+     * @deprecated Use {@link net.serenitybdd.cucumber.CucumberRuntimeOptions#setRuntimeOptions(RuntimeOptions)} directly
+     */
+    @Deprecated
     public static void setRuntimeOptions(RuntimeOptions runtimeOptions) {
         RUNTIME_OPTIONS.set(runtimeOptions);
         DEFAULT_RUNTIME_OPTIONS = runtimeOptions;
+        net.serenitybdd.cucumber.CucumberRuntimeOptions.setRuntimeOptions(runtimeOptions);
     }
 
+    /**
+     * @deprecated Use {@link net.serenitybdd.cucumber.CucumberRuntimeOptions#currentRuntimeOptions()} directly
+     */
+    @Deprecated
     public static RuntimeOptions currentRuntimeOptions() {
-        return (RUNTIME_OPTIONS.get() != null) ? RUNTIME_OPTIONS.get() : DEFAULT_RUNTIME_OPTIONS;
+        return net.serenitybdd.cucumber.CucumberRuntimeOptions.currentRuntimeOptions();
     }
 
     protected void parseFeaturesEarly() {

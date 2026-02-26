@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.model;
 
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberRuntimeOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class StoredFeatureFile {
     
 
     public File fromTheConfiguredPaths() throws IOException {
-        for(URI uri : CucumberWithSerenity.currentRuntimeOptions().getFeaturePaths()) {
+        for(URI uri : CucumberRuntimeOptions.currentRuntimeOptions().getFeaturePaths()) {
             if (Files.exists(candidatePath(uri, featureFileName))) {
                 return candidatePath(uri, featureFileName).toFile();
             }

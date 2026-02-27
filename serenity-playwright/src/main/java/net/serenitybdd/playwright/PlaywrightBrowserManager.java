@@ -287,7 +287,23 @@ public class PlaywrightBrowserManager {
         CURRENT.remove();
     }
 
-    // ── Package-visible accessors for testing ────────────────────────────
+    // ── Package-visible factory and accessors for testing ─────────────────
+
+    /**
+     * Creates a manager with injected environment variables, for unit testing.
+     */
+    static PlaywrightBrowserManager managedWith(EnvironmentVariables env) {
+        String browserType = env.optionalProperty("playwright.browsertype").orElse(DEFAULT_BROWSER_TYPE);
+        return new PlaywrightBrowserManager(browserType, new BrowserType.LaunchOptions(), null, env);
+    }
+
+    static PlaywrightBrowserManager managedWith(OptionsFactory optionsFactory, EnvironmentVariables env) {
+        Options options = optionsFactory.getOptions();
+        String browserType = (options.browserName != null)
+                ? options.browserName
+                : env.optionalProperty("playwright.browsertype").orElse(DEFAULT_BROWSER_TYPE);
+        return new PlaywrightBrowserManager(browserType, null, null, env, options);
+    }
 
     String getBrowserType() {
         return browserType;
@@ -352,10 +368,18 @@ public class PlaywrightBrowserManager {
             effective = (launchOptions != null) ? launchOptions : new BrowserType.LaunchOptions();
         }
 
-        // Serenity property fallback
+        // Serenity property fallbacks
         if (effective.headless == null) {
             environmentVariables.optionalProperty("playwright.headless")
                     .map(Boolean::valueOf).ifPresent(effective::setHeadless);
+        }
+        if (effective.channel == null) {
+            environmentVariables.optionalProperty("playwright.channel")
+                    .ifPresent(effective::setChannel);
+        }
+        if (effective.slowMo == null) {
+            environmentVariables.optionalProperty("playwright.slowmo")
+                    .map(Double::valueOf).ifPresent(effective::setSlowMo);
         }
         return effective;
     }
@@ -365,9 +389,22 @@ public class PlaywrightBrowserManager {
      * delegates to {@link PlaywrightOptionsResolver} for shorthand resolution.
      */
     Browser.NewContextOptions resolveContextOptions() {
+        Browser.NewContextOptions effective;
         if (options != null) {
-            return PlaywrightOptionsResolver.resolveContextOptions(options);
+            effective = PlaywrightOptionsResolver.resolveContextOptions(options);
+        } else {
+            effective = contextOptions;
         }
-        return contextOptions;
+        // Serenity property fallback
+        if (effective == null || effective.baseURL == null) {
+            java.util.Optional<String> baseUrl = environmentVariables.optionalProperty("playwright.baseurl");
+            if (baseUrl.isPresent()) {
+                if (effective == null) {
+                    effective = new Browser.NewContextOptions();
+                }
+                effective.setBaseURL(baseUrl.get());
+            }
+        }
+        return effective;
     }
 }

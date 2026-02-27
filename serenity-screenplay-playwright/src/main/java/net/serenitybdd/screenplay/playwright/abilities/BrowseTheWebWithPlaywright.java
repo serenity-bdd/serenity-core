@@ -39,9 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.BROWSER_TYPE;
-import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.HEADLESS;
-import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.TRACING;
+import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.*;
 
 /**
  * A Screenplay ability that wraps the Playwright Browser object.
@@ -158,10 +156,23 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
     }
 
     private Browser.NewContextOptions resolveContextOptions() {
+        Browser.NewContextOptions effective;
         if (playwrightOptions != null) {
-            return net.serenitybdd.playwright.PlaywrightOptionsResolver.resolveContextOptions(playwrightOptions);
+            effective = net.serenitybdd.playwright.PlaywrightOptionsResolver.resolveContextOptions(playwrightOptions);
+        } else {
+            effective = contextOptions;
         }
-        return contextOptions;
+        // Serenity property fallback
+        if (effective == null || effective.baseURL == null) {
+            Optional<String> baseUrl = BASE_URL.asStringFrom(environmentVariables);
+            if (baseUrl.isPresent()) {
+                if (effective == null) {
+                    effective = new Browser.NewContextOptions();
+                }
+                effective.setBaseURL(baseUrl.get());
+            }
+        }
+        return effective;
     }
 
     public Page getCurrentPage() {
@@ -252,6 +263,12 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
         }
         if (effective.tracesDir == null && TRACING.asBooleanFrom(environmentVariables).orElse(false)) {
             effective.setTracesDir(Paths.get(TRACES_PATH));
+        }
+        if (effective.channel == null) {
+            CHANNEL.asStringFrom(environmentVariables).ifPresent(effective::setChannel);
+        }
+        if (effective.slowMo == null) {
+            SLOW_MO.asDoubleFrom(environmentVariables).ifPresent(effective::setSlowMo);
         }
         return effective;
     }

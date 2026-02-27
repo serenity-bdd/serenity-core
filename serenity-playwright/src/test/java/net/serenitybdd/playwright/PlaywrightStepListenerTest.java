@@ -1,9 +1,16 @@
 package net.serenitybdd.playwright;
 
 import com.microsoft.playwright.Page;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -29,48 +36,133 @@ class PlaywrightStepListenerTest {
         assertThat(listener).isNotNull();
     }
 
-    @Test
-    void shouldHandleStepFinishedWhenNoPagesRegistered() {
-        // Should not throw even when no pages registered
-        assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+    @Nested
+    @DisplayName("stepFinished()")
+    class StepFinished {
+
+        @Test
+        void shouldHandleStepFinishedWhenNoPagesRegistered() {
+            assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+        }
+
+        @Test
+        void shouldHandleStepFinishedWithClosedPage() {
+            Page closedPage = mock(Page.class);
+            when(closedPage.isClosed()).thenReturn(true);
+            PlaywrightPageRegistry.registerPage(closedPage);
+
+            assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+        }
+
+        @Test
+        void shouldHandleStepFinishedWhenOutputDirectoryNotAvailable() {
+            Page mockPage = mock(Page.class);
+            when(mockPage.isClosed()).thenReturn(false);
+            PlaywrightPageRegistry.registerPage(mockPage);
+
+            assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+        }
     }
 
-    @Test
-    void shouldHandleStepFailedWhenNoPagesRegistered() {
-        // Should not throw even when no pages registered
-        assertThatCode(() -> listener.stepFailed(null)).doesNotThrowAnyException();
+    @Nested
+    @DisplayName("stepFailed()")
+    class StepFailed {
+
+        @Test
+        void shouldHandleStepFailedWhenNoPagesRegistered() {
+            assertThatCode(() -> listener.stepFailed(null)).doesNotThrowAnyException();
+        }
     }
 
-    @Test
-    void shouldHandleTakeScreenshotNowWhenNoPagesRegistered() {
-        // Should not throw even when no pages registered
-        assertThatCode(() -> listener.takeScreenshotNow()).doesNotThrowAnyException();
+    @Nested
+    @DisplayName("takeScreenshots(List)")
+    class TakeScreenshots {
+
+        @Test
+        void shouldDoNothingWhenNoPagesAreRegistered() {
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(screenshots);
+
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
+        void shouldDoNothingWhenRegisteredPageIsClosed() {
+            Page closedPage = mock(Page.class);
+            when(closedPage.isClosed()).thenReturn(true);
+            PlaywrightPageRegistry.registerPage(closedPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(screenshots);
+
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
+        void shouldNotThrowWhenOutputDirectoryIsUnavailableWithRegisteredPages() {
+            Page mockPage = mock(Page.class);
+            when(mockPage.isClosed()).thenReturn(false);
+            PlaywrightPageRegistry.registerPage(mockPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            // Without a real StepEventBus context, output directory is null
+            assertThatCode(() -> listener.takeScreenshots(screenshots))
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        void shouldNotThrowWhenNullListPassedAndNoPagesRegistered() {
+            // Guard: hasRegisteredPages() is false → returns before touching the list
+            assertThatCode(() -> listener.takeScreenshots((List<ScreenshotAndHtmlSource>) null))
+                    .doesNotThrowAnyException();
+        }
     }
 
-    @Test
-    void shouldHandleStepFinishedWithClosedPage() {
-        Page closedPage = mock(Page.class);
-        when(closedPage.isClosed()).thenReturn(true);
-        PlaywrightPageRegistry.registerPage(closedPage);
+    @Nested
+    @DisplayName("takeScreenshots(TestResult, List)")
+    class TakeScreenshotsWithResult {
 
-        // Should not throw with closed page
-        assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+        @Test
+        void shouldDoNothingWhenNoPagesAreRegistered() {
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(TestResult.SUCCESS, screenshots);
+
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
+        void shouldDoNothingWhenRegisteredPageIsClosed() {
+            Page closedPage = mock(Page.class);
+            when(closedPage.isClosed()).thenReturn(true);
+            PlaywrightPageRegistry.registerPage(closedPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(TestResult.FAILURE, screenshots);
+
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
+        void shouldNotThrowWhenNullListPassedAndNoPagesRegistered() {
+            assertThatCode(() -> listener.takeScreenshots(TestResult.SUCCESS, null))
+                    .doesNotThrowAnyException();
+        }
     }
 
-    @Test
-    void shouldHandleStepFinishedWhenOutputDirectoryNotAvailable() {
-        // Without a proper test context, output directory will be null
-        Page mockPage = mock(Page.class);
-        when(mockPage.isClosed()).thenReturn(false);
-        PlaywrightPageRegistry.registerPage(mockPage);
+    @Nested
+    @DisplayName("takeScreenshotNow()")
+    class TakeScreenshotNow {
 
-        // Should gracefully handle missing output directory
-        assertThatCode(() -> listener.stepFinished()).doesNotThrowAnyException();
+        @Test
+        void shouldNotThrowWhenNoPagesRegistered() {
+            assertThatCode(() -> listener.takeScreenshotNow()).doesNotThrowAnyException();
+        }
     }
 
     @Test
     void shouldNotThrowOnAllStepListenerMethods() {
-        // Verify all interface methods are implemented without throwing
         assertThatCode(() -> {
             listener.testSuiteStarted(Object.class);
             listener.testSuiteFinished();
@@ -96,8 +188,6 @@ class PlaywrightStepListenerTest {
             listener.exampleFinished();
             listener.assumptionViolated("message");
             listener.testRunFinished();
-            listener.takeScreenshots(null);
-            listener.takeScreenshots(null, null);
             listener.recordScreenshot("name", new byte[0]);
         }).doesNotThrowAnyException();
     }

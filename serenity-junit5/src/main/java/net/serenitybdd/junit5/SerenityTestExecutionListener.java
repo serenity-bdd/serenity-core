@@ -387,11 +387,37 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     private void updateResultsUsingTestAnnotations(TestIdentifier testIdentifier, MethodSource methodSource) {
-
-        if (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isManual()) {
-            setToManual(testIdentifier, methodSource);
-        }
+        findJavaMethod(methodSource).ifPresent(method -> {
+            if (TestMethodConfiguration.forMethod(method).isManual()) {
+                setToManual(testIdentifier, methodSource);
+            }
+        });
         expectedExceptions.forEach(ex -> updateResultsForExpectedException(testIdentifier, ex));
+    }
+
+    /**
+     * Resolve the Java method from a MethodSource, handling frameworks like Spock
+     * where the reported method name may be a display name rather than the actual method name.
+     */
+    private Optional<Method> findJavaMethod(MethodSource methodSource) {
+        try {
+            return Optional.of(methodSource.getJavaMethod());
+        } catch (Exception e) {
+            // Spock and other frameworks report display names (e.g. "A test should do X")
+            // instead of the actual generated method name (e.g. "$spock_feature_0_0").
+            // Fall back to searching declared methods by name.
+            try {
+                Class<?> testClass = methodSource.getJavaClass();
+                for (Method method : testClass.getDeclaredMethods()) {
+                    if (method.getName().equals(methodSource.getMethodName())) {
+                        return Optional.of(method);
+                    }
+                }
+            } catch (Exception fallbackException) {
+                // Class itself could not be resolved
+            }
+            return Optional.empty();
+        }
     }
 
     private void setToManual(TestIdentifier testIdentifier, MethodSource methodSource) {

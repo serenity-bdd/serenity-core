@@ -133,6 +133,9 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         // Use the map to update the leaf requirements
         updateParentFieldsIn(requirementsByPath, allRequirements);
 
+        // Override requirement types based on annotation tags (@Feature, @Story) from outcomes
+        overrideRequirementTypesFromAnnotationTags(outcomes, allRequirements);
+
         // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
 
         populateChildren(requirementsByPath, allRequirements);
@@ -143,6 +146,30 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         return allRequirements.stream()
                 .filter(requirement -> StringUtils.isEmpty(requirement.getParent()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Override depth-based requirement types using annotation tags from test outcomes.
+     * When a requirement's name matches a @Feature or @Story tag, the requirement type
+     * is updated to match the annotation rather than the depth-based default.
+     */
+    private void overrideRequirementTypesFromAnnotationTags(List<TestOutcome> outcomes, Collection<Requirement> allRequirements) {
+        Set<String> featureNames = new HashSet<>();
+        Set<String> storyNames = new HashSet<>();
+        for (TestOutcome outcome : outcomes) {
+            for (TestTag tag : outcome.getTags()) {
+                if ("feature".equalsIgnoreCase(tag.getType())) {
+                    featureNames.add(tag.getName());
+                } else if ("story".equalsIgnoreCase(tag.getType()) && !tag.getName().contains("/")) {
+                    storyNames.add(tag.getName());
+                }
+            }
+        }
+        for (Requirement requirement : allRequirements) {
+            if (featureNames.contains(requirement.getName()) && !"feature".equals(requirement.getType())) {
+                requirement.withType("feature");
+            }
+        }
     }
 
     private void processPathElements(PathElements pathElements, int maxRequirementsDepth, Set<PathElements> leafPathElements,

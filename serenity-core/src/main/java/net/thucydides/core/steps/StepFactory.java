@@ -19,6 +19,7 @@ import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.collect.NewSet;
 import net.serenitybdd.model.di.DependencyInjector;
+import net.serenitybdd.model.steps.StepParameterProvider;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.ConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
@@ -32,6 +33,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.function.Function;
 
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
@@ -59,6 +61,7 @@ public class StepFactory {
 
     private final ByteBuddy byteBuddy;
     private final TypeCache<TypeCache.SimpleKey> proxyCache;
+    private List<StepParameterProvider> parameterProviders;
 
     /**
      * Create a new step factory.
@@ -249,15 +252,27 @@ public class StepFactory {
                 return webEnabledStepLibrary(scenarioStepsClass, proxyClass,interceptor);
             } else if (STEP_LIBRARY_WITH_PAGES.equals(strategy)) {
                 return stepLibraryWithPages(scenarioStepsClass, proxyClass,interceptor);
-            } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
-                return immutableStepLibrary(scenarioStepsClass, proxyClass, parameters,interceptor);
-            } else if (INNER_CLASS_CONSTRUCTOR.equals(strategy)) {
-                return immutableStepLibrary(scenarioStepsClass, proxyClass, EnclosingClass.of(scenarioStepsClass).asParameters(),interceptor);
-            } else {
-                final ProxyConfiguration proxy = (ProxyConfiguration)proxyClass.getDeclaredConstructor().newInstance();
-                proxy.$$_serenity_set_interceptor(interceptor);
-                return (T) proxy;
+            } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy)) {
+                if (parameters.length > 0) {
+                    return immutableStepLibrary(scenarioStepsClass, proxyClass, parameters, interceptor);
+                }
+                Object[] resolvedParams = resolveConstructorParameters(scenarioStepsClass);
+                if (resolvedParams.length > 0) {
+                    try {
+                        return immutableStepLibrary(scenarioStepsClass, proxyClass, resolvedParams, interceptor);
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        LOGGER.debug("Could not create step library {} with SPI-resolved parameters, falling back to default constructor",
+                                scenarioStepsClass.getSimpleName());
+                    }
+                }
+                // fall through to default constructor
             }
+            if (INNER_CLASS_CONSTRUCTOR.equals(strategy)) {
+                return immutableStepLibrary(scenarioStepsClass, proxyClass, EnclosingClass.of(scenarioStepsClass).asParameters(),interceptor);
+            }
+            final ProxyConfiguration proxy = (ProxyConfiguration)proxyClass.getDeclaredConstructor().newInstance();
+            proxy.$$_serenity_set_interceptor(interceptor);
+            return (T) proxy;
         } catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException|InstantiationException ex) {
             LOGGER.error("Cannot create StepFactory for  " + scenarioStepsClass , ex);
             return null;
@@ -481,6 +496,57 @@ public class StepFactory {
 
     private static boolean isByte(Class<?> fieldType) {
         return (fieldType.equals(Byte.class) || fieldType.equals(byte.class));
+    }
+
+    private List<StepParameterProvider> getParameterProviders() {
+        if (parameterProviders == null) {
+            parameterProviders = new ArrayList<>();
+            ServiceLoader.load(StepParameterProvider.class).forEach(parameterProviders::add);
+        }
+        return parameterProviders;
+    }
+
+    private Object[] resolveConstructorParameters(Class<?> scenarioStepsClass) {
+        List<StepParameterProvider> providers = getParameterProviders();
+        if (providers.isEmpty()) {
+            return new Object[0];
+        }
+
+        List<Constructor<?>> constructors = Arrays.stream(scenarioStepsClass.getDeclaredConstructors())
+                .filter(c -> c.getParameterTypes().length > 0)
+                .filter(c -> !(c.getParameterTypes().length == 1
+                        && scenarioStepsClass.getEnclosingClass() != null
+                        && c.getParameterTypes()[0] == scenarioStepsClass.getEnclosingClass()))
+                .sorted(Comparator.comparingInt(c -> c.getParameterTypes().length))
+                .collect(Collectors.toList());
+
+        for (Constructor<?> constructor : constructors) {
+            Class<?>[] paramTypes = constructor.getParameterTypes();
+            Object[] resolved = new Object[paramTypes.length];
+            boolean allResolved = true;
+
+            for (int i = 0; i < paramTypes.length; i++) {
+                Optional<Object> value = Optional.empty();
+                for (StepParameterProvider provider : providers) {
+                    value = provider.resolve(paramTypes[i]);
+                    if (value.isPresent()) {
+                        break;
+                    }
+                }
+                if (value.isPresent()) {
+                    resolved[i] = value.get();
+                } else {
+                    allResolved = false;
+                    break;
+                }
+            }
+
+            if (allResolved) {
+                return resolved;
+            }
+        }
+
+        return new Object[0];
     }
 
     private TypeCache.SimpleKey getCacheKey(Class<?> scenarioStepsClass, Class<?> interceptorClass) {

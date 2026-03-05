@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.playwright.actors;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.junit.OptionsFactory;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actors.Cast;
@@ -68,6 +69,7 @@ public class PlaywrightCast extends Cast {
     private BrowserType.LaunchOptions launchOptions;
     private Browser.NewContextOptions contextOptions;
     private String browserType;
+    private OptionsFactory optionsFactory;
 
     public PlaywrightCast() {
         super(new Ability[]{});
@@ -122,6 +124,18 @@ public class PlaywrightCast extends Cast {
     }
 
     /**
+     * Configure the cast using a Playwright {@link OptionsFactory}.
+     * <p>
+     * This allows reusing the same {@code OptionsFactory} that you use with {@code @UsePlaywright}
+     * when setting up a Screenplay stage.
+     * </p>
+     */
+    public PlaywrightCast withOptions(OptionsFactory optionsFactory) {
+        this.optionsFactory = optionsFactory;
+        return this;
+    }
+
+    /**
      * Set headless mode for the browser.
      */
     public PlaywrightCast withHeadlessMode(boolean headless) {
@@ -145,6 +159,10 @@ public class PlaywrightCast extends Cast {
     }
 
     private BrowseTheWebWithPlaywright createPlaywrightAbility() {
+        if (optionsFactory != null) {
+            return BrowseTheWebWithPlaywright.withOptions(optionsFactory);
+        }
+
         BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.usingTheDefaultConfiguration();
 
         if (launchOptions != null) {

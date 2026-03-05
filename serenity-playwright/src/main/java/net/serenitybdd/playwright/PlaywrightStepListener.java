@@ -144,7 +144,7 @@ public class PlaywrightStepListener implements StepListener {
 
         try {
             StepEventBus eventBus = StepEventBus.getParallelEventBus();
-            if (eventBus.getBaseStepListener() != null) {
+            if (eventBus.isBaseStepListenerRegistered()) {
                 TestOutcome outcome = eventBus.getBaseStepListener().getCurrentTestOutcome();
                 if (outcome != null && !outcome.getTestSteps().isEmpty()) {
                     // Use lastStep() to get the most recently completed step
@@ -163,7 +163,7 @@ public class PlaywrightStepListener implements StepListener {
     private Path getOutputDirectory() {
         try {
             StepEventBus eventBus = StepEventBus.getParallelEventBus();
-            if (eventBus.getBaseStepListener() != null) {
+            if (eventBus.isBaseStepListenerRegistered()) {
                 File outputDir = eventBus.getBaseStepListener().getOutputDirectory();
                 return outputDir != null ? outputDir.toPath() : null;
             }
@@ -257,10 +257,60 @@ public class PlaywrightStepListener implements StepListener {
     public void testRunFinished() {}
 
     @Override
-    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {}
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+        captureScreenshotsInto(screenshots);
+    }
 
     @Override
-    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {}
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
+        captureScreenshotsInto(screenshots);
+    }
+
+    private void captureScreenshotsInto(List<ScreenshotAndHtmlSource> screenshots) {
+        if (!PlaywrightPageRegistry.hasRegisteredPages()) {
+            return;
+        }
+        try {
+            Path outputDir = getOutputDirectory();
+            if (outputDir == null) {
+                LOGGER.debug("No output directory available for screenshots");
+                return;
+            }
+            for (Page page : PlaywrightPageRegistry.getRegisteredPages()) {
+                ScreenshotAndHtmlSource screenshot = captureScreenshot(page, outputDir);
+                if (screenshot != null) {
+                    screenshots.add(screenshot);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to capture Playwright screenshots", e);
+        }
+    }
+
+    private ScreenshotAndHtmlSource captureScreenshot(Page page, Path outputDir) {
+        if (page == null) {
+            return null;
+        }
+
+        PlaywrightPhotoLens lens = new PlaywrightPhotoLens(page);
+        if (!lens.canTakeScreenshot()) {
+            return null;
+        }
+
+        try {
+            byte[] screenshotData = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+            if (screenshotData != null && screenshotData.length > 0) {
+                Files.createDirectories(outputDir);
+                Path screenshotPath = Files.createTempFile(outputDir, "screenshot", ".png");
+                Files.write(screenshotPath, screenshotData);
+                File sourceFile = capturePageSource(page, outputDir);
+                return new ScreenshotAndHtmlSource(screenshotPath.toFile(), sourceFile);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to capture screenshot for Playwright page", e);
+        }
+        return null;
+    }
 
     @Override
     public void recordScreenshot(String screenshotName, byte[] screenshot) {}

@@ -275,6 +275,11 @@ public class TestAnnotations {
         if (testClass.getSuperclass() != Object.class) {
             tags.addAll(getClassTags(testClass.getSuperclass()));
         }
+        // Walk enclosing class chain so that JUnit 5 @Nested inner classes
+        // inherit @Feature, @Epic, @Story, @WithTag etc. from their outer class
+        if (testClass.getEnclosingClass() != null) {
+            tags.addAll(getClassTags(testClass.getEnclosingClass()));
+        }
         return tags;
     }
 

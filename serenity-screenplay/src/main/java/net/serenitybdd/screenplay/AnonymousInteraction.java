@@ -8,7 +8,9 @@ public class AnonymousInteraction extends AnonymousPerformable implements Intera
 
     private boolean isSilent = false;
 
-    public AnonymousInteraction(){}
+    public AnonymousInteraction(){
+        super();
+    }
 
     public AnonymousInteraction(String title, List<Performable> steps) {
         super(title, steps);

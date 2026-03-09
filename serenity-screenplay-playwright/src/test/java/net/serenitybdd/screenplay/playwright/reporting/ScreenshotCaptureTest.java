@@ -9,7 +9,9 @@ import net.serenitybdd.screenplay.playwright.interactions.Open;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +45,11 @@ public class ScreenshotCaptureTest {
     void setup() {
         alice = Actor.named("Alice")
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
+    }
+
+    @AfterEach
+    void clearStoreHtmlProperty() {
+        TestLocalEnvironmentVariables.clear();
     }
 
     @Test
@@ -140,6 +147,62 @@ public class ScreenshotCaptureTest {
         assertThat(screenshotAndSource.getScreenshot()).isNotNull();
         assertThat(screenshotAndSource.getScreenshot().exists()).isTrue();
     }
+
+    @Test
+    @DisplayName("HTML source should be recorded when SERENITY_STORE_HTML is ALWAYS")
+    void html_source_should_be_recorded_when_store_html_is_always() {
+        TestLocalEnvironmentVariables.setProperty("serenity.store.html", "ALWAYS");
+
+        alice.attemptsTo(
+            Open.url("https://the-internet.herokuapp.com/")
+        );
+
+        BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
+        var screenshotAndSource = ability.takeScreenShot();
+
+        assertThat(screenshotAndSource.getScreenshot()).isNotNull();
+        assertThat(screenshotAndSource.getHtmlSource()).isPresent();
+        assertThat(screenshotAndSource.getHtmlSource().get().exists()).isTrue();
+    }
+
+    @Test
+    @DisplayName("HTML source should not be recorded when SERENITY_STORE_HTML is NEVER")
+    void html_source_should_not_be_recorded_when_store_html_is_never() {
+        TestLocalEnvironmentVariables.setProperty("serenity.store.html", "NEVER");
+
+        alice.attemptsTo(
+            Open.url("https://the-internet.herokuapp.com/")
+        );
+
+        BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
+        var screenshotAndSource = ability.takeScreenShot();
+
+        assertThat(screenshotAndSource.getScreenshot()).isNotNull();
+        assertThat(screenshotAndSource.getHtmlSource()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("HTML source should not be recorded for passing tests when SERENITY_STORE_HTML is FAILURES")
+    void html_source_should_not_be_recorded_for_passing_tests_by_default() {
+        TestLocalEnvironmentVariables.setProperty("serenity.store.html", "FAILURES");
+
+        alice.attemptsTo(
+            Open.url("https://the-internet.herokuapp.com/")
+        );
+
+        BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
+        var screenshotAndSource = ability.takeScreenShot();
+
+        // For a passing test, HTML source should not be recorded
+        assertThat(screenshotAndSource.getScreenshot()).isNotNull();
+        assertThat(screenshotAndSource.getHtmlSource()).isEmpty();
+    }
+
+    /**
+     * The test for SERENITY_STORE_HTML=FAILURES with a failed test is in
+     * {@link StoreHtmlOnFailureTest} because it requires simulating a test failure
+     * which conflicts with the SerenityJUnit5Extension (it rethrows recorded failures).
+     */
 
     private void collectStepDescriptions(List<TestStep> steps, List<String> descriptions) {
         for (TestStep step : steps) {

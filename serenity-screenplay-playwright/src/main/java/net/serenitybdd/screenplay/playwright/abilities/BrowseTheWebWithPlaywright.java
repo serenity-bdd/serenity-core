@@ -40,6 +40,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.*;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_STORE_HTML;
 
 /**
  * A Screenplay ability that wraps the Playwright Browser object.
@@ -285,14 +286,31 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor, HasTe
         Page currentPage = getCurrentPage();
 
         try {
-            Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
-            Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
-            Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
             File screenshot = getPhotographer().takesAScreenshot(currentPage);
 
-            return new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
+            if (shouldRecordPageSource()) {
+                Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
+                Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
+                Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
+                return new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
+            }
+
+            return new ScreenshotAndHtmlSource(screenshot);
         } catch (IOException e) {
             throw new AssertionError("Failed to take Playwright screenshot", e);
+        }
+    }
+
+    private boolean shouldRecordPageSource() {
+        String storeHtmlValue = SERENITY_STORE_HTML.optionalFrom(SystemEnvironmentVariables.currentEnvironmentVariables()).orElse("FAILURES");
+        switch (storeHtmlValue) {
+            case "NEVER":
+                return false;
+            case "ALWAYS":
+                return true;
+            default:
+                // FAILURES - only record for failures and errors
+                return StepEventBus.getParallelEventBus().getBaseStepListener().currentTestFailed();
         }
     }
 

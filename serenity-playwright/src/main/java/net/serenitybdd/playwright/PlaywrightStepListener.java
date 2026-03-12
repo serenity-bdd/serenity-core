@@ -1,12 +1,16 @@
 package net.serenitybdd.playwright;
 
 import com.microsoft.playwright.Page;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.core.model.screenshots.ScreenshotPermission;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.Story;
+import net.thucydides.model.domain.TakeScreenshots;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
@@ -21,6 +25,8 @@ import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_STORE_HTML;
 
 /**
  * Listens to step events and captures Playwright screenshots.
@@ -46,21 +52,21 @@ public class PlaywrightStepListener implements StepListener {
 
     @Override
     public void stepFinished() {
-        if (PlaywrightPageRegistry.hasRegisteredPages()) {
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.SUCCESS)) {
             captureScreenshotsForAllPages(TestResult.SUCCESS);
         }
     }
 
     @Override
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
-        if (PlaywrightPageRegistry.hasRegisteredPages()) {
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.SUCCESS)) {
             captureScreenshotsForAllPages(TestResult.SUCCESS);
         }
     }
 
     @Override
     public void stepFailed(StepFailure failure) {
-        if (PlaywrightPageRegistry.hasRegisteredPages()) {
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.FAILURE)) {
             captureScreenshotsForAllPages(TestResult.FAILURE);
         }
     }
@@ -68,8 +74,21 @@ public class PlaywrightStepListener implements StepListener {
     @Override
     public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList,
                            boolean isInDataDrivenTest, ZonedDateTime timestamp) {
-        if (PlaywrightPageRegistry.hasRegisteredPages()) {
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.FAILURE)) {
             captureScreenshotsForAllPages(TestResult.FAILURE);
+        }
+    }
+
+    /**
+     * Check screenshot permissions, mirroring BaseStepListener.shouldTakeEndOfStepScreenshotFor().
+     * For failures, checks if FOR_FAILURES is allowed; for success, checks if AFTER_EACH_STEP is allowed.
+     */
+    private boolean shouldTakeEndOfStepScreenshotFor(TestResult result) {
+        ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
+        if (result.isAtLeast(TestResult.FAILURE)) {
+            return screenshots.areAllowed(TakeScreenshots.FOR_FAILURES, result);
+        } else {
+            return screenshots.areAllowed(TakeScreenshots.AFTER_EACH_STEP, result);
         }
     }
 
@@ -126,6 +145,9 @@ public class PlaywrightStepListener implements StepListener {
     }
 
     private File capturePageSource(Page page, Path outputDir) {
+        if (!shouldRecordPageSource()) {
+            return null;
+        }
         try {
             String content = page.content();
             Path sourceFile = Files.createTempFile(outputDir, "pagesource", ".html");
@@ -134,6 +156,22 @@ public class PlaywrightStepListener implements StepListener {
         } catch (IOException e) {
             LOGGER.debug("Could not capture page source", e);
             return null;
+        }
+    }
+
+    private boolean shouldRecordPageSource() {
+        String storeHtmlValue = SERENITY_STORE_HTML.optionalFrom(SystemEnvironmentVariables.currentEnvironmentVariables()).orElse("FAILURES");
+        switch (storeHtmlValue) {
+            case "NEVER":
+                return false;
+            case "ALWAYS":
+                return true;
+            default:
+                try {
+                    return StepEventBus.getParallelEventBus().getBaseStepListener().currentTestFailed();
+                } catch (Exception e) {
+                    return false;
+                }
         }
     }
 

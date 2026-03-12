@@ -17,6 +17,7 @@ public class Photographer {
 
         try {
             Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
+            Files.createDirectories(outputDirectory);
             Path screenshotFile = Files.createTempFile(outputDirectory, "screenshot", ".png");
             Files.write(screenshotFile, screenshot);
 

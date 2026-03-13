@@ -8,7 +8,7 @@ public class TaskBuilder {
         this.title = title;
     }
 
-    public <T extends Performable> AnonymousTask whereTheActorAttemptsTo(T... steps) {
+    public <T extends Task> AnonymousTask whereTheActorAttemptsTo(T... steps) {
         return Task.where(title, steps);
     }
 }

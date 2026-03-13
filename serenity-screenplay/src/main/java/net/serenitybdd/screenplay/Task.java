@@ -23,21 +23,21 @@ public interface Task extends Performable {
         return Instrumented.instanceOf(AnonymousTask.class).withProperties(title, Arrays.asList(steps));
     }
 
-    static <T extends Performable> AnonymousPerformableFunction where(Consumer<Actor> performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(HumanReadableTaskName.forCurrentMethod(),
+    static <T extends Performable> AnonymousTaskFunction where(Consumer<Actor> performableOperation) {
+        return Instrumented.instanceOf(AnonymousTaskFunction.class).withProperties(HumanReadableTaskName.forCurrentMethod(),
                                                                                           performableOperation);
     }
 
-    static <T extends Performable> AnonymousPerformableFunction where(String title, Consumer<Actor> performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(title, performableOperation);
+    static <T extends Performable> AnonymousTaskFunction where(String title, Consumer<Actor> performableOperation) {
+        return Instrumented.instanceOf(AnonymousTaskFunction.class).withProperties(title, performableOperation);
     }
 
-    static <T extends Performable> AnonymousPerformableRunnable thatPerforms(Runnable performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableRunnable.class).withProperties(HumanReadableTaskName.forCurrentMethod(), performableOperation);
+    static <T extends Performable> AnonymousTaskRunnable thatPerforms(Runnable performableOperation) {
+        return Instrumented.instanceOf(AnonymousTaskRunnable.class).withProperties(HumanReadableTaskName.forCurrentMethod(), performableOperation);
     }
 
-    static <T extends Performable> AnonymousPerformableRunnable thatPerforms(String title, Runnable performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableRunnable.class).withProperties(title, performableOperation);
+    static <T extends Performable> AnonymousTaskRunnable thatPerforms(String title, Runnable performableOperation) {
+        return Instrumented.instanceOf(AnonymousTaskRunnable.class).withProperties(title, performableOperation);
     }
 
 }

@@ -501,6 +501,11 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
             } else {
                 error = SerenityManagedException.detachedCopyOf(testErrorException);
                 logStepFailure(obj, method, args, ErrorConvertor.convertToAssertion(error));
+                if (StepEventBus.getEventBus().softAssertsActive()) {
+                    // Non-assertion exceptions (RuntimeException, checked exceptions) should
+                    // not be suppressed by soft asserts — only AssertionErrors are soft.
+                    throw error;
+                }
                 result = appropriateReturnObject(obj, method);
             }
         }
@@ -544,17 +549,8 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
         try {
             return zuperMethod.invoke(obj, args);
         } catch (InvocationTargetException invocationTargetException) {
-            if (isAnAssertionError(invocationTargetException) && StepEventBus.getEventBus().softAssertsActive()) {
-                return null;
-            } else {
-                throw invocationTargetException.getCause();
-            }
+            throw invocationTargetException.getCause();
         }
-    }
-
-    private boolean isAnAssertionError(InvocationTargetException invocationTargetException) {
-        return (invocationTargetException.getTargetException() instanceof AssertionError)
-                || (invocationTargetException.getCause() instanceof AssertionError);
     }
 
     private boolean isPending(final Method method) {

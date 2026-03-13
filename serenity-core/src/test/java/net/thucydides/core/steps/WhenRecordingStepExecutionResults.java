@@ -846,7 +846,7 @@ public class WhenRecordingStepExecutionResults {
     }
 
     @Test
-    public void a_failing_step_should_not_prevent_collecting_next_steps_result_if_soft_asserts_enabled() throws Exception {
+    public void a_failing_assertion_should_not_prevent_collecting_next_steps_result_if_soft_asserts_enabled() throws Exception {
 
         StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getParallelEventBus().testStarted("app_should_work");
@@ -854,9 +854,9 @@ public class WhenRecordingStepExecutionResults {
 
         FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
-        steps.failingWithExceptionStep();
+        steps.failingStep();
         steps.step_two();
-        steps.failingWithExceptionStep();
+        steps.failingStep();
         steps.step_three();
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
@@ -864,10 +864,142 @@ public class WhenRecordingStepExecutionResults {
         TestOutcome testOutcome = results.get(0);
 
         assertThat(testOutcome.getTestSteps().size(), equalTo(5));
-        TestResult[] expectedResults = {TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS};
+        TestResult[] expectedResults = {TestResult.SUCCESS, TestResult.FAILURE, TestResult.SUCCESS, TestResult.FAILURE, TestResult.SUCCESS};
         for (int i = 0; i < testOutcome.getTestSteps().size(); i++) {
             assertThat(testOutcome.getTestSteps().get(i).getResult(), is(expectedResults[i]));
         }
+    }
+
+    @Test
+    public void a_runtime_exception_should_terminate_execution_even_if_soft_asserts_enabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+
+        try {
+            steps.failingWithRuntimeExceptionStep();
+            // Should not reach here - RuntimeException must propagate
+            throw new AssertionError("Expected RuntimeException to propagate but it was swallowed");
+        } catch (Throwable e) {
+            // Expected: RuntimeException should not be suppressed by soft asserts
+            assertThat(e.getMessage(), containsString("runtime exception"));
+        }
+
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        // Only 2 steps should be recorded: step_one (SUCCESS) and failingWithRuntimeExceptionStep (ERROR)
+        assertThat(testOutcome.getTestSteps().size(), equalTo(2));
+        assertThat(testOutcome.getTestSteps().get(0).getResult(), is(TestResult.SUCCESS));
+        assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.ERROR));
+    }
+
+    @Test
+    public void a_checked_exception_should_terminate_execution_even_if_soft_asserts_enabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+
+        try {
+            steps.failingWithExceptionStep();
+            throw new AssertionError("Expected checked exception to propagate but it was swallowed");
+        } catch (Throwable e) {
+            assertThat(e.getMessage(), containsString("Step failed due to exception"));
+        }
+
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        assertThat(testOutcome.getTestSteps().size(), equalTo(2));
+        assertThat(testOutcome.getTestSteps().get(0).getResult(), is(TestResult.SUCCESS));
+        assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.ERROR));
+    }
+
+    @Test
+    public void a_null_pointer_exception_should_terminate_execution_even_if_soft_asserts_enabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+
+        try {
+            steps.stepCausingANullPointerException();
+            throw new AssertionError("Expected NullPointerException to propagate but it was swallowed");
+        } catch (Throwable e) {
+            assertThat(e.getClass().getName(), containsString("NullPointerException"));
+        }
+
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        assertThat(testOutcome.getTestSteps().size(), equalTo(2));
+        assertThat(testOutcome.getTestSteps().get(0).getResult(), is(TestResult.SUCCESS));
+        assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.ERROR));
+    }
+
+    @Test
+    public void soft_assertion_failures_should_record_error_details() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+        steps.failingStep();
+        steps.step_two();
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        // Verify the failure step has error details recorded
+        assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.FAILURE));
+        assertThat(testOutcome.getTestSteps().get(1).getException().getErrorType(), is("java.lang.AssertionError"));
+        assertThat(testOutcome.getTestSteps().get(1).getErrorMessage(), containsString("Step failed"));
+
+        // Verify subsequent step still ran and succeeded
+        assertThat(testOutcome.getTestSteps().get(2).getResult(), is(TestResult.SUCCESS));
+    }
+
+    @Test
+    public void assertion_errors_should_still_terminate_execution_when_soft_asserts_are_disabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        // Note: soft asserts NOT enabled
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+        steps.failingStep();
+        // step_two should NOT execute because soft asserts are off
+        steps.step_two();
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        // failingStep should be recorded as FAILURE
+        assertThat(testOutcome.getTestSteps().get(1).getResult(), is(TestResult.FAILURE));
+        // step_two should be skipped (not SUCCESS) because the previous step failed
+        assertThat(testOutcome.getTestSteps().get(2).getResult(), is(not(TestResult.SUCCESS)));
     }
 
     @Test

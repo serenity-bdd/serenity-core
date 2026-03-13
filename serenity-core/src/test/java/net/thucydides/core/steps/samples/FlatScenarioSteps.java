@@ -72,6 +72,11 @@ public class FlatScenarioSteps extends ScenarioSteps {
         throw new Exception("Step failed due to exception");
     }
 
+    @Step
+    public void failingWithRuntimeExceptionStep() {
+        throw new RuntimeException("Step failed due to runtime exception");
+    }
+
     @Ignore
     @Step
     public void ignoredStep() {}

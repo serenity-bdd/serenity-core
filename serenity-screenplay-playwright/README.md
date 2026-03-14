@@ -1019,6 +1019,193 @@ serenity.take.screenshots=FOR_EACH_ACTION
 
 ---
 
+## Working with Multiple Pages and Frames
+
+### Switching Between Pages (Tabs)
+
+The `SwitchTo` class provides methods for managing multiple browser pages (tabs) in Playwright:
+
+#### Opening New Pages
+
+```java
+// Open a new blank page
+actor.attemptsTo(
+    SwitchTo.newPage()
+);
+
+// Open a new page and navigate to a URL
+actor.attemptsTo(
+    SwitchTo.newPageAt("https://example.com/page2")
+);
+```
+
+#### Switching Between Existing Pages
+
+```java
+// Switch by index (0-based)
+actor.attemptsTo(
+    SwitchTo.pageNumber(0)  // Switch to first page
+);
+
+// Switch by title (partial match)
+actor.attemptsTo(
+    SwitchTo.pageWithTitle("Dashboard")
+);
+
+// Switch by URL (partial match)
+actor.attemptsTo(
+    SwitchTo.pageWithUrl("/admin")
+);
+```
+
+#### Closing Pages
+
+```java
+// Close current page and switch to previous one
+actor.attemptsTo(
+    SwitchTo.previousPageAfterClosingCurrent()
+);
+```
+
+#### Complete Example
+
+```java
+@Test
+void shouldWorkWithMultiplePages() {
+    actor.attemptsTo(
+        // Open main page
+        Open.url("https://example.com"),
+        Click.on("#external-link"),  // Opens new tab
+        
+        // Switch to the new page
+        SwitchTo.pageWithTitle("External Page"),
+        Ensure.that("#content").isVisible(),
+        
+        // Switch back to original page
+        SwitchTo.pageNumber(0),
+        Ensure.that("#main").isVisible(),
+        
+        // Close the second page
+        SwitchTo.pageNumber(1),
+        SwitchTo.previousPageAfterClosingCurrent()
+    );
+}
+```
+
+### Working with IFrames
+
+The `WithinFrame` class allows you to interact with elements inside iframes without manually switching contexts:
+
+#### Basic IFrame Interactions
+
+```java
+// Click an element within an iframe
+actor.attemptsTo(
+    WithinFrame.locatedBy("#my-iframe")
+        .click("#button-inside")
+);
+
+// Fill an input within an iframe
+actor.attemptsTo(
+    WithinFrame.locatedBy("iframe[name='content']")
+        .fill("#email", "user@example.com")
+);
+
+// Clear an input within an iframe
+actor.attemptsTo(
+    WithinFrame.locatedBy("#editor-frame")
+        .clear("#text-field")
+);
+
+// Type text character by character
+actor.attemptsTo(
+    WithinFrame.locatedBy("#editor-frame")
+        .type("#text-field", "Hello World")
+);
+```
+
+#### Custom Actions Within IFrames
+
+For more complex interactions, use the `perform()` method with a lambda:
+
+```java
+actor.attemptsTo(
+    WithinFrame.locatedBy("#my-iframe")
+        .perform(frame -> {
+            // Perform multiple actions within the frame
+            frame.locator("#username").fill("testuser");
+            frame.locator("#password").fill("password123");
+            frame.locator("#remember-me").check();
+            frame.locator("#login-button").click();
+        })
+);
+```
+
+#### Nested IFrames
+
+For nested iframes, you can use `Target.inFrame()` or chain multiple `WithinFrame` calls:
+
+```java
+// Using Target for nested frames
+Target nestedElement = Target.the("nested element")
+    .inFrame("iframe#outer")
+    .inFrame("iframe#inner")
+    .locatedBy("#content");
+
+actor.attemptsTo(
+    Click.on(nestedElement)
+);
+
+// Or query content from nested frames
+String text = actor.asksFor(Text.of(nestedElement));
+```
+
+#### Complete IFrame Example
+
+```java
+@Test
+void shouldInteractWithIFrame() {
+    actor.attemptsTo(
+        // Navigate to page with iframe
+        Open.url("https://example.com/iframe-demo"),
+        
+        // Fill form within iframe
+        WithinFrame.locatedBy("#contact-form-iframe")
+            .fill("#name", "John Doe"),
+        
+        WithinFrame.locatedBy("#contact-form-iframe")
+            .fill("#email", "john@example.com"),
+        
+        WithinFrame.locatedBy("#contact-form-iframe")
+            .click("#submit"),
+        
+        // Verify success message (also in iframe)
+        Ensure.that(
+            Target.the("success message")
+                .inFrame("#contact-form-iframe")
+                .locatedBy(".success")
+        ).isVisible()
+    );
+}
+```
+
+### Checking Current Page State
+
+You can query information about the current page or open pages:
+
+```java
+// Get count of open pages
+int pageCount = actor.asksFor(PageCount.inTheBrowser());
+
+// Get current page URL
+String url = actor.asksFor(TheWebPage.currentUrl());
+
+// Get current page title
+String title = actor.asksFor(TheWebPage.title());
+```
+
+---
+
 ## API Reference
 
 ### Interactions (Actions)

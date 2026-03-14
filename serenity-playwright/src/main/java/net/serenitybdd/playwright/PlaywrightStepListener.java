@@ -59,9 +59,7 @@ public class PlaywrightStepListener implements StepListener {
 
     @Override
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
-        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.SUCCESS)) {
-            captureScreenshotsForAllPages(TestResult.SUCCESS);
-        }
+        // Screenshots were already captured during takeScreenshots() — do not capture again
     }
 
     @Override
@@ -74,9 +72,7 @@ public class PlaywrightStepListener implements StepListener {
     @Override
     public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList,
                            boolean isInDataDrivenTest, ZonedDateTime timestamp) {
-        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.FAILURE)) {
-            captureScreenshotsForAllPages(TestResult.FAILURE);
-        }
+        // Screenshots were already captured during takeScreenshots() — do not capture again
     }
 
     /**
@@ -296,12 +292,16 @@ public class PlaywrightStepListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
-        captureScreenshotsInto(screenshots);
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(TestResult.SUCCESS)) {
+            captureScreenshotsInto(screenshots);
+        }
     }
 
     @Override
     public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
-        captureScreenshotsInto(screenshots);
+        if (PlaywrightPageRegistry.hasRegisteredPages() && shouldTakeEndOfStepScreenshotFor(testResult)) {
+            captureScreenshotsInto(screenshots);
+        }
     }
 
     private void captureScreenshotsInto(List<ScreenshotAndHtmlSource> screenshots) {

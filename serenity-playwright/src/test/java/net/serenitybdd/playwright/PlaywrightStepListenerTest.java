@@ -262,6 +262,55 @@ class PlaywrightStepListenerTest {
         }
 
         @Test
+        @DisplayName("takeScreenshots should not take screenshot when configured FOR_FAILURES")
+        void takeScreenshots_should_not_take_screenshot_when_configured_for_failures() {
+            setScreenshotProperty("FOR_FAILURES");
+
+            Page mockPage = mock(Page.class);
+            when(mockPage.isClosed()).thenReturn(false);
+            PlaywrightPageRegistry.registerPage(mockPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(screenshots);
+
+            verify(mockPage, never()).screenshot(any());
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
+        @DisplayName("takeScreenshots(TestResult) should take screenshot when result is FAILURE and configured FOR_FAILURES")
+        void takeScreenshots_with_result_should_take_screenshot_for_failure() {
+            setScreenshotProperty("FOR_FAILURES");
+
+            Page mockPage = mock(Page.class);
+            when(mockPage.isClosed()).thenReturn(false);
+            when(mockPage.screenshot(any(Page.ScreenshotOptions.class))).thenReturn(new byte[]{1, 2, 3});
+            PlaywrightPageRegistry.registerPage(mockPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(TestResult.FAILURE, screenshots);
+
+            verify(mockPage).screenshot(any());
+            assertThat(screenshots).isNotEmpty();
+        }
+
+        @Test
+        @DisplayName("takeScreenshots should not take screenshot when configured DISABLED")
+        void takeScreenshots_should_not_take_screenshot_when_disabled() {
+            setScreenshotProperty("DISABLED");
+
+            Page mockPage = mock(Page.class);
+            when(mockPage.isClosed()).thenReturn(false);
+            PlaywrightPageRegistry.registerPage(mockPage);
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+
+            listener.takeScreenshots(screenshots);
+
+            verify(mockPage, never()).screenshot(any());
+            assertThat(screenshots).isEmpty();
+        }
+
+        @Test
         @DisplayName("page source should not be captured when SERENITY_STORE_HTML is NEVER")
         void page_source_should_not_be_captured_when_store_html_is_never() {
             setScreenshotProperty( "AFTER_EACH_STEP");

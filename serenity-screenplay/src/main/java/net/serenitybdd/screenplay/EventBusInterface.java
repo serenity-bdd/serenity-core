@@ -163,22 +163,26 @@ public class EventBusInterface {
         if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
-        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
-                testOutcome -> testOutcome.assignFact(actor.getName(), fact)
-        );
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                    testOutcome -> testOutcome.assignFact(actor.getName(), fact)
+            );
+        } else {
+            TestSession.addEvent(new AssignFactToActorEvent(actor.getName(), fact));
+        }
     }
 
     public void assignAbilityToActor(Actor actor, String ability) {
         if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
-        if (StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome() == null) {
-            return;
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                    testOutcome -> testOutcome.assignAbility(actor.getName(), ability)
+            );
+        } else {
+            TestSession.addEvent(new AssignAbilityToActorEvent(actor.getName(), ability));
         }
-
-        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
-                testOutcome -> testOutcome.assignAbility(actor.getName(), ability)
-        );
     }
 
 }

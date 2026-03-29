@@ -5,9 +5,12 @@ import net.serenitybdd.model.exceptions.TestCompromisedException;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.events.StepEventBusEvent;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.domain.CastMember;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +27,14 @@ public class WhenDeclaringFactsAboutActors {
         Serenity.initialize(this);
         StepEventBus.getParallelEventBus().testSuiteStarted(Story.called("sample story"));
         StepEventBus.getParallelEventBus().testStarted("sample test");
+    }
+
+    @After
+    public void cleanup() {
+        if (TestSession.isSessionStarted()) {
+            TestSession.closeSession();
+        }
+        TestSession.cleanupSession();
     }
 
     static List<String> knownAccounts = new ArrayList<>();
@@ -147,5 +158,34 @@ public class WhenDeclaringFactsAboutActors {
         assertThat(castMember.getCan()).contains("Do his accounts");
     }
 
+     @Test
+    public void facts_and_abilities_are_recorded_in_test_reports_when_test_session_is_active() {
+        // Given
+        StepEventBus stepEventBus = StepEventBus.getParallelEventBus();
+        TestSession.startSession("parallel-abilities", stepEventBus);
+
+        Actor tim = Actor.named("Tim");
+        tim.whoCan(new DoHisAccounts());
+        givenThat(tim).has(AnAccount.numbered("999888"));
+
+        TestSession.closeSession();
+
+        // When
+        stepEventBus.testStarted("parallel abilities test");
+        for (StepEventBusEvent event : TestSession.getTestSessionContext().getStepEventBusEvents()) {
+            event.setStepEventBus(stepEventBus);
+            event.play();
+        }
+        stepEventBus.testFinished();
+
+        // Then
+        TestOutcome testOutcome = stepEventBus.getBaseStepListener().latestTestOutcome().get();
+
+        assertThat(testOutcome.getActors()).isNotEmpty();
+        CastMember castMember = testOutcome.getActors().get(0);
+        assertThat(castMember.getName()).isEqualTo("Tim");
+        assertThat(castMember.getHas()).containsExactly("An account numbered 999888");
+        assertThat(castMember.getCan()).containsExactly("Do his accounts");
+    }
 }
 

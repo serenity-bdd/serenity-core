@@ -56,7 +56,9 @@ public abstract class AbstractScreenshotQuestion<T> implements Question<ImageWit
      */
     @SuppressWarnings("unchecked")
     public AbstractScreenshotQuestion<T> mask(T... targets) {
-        masks.addAll(Arrays.asList(targets));
+        if (targets != null) {
+            masks.addAll(Arrays.asList(targets));
+        }
         return this;
     }
 

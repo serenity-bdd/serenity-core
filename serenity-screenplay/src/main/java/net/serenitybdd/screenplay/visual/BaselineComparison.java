@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.visual;
 
+import net.serenitybdd.core.Serenity;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,6 +22,8 @@ public class BaselineComparison implements Predicate<ImageWithScale> {
     private SnapshotFileNamer fileNamer;
     private double threshold = 0.0;
     private boolean updateBaseline = false;
+    private boolean requireBaseline = false;
+    private boolean attachFailureImagesToReport = false;
 
     public BaselineComparison(String baselineName) {
         this(new DefaultSnapshotFileNamer(baselineName));
@@ -29,20 +33,44 @@ public class BaselineComparison implements Predicate<ImageWithScale> {
         this.fileNamer = fileNamer;
     }
 
+    /**
+     * Set the allowed difference threshold.
+     *
+     * @param threshold Value between 0.0 (exact match) and 1.0 (any difference allowed)
+     */
     public BaselineComparison withThreshold(double threshold) {
         this.threshold = threshold;
         return this;
     }
 
+    /**
+     * Force update of the baseline image instead of comparing.
+     */
     public BaselineComparison updatingBaseline() {
         this.updateBaseline = true;
+        return this;
+    }
+
+    /**
+     * Require baseline to pass.
+     */
+    public BaselineComparison requiringBaseline() {
+        this.requireBaseline = true;
+        return this;
+    }
+
+    /**
+     * Attach images to report when comparison fails.
+     */
+    public BaselineComparison attachingFailureImagesToReport() {
+        this.attachFailureImagesToReport = true;
         return this;
     }
 
     @Override
     public boolean test(ImageWithScale screenshot) {
         try {
-            String description = screenshot.description();
+            String description = screenshot.getDescription();
             Path baselinePath = fileNamer.baselinePath(description, "png");
             Path actualPath = fileNamer.actualPath(description, "png");
             Path diffPath = fileNamer.diffPath(description, "png");
@@ -53,10 +81,23 @@ public class BaselineComparison implements Predicate<ImageWithScale> {
 
             ImageIO.write(screenshot.getImage(), "PNG", actualPath.toFile());
 
-            if (updateBaseline || !Files.exists(baselinePath)) {
+            boolean baselinePresent = Files.exists(baselinePath);
+            if (updateBaseline || !baselinePresent) {
                 ImageIO.write(screenshot.getImage(), "PNG", baselinePath.toFile());
                 if (!updateBaseline) {
                     System.out.println("Created baseline: " + baselinePath);
+                }
+                if (!baselinePresent && requireBaseline) {
+                    if (attachFailureImagesToReport) {
+                        Serenity.recordReportData().withTitle("Actual").downloadable().fromFile(baselinePath);
+                    }
+                    throw new VisualComparisonFailure(
+                            String.format(
+                                    "Visual comparison failed for '%s'. Missing baseline %s",
+                                    fileNamer.baselineName(description),
+                                    baselinePath
+                            )
+                    );
                 }
                 return true;
             } else {
@@ -65,20 +106,23 @@ public class BaselineComparison implements Predicate<ImageWithScale> {
                 double diffPercentage = compareImages(baseline, screenshot.getImage(), diffPath);
 
                 if (diffPercentage > threshold) {
+                    if (attachFailureImagesToReport) {
+                        Serenity.recordReportData().withTitle("Expected").downloadable().fromFile(baselinePath);
+                        Serenity.recordReportData().withTitle("Actual").downloadable().fromFile(actualPath);
+                        Serenity.recordReportData().withTitle("Differences").downloadable().fromFile(diffPath);
+                    }
                     throw new VisualComparisonFailure(
                         String.format(
                             "Visual comparison failed for '%s'. Difference: %.2f%% (threshold: %.2f%%). See: %s",
                             fileNamer.baselineName(description),
                             diffPercentage * 100,
                             threshold * 100,
-                            diffPath.toAbsolutePath()
+                            diffPath
                         )
                     );
                 }
                 return true;
             }
-        } catch (VisualComparisonFailure e) {
-            throw e;
         } catch (IOException e) {
             throw new RuntimeException("Failed to process screenshot for visual comparison", e);
         }

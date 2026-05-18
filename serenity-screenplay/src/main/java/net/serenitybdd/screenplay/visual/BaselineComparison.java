@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.function.Predicate;
 
 /**
@@ -19,18 +18,16 @@ import java.util.function.Predicate;
  */
 public class BaselineComparison implements Predicate<byte[]> {
 
-    private static final String BASELINES_DIR = "src/test/resources/visual-baselines";
-    private static final String ACTUAL_DIR = "target/visual-comparisons/actual";
-    private static final String DIFF_DIR = "target/visual-comparisons/diff";
-
-    private final String baselineName;
-    private double threshold;
-    private boolean updateBaseline;
+    private SnapshotFileNamer fileNamer;
+    private double threshold = 0.0;
+    private boolean updateBaseline = false;
 
     public BaselineComparison(String baselineName) {
-        this.baselineName = baselineName;
-        this.threshold = 0.0;
-        this.updateBaseline = false;
+        this(new DefaultSnapshotFileNamer(baselineName));
+    }
+
+    public BaselineComparison(SnapshotFileNamer fileNamer) {
+        this.fileNamer = fileNamer;
     }
 
     public BaselineComparison withThreshold(double threshold) {
@@ -45,13 +42,14 @@ public class BaselineComparison implements Predicate<byte[]> {
 
     @Override
     public boolean test(byte[] screenshotBytes) {
-        Path baselinePath = Paths.get(BASELINES_DIR, baselineName + ".png");
-        Path actualPath = Paths.get(ACTUAL_DIR, baselineName + ".png");
-
         try {
+            Path baselinePath = fileNamer.baselinePath("png");
+            Path actualPath = fileNamer.actualPath("png");
+            Path diffPath = fileNamer.diffPath("png");
+
             Files.createDirectories(baselinePath.getParent());
             Files.createDirectories(actualPath.getParent());
-            Files.createDirectories(Paths.get(DIFF_DIR));
+            Files.createDirectories(diffPath.getParent());
 
             Files.write(actualPath, screenshotBytes);
 
@@ -65,16 +63,16 @@ public class BaselineComparison implements Predicate<byte[]> {
                 BufferedImage baseline = ImageIO.read(baselinePath.toFile());
                 BufferedImage actual = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
 
-                double diffPercentage = compareImages(baseline, actual, baselineName);
+                double diffPercentage = compareImages(baseline, actual, diffPath);
 
                 if (diffPercentage > threshold) {
                     throw new VisualComparisonFailure(
                         String.format(
                             "Visual comparison failed for '%s'. Difference: %.2f%% (threshold: %.2f%%). See: %s",
-                            baselineName,
+                            fileNamer.baselineName(),
                             diffPercentage * 100,
                             threshold * 100,
-                            Paths.get(DIFF_DIR, baselineName + "-diff.png").toAbsolutePath()
+                            diffPath.toAbsolutePath()
                         )
                     );
                 }
@@ -87,7 +85,7 @@ public class BaselineComparison implements Predicate<byte[]> {
         }
     }
 
-    private static double compareImages(BufferedImage baseline, BufferedImage actual, String name) throws IOException {
+    private double compareImages(BufferedImage baseline, BufferedImage actual, Path diffPath) throws IOException {
         int width = Math.max(baseline.getWidth(), actual.getWidth());
         int height = Math.max(baseline.getHeight(), actual.getHeight());
 
@@ -113,7 +111,7 @@ public class BaselineComparison implements Predicate<byte[]> {
         }
 
         // Save diff image
-        Path diffPath = Paths.get(DIFF_DIR, name + "-diff.png");
+        Files.createDirectories(diffPath.getParent());
         ImageIO.write(diff, "PNG", diffPath.toFile());
 
         return (double) diffPixels / totalPixels;

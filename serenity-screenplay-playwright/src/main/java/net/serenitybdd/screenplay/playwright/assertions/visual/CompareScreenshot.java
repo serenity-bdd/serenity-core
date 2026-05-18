@@ -111,7 +111,7 @@ public class CompareScreenshot {
         @Override
         @Step("{0} compares screenshot to baseline '#baselineName'")
         public <T extends Actor> void performAs(T actor) {
-            byte[] screenshotBytes = new ScreenshotQuestion(target, fullPage).answeredBy(actor);
+            byte[] screenshotBytes = new PlaywrightScreenshotQuestion(target, fullPage).answeredBy(actor);
             new BaselineComparison(baselineName, threshold, updateBaseline).test(screenshotBytes);
         }
     }

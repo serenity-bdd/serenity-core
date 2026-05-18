@@ -15,42 +15,42 @@ import java.util.List;
  * A Question that takes a screenshot using WebDriver and returns it as a byte array.
  * Supports masking specific elements to redact them from the screenshot.
  */
-public class ScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
+public class WebDriverScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
 
-    public ScreenshotQuestion(Target target) {
+    public WebDriverScreenshotQuestion(Target target) {
         super(target);
     }
 
     /**
-     * @deprecated Use {@link #ScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
+     * @deprecated Use {@link #WebDriverScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
      */
     @Deprecated
-    public ScreenshotQuestion(Target target, boolean fullPage) {
+    public WebDriverScreenshotQuestion(Target target, boolean fullPage) {
         super(target);
     }
 
-    public static ScreenshotQuestion ofPage() {
-        return new ScreenshotQuestion(null);
+    public static WebDriverScreenshotQuestion ofPage() {
+        return new WebDriverScreenshotQuestion(null);
     }
 
-    public static ScreenshotQuestion of(Target target) {
-        return new ScreenshotQuestion(target);
+    public static WebDriverScreenshotQuestion of(Target target) {
+        return new WebDriverScreenshotQuestion(target);
     }
 
     @Override
-    public ScreenshotQuestion mask(String... selectors) {
+    public WebDriverScreenshotQuestion mask(String... selectors) {
         super.mask(selectors);
         return this;
     }
 
     @Override
-    public ScreenshotQuestion mask(Target... targets) {
+    public WebDriverScreenshotQuestion mask(Target... targets) {
         super.mask(targets);
         return this;
     }
 
     @Override
-    public ScreenshotQuestion withColor(Color color) {
+    public WebDriverScreenshotQuestion withColor(Color color) {
         super.withColor(color);
         return this;
     }

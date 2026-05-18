@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.ensure.visual;
+package net.serenitybdd.screenplay.visual;
 
 /**
  * Exception thrown when a visual comparison fails because the screenshot

@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
 import net.serenitybdd.screenplay.visual.AbstractScreenshotQuestion;
+import net.serenitybdd.screenplay.visual.ImageWithScale;
 
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Question that takes a screenshot using Playwright and returns it as a byte array.
+ * A Question that takes a screenshot using Playwright and returns it as an ImageWithScale.
  * Supports masking specific elements to redact them from the screenshot.
  */
 public class PlaywrightScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
@@ -54,14 +55,18 @@ public class PlaywrightScreenshotQuestion extends AbstractScreenshotQuestion<Tar
     }
 
     @Override
-    protected byte[] takeScreenshot(Actor actor, Target target) {
+    protected ImageWithScale takeScreenshot(Actor actor, Target target) {
         Page page = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+        byte[] bytes;
         if (target == null) {
-            return page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+            bytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
         } else {
             Locator locator = target.resolveFor(page);
-            return locator.screenshot();
+            bytes = locator.screenshot();
         }
+        double scale = page.evaluate("window.devicePixelRatio").toString().isEmpty()
+            ? 1.0 : ((Number) page.evaluate("window.devicePixelRatio")).doubleValue();
+        return new ImageWithScale(bytes, scale);
     }
 
     @Override

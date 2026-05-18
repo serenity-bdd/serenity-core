@@ -10,20 +10,20 @@ public interface SnapshotFileNamer {
     /**
      * The baseline name.
      */
-    String baselineName();
+    String baselineName(String description);
 
     /**
      * Path where the baseline image is stored.
      */
-    Path baselinePath(String extension);
+    Path baselinePath(String description, String extension);
 
     /**
      * Path where the actual screenshot is saved.
      */
-    Path actualPath(String extension);
+    Path actualPath(String description, String extension);
 
     /**
      * Path where the diff image is saved.
      */
-    Path diffPath(String extension);
+    Path diffPath(String description, String extension);
 }

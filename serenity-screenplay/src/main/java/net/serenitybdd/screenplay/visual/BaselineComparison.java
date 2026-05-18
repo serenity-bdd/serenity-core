@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.visual;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +15,7 @@ import java.util.function.Predicate;
  *
  * <p>On first run (or when updating), the baseline is created from the provided screenshot bytes.</p>
  */
-public class BaselineComparison implements Predicate<byte[]> {
+public class BaselineComparison implements Predicate<ImageWithScale> {
 
     private SnapshotFileNamer fileNamer;
     private double threshold = 0.0;
@@ -41,35 +40,35 @@ public class BaselineComparison implements Predicate<byte[]> {
     }
 
     @Override
-    public boolean test(byte[] screenshotBytes) {
+    public boolean test(ImageWithScale screenshot) {
         try {
-            Path baselinePath = fileNamer.baselinePath("png");
-            Path actualPath = fileNamer.actualPath("png");
-            Path diffPath = fileNamer.diffPath("png");
+            String description = screenshot.description();
+            Path baselinePath = fileNamer.baselinePath(description, "png");
+            Path actualPath = fileNamer.actualPath(description, "png");
+            Path diffPath = fileNamer.diffPath(description, "png");
 
             Files.createDirectories(baselinePath.getParent());
             Files.createDirectories(actualPath.getParent());
             Files.createDirectories(diffPath.getParent());
 
-            Files.write(actualPath, screenshotBytes);
+            ImageIO.write(screenshot.getImage(), "PNG", actualPath.toFile());
 
             if (updateBaseline || !Files.exists(baselinePath)) {
-                Files.write(baselinePath, screenshotBytes);
+                ImageIO.write(screenshot.getImage(), "PNG", baselinePath.toFile());
                 if (!updateBaseline) {
                     System.out.println("Created baseline: " + baselinePath);
                 }
                 return true;
             } else {
                 BufferedImage baseline = ImageIO.read(baselinePath.toFile());
-                BufferedImage actual = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
 
-                double diffPercentage = compareImages(baseline, actual, diffPath);
+                double diffPercentage = compareImages(baseline, screenshot.getImage(), diffPath);
 
                 if (diffPercentage > threshold) {
                     throw new VisualComparisonFailure(
                         String.format(
                             "Visual comparison failed for '%s'. Difference: %.2f%% (threshold: %.2f%%). See: %s",
-                            fileNamer.baselineName(),
+                            fileNamer.baselineName(description),
                             diffPercentage * 100,
                             threshold * 100,
                             diffPath.toAbsolutePath()

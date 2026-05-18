@@ -3,19 +3,8 @@ package net.serenitybdd.screenplay.ensure.visual;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import net.serenitybdd.screenplay.visual.BaselineComparison;
 
 /**
  * Perform visual regression testing by comparing screenshots to baseline images
@@ -89,9 +78,6 @@ public class CompareScreenshot {
      * The actual screenshot comparison implementation.
      */
     public static class ScreenshotComparison implements Performable {
-        private static final String BASELINES_DIR = "src/test/resources/visual-baselines";
-        private static final String ACTUAL_DIR = "target/visual-comparisons/actual";
-        private static final String DIFF_DIR = "target/visual-comparisons/diff";
 
         private final Target target;
         private final boolean fullPage;
@@ -126,98 +112,8 @@ public class CompareScreenshot {
         @Override
         @Step("{0} compares screenshot to baseline '#baselineName'")
         public <T extends Actor> void performAs(T actor) {
-            WebDriver driver = BrowseTheWeb.as(actor).getDriver();
-
-            // Take screenshot
-            byte[] screenshotBytes;
-            if (fullPage) {
-                screenshotBytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            } else {
-                screenshotBytes = target.resolveFor(actor).getScreenshotAs(OutputType.BYTES);
-            }
-
-            Path baselinePath = Paths.get(BASELINES_DIR, baselineName + ".png");
-            Path actualPath = Paths.get(ACTUAL_DIR, baselineName + ".png");
-
-            try {
-                // Ensure directories exist
-                Files.createDirectories(baselinePath.getParent());
-                Files.createDirectories(actualPath.getParent());
-                Files.createDirectories(Paths.get(DIFF_DIR));
-
-                // Save actual screenshot
-                Files.write(actualPath, screenshotBytes);
-
-                if (updateBaseline || !Files.exists(baselinePath)) {
-                    // Create/update baseline
-                    Files.write(baselinePath, screenshotBytes);
-                    if (!updateBaseline) {
-                        System.out.println("Created baseline: " + baselinePath);
-                    }
-                } else {
-                    // Compare to baseline
-                    BufferedImage baseline = ImageIO.read(baselinePath.toFile());
-                    BufferedImage actual = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
-
-                    double diffPercentage = compareImages(baseline, actual, baselineName);
-
-                    if (diffPercentage > threshold) {
-                        throw new VisualComparisonFailure(
-                            String.format(
-                                "Visual comparison failed for '%s'. Difference: %.2f%% (threshold: %.2f%%). See: %s",
-                                baselineName,
-                                diffPercentage * 100,
-                                threshold * 100,
-                                Paths.get(DIFF_DIR, baselineName + "-diff.png").toAbsolutePath()
-                            )
-                        );
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to process screenshot for visual comparison", e);
-            }
-        }
-
-        private double compareImages(BufferedImage baseline, BufferedImage actual, String name) throws IOException {
-            int width = Math.max(baseline.getWidth(), actual.getWidth());
-            int height = Math.max(baseline.getHeight(), actual.getHeight());
-
-            BufferedImage diff = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            int diffPixels = 0;
-            int totalPixels = width * height;
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int baselineRgb = (x < baseline.getWidth() && y < baseline.getHeight())
-                        ? baseline.getRGB(x, y) : 0;
-                    int actualRgb = (x < actual.getWidth() && y < actual.getHeight())
-                        ? actual.getRGB(x, y) : 0;
-
-                    if (baselineRgb != actualRgb) {
-                        diffPixels++;
-                        diff.setRGB(x, y, 0xFFFF0000); // Red for differences
-                    } else {
-                        // Dimmed original for context
-                        diff.setRGB(x, y, toGrayscale(baselineRgb));
-                    }
-                }
-            }
-
-            // Save diff image
-            Path diffPath = Paths.get(DIFF_DIR, name + "-diff.png");
-            ImageIO.write(diff, "PNG", diffPath.toFile());
-
-            return (double) diffPixels / totalPixels;
-        }
-
-        private int toGrayscale(int rgb) {
-            int a = (rgb >> 24) & 0xFF;
-            int r = (rgb >> 16) & 0xFF;
-            int g = (rgb >> 8) & 0xFF;
-            int b = rgb & 0xFF;
-            int gray = (r + g + b) / 3;
-            // Make it semi-transparent for diff visualization
-            return ((a / 2) << 24) | (gray << 16) | (gray << 8) | gray;
+            byte[] screenshotBytes = new ScreenshotQuestion(target, fullPage).answeredBy(actor);
+            new BaselineComparison(baselineName, threshold, updateBaseline).test(screenshotBytes);
         }
     }
 }

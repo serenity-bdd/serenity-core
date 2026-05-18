@@ -22,14 +22,6 @@ public class PlaywrightScreenshotQuestion extends AbstractScreenshotQuestion<Tar
         super(target);
     }
 
-    /**
-     * @deprecated Use {@link #PlaywrightScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
-     */
-    @Deprecated
-    public PlaywrightScreenshotQuestion(Target target, boolean fullPage) {
-        super(target);
-    }
-
     public static PlaywrightScreenshotQuestion ofPage() {
         return new PlaywrightScreenshotQuestion(null);
     }

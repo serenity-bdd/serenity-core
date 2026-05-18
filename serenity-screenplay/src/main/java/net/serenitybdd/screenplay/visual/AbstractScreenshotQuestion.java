@@ -3,12 +3,8 @@ package net.serenitybdd.screenplay.visual;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +17,7 @@ import java.util.List;
  *
  * @param <T> the driver-specific target type used to locate elements
  */
-public abstract class AbstractScreenshotQuestion<T> implements Question<byte[]> {
+public abstract class AbstractScreenshotQuestion<T> implements Question<ImageWithScale> {
 
     protected final T target;
     protected final List<T> masks = new ArrayList<>();
@@ -75,7 +71,7 @@ public abstract class AbstractScreenshotQuestion<T> implements Question<byte[]> 
      * @param actor the actor performing the action
      * @param target the target element to screenshot, or {@code null} for a full page screenshot
      */
-    protected abstract byte[] takeScreenshot(Actor actor, T target);
+    protected abstract ImageWithScale takeScreenshot(Actor actor, T target);
 
     /**
      * Resolve all mask targets into screen rectangles.
@@ -83,34 +79,27 @@ public abstract class AbstractScreenshotQuestion<T> implements Question<byte[]> 
     protected abstract List<Rectangle> resolveMaskRectangles(Actor actor);
 
     @Override
-    public byte[] answeredBy(Actor actor) {
-        byte[] screenshotBytes = takeScreenshot(actor, target);
+    public ImageWithScale answeredBy(Actor actor) {
+        ImageWithScale screenshot = takeScreenshot(actor, target);
 
         List<Rectangle> maskRects = resolveMaskRectangles(actor);
         if (maskRects.isEmpty()) {
-            return screenshotBytes;
+            return screenshot;
         }
 
-        return applyMasks(screenshotBytes, maskRects);
+        return applyMasks(screenshot, maskRects);
     }
 
-    private byte[] applyMasks(byte[] screenshotBytes, List<Rectangle> maskRects) {
-        try {
-            BufferedImage image = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
-            Graphics2D g = image.createGraphics();
-            g.setColor(maskColor);
+    private ImageWithScale applyMasks(ImageWithScale screenshot, List<Rectangle> maskRects) {
+        BufferedImage image = screenshot.getImage();
+        Graphics2D g = image.createGraphics();
+        g.setColor(maskColor);
 
-            for (Rectangle rect : maskRects) {
-                g.fillRect(rect.x, rect.y, rect.width, rect.height);
-            }
-
-            g.dispose();
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            ImageIO.write(image, "PNG", out);
-            return out.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to apply masks to screenshot", e);
+        for (Rectangle rect : maskRects) {
+            g.fillRect(rect.x, rect.y, rect.width, rect.height);
         }
+
+        g.dispose();
+        return new ImageWithScale(image, screenshot.getScale());
     }
 }

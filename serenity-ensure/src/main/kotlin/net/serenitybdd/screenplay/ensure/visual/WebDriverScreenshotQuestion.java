@@ -4,6 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.visual.AbstractScreenshotQuestion;
+import net.serenitybdd.screenplay.visual.ImageWithScale;
 import org.openqa.selenium.*;
 
 import java.awt.Color;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Question that takes a screenshot using WebDriver and returns it as a byte array.
+ * A Question that takes a screenshot using WebDriver and returns it as an ImageWithScale.
  * Supports masking specific elements to redact them from the screenshot.
  */
 public class WebDriverScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
@@ -53,13 +54,15 @@ public class WebDriverScreenshotQuestion extends AbstractScreenshotQuestion<Targ
     }
 
     @Override
-    protected byte[] takeScreenshot(Actor actor, Target target) {
+    protected ImageWithScale takeScreenshot(Actor actor, Target target) {
         WebDriver driver = BrowseTheWeb.as(actor).getDriver();
+        byte[] bytes;
         if (target == null) {
-            return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            bytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
         } else {
-            return target.resolveFor(actor).getScreenshotAs(OutputType.BYTES);
+            bytes = target.resolveFor(actor).getScreenshotAs(OutputType.BYTES);
         }
+        return new ImageWithScale(bytes, 1.0);
     }
 
     @Override

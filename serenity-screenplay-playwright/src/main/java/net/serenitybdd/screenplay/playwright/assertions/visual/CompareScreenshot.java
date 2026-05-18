@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.visual.BaselineComparison;
+import net.serenitybdd.screenplay.visual.ImageWithScale;
 
 /**
  * Perform visual regression testing by comparing screenshots to baseline images.
@@ -111,12 +112,12 @@ public class CompareScreenshot {
         @Override
         @Step("{0} compares screenshot to baseline '#baselineName'")
         public <T extends Actor> void performAs(T actor) {
-            byte[] screenshotBytes = new PlaywrightScreenshotQuestion(target).answeredBy(actor);
+            ImageWithScale screenshot = new PlaywrightScreenshotQuestion(target).answeredBy(actor);
             BaselineComparison comparison = new BaselineComparison(baselineName).withThreshold(threshold);
             if (updateBaseline) {
                 comparison.updatingBaseline();
             }
-            comparison.test(screenshotBytes);
+            comparison.test(screenshot);
         }
     }
 }

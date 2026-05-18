@@ -21,22 +21,22 @@ public class DefaultSnapshotFileNamer implements SnapshotFileNamer {
     }
 
     @Override
-    public String baselineName() {
+    public String baselineName(String description) {
         return baselineName;
     }
 
     @Override
-    public Path baselinePath(String extension) {
+    public Path baselinePath(String description, String extension) {
         return Paths.get(BASELINES_DIR, baselineName + "." + extension);
     }
 
     @Override
-    public Path actualPath(String extension) {
+    public Path actualPath(String description, String extension) {
         return Paths.get(ACTUAL_DIR, baselineName + "." + extension);
     }
 
     @Override
-    public Path diffPath(String extension) {
+    public Path diffPath(String description, String extension) {
         return Paths.get(DIFF_DIR, baselineName + "-diff." + extension);
     }
 }

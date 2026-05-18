@@ -24,13 +24,23 @@ public class BaselineComparison implements Predicate<byte[]> {
     private static final String DIFF_DIR = "target/visual-comparisons/diff";
 
     private final String baselineName;
-    private final double threshold;
-    private final boolean updateBaseline;
+    private double threshold;
+    private boolean updateBaseline;
 
-    public BaselineComparison(String baselineName, double threshold, boolean updateBaseline) {
+    public BaselineComparison(String baselineName) {
         this.baselineName = baselineName;
+        this.threshold = 0.0;
+        this.updateBaseline = false;
+    }
+
+    public BaselineComparison withThreshold(double threshold) {
         this.threshold = threshold;
-        this.updateBaseline = updateBaseline;
+        return this;
+    }
+
+    public BaselineComparison updatingBaseline() {
+        this.updateBaseline = true;
+        return this;
     }
 
     @Override

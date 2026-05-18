@@ -1002,7 +1002,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void recordStepResult(URI featurePath, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep, boolean isInDataDrivenTest) {
         ZonedDateTime endTime = ZonedDateTime.now();
-        List<ScreenshotAndHtmlSource> screenshotList = getContext(featurePath).stepEventBus().takeScreenshots();
+        List<ScreenshotAndHtmlSource> screenshotList = getContext(featurePath).stepEventBus().takeScreenshots(serenityTestResultFrom(result.getStatus()));
         getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime, isInDataDrivenTest));
     }
 

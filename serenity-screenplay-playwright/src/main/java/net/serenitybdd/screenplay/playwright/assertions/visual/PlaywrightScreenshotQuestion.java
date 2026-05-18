@@ -16,42 +16,42 @@ import java.util.List;
  * A Question that takes a screenshot using Playwright and returns it as a byte array.
  * Supports masking specific elements to redact them from the screenshot.
  */
-public class ScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
+public class PlaywrightScreenshotQuestion extends AbstractScreenshotQuestion<Target> {
 
-    public ScreenshotQuestion(Target target) {
+    public PlaywrightScreenshotQuestion(Target target) {
         super(target);
     }
 
     /**
-     * @deprecated Use {@link #ScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
+     * @deprecated Use {@link #PlaywrightScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
      */
     @Deprecated
-    public ScreenshotQuestion(Target target, boolean fullPage) {
+    public PlaywrightScreenshotQuestion(Target target, boolean fullPage) {
         super(target);
     }
 
-    public static ScreenshotQuestion ofPage() {
-        return new ScreenshotQuestion(null);
+    public static PlaywrightScreenshotQuestion ofPage() {
+        return new PlaywrightScreenshotQuestion(null);
     }
 
-    public static ScreenshotQuestion of(Target target) {
-        return new ScreenshotQuestion(target);
+    public static PlaywrightScreenshotQuestion of(Target target) {
+        return new PlaywrightScreenshotQuestion(target);
     }
 
     @Override
-    public ScreenshotQuestion mask(String... selectors) {
+    public PlaywrightScreenshotQuestion mask(String... selectors) {
         super.mask(selectors);
         return this;
     }
 
     @Override
-    public ScreenshotQuestion mask(Target... targets) {
+    public PlaywrightScreenshotQuestion mask(Target... targets) {
         super.mask(targets);
         return this;
     }
 
     @Override
-    public ScreenshotQuestion withColor(Color color) {
+    public PlaywrightScreenshotQuestion withColor(Color color) {
         super.withColor(color);
         return this;
     }

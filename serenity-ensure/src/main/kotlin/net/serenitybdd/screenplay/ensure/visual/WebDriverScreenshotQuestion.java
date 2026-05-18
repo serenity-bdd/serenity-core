@@ -6,9 +6,11 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.visual.AbstractScreenshotQuestion;
 import net.serenitybdd.screenplay.visual.ImageWithScale;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,12 +59,19 @@ public class WebDriverScreenshotQuestion extends AbstractScreenshotQuestion<Targ
     protected ImageWithScale takeScreenshot(Actor actor, Target target) {
         WebDriver driver = BrowseTheWeb.as(actor).getDriver();
         byte[] bytes;
+        Dimension size;
         if (target == null) {
             bytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            size = driver.manage().window().getSize();
         } else {
-            bytes = target.resolveFor(actor).getScreenshotAs(OutputType.BYTES);
+            WebElement webElementFacade = target.resolveFor(actor);
+            bytes = webElementFacade.getScreenshotAs(OutputType.BYTES);
+            size = webElementFacade.getSize();
         }
-        return new ImageWithScale(bytes, 1.0);
+        // Scale factor for high-DPI scenarios
+        BufferedImage image = ImageWithScale.readImage(bytes);
+        double scale = (double) image.getWidth() / size.width;
+        return new ImageWithScale(image, scale);
     }
 
     @Override

@@ -21,14 +21,6 @@ public class WebDriverScreenshotQuestion extends AbstractScreenshotQuestion<Targ
         super(target);
     }
 
-    /**
-     * @deprecated Use {@link #WebDriverScreenshotQuestion(Target)} instead. The fullPage parameter is ignored.
-     */
-    @Deprecated
-    public WebDriverScreenshotQuestion(Target target, boolean fullPage) {
-        super(target);
-    }
-
     public static WebDriverScreenshotQuestion ofPage() {
         return new WebDriverScreenshotQuestion(null);
     }

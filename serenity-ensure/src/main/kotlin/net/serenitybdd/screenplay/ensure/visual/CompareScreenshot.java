@@ -113,7 +113,11 @@ public class CompareScreenshot {
         @Step("{0} compares screenshot to baseline '#baselineName'")
         public <T extends Actor> void performAs(T actor) {
             byte[] screenshotBytes = new WebDriverScreenshotQuestion(target).answeredBy(actor);
-            new BaselineComparison(baselineName, threshold, updateBaseline).test(screenshotBytes);
+            BaselineComparison comparison = new BaselineComparison(baselineName).withThreshold(threshold);
+            if (updateBaseline) {
+                comparison.updatingBaseline();
+            }
+            comparison.test(screenshotBytes);
         }
     }
 }

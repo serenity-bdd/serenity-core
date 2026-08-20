@@ -173,7 +173,7 @@ public class AppiumConfiguration {
 
         Map<String,Object>  appiumProperties = new HashMap<>();
         String env = environmentVariables.getProperty("environment", "default");
-        String regex = String.format("environments\\.(all|%s)\\.appium", env);
+        String regex = String.format("environments\\.(all|%s)\\.appium", env.replace(",", "|"));
         List<String> appiumKeys =
                 environmentVariables.getKeys()
                         .stream()

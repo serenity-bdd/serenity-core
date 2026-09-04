@@ -98,7 +98,6 @@ public class WhenSettingW3CProperties {
         Proxy proxy = (Proxy) caps.getCapability("proxy");
         assertThat(proxy.getProxyType()).isEqualTo(Proxy.ProxyType.MANUAL);
         assertThat(proxy.getHttpProxy()).isEqualTo("myproxy.com:3128");
-        assertThat(proxy.getFtpProxy()).isEqualTo("ftp.myproxy.com:3128");
         assertThat(proxy.getSocksProxy()).isEqualTo("socks.myproxy.com:3128");
         assertThat(proxy.getSocksVersion()).isEqualTo(1);
         assertThat(proxy.getSslProxy()).isEqualTo("ssl.myproxy.com:3128");

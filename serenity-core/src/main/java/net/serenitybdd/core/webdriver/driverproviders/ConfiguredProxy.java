@@ -15,7 +15,6 @@ public class ConfiguredProxy {
     public static Optional<Proxy> definedIn(EnvironmentVariables environmentVariables) {
         String httpProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_HTTP).orElse(null);
         String sslProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_SSL).orElse(null);
-        String ftpProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_FTP).orElse(null);
         String noProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_NOPROXY).orElse(null);
         String proxyType = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_TYPE).orElse(null);
 
@@ -34,14 +33,8 @@ public class ConfiguredProxy {
             if (sslProxy != null) {
                 proxy.setSslProxy(sslProxy);
             }
-            if (ftpProxy != null) {
-                proxy.setFtpProxy(ftpProxy);
-            }
             proxy.setAutodetect(autodetect);
 
-            if (ftpProxy != null) {
-                proxy.setFtpProxy(ftpProxy);
-            }
             if (noProxy != null) {
                 proxy.setNoProxy(noProxy);
             }

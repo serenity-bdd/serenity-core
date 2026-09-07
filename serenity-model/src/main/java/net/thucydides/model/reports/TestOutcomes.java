@@ -836,6 +836,8 @@ public class TestOutcomes {
         return this.withResult(TestResult.ABORTED);
     }
 
+    public TestOutcomes getIgnoredTests() { return this.withResult(TestResult.IGNORED); }
+
     public TestOutcomes getErrorTests() {
         return this.withResult(TestResult.ERROR);
     }

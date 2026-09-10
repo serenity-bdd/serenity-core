@@ -426,9 +426,6 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     }
 
     private List<Requirement> getFlattenedRequirements(List<Requirement> requirements) {
-        if (RequirementCache.getInstance().getFlattenedRequirements().isEmpty()) {
-            RequirementCache.getInstance().updateFlattenedRequirements(flattenedRequirementsFrom(requirements));
-        }
-        return RequirementCache.getInstance().getFlattenedRequirements();
+        return RequirementCache.getInstance().getFlattenedRequirements(() -> flattenedRequirementsFrom(requirements));
     }
 }

@@ -713,8 +713,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void testAndTopLevelStepsShouldBeIgnored() {
-        getCurrentTestOutcome().setResult(IGNORED);
         if (getCurrentTestOutcome().isDataDriven()) {
+            getCurrentTestOutcome().updateCurrentRowResult(IGNORED);
+            if (getCurrentTestOutcome().getResult() == null || getCurrentTestOutcome().getResult() == TestResult.UNDEFINED) {
+                getCurrentTestOutcome().setResult(IGNORED);
+            }
+        } else {
+            getCurrentTestOutcome().setResult(IGNORED);
             getCurrentTestOutcome().updateTopLevelStepResultsTo(IGNORED);
         }
 

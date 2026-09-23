@@ -265,6 +265,23 @@ public class RootDirectory {
             URI serenityReqDir = new File(ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.from(environmentVariables)).toURI();
             return Optional.of(Paths.get(serenityReqDir));
         }
+
+        // The Gradle plugin's `AggregateTask` wires its `requirementsBaseDir` DSL field
+        // into `serenity.test.requirements.basedir`, but does not mirror it into
+        // `serenity.requirements.dir`. For multi-module Gradle builds the working
+        // directory during aggregation is the root project (not the sub-module owning
+        // the feature files), so the classpath / resource scans below do not find the
+        // feature tree. Honouring the `basedir` property here makes the existing
+        // plugin wiring work without requiring callers to double-configure the same
+        // path under two property names.
+        if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
+            File basedir = new File(
+                    ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.from(environmentVariables));
+            if (basedir.isDirectory()) {
+                return Optional.of(basedir.toPath());
+            }
+        }
+
         List<File> resourceDirectories = getResourceDirectories(Paths.get(relativeRoot), environmentVariables);
         List<File> resourceDirectoriesByIncreasingDepth = resourceDirectories.stream()
                 .sorted(Comparator.comparingInt(dir -> dir.getAbsolutePath().length()))

@@ -14,6 +14,7 @@ import java.io.File;
 import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Tests that HTML source is recorded for failed tests when SERENITY_STORE_HTML is FAILURES.
@@ -44,8 +45,8 @@ public class StoreHtmlOnFailureTest {
             );
         } catch (Exception e) {
             // External website may not be available in test environment
-            // Skip this test if connection fails
-            throw new org.junit.jupiter.api.extension.TestAbortedException("External website not available", e);
+            // Abort the test if connection fails
+            assumeTrue(false, "External website not available: " + e.getMessage());
         }
     }
 

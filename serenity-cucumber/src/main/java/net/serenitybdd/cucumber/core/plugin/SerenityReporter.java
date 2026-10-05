@@ -422,10 +422,10 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
                 for (int i = 0; i < examplesTableRows.size(); i++) {
                     TableRow tableRow = examplesTableRows.get(i);
-                    lineNumbersOfEachRow.put(i, tableRow.getLocation().getLine());
+                    lineNumbersOfEachRow.put(i, tableRow.getLocation().getLine().longValue());
                     addRow(exampleRows(), headers, tableRow);
                     if (examples.getTags() != null) {
-                        exampleTags().put(examplesTableRows.get(i).getLocation().getLine(), examples.getTags());
+                        exampleTags().put(examplesTableRows.get(i).getLocation().getLine().longValue(), examples.getTags());
                     }
                 }
                 String scenarioId = scenarioIdFrom(featureName, id);
@@ -529,7 +529,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             List<String> cells = currentTableRow.getCells().stream().map(TableCell::getValue).collect(Collectors.toList());
             row.put(headers.get(j), cells.get(j));
         }
-        exampleRows().put(currentTableRow.getLocation().getLine(), row);
+        exampleRows().put(currentTableRow.getLocation().getLine().longValue(), row);
     }
 
     private String scenarioIdFrom(String featureId, String scenarioIdOrExampleId) {

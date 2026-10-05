@@ -129,7 +129,7 @@ final class TestSourcesModel {
         child.getScenario().ifPresent(scenario -> processScenarioDefinition(nodeMap, scenario, currentParent));
         child.getRule().ifPresent(rule -> {
             AstNode childNode = new AstNode(rule, currentParent);
-            nodeMap.put(rule.getLocation().getLine(), childNode);
+            nodeMap.put(rule.getLocation().getLine().longValue(), childNode);
             rule.getChildren().forEach(ruleChild -> processRuleDefinition(nodeMap, ruleChild, childNode));
         });
     }
@@ -138,17 +138,17 @@ final class TestSourcesModel {
             Map<Long, AstNode> nodeMap, Background background, AstNode currentParent
     ) {
         AstNode childNode = new AstNode(background, currentParent);
-        nodeMap.put(background.getLocation().getLine(), childNode);
+        nodeMap.put(background.getLocation().getLine().longValue(), childNode);
         for (Step step : background.getSteps()) {
-            nodeMap.put(step.getLocation().getLine(), new AstNode(step, childNode));
+            nodeMap.put(step.getLocation().getLine().longValue(), new AstNode(step, childNode));
         }
     }
 
     private void processScenarioDefinition(Map<Long, AstNode> nodeMap, Scenario child, AstNode currentParent) {
         AstNode childNode = new AstNode(child, currentParent);
-        nodeMap.put(child.getLocation().getLine(), childNode);
+        nodeMap.put(child.getLocation().getLine().longValue(), childNode);
         for (Step step : child.getSteps()) {
-            nodeMap.put(step.getLocation().getLine(), new AstNode(step, childNode));
+            nodeMap.put(step.getLocation().getLine().longValue(), new AstNode(step, childNode));
         }
         if (!child.getExamples().isEmpty()) {
             processScenarioOutlineExamples(nodeMap, child, childNode);
@@ -168,12 +168,12 @@ final class TestSourcesModel {
             // TODO: Can tables without headers even exist?
             TableRow headerRow = examples.getTableHeader().get();
             AstNode headerNode = new AstNode(headerRow, examplesNode);
-            nodeMap.put(headerRow.getLocation().getLine(), headerNode);
+            nodeMap.put(headerRow.getLocation().getLine().longValue(), headerNode);
             for (int i = 0; i < examples.getTableBody().size(); ++i) {
                 TableRow examplesRow = examples.getTableBody().get(i);
                 Object rowNode = new ExamplesRowWrapperNode(examplesRow, i);
                 AstNode expandedScenarioNode = new AstNode(rowNode, examplesNode);
-                nodeMap.put(examplesRow.getLocation().getLine(), expandedScenarioNode);
+                nodeMap.put(examplesRow.getLocation().getLine().longValue(), expandedScenarioNode);
             }
         }
     }

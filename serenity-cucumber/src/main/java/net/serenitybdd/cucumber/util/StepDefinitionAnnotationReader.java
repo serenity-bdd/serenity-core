@@ -80,6 +80,10 @@ public class StepDefinitionAnnotationReader {
         }
         String qualifiedMethodName = stepDefinitionPath.substring(0, lastOpeningParentheses);
         int endOfClassName = qualifiedMethodName.lastIndexOf(".");
+        
+        if (endOfClassName <= 0) {
+            return qualifiedMethodName;
+        }
         return stepDefinitionPath.substring(0, endOfClassName);
     }
 

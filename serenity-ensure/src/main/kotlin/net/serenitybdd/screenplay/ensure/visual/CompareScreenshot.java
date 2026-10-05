@@ -1,14 +1,15 @@
-package net.serenitybdd.screenplay.playwright.assertions.visual;
+package net.serenitybdd.screenplay.ensure.visual;
 
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.playwright.Target;
+import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.visual.BaselineComparison;
 import net.serenitybdd.screenplay.visual.ImageWithScale;
 
 /**
- * Perform visual regression testing by comparing screenshots to baseline images.
+ * Perform visual regression testing by comparing screenshots to baseline images
+ * using WebDriver.
  *
  * <p>On first run, baseline images are created. On subsequent runs, screenshots
  * are compared against the baselines and differences are reported.</p>
@@ -48,7 +49,7 @@ public class CompareScreenshot {
     }
 
     /**
-     * Compare a screenshot of a specific element.
+     * Compare a screenshot of a specific element identified by a CSS or XPath selector.
      *
      * @param selector The CSS or XPath selector
      */
@@ -112,7 +113,7 @@ public class CompareScreenshot {
         @Override
         @Step("{0} compares screenshot to baseline '#baselineName'")
         public <T extends Actor> void performAs(T actor) {
-            ImageWithScale screenshot = new PlaywrightScreenshotQuestion(target).answeredBy(actor);
+            ImageWithScale screenshot = new WebDriverScreenshotQuestion(target).answeredBy(actor);
             BaselineComparison comparison = new BaselineComparison(baselineName).withThreshold(threshold);
             if (updateBaseline) {
                 comparison.updatingBaseline();

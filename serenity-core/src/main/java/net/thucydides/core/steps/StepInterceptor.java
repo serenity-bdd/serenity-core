@@ -206,7 +206,7 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
 
         listeners.forEach(listener -> listener.end(obj, method, args, zuperMethod));
 
-        if (isATopLevelStepInADataDrivenTest()) {
+        if (isATopLevelStepInADataDrivenTest() && !stepIsCalledFromCleanupMethod()) {
             throwNestedExceptions();
         }
         return result;

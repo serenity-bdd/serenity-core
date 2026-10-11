@@ -186,14 +186,15 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             LOGGER.info("------------------------------------------------------------------------");
             LOGGER.info("Serenity BDD Test Results");
             LOGGER.info("  - Report guide: {}", DOCS_URL);
-            LOGGER.info("  - Results: {} tests | {} passed | {} failed | {} errors | {} compromised | {} pending | {} aborted",
+            LOGGER.info("  - Results: {} tests | {} passed | {} failed | {} errors | {} compromised | {} pending | {} aborted | {} ignored",
                 testOutcomes.getTestCount(),
                 testOutcomes.getPassingTests().getTestCount(),
                 testOutcomes.getFailingTests().getTestCount(),
                 testOutcomes.getErrorTests().getTestCount(),
                 testOutcomes.getCompromisedTests().getTestCount(),
                 testOutcomes.getPendingTests().getTestCount(),
-                testOutcomes.getAbortedTests().getTestCount());
+                testOutcomes.getAbortedTests().getTestCount(),
+                testOutcomes.getIgnoredTests().getTestCount());
 
             // Only show expanded details if something needs attention
             boolean hasIssues =
@@ -210,6 +211,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 logIfNonZero("Compromised ", testOutcomes.getCompromisedTests().getTestCount());
                 logIfNonZero("Pending     ", testOutcomes.getPendingTests().getTestCount());
                 logIfNonZero("Aborted     ", testOutcomes.getAbortedTests().getTestCount());
+                logIfNonZero("Ignored     ", testOutcomes.getIgnoredTests().getTestCount());
             }
             LOGGER.info("------------------------------------------------------------------------");
             LOGGER.info("");

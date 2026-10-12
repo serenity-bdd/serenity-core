@@ -1,6 +1,15 @@
 name: Release to Maven Central
 on:
   workflow_dispatch:
+    inputs:
+      release_profile:
+        description: Which artifacts to publish
+        required: true
+        type: choice
+        default: deploy
+        options:
+          - deploy
+          - deploy-cli
 
 jobs:
   release:
@@ -53,4 +62,7 @@ jobs:
       - name: Run Maven Release
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: mvn release:prepare release:perform -Darguments='-Dmaven.test.skip=true' -Pdeploy
+        run: |
+          mvn release:prepare release:perform \
+            -Darguments='-Dmaven.test.skip=true' \
+            -P"${{ github.event.inputs.release_profile }}"

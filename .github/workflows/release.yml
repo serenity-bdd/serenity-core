@@ -1,11 +1,6 @@
 name: Release to Maven Central
 on:
   workflow_dispatch:
-    inputs:
-      release_version:
-        description: Release version, e.g. 5.4.0 (leave empty to use the current SNAPSHOT version without the suffix)
-        required: false
-        type: string
 
 jobs:
   release:
@@ -68,16 +63,12 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      # The release version is derived from the current SNAPSHOT version (e.g. 5.4.1-SNAPSHOT releases 5.4.1,
+      # then moves to 5.4.2-SNAPSHOT). To release a different version, bump the SNAPSHOT version in the poms first.
       - name: Run Maven Release
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          RELEASE_VERSION: ${{ github.event.inputs.release_version }}
         run: |
-          args=()
-          if [ -n "$RELEASE_VERSION" ]; then
-            args+=("-DreleaseVersion=$RELEASE_VERSION")
-          fi
           mvn release:prepare release:perform \
             -Darguments='-Dmaven.test.skip=true' \
-            -Pdeploy \
-            "${args[@]}"
+            -Pdeploy

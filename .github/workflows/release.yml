@@ -2,14 +2,6 @@ name: Release to Maven Central
 on:
   workflow_dispatch:
     inputs:
-      release_profile:
-        description: Which artifacts to publish
-        required: true
-        type: choice
-        default: deploy
-        options:
-          - deploy
-          - deploy-cli
       release_version:
         description: Release version, e.g. 5.4.0 (leave empty to use the current SNAPSHOT version without the suffix)
         required: false
@@ -77,7 +69,6 @@ jobs:
       - name: Run Maven Release
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          RELEASE_PROFILE: ${{ github.event.inputs.release_profile }}
           RELEASE_VERSION: ${{ github.event.inputs.release_version }}
         run: |
           args=()
@@ -86,5 +77,5 @@ jobs:
           fi
           mvn release:prepare release:perform \
             -Darguments='-Dmaven.test.skip=true' \
-            -P"$RELEASE_PROFILE" \
+            -Pdeploy \
             "${args[@]}"

@@ -15,10 +15,12 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v6
 
-      - name: Set up JDK 17
+      # JDK 25 is required for the javadoc --no-fonts option (see the deploy profile in pom.xml).
+      # The code is still compiled with --release 17.
+      - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
-          java-version: '17'
+          java-version: '25'
           distribution: 'temurin'
 
       # Maven 3.10.0 breaks central-publishing-maven-plugin (maven-metadata-local.xml ends up in the

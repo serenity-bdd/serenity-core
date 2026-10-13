@@ -787,7 +787,11 @@
                                 </goals>
                                 <configuration>
                                     <doclint>none</doclint>
-                                    <additionalOptions>-Xdoclint:none</additionalOptions>
+                                    <additionalOptions>
+                                        <additionalOption>-Xdoclint:none</additionalOption>
+                                        <!-- Without this, every javadoc jar contains ~4 MB of web fonts (needs JDK 23+ javadoc) -->
+                                        <additionalOption>--no-fonts</additionalOption>
+                                    </additionalOptions>
                                 </configuration>
                             </execution>
                         </executions>

@@ -151,11 +151,9 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             activateProxyFor(profile, firefoxProfileEnhancer);
         }
         if (refuseUntrustedCertificates()) {
-            profile.setAssumeUntrustedCertificateIssuer(false);
-            profile.setAcceptUntrustedCertificates(false);
+            profile.setPreference("webdriver_accept_untrusted_certs", false);
         } else {
-            profile.setAssumeUntrustedCertificateIssuer(true);
-            profile.setAcceptUntrustedCertificates(true);
+            profile.setPreference("webdriver_accept_untrusted_certs", true);
         }
         firefoxProfileEnhancer.configureJavaSupport(profile);
         firefoxProfileEnhancer.addPreferences(profile);
@@ -204,7 +202,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         } else {
             profile = new FirefoxProfile();
             profile.setPreference("network.proxy.socks_port", 9999);
-            profile.setAlwaysLoadNoFocusLib(true);
         }
         return profile;
     }

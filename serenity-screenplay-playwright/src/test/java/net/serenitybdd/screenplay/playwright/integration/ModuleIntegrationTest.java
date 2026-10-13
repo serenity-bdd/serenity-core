@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.integration;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.playwright.PlaywrightSerenity;
 import net.serenitybdd.screenplay.Actor;
@@ -30,7 +31,7 @@ public class ModuleIntegrationTest {
     void should_register_page_with_playwright_serenity_when_page_is_created() {
         // When the actor opens a URL (which creates a page)
         alice.attemptsTo(
-            Open.url("https://example.com")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Then the page should be registered with PlaywrightSerenity
@@ -42,7 +43,7 @@ public class ModuleIntegrationTest {
     @Test
     void should_be_able_to_access_current_page_via_playwright_serenity() {
         alice.attemptsTo(
-            Open.url("https://example.com")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // The current page from the ability should match the one in PlaywrightSerenity

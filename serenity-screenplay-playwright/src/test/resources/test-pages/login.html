@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>The Internet</title></head>
+<body>
+  <h2>Login Page</h2>
+  <h4>This is where you sign in.</h4>
+  <form id="login" action="authenticate" onsubmit="return doLogin(event)">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password">
+    <button type="submit">Login</button>
+  </form>
+  <div id="flash" style="display:none"></div>
+  <script>
+    function doLogin(e) {
+      e.preventDefault();
+      var u = document.getElementById('username').value;
+      var p = document.getElementById('password').value;
+      var flash = document.getElementById('flash');
+      flash.style.display = 'block';
+      if (u === 'tomsmith' && p === 'SuperSecretPassword!') {
+        flash.textContent = 'You logged into a secure area!';
+        flash.style.color = 'green';
+        document.cookie = 'rack.session=authenticated; path=/';
+        setTimeout(function() { window.location.href = 'secure.html'; }, 500);
+      } else {
+        flash.textContent = 'Your username is invalid!';
+        flash.style.color = 'red';
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

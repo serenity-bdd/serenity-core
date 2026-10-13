@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>The Internet</title></head>
+<body>
+  <h3>Add/Remove Elements</h3>
+  <div id="content">
+    <div class="example">
+      <button onclick="addElement()">Add Element</button>
+      <div id="elements"></div>
+    </div>
+  </div>
+  <script>
+    function addElement() {
+      var btn = document.createElement('button');
+      btn.textContent = 'Delete';
+      btn.onclick = function() { this.parentNode.removeChild(this); };
+      document.getElementById('elements').appendChild(btn);
+    }
+  </script>
+</body>
+</html>

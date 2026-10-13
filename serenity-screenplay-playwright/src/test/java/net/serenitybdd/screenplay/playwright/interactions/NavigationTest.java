@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -27,7 +28,7 @@ public class NavigationTest {
     @Test
     void should_navigate_back() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Click.on("text='A/B Testing'")
         );
 
@@ -43,7 +44,7 @@ public class NavigationTest {
     @Test
     void should_navigate_forward() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Click.on("text='A/B Testing'"),
             Navigate.back()
         );
@@ -60,7 +61,7 @@ public class NavigationTest {
     @Test
     void should_refresh_page() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Navigate.refresh()
         );
 

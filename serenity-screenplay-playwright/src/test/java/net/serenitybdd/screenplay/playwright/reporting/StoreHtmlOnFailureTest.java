@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.reporting;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
@@ -41,7 +42,7 @@ public class StoreHtmlOnFailureTest {
         Actor alice = Actor.named("Alice").whoCan(ability);
         try {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/")
+                Open.url(LocalTestSite.url("/"))
             );
         } catch (Exception e) {
             // External website may not be available in test environment

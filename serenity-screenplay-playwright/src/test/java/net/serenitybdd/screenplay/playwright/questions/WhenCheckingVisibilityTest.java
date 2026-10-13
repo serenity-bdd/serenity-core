@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.questions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -24,7 +25,7 @@ public class WhenCheckingVisibilityTest {
     @Test
     public void weCanCheckForHiddenAndVisibleElements() {
         fred.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+            Open.url(LocalTestSite.url("/add_remove_elements/")),
             Ensure.that("text='Delete'").withTimeout(0.0).isHidden(),
             Click.on("text='Add Element'"),
             Ensure.that("text='Delete'").isVisible()
@@ -34,7 +35,7 @@ public class WhenCheckingVisibilityTest {
     @Test
     public void weCanCheckForDisabledElements() {
         fred.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/dynamic_controls"),
+            Open.url(LocalTestSite.url("/dynamic_controls")),
             Ensure.that("#input-example input").isDisabled(),
             Click.on("text='Enable'"),
             WaitFor.selector("text='It's enabled!'"),

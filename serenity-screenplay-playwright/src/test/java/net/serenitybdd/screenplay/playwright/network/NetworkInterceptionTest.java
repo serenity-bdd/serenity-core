@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.network;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -32,7 +33,7 @@ public class NetworkInterceptionTest {
             // Block image requests
             InterceptNetwork.forUrl("**/*.png").andAbort(),
             InterceptNetwork.forUrl("**/*.jpg").andAbort(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Test passes if page loads without errors
@@ -47,7 +48,7 @@ public class NetworkInterceptionTest {
             InterceptNetwork.forUrl("**/status_codes/200")
                 .andRespondWith("<html><body><h1>Mocked Response</h1></body></html>")
                 .withContentType("text/html"),
-            Open.url("https://the-internet.herokuapp.com/status_codes/200")
+            Open.url(LocalTestSite.url("/status_codes/200"))
         );
 
         String text = alice.asksFor(Text.of("h1"));
@@ -59,7 +60,7 @@ public class NetworkInterceptionTest {
         // Wait for the response when navigating to a page
         alice.attemptsTo(
             WaitForResponse.containingUrl("login")
-                .whilePerforming(Open.url("https://the-internet.herokuapp.com/login"))
+                .whilePerforming(Open.url(LocalTestSite.url("/login")))
         );
 
         // Page should be loaded
@@ -72,7 +73,7 @@ public class NetworkInterceptionTest {
         alice.attemptsTo(
             // Add a custom header to all requests
             InterceptNetwork.forUrl("**/*").andContinueWithHeader("X-Custom-Header", "test-value"),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Test passes if page loads successfully

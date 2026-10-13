@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.abilities;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.playwright.PlaywrightSerenity;
@@ -33,7 +34,7 @@ public class TeardownTest {
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
 
         // Create a page by opening a URL
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
         Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
         assertThat(page.isClosed()).isFalse();
@@ -53,7 +54,7 @@ public class TeardownTest {
         Actor alice = Actor.named("Alice")
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
 
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
         Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
         // wrapUp() should call tearDown() on all abilities with HasTeardown
@@ -69,7 +70,7 @@ public class TeardownTest {
         Actor alice = Actor.named("Alice")
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
 
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
         // Verify page is registered
         assertThat(PlaywrightSerenity.getRegisteredPages()).isNotEmpty();

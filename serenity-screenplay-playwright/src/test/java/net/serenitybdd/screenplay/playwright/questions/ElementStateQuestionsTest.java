@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.questions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -28,7 +29,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_element_presence() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         Boolean present = alice.asksFor(Presence.of("h1"));
@@ -41,7 +42,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_element_enabled_state() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_controls")
+            Open.url(LocalTestSite.url("/dynamic_controls"))
         );
 
         // The input is initially disabled
@@ -52,7 +53,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_element_disabled_state() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_controls")
+            Open.url(LocalTestSite.url("/dynamic_controls"))
         );
 
         // The input is initially disabled
@@ -63,7 +64,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_get_element_count() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes")
+            Open.url(LocalTestSite.url("/checkboxes"))
         );
 
         Integer count = alice.asksFor(Count.of("#checkboxes input"));
@@ -73,7 +74,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_get_zero_count_for_missing_elements() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         Integer count = alice.asksFor(Count.of(".nonexistent-element"));
@@ -83,7 +84,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_if_element_is_checked() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes")
+            Open.url(LocalTestSite.url("/checkboxes"))
         );
 
         // Second checkbox is checked by default
@@ -97,7 +98,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_if_element_is_focused() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Click.on("#username")
         );
 
@@ -108,7 +109,7 @@ public class ElementStateQuestionsTest {
     @Test
     void should_check_if_element_is_editable() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login")
+            Open.url(LocalTestSite.url("/login"))
         );
 
         Boolean editable = alice.asksFor(Editable.of("#username"));

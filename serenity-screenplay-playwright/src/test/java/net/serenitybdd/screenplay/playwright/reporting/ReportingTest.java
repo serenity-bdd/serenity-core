@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.reporting;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.screenplay.Actor;
@@ -35,7 +36,7 @@ public class ReportingTest {
     @Test
     void interactions_should_appear_in_report() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Enter.theValue("tomsmith").into("#username"),
             Enter.theValue("SuperSecretPassword!").into("#password"),
             Click.on("button[type='submit']")
@@ -70,8 +71,8 @@ public class ReportingTest {
     @Test
     void step_descriptions_should_include_element_info() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            Click.on("a[href='/login']")
+            Open.url(LocalTestSite.url("/")),
+            Click.on("a[href='login.html']")
         );
 
         TestOutcome outcome = StepEventBus.getParallelEventBus()
@@ -95,7 +96,7 @@ public class ReportingTest {
     @Test
     void test_outcome_should_have_correct_result() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         TestOutcome outcome = StepEventBus.getParallelEventBus()
@@ -110,7 +111,7 @@ public class ReportingTest {
     @Test
     void nested_steps_should_be_recorded() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes"),
+            Open.url(LocalTestSite.url("/checkboxes")),
             net.serenitybdd.screenplay.playwright.interactions.Check.the("#checkboxes input >> nth=0")
         );
 

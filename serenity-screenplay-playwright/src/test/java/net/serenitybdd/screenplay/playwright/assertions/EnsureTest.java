@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.assertions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -27,7 +28,7 @@ public class EnsureTest {
     @Test
     void should_ensure_text_content() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.that("h1").hasText("Welcome to the-internet"),
             Ensure.that("h1").containsText("Welcome"),
             Ensure.that("h1").hasTextMatching("Welcome.*internet")
@@ -37,7 +38,7 @@ public class EnsureTest {
     @Test
     void should_ensure_text_matching_with_pattern() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.that("h1").hasTextMatching(Pattern.compile("Welcome.*", Pattern.CASE_INSENSITIVE))
         );
     }
@@ -45,7 +46,7 @@ public class EnsureTest {
     @Test
     void should_ensure_attribute_value() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Ensure.that("#username").hasAttribute("name", "username"),
             Ensure.that("#username").hasAttribute("type", "text")
         );
@@ -54,7 +55,7 @@ public class EnsureTest {
     @Test
     void should_ensure_attribute_contains() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Ensure.that("form").hasAttributeContaining("action", "authenticate")
         );
     }
@@ -62,7 +63,7 @@ public class EnsureTest {
     @Test
     void should_ensure_element_has_class() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/add_remove_elements/"),
+            Open.url(LocalTestSite.url("/add_remove_elements/")),
             Ensure.that("#content .example").hasClass("example")
         );
     }
@@ -70,7 +71,7 @@ public class EnsureTest {
     @Test
     void should_ensure_element_count() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes"),
+            Open.url(LocalTestSite.url("/checkboxes")),
             Ensure.that("#checkboxes input").hasCount(2)
         );
     }
@@ -78,7 +79,7 @@ public class EnsureTest {
     @Test
     void should_ensure_url_contains() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Ensure.thatTheCurrentUrl().contains("/login")
         );
     }
@@ -86,7 +87,7 @@ public class EnsureTest {
     @Test
     void should_ensure_url_matches() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Ensure.thatTheCurrentUrl().matches(Pattern.compile(".*/login$"))
         );
     }
@@ -94,7 +95,7 @@ public class EnsureTest {
     @Test
     void should_ensure_page_title() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.thatThePageTitle().isEqualTo("The Internet"),
             Ensure.thatThePageTitle().contains("Internet")
         );
@@ -103,7 +104,7 @@ public class EnsureTest {
     @Test
     void should_ensure_element_is_focused() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             net.serenitybdd.screenplay.playwright.interactions.Click.on("#username"),
             Ensure.that("#username").isFocused()
         );
@@ -112,7 +113,7 @@ public class EnsureTest {
     @Test
     void should_ensure_element_is_not_empty() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.that("h1").isNotEmpty()
         );
     }
@@ -120,7 +121,7 @@ public class EnsureTest {
     @Test
     void should_ensure_input_is_empty() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Ensure.that("#username").isEmpty()
         );
     }
@@ -128,7 +129,7 @@ public class EnsureTest {
     @Test
     void should_ensure_css_value() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.that("h1").hasCSSValue("display", "block")
         );
     }

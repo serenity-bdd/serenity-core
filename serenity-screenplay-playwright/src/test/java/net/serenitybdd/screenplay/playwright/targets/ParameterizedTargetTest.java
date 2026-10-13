@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.targets;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
@@ -35,7 +36,7 @@ public class ParameterizedTargetTest {
     @Test
     void should_resolve_parameterized_selector_with_single_parameter() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes")
+            Open.url(LocalTestSite.url("/checkboxes"))
         );
 
         // Use parameterized target with index 1
@@ -65,7 +66,7 @@ public class ParameterizedTargetTest {
     @Test
     void should_support_text_based_parameterized_selectors() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Click on a link using parameterized text selector

@@ -25,7 +25,7 @@ public class JQueryInteractionTests extends ScreenplayInteractionTestBase {
     public void draggingAnElementToATarget() {
 
         dina.attemptsTo(
-                Open.url("https://jqueryui.com/droppable/"),
+                Open.url("classpath:/sample-web-site/droppable.html"),
                 Drag.from(FROM).to(TO)
         );
 
@@ -45,7 +45,7 @@ public class JQueryInteractionTests extends ScreenplayInteractionTestBase {
     @Test
     public void mouseInteractions() {
         dina.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/context_menu"),
+                Open.url("classpath:/sample-web-site/context-menu.html"),
                 ContextClick.on("#hot-spot")
         );
 

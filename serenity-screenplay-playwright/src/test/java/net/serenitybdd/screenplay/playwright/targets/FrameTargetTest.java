@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.targets;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
@@ -30,11 +31,11 @@ public class FrameTargetTest {
     void should_interact_with_element_in_iframe() {
         // Target inside an iframe - using the nested frames example page
         Target frameContent = Target.the("frame content")
-            .inFrame("frame[name='frame-bottom']")
+            .inFrame("iframe[name='frame-bottom']")
             .locatedBy("body");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/nested_frames")
+            Open.url(LocalTestSite.url("/nested_frames"))
         );
 
         String text = alice.asksFor(Text.of(frameContent));

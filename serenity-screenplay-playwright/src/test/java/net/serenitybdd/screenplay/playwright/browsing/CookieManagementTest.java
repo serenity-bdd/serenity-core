@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.browsing;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -29,7 +30,7 @@ public class CookieManagementTest {
     @Test
     void should_add_a_cookie() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ManageCookies.addCookie("test_cookie", "test_value")
         );
 
@@ -40,7 +41,7 @@ public class CookieManagementTest {
     @Test
     void should_check_if_cookie_exists() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ManageCookies.addCookie("existing_cookie", "some_value")
         );
 
@@ -54,7 +55,7 @@ public class CookieManagementTest {
     @Test
     void should_clear_all_cookies() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ManageCookies.addCookie("cookie1", "value1"),
             ManageCookies.addCookie("cookie2", "value2"),
             ManageCookies.clearAll()
@@ -70,7 +71,7 @@ public class CookieManagementTest {
     @Test
     void should_add_cookie_with_options() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ManageCookies.addCookie("session_cookie", "session_value")
                 .withPath("/")
                 .httpOnly()

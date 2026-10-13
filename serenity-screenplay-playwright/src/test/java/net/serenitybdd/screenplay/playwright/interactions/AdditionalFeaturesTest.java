@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -40,7 +41,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can focus on an element")
         void can_focus_on_element() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/login"),
+                Open.url(LocalTestSite.url("/login")),
                 Focus.on("#username")
             );
 
@@ -55,7 +56,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can blur the active element")
         void can_blur_active_element() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/login"),
+                Open.url(LocalTestSite.url("/login")),
                 Focus.on("#username"),
                 Focus.blur()
             );
@@ -76,7 +77,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can set and get localStorage values")
         void can_manage_local_storage() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 ManageStorage.localStorage().setItem("testKey", "testValue")
             );
 
@@ -88,7 +89,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can set and get sessionStorage values")
         void can_manage_session_storage() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 ManageStorage.sessionStorage().setItem("sessionKey", "sessionValue")
             );
 
@@ -100,7 +101,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can clear localStorage")
         void can_clear_local_storage() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 ManageStorage.localStorage().setItem("key1", "value1"),
                 ManageStorage.localStorage().setItem("key2", "value2"),
                 ManageStorage.localStorage().clear()
@@ -114,7 +115,7 @@ public class AdditionalFeaturesTest {
         @DisplayName("Can get all storage items")
         void can_get_all_storage_items() {
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 ManageStorage.localStorage().setItem("key1", "value1"),
                 ManageStorage.localStorage().setItem("key2", "value2")
             );
@@ -132,12 +133,12 @@ public class AdditionalFeaturesTest {
         @Test
         @DisplayName("Can check visibility in a frame")
         void can_check_visibility_in_frame() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/nested_frames"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/nested_frames")));
 
             // Use nested frames page which has simpler, more reliable frames
             Boolean visible = alice.asksFor(
-                FrameContent.inFrame("frame[name='frame-top']").isVisible("frameset"));
-            // The top frame contains a frameset, which should be visible
+                FrameContent.inFrame("iframe[name='frame-top']").isVisible("iframe[name='frame-left']"));
+            // The top frame contains the left/middle/right iframes, which should be visible
             assertThat(visible).isTrue();
         }
     }
@@ -155,7 +156,7 @@ public class AdditionalFeaturesTest {
             Path screenshotPath = tempDir.resolve("page.png");
 
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 TakeScreenshot.ofPage().saveTo(screenshotPath)
             );
 
@@ -169,7 +170,7 @@ public class AdditionalFeaturesTest {
             Path screenshotPath = tempDir.resolve("fullpage.png");
 
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 TakeScreenshot.ofPage().fullPage().saveTo(screenshotPath)
             );
 
@@ -182,7 +183,7 @@ public class AdditionalFeaturesTest {
             Path screenshotPath = tempDir.resolve("element.png");
 
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 TakeScreenshot.ofElement("h1.heading").saveTo(screenshotPath)
             );
 

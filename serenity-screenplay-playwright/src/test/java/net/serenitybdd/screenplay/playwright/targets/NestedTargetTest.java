@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.targets;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
@@ -34,7 +35,7 @@ public class NestedTargetTest {
     @Test
     void should_find_element_inside_container() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login")
+            Open.url(LocalTestSite.url("/login"))
         );
 
         // Find submit button inside the form
@@ -52,7 +53,7 @@ public class NestedTargetTest {
     @Test
     void should_chain_locators_with_find() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login")
+            Open.url(LocalTestSite.url("/login"))
         );
 
         // Chain: form -> button

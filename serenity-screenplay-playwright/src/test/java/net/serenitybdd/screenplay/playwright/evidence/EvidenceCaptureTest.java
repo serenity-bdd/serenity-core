@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.evidence;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -166,14 +167,14 @@ public class EvidenceCaptureTest {
     void should_capture_network_requests() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         List<CapturedRequest> requests = alice.asksFor(NetworkRequests.all());
 
         assertThat(requests).isNotEmpty();
         // Should have captured the main page request
-        assertThat(requests).anyMatch(r -> r.getUrl().contains("the-internet.herokuapp.com"));
+        assertThat(requests).anyMatch(r -> r.getUrl().contains("localhost"));
     }
 
     @Test
@@ -181,7 +182,7 @@ public class EvidenceCaptureTest {
     void should_capture_request_methods() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         List<CapturedRequest> getRequests = alice.asksFor(NetworkRequests.withMethod("GET"));
@@ -195,15 +196,15 @@ public class EvidenceCaptureTest {
     void should_filter_requests_by_url() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
-        List<CapturedRequest> herokuRequests = alice.asksFor(
-            NetworkRequests.toUrlContaining("herokuapp")
+        List<CapturedRequest> localRequests = alice.asksFor(
+            NetworkRequests.toUrlContaining("localhost")
         );
 
-        assertThat(herokuRequests).isNotEmpty();
-        assertThat(herokuRequests).allMatch(r -> r.getUrl().contains("herokuapp"));
+        assertThat(localRequests).isNotEmpty();
+        assertThat(localRequests).allMatch(r -> r.getUrl().contains("localhost"));
     }
 
     @Test
@@ -211,7 +212,7 @@ public class EvidenceCaptureTest {
     void should_filter_requests_by_pattern() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         List<CapturedRequest> matchingRequests = alice.asksFor(
@@ -227,7 +228,7 @@ public class EvidenceCaptureTest {
     void should_capture_response_status() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         List<CapturedRequest> requests = alice.asksFor(NetworkRequests.all());
@@ -243,7 +244,7 @@ public class EvidenceCaptureTest {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
             // Navigate to a page that will have some 404s
-            Open.url("https://the-internet.herokuapp.com/status_codes/404")
+            Open.url(LocalTestSite.url("/status_codes/404"))
         );
 
         List<CapturedRequest> failed = alice.asksFor(NetworkRequests.failed());
@@ -258,11 +259,11 @@ public class EvidenceCaptureTest {
     @DisplayName("Should identify client error requests")
     void should_identify_client_errors() {
         // httpbin.org's /status/404 endpoint has been returning 503s from its load balancer
-        // rather than the intended 404, so use the-internet.herokuapp.com instead, which is
+        // rather than the intended 404, so use the local test site instead, which is
         // already relied on elsewhere in this file and reliably returns a genuine 404.
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/status_codes/404")
+            Open.url(LocalTestSite.url("/status_codes/404"))
         );
 
         // Request/response events are delivered to the Java-side listeners asynchronously, so the
@@ -289,7 +290,7 @@ public class EvidenceCaptureTest {
     void should_count_network_requests() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         int count = alice.asksFor(NetworkRequests.count());
@@ -302,15 +303,15 @@ public class EvidenceCaptureTest {
     void should_clear_network_requests() {
         alice.attemptsTo(
             CaptureNetworkRequests.duringTest(),
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             CaptureNetworkRequests.clear(),
-            Open.url("https://the-internet.herokuapp.com/login")
+            Open.url(LocalTestSite.url("/login"))
         );
 
         List<CapturedRequest> requests = alice.asksFor(NetworkRequests.all());
 
         // Should only have requests from the second navigation
-        assertThat(requests).allMatch(r -> !r.getUrl().endsWith("herokuapp.com/") ||
+        assertThat(requests).allMatch(r -> !r.getUrl().endsWith("/") ||
             r.getUrl().contains("login"));
     }
 

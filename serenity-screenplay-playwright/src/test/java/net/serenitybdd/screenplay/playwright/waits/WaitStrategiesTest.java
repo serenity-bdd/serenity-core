@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for wait strategies using Playwright's native waiting mechanisms.
+ * Uses local HTML test fixtures to avoid any dependency on external sites.
  */
 @ExtendWith(SerenityJUnit5Extension.class)
 public class WaitStrategiesTest {
@@ -29,10 +30,18 @@ public class WaitStrategiesTest {
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
     }
 
+    private String localPage(String name) {
+        java.net.URL resource = getClass().getClassLoader().getResource("test-pages/" + name);
+        if (resource == null) {
+            throw new IllegalStateException("Test page not found on classpath: test-pages/" + name);
+        }
+        return resource.toExternalForm();
+    }
+
     @Test
     void should_wait_for_element_to_be_visible() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_loading/2"),
+            Open.url(localPage("dynamic-loading.html")),
             Click.on("#start button"),
             WaitUntil.the("#finish h4").isVisible()
         );
@@ -44,7 +53,7 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_for_element_to_be_hidden() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_loading/1"),
+            Open.url(localPage("dynamic-loading.html")),
             Click.on("#start button"),
             WaitUntil.the("#loading").isHidden()
         );
@@ -58,9 +67,9 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_with_custom_timeout() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_loading/2"),
+            Open.url(localPage("dynamic-loading.html")),
             Click.on("#start button"),
-            WaitUntil.the("#finish h4").isVisible().forNoMoreThan(Duration.ofSeconds(30))
+            WaitUntil.the("#finish h4").isVisible().forNoMoreThan(Duration.ofSeconds(10))
         );
 
         String text = alice.asksFor(Text.of("#finish h4"));
@@ -70,7 +79,7 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_for_element_to_be_attached() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_loading/2"),
+            Open.url(localPage("dynamic-loading.html")),
             Click.on("#start button"),
             WaitUntil.the("#finish h4").isAttached()
         );
@@ -79,17 +88,16 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_for_element_to_be_enabled() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_controls"),
+            Open.url(localPage("dynamic-controls.html")),
             Click.on("#input-example button"),
-            // The enable animation takes several seconds
-            WaitUntil.the("#input-example input").isEnabled().forNoMoreThan(Duration.ofSeconds(15))
+            WaitUntil.the("#input-example input").isEnabled().forNoMoreThan(Duration.ofSeconds(10))
         );
     }
 
     @Test
     void should_wait_for_page_load() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(localPage("index.html")),
             WaitUntil.thePageIsLoaded()
         );
     }
@@ -97,7 +105,7 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_for_network_idle() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(localPage("index.html")),
             WaitUntil.networkIsIdle()
         );
     }
@@ -105,18 +113,17 @@ public class WaitStrategiesTest {
     @Test
     void should_wait_for_url_to_contain() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            Click.on("a[href='/abtest']"),
-            WaitUntil.theUrl().contains("/abtest")
+            Open.url(localPage("index.html")),
+            Click.on("a[href='abtest.html']"),
+            WaitUntil.theUrl().contains("abtest")
         );
     }
 
     @Test
     void should_wait_for_element_to_contain_text() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dynamic_loading/2"),
+            Open.url(localPage("dynamic-loading.html")),
             Click.on("#start button"),
-            // First wait for element to be visible, then check text
             WaitUntil.the("#finish h4").isVisible(),
             Ensure.that("#finish h4").containsText("Hello")
         );

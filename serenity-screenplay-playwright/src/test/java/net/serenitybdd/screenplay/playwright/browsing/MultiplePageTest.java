@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.browsing;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -30,8 +31,8 @@ public class MultiplePageTest {
     @Test
     void should_open_new_page_and_navigate() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            SwitchTo.newPageAt("https://the-internet.herokuapp.com/login")
+            Open.url(LocalTestSite.url("/")),
+            SwitchTo.newPageAt(LocalTestSite.url("/login"))
         );
 
         // Should now have 2 pages open
@@ -46,8 +47,8 @@ public class MultiplePageTest {
     @Test
     void should_switch_between_pages_by_index() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            SwitchTo.newPageAt("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/")),
+            SwitchTo.newPageAt(LocalTestSite.url("/login")),
             SwitchTo.pageNumber(0)  // Switch back to first page
         );
 
@@ -58,8 +59,8 @@ public class MultiplePageTest {
     @Test
     void should_switch_to_page_by_url() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes"),
-            SwitchTo.newPageAt("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/checkboxes")),
+            SwitchTo.newPageAt(LocalTestSite.url("/login")),
             SwitchTo.pageWithUrl("checkboxes")  // Switch back to first page by partial URL
         );
 
@@ -71,8 +72,8 @@ public class MultiplePageTest {
     @Test
     void should_close_current_page_and_switch_back() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            SwitchTo.newPageAt("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/")),
+            SwitchTo.newPageAt(LocalTestSite.url("/login")),
             SwitchTo.previousPageAfterClosingCurrent()
         );
 

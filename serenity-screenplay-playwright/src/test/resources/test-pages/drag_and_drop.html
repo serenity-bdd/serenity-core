@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Internet</title>
+<style>
+  #columns { display: flex; gap: 20px; }
+  #column-a, #column-b { width: 150px; height: 150px; border: 2px solid #ccc; text-align: center; cursor: grab; }
+  #column-a[draggable], #column-b[draggable] { user-select: none; }
+  .drag-over { border-color: #666; background: #f0f0f0; }
+</style>
+</head>
+<body>
+  <h3>Drag and Drop</h3>
+  <div id="columns">
+    <div id="column-a" draggable="true"><header>A</header></div>
+    <div id="column-b" draggable="true"><header>B</header></div>
+  </div>
+  <script>
+    var dragged = null;
+    document.querySelectorAll('[draggable]').forEach(function(col) {
+      col.addEventListener('dragstart', function(e) { dragged = this; e.dataTransfer.effectAllowed = 'move'; });
+      col.addEventListener('dragover', function(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; this.classList.add('drag-over'); });
+      col.addEventListener('dragleave', function() { this.classList.remove('drag-over'); });
+      col.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        if (dragged !== this) {
+          var srcHeader = dragged.querySelector('header').textContent;
+          var tgtHeader = this.querySelector('header').textContent;
+          dragged.querySelector('header').textContent = tgtHeader;
+          this.querySelector('header').textContent = srcHeader;
+        }
+        dragged = null;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
@@ -29,7 +30,7 @@ public class MouseInteractionsTest {
     @Test
     void should_hover_over_element() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/hovers"),
+            Open.url(LocalTestSite.url("/hovers")),
             Hover.over(".figure >> nth=0")
         );
 
@@ -44,7 +45,7 @@ public class MouseInteractionsTest {
         Target FIRST_FIGURE = Target.the("first figure").locatedBy(".figure >> nth=0");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/hovers"),
+            Open.url(LocalTestSite.url("/hovers")),
             Hover.over(FIRST_FIGURE)
         );
 
@@ -56,7 +57,7 @@ public class MouseInteractionsTest {
     @Test
     void should_right_click_element() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/context_menu"),
+            Open.url(LocalTestSite.url("/context_menu")),
             RightClick.on("#hot-spot")
         );
 
@@ -67,7 +68,7 @@ public class MouseInteractionsTest {
     @Test
     void should_drag_and_drop() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/drag_and_drop"),
+            Open.url(LocalTestSite.url("/drag_and_drop")),
             Drag.from("#column-a").to("#column-b")
         );
 
@@ -82,7 +83,7 @@ public class MouseInteractionsTest {
         Target COLUMN_B = Target.the("column B").locatedBy("#column-b");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/drag_and_drop"),
+            Open.url(LocalTestSite.url("/drag_and_drop")),
             Drag.from(COLUMN_A).to(COLUMN_B)
         );
 

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.reporting;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -56,7 +57,7 @@ public class ScreenshotCaptureTest {
     @DisplayName("Test outcome should be available after interactions")
     void test_outcome_should_be_available() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             Enter.theValue("tomsmith").into("#username"),
             Enter.theValue("SuperSecretPassword!").into("#password"),
             Click.on("button[type='submit']")
@@ -76,8 +77,8 @@ public class ScreenshotCaptureTest {
     @DisplayName("Steps should be recorded with descriptions")
     void steps_should_be_recorded_with_descriptions() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            Click.on("a[href='/login']")
+            Open.url(LocalTestSite.url("/")),
+            Click.on("a[href='login.html']")
         );
 
         TestOutcome outcome = StepEventBus.getParallelEventBus()
@@ -107,8 +108,8 @@ public class ScreenshotCaptureTest {
         // Actual screenshot attachment depends on SERENITY_TAKE_SCREENSHOTS setting
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            Click.on("a[href='/checkboxes']")
+            Open.url(LocalTestSite.url("/")),
+            Click.on("a[href='checkboxes.html']")
         );
 
         TestOutcome outcome = StepEventBus.getParallelEventBus()
@@ -132,7 +133,7 @@ public class ScreenshotCaptureTest {
     @DisplayName("BrowseTheWebWithPlaywright can take screenshots manually")
     void can_take_screenshots_manually() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Verify ability can take screenshots
@@ -154,7 +155,7 @@ public class ScreenshotCaptureTest {
         TestLocalEnvironmentVariables.setProperty("serenity.store.html", "ALWAYS");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
@@ -171,7 +172,7 @@ public class ScreenshotCaptureTest {
         TestLocalEnvironmentVariables.setProperty("serenity.store.html", "NEVER");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
@@ -187,7 +188,7 @@ public class ScreenshotCaptureTest {
         TestLocalEnvironmentVariables.setProperty("serenity.store.html", "FAILURES");
 
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);

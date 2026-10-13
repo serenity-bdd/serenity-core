@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.integration;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
@@ -48,10 +49,10 @@ public class WhenUsingUsePlaywrightWithScreenplayIT {
     @Test
     @DisplayName("Actor can use standard interactions with an external page")
     void actor_can_use_standard_interactions(Page page) {
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
         String title = alice.asksFor(TheWebPage.title());
-        assertThat(title).containsIgnoringCase("example");
+        assertThat(title).containsIgnoringCase("internet");
     }
 
     @Test
@@ -75,7 +76,7 @@ public class WhenUsingUsePlaywrightWithScreenplayIT {
     @Test
     @DisplayName("Cookie operations work via derived context")
     void cookie_operations_work_via_derived_context(Page page) {
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
         BrowseTheWebWithPlaywright ability = BrowseTheWebWithPlaywright.as(alice);
 
@@ -85,7 +86,7 @@ public class WhenUsingUsePlaywrightWithScreenplayIT {
 
         // Add a cookie and verify it's accessible
         var cookie = new com.microsoft.playwright.options.Cookie("test-cookie", "test-value")
-            .setDomain("example.com")
+            .setDomain("localhost")
             .setPath("/");
         ability.addCookie(cookie);
 
@@ -96,7 +97,7 @@ public class WhenUsingUsePlaywrightWithScreenplayIT {
     @Test
     @DisplayName("Teardown does not close the external page")
     void teardown_does_not_close_external_page(Page page) {
-        alice.attemptsTo(Open.url("https://example.com"));
+        alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
         // Trigger teardown via wrapUp
         alice.wrapUp();

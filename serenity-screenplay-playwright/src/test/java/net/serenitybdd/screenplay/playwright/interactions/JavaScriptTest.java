@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -27,7 +28,7 @@ public class JavaScriptTest {
     @Test
     void should_execute_javascript() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ExecuteJavaScript.async("document.title = 'Changed Title'")
         );
 
@@ -40,7 +41,7 @@ public class JavaScriptTest {
     @Test
     void should_execute_javascript_with_arguments() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             ExecuteJavaScript.async("([a, b]) => document.title = a + ' ' + b")
                 .withArguments("Hello", "World")
         );
@@ -54,7 +55,7 @@ public class JavaScriptTest {
     @Test
     void should_evaluate_javascript_returning_string() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         String userAgent = alice.asksFor(
@@ -66,7 +67,7 @@ public class JavaScriptTest {
     @Test
     void should_evaluate_javascript_returning_number() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         Object result = alice.asksFor(
@@ -78,7 +79,7 @@ public class JavaScriptTest {
     @Test
     void should_evaluate_javascript_with_arguments() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         Object result = alice.asksFor(
@@ -91,8 +92,8 @@ public class JavaScriptTest {
     @Test
     void should_scroll_element_into_view() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
-            ScrollIntoView.element("a[href='/status_codes']")
+            Open.url(LocalTestSite.url("/")),
+            ScrollIntoView.element("a[href='status_codes.html']")
         );
         // Test passes if no error occurs
     }

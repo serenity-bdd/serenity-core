@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dynamic Controls</title></head>
+<body>
+  <div id="input-example">
+    <input type="text" disabled placeholder="Disabled until you click Enable">
+    <br><br>
+    <button>Enable</button>
+    <p id="message"></p>
+  </div>
+  <script>
+    document.querySelector('#input-example button').addEventListener('click', function() {
+      document.getElementById('message').textContent = 'Wait for it...';
+      setTimeout(function() {
+        document.querySelector('#input-example input').disabled = false;
+        document.getElementById('message').textContent = "It's enabled!";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

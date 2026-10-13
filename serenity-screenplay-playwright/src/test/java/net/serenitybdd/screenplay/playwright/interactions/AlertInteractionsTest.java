@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -26,7 +27,7 @@ public class AlertInteractionsTest {
     @Test
     void should_accept_alert() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/javascript_alerts"),
+            Open.url(LocalTestSite.url("/javascript_alerts")),
             // Set up dialog handler before triggering
             HandleDialog.byAccepting(),
             Click.on("button[onclick='jsAlert()']")
@@ -42,7 +43,7 @@ public class AlertInteractionsTest {
     @Test
     void should_dismiss_confirm_dialog() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/javascript_alerts"),
+            Open.url(LocalTestSite.url("/javascript_alerts")),
             HandleDialog.byDismissing(),
             Click.on("button[onclick='jsConfirm()']")
         );
@@ -56,7 +57,7 @@ public class AlertInteractionsTest {
     @Test
     void should_accept_confirm_dialog() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/javascript_alerts"),
+            Open.url(LocalTestSite.url("/javascript_alerts")),
             HandleDialog.byAccepting(),
             Click.on("button[onclick='jsConfirm()']")
         );
@@ -70,7 +71,7 @@ public class AlertInteractionsTest {
     @Test
     void should_enter_text_in_prompt() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/javascript_alerts"),
+            Open.url(LocalTestSite.url("/javascript_alerts")),
             HandleDialog.byEntering("Hello World"),
             Click.on("button[onclick='jsPrompt()']")
         );

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.integration;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -27,7 +28,7 @@ public class SelectingDropdownOptionsTest {
     @Test
     public void checkingOptionsOfDropdown() {
         daffy.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/dropdown")
+            Open.url(LocalTestSite.url("/dropdown"))
         );
         daffy.should(seeThat(
             SelectOptions.of("#dropdown"),
@@ -39,7 +40,7 @@ public class SelectingDropdownOptionsTest {
     public void selectingOptionsFromDropdown() {
         String dropdown = "#dropdown";
         daffy.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/dropdown"),
+            Open.url(LocalTestSite.url("/dropdown")),
             SelectFromOptions.byValue("1").from(dropdown),
             Ensure.that(dropdown).currentValue("1"),
             SelectFromOptions.byVisibleText("Option 2").from(dropdown),

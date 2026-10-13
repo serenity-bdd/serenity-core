@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.questions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -29,7 +30,7 @@ public class CollectionQuestionsTest {
     @Test
     void should_get_all_text_values() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes")
+            Open.url(LocalTestSite.url("/checkboxes"))
         );
 
         // Get all link texts from the page
@@ -40,7 +41,7 @@ public class CollectionQuestionsTest {
     @Test
     void should_get_all_attribute_values() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/checkboxes")
+            Open.url(LocalTestSite.url("/checkboxes"))
         );
 
         List<String> types = alice.asksFor(AttributeOfAll.of("#checkboxes input").named("type"));
@@ -51,7 +52,7 @@ public class CollectionQuestionsTest {
     @Test
     void should_get_selected_option_text() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dropdown")
+            Open.url(LocalTestSite.url("/dropdown"))
         );
 
         String selectedText = alice.asksFor(SelectedOptionText.of("#dropdown"));
@@ -61,7 +62,7 @@ public class CollectionQuestionsTest {
     @Test
     void should_get_all_option_texts() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/dropdown")
+            Open.url(LocalTestSite.url("/dropdown"))
         );
 
         List<String> options = alice.asksFor(AllOptionTexts.of("#dropdown"));

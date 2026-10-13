@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywrigh
 import net.serenitybdd.screenplay.playwright.annotations.PlaywrightCastMember;
 import net.serenitybdd.screenplay.playwright.assertions.Ensure;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -45,7 +46,7 @@ public class CastMemberInjectionTest {
     @Test
     void should_be_able_to_browse_with_injected_actor() {
         alice.attemptsTo(
-            Open.url("https://example.com"),
+            Open.url(LocalTestSite.url("/")),
             Ensure.that("h1").isVisible()
         );
     }

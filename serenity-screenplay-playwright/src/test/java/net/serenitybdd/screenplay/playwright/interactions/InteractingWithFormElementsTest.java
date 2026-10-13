@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import com.microsoft.playwright.Locator;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -22,7 +23,7 @@ public class InteractingWithFormElementsTest {
     @Test
     public void clickingOnButtons() {
         fred.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+            Open.url(LocalTestSite.url("/add_remove_elements/")),
             Ensure.that("text='Delete'").isHidden(),
             Click.on("text='Add Element'"),
             Ensure.that("text='Delete'").isVisible(),
@@ -34,7 +35,7 @@ public class InteractingWithFormElementsTest {
     @Test
     public void clickingOnButtonsWithOptions() {
         fred.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+            Open.url(LocalTestSite.url("/add_remove_elements/")),
             Ensure.that("text='Delete'").isHidden(),
             // Double-click to add two elements, then verify at least one Delete button is visible
             Click.on("text='Add Element'").withOptions(new Locator.ClickOptions().setClickCount(2)),
@@ -45,7 +46,7 @@ public class InteractingWithFormElementsTest {
     @Test
     public void clickingOnCheckboxes() {
         fred.attemptsTo(
-            Open.url("http://the-internet.herokuapp.com/checkboxes"),
+            Open.url(LocalTestSite.url("/checkboxes")),
             // Use first checkbox specifically
             Ensure.that("#checkboxes input >> nth=0").isNotChecked(),
             Click.on("#checkboxes input >> nth=0"),

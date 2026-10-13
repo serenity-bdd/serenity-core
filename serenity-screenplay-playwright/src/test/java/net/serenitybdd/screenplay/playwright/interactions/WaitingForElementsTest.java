@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import com.microsoft.playwright.Locator;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -22,7 +23,7 @@ public class WaitingForElementsTest {
     @Test
     public void waitingForAnElementToAppear() {
         fred.attemptsTo(
-                Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+                Open.url(LocalTestSite.url("/add_remove_elements/")),
                 Click.on("text='Add Element'"),
                 WaitFor.selector("text='Delete'"),
                 Ensure.that("text='Delete'").isVisible()
@@ -32,7 +33,7 @@ public class WaitingForElementsTest {
     @Test
     public void waitingForAnElementToAppearAndThenPerformingSomeAction() {
         fred.attemptsTo(
-                Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+                Open.url(LocalTestSite.url("/add_remove_elements/")),
                 Click.on("text='Add Element'"),
                 WaitFor.selector("text='Delete'").andThen(Locator::click),
                 Ensure.that("text='Delete'").isHidden()

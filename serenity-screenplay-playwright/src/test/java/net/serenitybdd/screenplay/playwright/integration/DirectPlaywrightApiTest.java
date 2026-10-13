@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.integration;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
@@ -58,20 +59,20 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can access the Page object directly")
         void can_access_page_directly() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             // Access the Page object directly
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
             // Use Playwright's native API
             assertThat(page.title()).contains("The Internet");
-            assertThat(page.url()).contains("the-internet.herokuapp.com");
+            assertThat(page.url()).contains("localhost");
         }
 
         @Test
         @DisplayName("Can access the Browser object")
         void can_access_browser_directly() {
-            alice.attemptsTo(Open.url("https://example.com"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Browser browser = BrowseTheWebWithPlaywright.as(alice).getBrowser();
 
@@ -82,7 +83,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can create Locators directly from Page")
         void can_create_locators_directly() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
@@ -118,7 +119,7 @@ public class DirectPlaywrightApiTest {
             };
 
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 scrollDown
             );
 
@@ -131,7 +132,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can create custom Question using direct API")
         void can_create_custom_question() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             // Create a custom Question inline
             Question<List<String>> allLinks = actor -> {
@@ -156,13 +157,13 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can work with frames using FrameLocator")
         void can_work_with_frames() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/nested_frames"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/nested_frames")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
             // Use Playwright's frameLocator API with nested frames
-            FrameLocator topFrame = page.frameLocator("frame[name='frame-top']");
-            FrameLocator leftFrame = topFrame.frameLocator("frame[name='frame-left']");
+            FrameLocator topFrame = page.frameLocator("iframe[name='frame-top']");
+            FrameLocator leftFrame = topFrame.frameLocator("iframe[name='frame-left']");
 
             // Verify we can access content in the nested frame
             assertThat(leftFrame.locator("body").textContent()).contains("LEFT");
@@ -171,7 +172,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can capture element screenshots")
         void can_capture_element_screenshot() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
             Locator heading = page.locator("h1.heading");
@@ -186,7 +187,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can capture full page screenshot")
         void can_capture_full_page_screenshot() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
@@ -201,7 +202,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can listen to console messages")
         void can_listen_to_console_messages() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
@@ -223,13 +224,13 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can use waitForURL")
         void can_wait_for_url() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
             // Click a link and wait for URL to change
-            page.locator("a[href='/login']").click();
-            page.waitForURL("**/login");
+            page.locator("a[href='login.html']").click();
+            page.waitForURL("**/login.html");
 
             assertThat(page.url()).contains("/login");
         }
@@ -237,7 +238,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can use keyboard shortcuts")
         void can_use_keyboard_shortcuts() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/inputs"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/inputs")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
             Locator input = page.locator("input[type='number']");
@@ -256,7 +257,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can access localStorage")
         void can_access_local_storage() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
@@ -274,7 +275,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can access sessionStorage")
         void can_access_session_storage() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
 
@@ -295,7 +296,7 @@ public class DirectPlaywrightApiTest {
         @Test
         @DisplayName("Can use focus and blur")
         void can_use_focus_and_blur() {
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/login"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/login")));
 
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
             Locator username = page.locator("#username");
@@ -328,7 +329,7 @@ public class DirectPlaywrightApiTest {
         @DisplayName("Can mix high-level Screenplay with low-level Playwright")
         void can_mix_screenplay_and_direct_api() {
             // Use Screenplay for navigation
-            alice.attemptsTo(Open.url("https://the-internet.herokuapp.com/login"));
+            alice.attemptsTo(Open.url(LocalTestSite.url("/login")));
 
             // Use direct API for complex assertion
             Page page = BrowseTheWebWithPlaywright.as(alice).getCurrentPage();
@@ -365,7 +366,7 @@ public class DirectPlaywrightApiTest {
             };
 
             alice.attemptsTo(
-                Open.url("https://the-internet.herokuapp.com/"),
+                Open.url(LocalTestSite.url("/")),
                 highlightElement
             );
 

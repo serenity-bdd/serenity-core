@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dynamic Loading</title></head>
+<body>
+  <div id="start"><button>Start</button></div>
+  <div id="loading" style="display:none"><em>Loading...</em></div>
+  <script>
+    document.querySelector('#start button').addEventListener('click', function() {
+      document.getElementById('start').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+      setTimeout(function() {
+        document.getElementById('loading').style.display = 'none';
+        var finish = document.createElement('div');
+        finish.id = 'finish';
+        finish.innerHTML = '<h4>Hello World!</h4>';
+        document.body.appendChild(finish);
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

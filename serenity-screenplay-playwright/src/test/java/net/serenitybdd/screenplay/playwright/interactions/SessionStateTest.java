@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
+import net.serenitybdd.screenplay.playwright.testsupport.LocalTestSite;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -40,7 +41,7 @@ public class SessionStateTest {
 
         alice.attemptsTo(
             // Navigate to a page that sets cookies
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             // Save the session state
             SaveSessionState.toPath(statePath)
         );
@@ -63,7 +64,7 @@ public class SessionStateTest {
     @DisplayName("Should save session state to default location with name")
     void should_save_session_state_to_default_location() {
         alice.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             SaveSessionState.toFile("test-session")
         );
 
@@ -83,7 +84,7 @@ public class SessionStateTest {
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
 
         firstSession.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/"),
+            Open.url(LocalTestSite.url("/")),
             SaveSessionState.toPath(statePath)
         );
 
@@ -96,7 +97,7 @@ public class SessionStateTest {
 
         secondSession.attemptsTo(
             RestoreSessionState.fromPath(statePath),
-            Open.url("https://the-internet.herokuapp.com/")
+            Open.url(LocalTestSite.url("/"))
         );
 
         // Verify the page loads correctly with restored session
@@ -117,7 +118,7 @@ public class SessionStateTest {
             .whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
 
         firstSession.attemptsTo(
-            Open.url("https://the-internet.herokuapp.com/login"),
+            Open.url(LocalTestSite.url("/login")),
             // Login to set session cookies
             Enter.theValue("tomsmith").into("#username"),
             Enter.theValue("SuperSecretPassword!").into("#password"),
@@ -139,7 +140,7 @@ public class SessionStateTest {
         secondSession.attemptsTo(
             RestoreSessionState.fromPath(statePath),
             // Navigate directly to secure area
-            Open.url("https://the-internet.herokuapp.com/secure")
+            Open.url(LocalTestSite.url("/secure"))
         );
 
         // Verify we're still logged in

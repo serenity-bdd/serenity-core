@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Droppable demo</title>
+<style>
+  #draggable { width: 100px; height: 100px; padding: 0.5em; border: 1px solid #aaa; background: #eee; position: relative; z-index: 2; user-select: none; }
+  #droppable { width: 150px; height: 150px; padding: 0.5em; border: 1px solid #aaa; position: absolute; left: 300px; top: 10px; }
+  #droppable.ui-state-highlight { background: #fffa90; }
+</style>
+</head>
+<body>
+  <div id="draggable"><p>Drag me to my target</p></div>
+  <div id="droppable"><p>Drop here</p></div>
+  <script>
+    var drag = document.getElementById('draggable');
+    var drop = document.getElementById('droppable');
+    var start = null;
+
+    drag.addEventListener('mousedown', function(e) {
+      start = { x: e.clientX, y: e.clientY };
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (!start) return;
+      drag.style.left = (e.clientX - start.x) + 'px';
+      drag.style.top = (e.clientY - start.y) + 'px';
+    });
+    document.addEventListener('mouseup', function(e) {
+      if (!start) return;
+      start = null;
+      var d = drag.getBoundingClientRect();
+      var t = drop.getBoundingClientRect();
+      var cx = d.left + d.width / 2;
+      var cy = d.top + d.height / 2;
+      if (cx >= t.left && cx <= t.right && cy >= t.top && cy <= t.bottom) {
+        drop.classList.add('ui-state-highlight');
+        drop.querySelector('p').textContent = 'Dropped!';
+      }
+    });
+  </script>
+</body>
+</html>

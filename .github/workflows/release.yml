@@ -25,6 +25,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Maven 3.10.0 breaks central-publishing-maven-plugin (maven-metadata-local.xml ends up in the
+      # bundle and Central rejects it: "Bundle has content that does NOT have a .pom file").
+      # Pin Maven 3.9.x until a plugin release containing the fix (mavenplugins/central-publishing-maven-plugin#79/#80) is available.
+      - name: Install Maven 3.9.14
+        run: |
+          curl -fsSL -o /tmp/maven.tar.gz https://archive.apache.org/dist/maven/maven-3/3.9.14/binaries/apache-maven-3.9.14-bin.tar.gz
+          curl -fsSL -o /tmp/maven.tar.gz.sha512 https://archive.apache.org/dist/maven/maven-3/3.9.14/binaries/apache-maven-3.9.14-bin.tar.gz.sha512
+          echo "$(cat /tmp/maven.tar.gz.sha512)  /tmp/maven.tar.gz" | sha512sum -c -
+          sudo tar -xzf /tmp/maven.tar.gz -C /opt
+          echo "/opt/apache-maven-3.9.14/bin" >> "$GITHUB_PATH"
+
       - name: Cache Maven packages
         uses: actions/cache@v5
         with:

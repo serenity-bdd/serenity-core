@@ -4,7 +4,6 @@ package net.serenitybdd.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Tag;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.jsoup.internal.StringUtil;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -46,7 +45,7 @@ public class ManualScenarioChecker {
         }
 
         // If @manual-last-tested-version is defined but no current.target.version is defined, we might have a problem.
-        if (!currentTargetVersion.isPresent() || StringUtil.isBlank(currentTargetVersion.get())) {
+        if (!currentTargetVersion.isPresent() || currentTargetVersion.get().isBlank()) {
             LOGGER.warn(UNDEFINED_MANUAL_VERSION_TARGET_MESSAGE);
             return true;
         }

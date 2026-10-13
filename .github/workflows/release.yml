@@ -10,6 +10,10 @@ on:
         options:
           - deploy
           - deploy-cli
+      release_version:
+        description: Release version, e.g. 5.4.0 (leave empty to use the current SNAPSHOT version without the suffix)
+        required: false
+        type: string
 
 jobs:
   release:
@@ -73,7 +77,14 @@ jobs:
       - name: Run Maven Release
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          RELEASE_PROFILE: ${{ github.event.inputs.release_profile }}
+          RELEASE_VERSION: ${{ github.event.inputs.release_version }}
         run: |
+          args=()
+          if [ -n "$RELEASE_VERSION" ]; then
+            args+=("-DreleaseVersion=$RELEASE_VERSION")
+          fi
           mvn release:prepare release:perform \
             -Darguments='-Dmaven.test.skip=true' \
-            -P"${{ github.event.inputs.release_profile }}"
+            -P"$RELEASE_PROFILE" \
+            "${args[@]}"

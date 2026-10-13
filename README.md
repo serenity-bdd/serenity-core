@@ -118,6 +118,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [5.4.0](docs/release-notes/5.4.0.md) - Cucumber 8.0.4 upgrade, Selenium 4.51, JUnit 6.1 and dependency security updates, `RequirementCache` thread-safety fix (#3753)
 * [5.3.9](docs/release-notes/5.3.9.md) - Page source recording fix (#3719), security fixes, `QuestionWithDefinedSubject` fix (#3661)
 * [5.3.8](docs/release-notes/5.3.8.md) - Screenshot navigation fix (#3722), `@FindBy` NPE fix (#3714), Jira modules deprecated
 * [5.3.7](docs/release-notes/5.3.7.md) - New `serenity-bom` for simplified dependency management, CI fixes, Playwright test stabilization

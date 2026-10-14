@@ -62,7 +62,7 @@
         <commons.compress.version>1.28.0</commons.compress.version>
         <commons.net.version>3.12.0</commons.net.version>
         <commons.codec.version>1.22.0</commons.codec.version>
-        <freemarker.version>2.3.34</freemarker.version>
+        <freemarker.version>2.3.35</freemarker.version>
         <selenium.version>4.51.0</selenium.version>
         <htmlunit.driver.version>4.51.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
@@ -86,9 +86,9 @@
         <ant.version>1.10.12</ant.version>
         <restassured.version>6.0.0</restassured.version>
         <wiremock.version>4.0.0-beta.34</wiremock.version>
-        <thymeleaf.version>3.1.4.RELEASE</thymeleaf.version>
+        <thymeleaf.version>3.1.5.RELEASE</thymeleaf.version>
         <javassist.version>3.30.2-GA</javassist.version>
-        <jackson.version>2.21.6</jackson.version>
+        <jackson.version>2.21.7</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.11.1</ehcache.version>
         <!-- Kotlin config -->
@@ -106,7 +106,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.4.4</version>
+                <version>5.6.3</version>
             </dependency>
             <!-- Testing libraries -->
             <dependency>

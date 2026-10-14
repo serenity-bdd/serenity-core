@@ -787,6 +787,8 @@
                                 </goals>
                                 <configuration>
                                     <doclint>none</doclint>
+                                    <!-- Skip the class-use pages, which make up roughly 40% of the generated HTML -->
+                                    <use>false</use>
                                     <additionalOptions>
                                         <additionalOption>-Xdoclint:none</additionalOption>
                                         <!-- Without this, every javadoc jar contains ~4 MB of web fonts (needs JDK 23+ javadoc) -->

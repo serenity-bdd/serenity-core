@@ -43,7 +43,8 @@ public class JerseyJiraClient {
 
     private static final String ADD_COMMENT = "rest/api/3/issue/%s/comment";
     private static final String UPDATE_COMMENT = "rest/api/3/issue/%s/comment/%s";
-    private static final String REST_SEARCH = "rest/api/3/search";
+    private static final String REST_SEARCH = "rest/api/3/search/jql";
+    private static final String REST_SEARCH_COUNT = "rest/api/3/search/approximate-count";
     private static final String VERSIONS_SEARCH = "rest/api/3/project/%s/versions";
     private static final String ISSUE = "rest/api/3/issue/";
     private static final String PROJECT = "rest/api/3/project";
@@ -156,25 +157,34 @@ public class JerseyJiraClient {
     }
 
     protected List<IssueSummary> loadByJQLBatches(String query) {
-        int total = countByJQL(query);
         List<IssueSummary> issues = new ArrayList<>();
-        int startAt = 0;
-        while (issues.size() < total) {
-            String jsonResponse = getJSONResponse(query, startAt, batchSize);
+        String nextPageToken = null;
+        boolean lastPage = false;
+        while (!lastPage) {
+            String jsonResponse = getJSONResponse(query, nextPageToken, batchSize);
             JsonObject responseObject = new JsonParser().parse(jsonResponse).getAsJsonObject();
             JsonArray issueEntries = (JsonArray) responseObject.get("issues");
-            for (int i = 0; i < issueEntries.size(); i++) {
-                JsonObject issueObject = issueEntries.get(i).getAsJsonObject();
-                issues.add(convertToIssueSummary(issueObject));
+            if (issueEntries != null) {
+                for (int i = 0; i < issueEntries.size(); i++) {
+                    JsonObject issueObject = issueEntries.get(i).getAsJsonObject();
+                    issues.add(convertToIssueSummary(issueObject));
+                }
             }
-            startAt = startAt + getBatchSize();
+            JsonElement tokenElement = responseObject.get("nextPageToken");
+            JsonElement isLastElement = responseObject.get("isLast");
+            boolean noMorePages = (isLastElement != null && !isLastElement.isJsonNull() && isLastElement.getAsBoolean());
+            if (noMorePages || tokenElement == null || tokenElement.isJsonNull()) {
+                lastPage = true;
+            } else {
+                nextPageToken = tokenElement.getAsString();
+            }
         }
         return issues;
     }
 
     protected List<IssueSummary> loadByJQL(String query) {
         List<IssueSummary> issues = new ArrayList<>();
-        String jsonResponse = getJSONResponse(query, 0, WITH_NO_BATCHES);
+        String jsonResponse = getJSONResponse(query, null, WITH_NO_BATCHES);
         JsonObject responseObject = new JsonParser().parse(jsonResponse).getAsJsonObject();
         JsonArray issueEntries = (JsonArray) responseObject.get("issues");
         if (issueEntries != null) {
@@ -206,16 +216,19 @@ public class JerseyJiraClient {
         return restClient().target(url).path(path);
     }
 
-    private String getJSONResponse(String query, int startAt, int batchSize) {
+    private String getJSONResponse(String query, String nextPageToken, int batchSize) {
 
         String fields = "key,status,summary,description,comment,issuetype,labels,fixVersions";
         fields = addCustomFieldsTo(fields);
 
         WebTarget target = buildWebTargetFor(REST_SEARCH)
                 .queryParam("jql", query)
-                .queryParam("startAt", startAt)
                 .queryParam("expand", "renderedFields")
                 .queryParam("fields", fields);
+
+        if (nextPageToken != null) {
+            target = target.queryParam("nextPageToken", nextPageToken);
+        }
 
         if (batchSize > 0) {
             target = target.queryParam("maxResults", batchSize);
@@ -464,8 +477,10 @@ public class JerseyJiraClient {
     }
 
     public Integer countByJQL(String query) {
-        WebTarget target = buildWebTargetFor(REST_SEARCH).queryParam("jql", query).queryParam("maxResults", 0);
-        Response response = target.request().get();
+        WebTarget target = buildWebTargetFor(REST_SEARCH_COUNT);
+        JsonObject jsonQuery = new JsonObject();
+        jsonQuery.addProperty("jql", query);
+        Response response = target.request().post(Entity.json(jsonQuery.toString()));
 
         if (isEmpty(response)) {
             return 0;
@@ -478,7 +493,7 @@ public class JerseyJiraClient {
         int total;
 
         JsonObject responseObject = new JsonParser().parse(jsonResponse).getAsJsonObject();
-        total = responseObject.getAsJsonPrimitive("total").getAsInt();
+        total = responseObject.getAsJsonPrimitive("count").getAsInt();
 
         logger.debug("Count by JQL for {}", query);
 

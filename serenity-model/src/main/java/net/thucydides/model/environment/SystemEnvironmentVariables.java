@@ -6,6 +6,7 @@ import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.util.LocalPreferences;
 import net.thucydides.model.util.PropertiesLocalPreferences;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -35,12 +36,32 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
             try {
                 if (CACHED_ENVIRONMENT_VARIABLES == null) { // Check again inside the lock
                     CACHED_ENVIRONMENT_VARIABLES = createEnvironmentVariables().loadLocalConfig();
+                    warnIfSerenityConfIsOutsideTheClasspath();
                 }
             } finally {
                 lock.unlock();
             }
         }
         return CACHED_ENVIRONMENT_VARIABLES;
+    }
+
+    /**
+     * serenity.conf is read from the classpath (src/test/resources), not from the project directory, so a copy in
+     * the project root is silently ignored. Say so once, because it is a common reason for "my configuration is ignored".
+     */
+    private static void warnIfSerenityConfIsOutsideTheClasspath() {
+        try {
+            java.io.File inProjectDirectory = new java.io.File("serenity.conf");
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader() != null
+                    ? Thread.currentThread().getContextClassLoader() : SystemEnvironmentVariables.class.getClassLoader();
+            if (inProjectDirectory.isFile() && classLoader.getResource("serenity.conf") == null) {
+                LoggerFactory.getLogger(SystemEnvironmentVariables.class).warn(
+                        "Found {} but Serenity reads serenity.conf from the classpath, not from the project directory, so it is ignored. "
+                                + "Move it to src/test/resources/serenity.conf.", inProjectDirectory.getAbsolutePath());
+            }
+        } catch (RuntimeException ignored) {
+            // Never let a diagnostic stop the configuration from loading
+        }
     }
 
     private SystemEnvironmentVariables(Map<String, String> properties, Map<String, String> systemValues, Config config) {

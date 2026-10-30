@@ -225,7 +225,39 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(final String name) {
-        return properties.get(name);
+        String value = properties.get(name);
+        return (value != null) ? value : environmentSpecificValueFor(name);
+    }
+
+    /**
+     * A value defined inside {@code environments { }} for the active environment, so that
+     * {@code getProperty("app.url")} finds a value that is defined only for an environment. A property defined outside
+     * {@code environments { }}, including one given with -D on the command line, always wins over these values.
+     * The order is the one {@link net.serenitybdd.model.environment.EnvironmentSpecificConfiguration} uses: the active
+     * environment(s), then "all", then "default".
+     */
+    private String environmentSpecificValueFor(String name) {
+        // Reading "environment" or the environments themselves must not look for environment-specific values
+        if ("environment".equals(name) || name.startsWith("environments.")) {
+            return null;
+        }
+        String value = null;
+        String activeEnvironments = properties.get("environment");
+        if (activeEnvironments != null) {
+            for (String environment : activeEnvironments.split(",")) {
+                String candidate = properties.get("environments." + environment.trim() + "." + name);
+                if (!environment.trim().isEmpty() && candidate != null && !candidate.isEmpty()) {
+                    value = candidate;
+                }
+            }
+        }
+        if (value == null) {
+            value = properties.get("environments.all." + name);
+        }
+        if (value == null) {
+            value = properties.get("environments.default." + name);
+        }
+        return value;
     }
 
     @Override
@@ -239,7 +271,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(final String name, final String defaultValue) {
-        String value = properties.get(name);
+        String value = getProperty(name);
         return (value != null) ? value : defaultValue;
     }
 

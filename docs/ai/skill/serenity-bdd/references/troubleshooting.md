@@ -57,13 +57,13 @@ List `junit-jupiter` and `junit-platform-suite` without versions.
 ### Tests failed, and there is no `target/site/serenity/index.html`
 
 - **Cause:** the report is built by the Serenity Maven plugin in the `post-integration-test` phase, which Maven never reaches when tests fail. The per-test JSON files exist, but no HTML. Reproduced: after a failing scenario, `mvn verify` printed `There are test failures`, and `index.html` was absent.
-- **Fix:** either run the report goal after the failed build:
+- **Fix:** run the report goal after the failed build. This is the recommended way, because the build keeps its failing exit code:
 
 ```
 mvn net.serenity-bdd.maven.plugins:serenity-maven-plugin:5.4.1:aggregate
 ```
 
-(this produced `index.html`), or let the build continue past test failures with `-Dmaven.test.failure.ignore=true` (then the exit code is 0 even when tests fail, so a CI job must check results another way). To find out what failed without any report, read the JSON files: `python3 scripts/results.py target/site/serenity` (see `test-results.md`).
+(this produced `index.html`). The alternative is to let the build continue past test failures with `-Dmaven.test.failure.ignore=true`, but then the exit code is 0 even when tests fail, so a CI job must check results another way; avoid it unless you do. To find out what failed without any report, read the JSON files: `python3 scripts/results.py target/site/serenity` (see `test-results.md`).
 
 ### `Conflicting module versions. Module [groovy-xml is loaded in version 4.0.29 and you are trying to load version 3.0.9` / `Could not initialize class io.restassured.RestAssured`
 

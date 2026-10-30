@@ -35,7 +35,8 @@ If you need a class that isn't listed here or already used in the project, find 
 
 - Check that it compiles: `mvn -q test-compile`
 - Run the tests and build the report: `mvn clean verify`
-- Report: `target/site/serenity/index.html`
+- Report: `target/site/serenity/index.html` (only built when the tests pass)
+- Results, also after a failed build: read the JSON outcome files `target/site/serenity/*.json` (title, result, failure message, steps); see https://serenity-bdd.github.io/docs/ai/ai_test_results
 
 ## Rules
 

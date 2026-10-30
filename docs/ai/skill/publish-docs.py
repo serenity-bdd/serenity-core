@@ -24,6 +24,7 @@ PAGES = [
     ("upgrading.md", "ai_upgrading", "Upgrading to Serenity 5 and Recognising Old Code", 6, []),
     ("living-documentation.md", "ai_living_documentation", "Living Documentation: Intent, Wording and Structure", 2, ["living-docs", "living-docs-annotated"]),
     ("review-checklist.md", "ai_review_checklist", "Reviewing Tests and Living Documentation", 7, []),
+    ("test-results.md", "ai_test_results", "Reading Test Results Without the HTML Report", 7, []),
     ("cucumber.md", "ai_cucumber", "Cucumber: Runner, Tags, Hooks, Gradle and Parallel", 3, ["cuke-plain", "cuke-pages"]),
 ]
 
@@ -37,6 +38,7 @@ DESCRIPTIONS = {
     "ai_cucumber": "Running Serenity with Cucumber on the JUnit Platform: the runner, tags and filters under Maven and Gradle, hooks, shared state, re-running failures and parallel runs; every command was run.",
     "ai_living_documentation": "How scenario titles, step wording, packages, annotations and readme files become the Serenity report, and how to write tests that read as living documentation; the behaviour was run.",
     "ai_review_checklist": "A checklist for judging Serenity tests and the report they produce: intent, business wording, organisation and test quality.",
+    "ai_test_results": "Where Serenity writes the outcome of each test as JSON while tests run (also after a failed build), the fields to read, a script that summarises a run, and the optional JSON summary report; checked by running a passing and a failing project.",
     "ai_troubleshooting": "Build, report and browser errors: the message, the cause and a fix that was reproduced and run.",
 }
 
@@ -91,6 +93,7 @@ Serenity supports several ways of writing tests, and all of them are current: Pa
 | Material | What it is | Where |
 |---|---|---|
 | Documentation pages | Exact packages, dependencies, idioms and compiling examples for each style, plus configuration, upgrading, living documentation and troubleshooting by symptom | [Idioms and Imports by Style](ai_idioms_overview) |
+| Machine-readable results | The JSON outcome files Serenity writes for every test (also after a failed build), a script that summarises a run, and the optional JSON summary report | [Reading Test Results Without the HTML Report](ai_test_results) |
 | `llms.txt` and `llms-full.txt` | An index of the documentation for AI assistants (this section first), and the full text of the pages. Every page is also plain markdown at its own address with `.md` appended, for example `https://serenity-bdd.github.io/docs/ai/ai_writing_tests.md` | [llms.txt](https://serenity-bdd.github.io/llms.txt), [llms-full.txt](https://serenity-bdd.github.io/llms-full.txt) |
 | `AGENTS.md` files | One per style. They record the style, driver and runner your project uses, so an assistant stays in it | [`docs/ai/agents-md/variants`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/agents-md/variants) in the serenity-core repository |
 | An agent skill (Claude Code) | The same material as the pages, loaded when you ask for Serenity tests: it chooses the style (or asks), writes the tests, compiles them, and reviews the report | [`docs/ai/skill/serenity-bdd`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/skill/serenity-bdd) |
@@ -137,6 +140,7 @@ These are results from one evaluation, run by the authors of the materials, on C
 """
 
 VERIFIED = {
+    "test-results.md": "Verified against Serenity **5.4.1** by running a passing and a failing project: the files, the fields and the script were all checked.",
     "screenplay.md": "Verified against Serenity **5.4.1** (Playwright modules: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
     "page-objects.md": "Verified against Serenity **5.4.1** (Playwright module: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
     "upgrading.md": "Verified against Serenity **5.4.1**. The class counts come from the released jars, and the recipe was applied to five real projects.",
@@ -207,7 +211,7 @@ def main(repo):
     open(os.path.join(outdir, "writing-tests-with-ai.md"), "w").write(open(os.path.join(HERE, "guide-writing-tests.md")).read())
     for fname, id_, title, pos, sets in PAGES:
         body = transform(open(os.path.join(REF, fname)).read(), fname)
-        slug = {"screenplay.md": "screenplay-idioms", "page-objects.md": "page-object-idioms", "rest-assured.md": "rest-step-library", "project-setup.md": "project-setup", "troubleshooting.md": "troubleshooting", "cucumber.md": "cucumber", "configuration.md": "configuration", "upgrading.md": "upgrading", "living-documentation.md": "living-documentation", "review-checklist.md": "review-checklist"}[fname]
+        slug = {"screenplay.md": "screenplay-idioms", "page-objects.md": "page-object-idioms", "rest-assured.md": "rest-step-library", "project-setup.md": "project-setup", "troubleshooting.md": "troubleshooting", "cucumber.md": "cucumber", "configuration.md": "configuration", "upgrading.md": "upgrading", "living-documentation.md": "living-documentation", "review-checklist.md": "review-checklist", "test-results.md": "test-results"}[fname]
         fm = '---\nid: %s\ntitle: "%s"\nsidebar_position: %d\ndescription: "%s"\n---\n\n' % (id_, title, pos, DESCRIPTIONS[id_])
         open(os.path.join(outdir, slug + ".md"), "w").write(fm + "# " + title + "\n\n" + body.strip() + "\n" + examples(sets, fname))
     print("wrote", outdir)

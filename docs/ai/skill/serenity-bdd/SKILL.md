@@ -40,6 +40,7 @@ Always use JUnit 5 (`@ExtendWith(SerenityJUnit5Extension.class)`) unless the pro
 | Upgrading a project from Serenity 2.x, 3.x or 4.x; recognising old code (old imports, `serenity-cucumber4/5/6`, JBehave, `drivers {}` blocks); JUnit 4 and the old Cucumber runner | `references/upgrading.md` |
 | How titles, step wording and structure turn into the report (living documentation); grouping tests by function; readme files | `references/living-documentation.md` (read it for every task that writes tests) |
 | Reviewing tests you or someone else wrote | `references/review-checklist.md` |
+| Reading the results of a run, especially a failed one, from files (`target/site/serenity/*.json`); `scripts/results.py` | `references/test-results.md` |
 | A build, report or browser error, or tests that don't run | `references/troubleshooting.md` (find the message; each entry was reproduced and its fix run) |
 
 Each reference lists exact packages, the common mistakes, and points to a compiling example in `examples/`. Copy the structure of the example for your style. Don't import a class you haven't seen in the reference or the project; if you need one that isn't listed, look in the project's dependency jars or sources instead of guessing a package.
@@ -61,7 +62,7 @@ The report is living documentation: people who never read the code read it to le
 1. Run `mvn -q test-compile` (or `./gradlew compileTestJava`) in the project.
 2. For each error, check the "Mistakes models make" table in the reference first (wrong package, `List` vs `Collection`, `By` vs String, `open()` override). For run-time errors (browser start-up, report missing, 0 tests, version conflicts) read `references/troubleshooting.md`.
 3. If the symbol isn't covered, find the real class (`unzip -l <jar> | grep ClassName` in `~/.m2`), fix the import, and recompile.
-4. When it compiles, run the tests (`mvn clean verify`) if the user has a runnable environment, and report the result honestly. A test that compiles is not a test that passes.
+4. When it compiles, run the tests (`mvn clean verify`) if the user has a runnable environment, and report the result honestly. Read the result with `python3 scripts/results.py target/site/serenity` (it works after a failed build too; see `references/test-results.md`), not by scraping the HTML report. A test that compiles is not a test that passes.
 
 ## Step 5: review
 

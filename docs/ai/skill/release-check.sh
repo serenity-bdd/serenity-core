@@ -17,6 +17,7 @@ else
   step "Cucumber how-to commands do what the reference says" python3 "$HERE/cucumber-checks/verify.py"
   step "REST step-library claims hold" python3 "$HERE/rest-checks/verify.py"
   step "Cucumber with page objects claims hold" python3 "$HERE/cucumber-checks/verify_pages.py"
+  step "test-result files and results.py behave as the reference says" python3 "$HERE/results-checks/verify.py"
   step "upgrade claims hold (moved classes, versions, JUnit 4)" python3 "$HERE/upgrade-checks/verify.py"
   step "configuration behaviour is as the reference says" python3 "$HERE/config-checks/verify.py"
   step "examples compile and their tests pass" bash -c "out=\$(bash '$HERE/serenity-bdd/check-examples.sh' --run); echo \"\$out\"; ! echo \"\$out\" | grep -q FAIL"

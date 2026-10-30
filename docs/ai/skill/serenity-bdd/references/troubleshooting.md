@@ -63,7 +63,7 @@ List `junit-jupiter` and `junit-platform-suite` without versions.
 mvn net.serenity-bdd.maven.plugins:serenity-maven-plugin:5.4.1:aggregate
 ```
 
-(this produced `index.html`), or let the build continue past test failures with `-Dmaven.test.failure.ignore=true` (then the exit code is 0 even when tests fail, so a CI job must check results another way).
+(this produced `index.html`), or let the build continue past test failures with `-Dmaven.test.failure.ignore=true` (then the exit code is 0 even when tests fail, so a CI job must check results another way). To find out what failed without any report, read the JSON files: `python3 scripts/results.py target/site/serenity` (see `test-results.md`).
 
 ### `Conflicting module versions. Module [groovy-xml is loaded in version 4.0.29 and you are trying to load version 3.0.9` / `Could not initialize class io.restassured.RestAssured`
 

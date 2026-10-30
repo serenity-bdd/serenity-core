@@ -1,0 +1,158 @@
+[
+  {
+    "id": "P01",
+    "harness": "h-po-selenium",
+    "style": "PO+Selenium",
+    "prompt": "Using Serenity BDD with Page Objects and JUnit 5, write a test that opens https://todo-app.serenity-js.org, adds the todo \"Buy milk\", and checks it appears in the list."
+  },
+  {
+    "id": "P02",
+    "harness": "h-po-selenium",
+    "style": "PO+Selenium",
+    "prompt": "Using Serenity BDD with Page Objects and JUnit 5, write a test for the todo app at https://todo-app.serenity-js.org that adds three items, completes one, and checks the \"items left\" count. Use a step library."
+  },
+  {
+    "id": "P03",
+    "harness": "h-po-playwright",
+    "style": "PO+Playwright",
+    "prompt": "Using Serenity BDD with Playwright and Page Objects, write a JUnit 5 test that opens https://todo-app.serenity-js.org and adds the todo \"Buy milk\"."
+  },
+  {
+    "id": "P04",
+    "harness": "h-sp-selenium",
+    "style": "Screenplay+Selenium",
+    "prompt": "Using Serenity BDD Screenplay with Selenium and JUnit 5, write a test where an actor called Toby adds \"Buy milk\" to the todo list at https://todo-app.serenity-js.org and sees it in the list. Create a reusable task and a question."
+  },
+  {
+    "id": "P05",
+    "harness": "h-sp-playwright",
+    "style": "Screenplay+Playwright",
+    "prompt": "Using Serenity BDD Screenplay with Playwright and JUnit 5, write a test where an actor adds \"Buy milk\" to the todo list at https://todo-app.serenity-js.org and checks it is shown."
+  },
+  {
+    "id": "P06",
+    "harness": "h-sp-rest",
+    "style": "Screenplay+REST",
+    "prompt": "Using Serenity BDD Screenplay and JUnit 5, write a test that GETs /users/1 from https://jsonplaceholder.typicode.com and checks the name, then creates a post with a custom task."
+  },
+  {
+    "id": "P07",
+    "harness": "h-cuke-sp",
+    "style": "Cucumber+Screenplay",
+    "prompt": "Using Serenity BDD with Cucumber and Screenplay, write a feature file, step definitions and test runner for adding an item to the todo list at https://todo-app.serenity-js.org."
+  },
+  {
+    "id": "P08",
+    "harness": "auto",
+    "style": "unnamed",
+    "prompt": "Write a Serenity BDD test that checks you can add a todo item at https://todo-app.serenity-js.org."
+  },
+  {
+    "id": "H01",
+    "harness": "h-sp-selenium",
+    "style": "Screenplay+Selenium",
+    "prompt": "Using Serenity BDD Screenplay with Selenium and JUnit 5, write a test where an actor called Sam logs in to https://www.saucedemo.com with username standard_user and password secret_sauce and sees the Products page title. Create a reusable login task."
+  },
+  {
+    "id": "H02",
+    "harness": "h-sp-selenium",
+    "style": "Screenplay+Selenium",
+    "prompt": "Using Serenity BDD Screenplay with Selenium and JUnit 5, write a test for https://the-internet.herokuapp.com/checkboxes where an actor ticks the first checkbox and checks that it is selected. Put the locators in a UI class and use a question for the checkbox state."
+  },
+  {
+    "id": "H03",
+    "harness": "h-sp-playwright",
+    "style": "Screenplay+Playwright",
+    "prompt": "Using Serenity BDD Screenplay with Playwright and JUnit 5, write a test where an actor logs in at https://the-internet.herokuapp.com/login with tomsmith / SuperSecretPassword! and checks the flash message contains 'You logged into a secure area'. Use a reusable task."
+  },
+  {
+    "id": "H04",
+    "harness": "h-sp-playwright",
+    "style": "Screenplay+Playwright",
+    "prompt": "Using Serenity BDD Screenplay with Playwright and JUnit 5, write a test for https://the-internet.herokuapp.com/dropdown where an actor selects Option 2 and checks the selected value. Create a question for the selected value."
+  },
+  {
+    "id": "H05",
+    "harness": "h-sp-rest",
+    "style": "Screenplay+REST",
+    "prompt": "Using Serenity BDD Screenplay and JUnit 5, write a test that GETs /posts/1 from https://jsonplaceholder.typicode.com and checks the title is not empty and the userId is 1. Put the request in a reusable task."
+  },
+  {
+    "id": "H06",
+    "harness": "h-sp-rest",
+    "style": "Screenplay+REST",
+    "prompt": "Using Serenity BDD Screenplay and JUnit 5, write a test that PUTs an updated title to /posts/1 on https://jsonplaceholder.typicode.com and checks the response status is 200 and the returned title matches. Use a custom task and a custom question for the title."
+  },
+  {
+    "id": "H07",
+    "harness": "h-cuke-sp",
+    "style": "Cucumber+Screenplay",
+    "prompt": "Using Serenity BDD with Cucumber and Screenplay, write a feature file, step definitions and test runner for logging in to https://www.saucedemo.com with a valid user and seeing the Products page."
+  },
+  {
+    "id": "H08",
+    "harness": "h-cuke-sp",
+    "style": "Cucumber+Screenplay",
+    "prompt": "Using Serenity BDD with Cucumber and Screenplay, write a feature with a scenario outline for the checkbox page at https://the-internet.herokuapp.com/checkboxes, with step definitions and a JUnit Platform runner."
+  },
+  {
+    "id": "H09",
+    "harness": "h-po-selenium",
+    "style": "PO+Selenium",
+    "prompt": "Using Serenity BDD with Page Objects and JUnit 5, write a test that logs in to https://www.saucedemo.com with standard_user / secret_sauce and checks the Products page is shown. Use a page object and a step library."
+  },
+  {
+    "id": "H10",
+    "harness": "h-po-selenium",
+    "style": "PO+Selenium",
+    "prompt": "Using Serenity BDD with Page Objects and JUnit 5, write a test for https://the-internet.herokuapp.com/dropdown that selects Option 2 and checks the selected option. Use a page object and a step library."
+  },
+  {
+    "id": "H11",
+    "harness": "h-po-selenium",
+    "style": "PO+Selenium",
+    "prompt": "Using Serenity BDD with Page Objects and JUnit 5, write a test for https://the-internet.herokuapp.com/checkboxes that ticks the first checkbox and verifies it is checked. Use a page object, and open the page via its default URL."
+  },
+  {
+    "id": "H12",
+    "harness": "h-po-playwright",
+    "style": "PO+Playwright",
+    "prompt": "Using Serenity BDD with Playwright and Page Objects and JUnit 5, write a test that logs in to https://the-internet.herokuapp.com/login with tomsmith / SuperSecretPassword! and checks the success message. Use a page object and a step library."
+  },
+  {
+    "id": "H13",
+    "harness": "h-po-playwright",
+    "style": "PO+Playwright",
+    "prompt": "Using Serenity BDD with Playwright and Page Objects and JUnit 5, write a test for https://www.saucedemo.com that logs in and adds the first product to the cart, then checks the cart badge shows 1."
+  },
+  {
+    "id": "S01",
+    "harness": "seed-po-selenium",
+    "style": "seeded:PO+Selenium",
+    "prompt": "Add a Serenity BDD test to this project that adds the todos \"Buy milk\" and \"Walk the dog\" at https://todo-app.serenity-js.org and checks that both appear in the list."
+  },
+  {
+    "id": "S02",
+    "harness": "seed-sp-selenium",
+    "style": "seeded:Screenplay+Selenium",
+    "prompt": "Add a Serenity BDD test to this project that adds the todos \"Buy milk\" and \"Walk the dog\" at https://todo-app.serenity-js.org and checks that both appear in the list."
+  },
+  {
+    "id": "S03",
+    "harness": "seed-sp-playwright",
+    "style": "seeded:Screenplay+Playwright",
+    "prompt": "Add a Serenity BDD test to this project that adds the todos \"Buy milk\" and \"Walk the dog\" at https://todo-app.serenity-js.org and checks that both appear in the list."
+  },
+  {
+    "id": "S04",
+    "harness": "seed-cuke-sp",
+    "style": "seeded:Cucumber+Screenplay",
+    "prompt": "Add a Serenity BDD test to this project that adds the todos \"Buy milk\" and \"Walk the dog\" at https://todo-app.serenity-js.org and checks that both appear in the list."
+  },
+  {
+    "id": "P09",
+    "harness": "auto",
+    "style": "Unnamed",
+    "prompt": "I want to start testing our web app with Serenity BDD. Write a first test for logging in at https://www.saucedemo.com with standard_user / secret_sauce."
+  }
+]

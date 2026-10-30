@@ -1,8 +1,12 @@
 package net.thucydides.model.environment;
 
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,5 +108,68 @@ class WhenReadingEnvironmentSpecificPropertiesDirectly {
         assertThat(env.getProperty("environment")).isEqualTo("staging");
         assertThat(env.getProperty("environments.staging.app.url")).isNull();
         assertThat(env.activeEnvironments()).containsExactly("staging");
+    }
+
+    private static final String CONF = "app.url = \"https://top-level.example.com\"\n"
+            + "environments {\n"
+            + "  default { app.url = \"https://dev.example.com\" }\n"
+            + "  staging { app.url = \"https://staging.example.com\" }\n"
+            + "}\n";
+
+    private EnvironmentVariables environmentFromFile(String environment) throws IOException {
+        Path conf = Files.createTempFile("serenity", ".conf");
+        Files.writeString(conf, CONF);
+        EnvironmentVariables env = SystemEnvironmentVariables.createEnvironmentVariables(conf);
+        if (environment != null) {
+            env.setProperty("environment", environment);
+        }
+        return env;
+    }
+
+    @Test
+    void anEnvironmentValueWinsOverAPlainValueReadFromTheConfigurationFile() throws IOException {
+        EnvironmentVariables env = environmentFromFile("staging");
+        // the file also defines a plain app.url (top-level.example.com); the environment value wins
+        assertThat(env.properties().get("app.url")).isEqualTo("https://top-level.example.com");
+        assertThat(env.getProperty("app.url")).isEqualTo("https://staging.example.com");
+        assertThat(EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")).contains("https://staging.example.com");
+    }
+
+    @Test
+    void aValueGivenExplicitlyOverridesTheEnvironmentValueInBothApis() throws IOException {
+        EnvironmentVariables env = environmentFromFile("staging");
+        env.setProperty("app.url", "https://given-with-D.example.com");
+
+        assertThat(env.isExplicitlyDefined("app.url")).isTrue();
+        assertThat(env.getProperty("app.url")).isEqualTo("https://given-with-D.example.com");
+        assertThat(EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")).contains("https://given-with-D.example.com");
+    }
+
+    @Test
+    void aValueFromTheConfigurationFileIsNotExplicit() throws IOException {
+        EnvironmentVariables env = environmentFromFile("staging");
+
+        assertThat(env.isExplicitlyDefined("environments.staging.app.url")).isFalse();
+    }
+
+    @Test
+    void clearingAnExplicitValueRestoresTheEnvironmentValue() throws IOException {
+        EnvironmentVariables env = environmentFromFile("staging");
+        env.setProperty("app.url", "https://given-with-D.example.com");
+        env.clearProperty("app.url");
+
+        // clearing removes the explicit value, and with it the plain value from the file
+        assertThat(EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")).contains("https://staging.example.com");
+    }
+
+    @Test
+    void aSystemPropertyGivenInTheConstructorIsExplicit() {
+        EnvironmentVariables env = environmentWith(
+                "environment", "staging",
+                "app.url", "https://given-with-D.example.com",
+                "environments.staging.app.url", "https://staging.example.com");
+
+        assertThat(env.isExplicitlyDefined("app.url")).isTrue();
+        assertThat(EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")).contains("https://given-with-D.example.com");
     }
 }

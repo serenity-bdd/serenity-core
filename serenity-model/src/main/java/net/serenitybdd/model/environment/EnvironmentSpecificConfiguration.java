@@ -320,6 +320,11 @@ public class EnvironmentSpecificConfiguration {
 
     public String getPropertyValue(String propertyName) {
 
+        // A value given explicitly (-D on the command line, or set in code) overrides the values inside environments { }
+        if (environmentVariables.isExplicitlyDefined(propertyName)) {
+            return environmentVariables.getProperty(propertyName);
+        }
+
         switch (environmentStrategy) {
             case USE_NORMAL_PROPERTIES:
             case ENVIRONMENT_CONFIGURED_BUT_NOT_NAMED:

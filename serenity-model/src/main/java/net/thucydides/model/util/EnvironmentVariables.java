@@ -95,4 +95,13 @@ public interface EnvironmentVariables {
     }
 
     Map<String, String> properties();
+
+    /**
+     * True if the value was given explicitly (for example with -D on the command line, or set in code) rather than
+     * read from a configuration file. An explicit value overrides the values defined inside environments { }.
+     * Implementations that cannot tell return false, which keeps the values in environments { } in charge.
+     */
+    default boolean isExplicitlyDefined(String name) {
+        return false;
+    }
 }

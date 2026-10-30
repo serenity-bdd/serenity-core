@@ -23,6 +23,8 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     private final Map<String, String> properties = new ConcurrentHashMap<>();
     private final Map<String, String> systemValues = new ConcurrentHashMap<>();
+    // Keys given explicitly (system properties, constructor values, values set in code), as opposed to read from serenity.conf
+    private final Set<String> explicitKeys = ConcurrentHashMap.newKeySet();
     private volatile Config config;
     private volatile boolean configLoaded = false;
 
@@ -77,7 +79,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(this.properties, this.systemValues, this.config);
+        SystemEnvironmentVariables copy = new SystemEnvironmentVariables(this.properties, this.systemValues, this.config);
+        copy.explicitKeys.addAll(this.explicitKeys);
+        return copy;
     }
 
     public SystemEnvironmentVariables() {
@@ -107,6 +111,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public SystemEnvironmentVariables(Map<String, String> propertyValues, Map<String, String> systemValues) {
         this.systemValues.putAll(systemValues);
         this.properties.putAll(propertyValues);
+        this.explicitKeys.addAll(propertyValues.keySet());
         loadLocalConfig();
     }
 
@@ -119,6 +124,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
             propertyValues.put(property, value);
         }
         this.properties.putAll(propertyValues);
+        this.explicitKeys.addAll(propertyValues.keySet());
         loadLocalConfig();
     }
 
@@ -225,14 +231,27 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(final String name) {
-        String value = properties.get(name);
-        return (value != null) ? value : environmentSpecificValueFor(name);
+        // The same order EnvironmentSpecificConfiguration uses: a value given explicitly (-D, or set in code), then a
+        // value defined for the active environment inside environments { }, then the plain value from the files.
+        if (explicitKeys.contains(name)) {
+            String explicitValue = properties.get(name);
+            if (explicitValue != null) {
+                return explicitValue;
+            }
+        }
+        String environmentValue = environmentSpecificValueFor(name);
+        return (environmentValue != null) ? environmentValue : properties.get(name);
+    }
+
+    @Override
+    public boolean isExplicitlyDefined(String name) {
+        return explicitKeys.contains(name) && properties.containsKey(name);
     }
 
     /**
      * A value defined inside {@code environments { }} for the active environment, so that
-     * {@code getProperty("app.url")} finds a value that is defined only for an environment. A property defined outside
-     * {@code environments { }}, including one given with -D on the command line, always wins over these values.
+     * {@code getProperty("app.url")} finds a value that is defined only for an environment. A value given explicitly (for example with -D on
+     * the command line) wins over these values, and they win over a plain value read from a configuration file.
      * The order is the one {@link net.serenitybdd.model.environment.EnvironmentSpecificConfiguration} uses: the active
      * environment(s), then "all", then "default".
      */
@@ -284,12 +303,14 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public void setProperty(String name, String value) {
         propertySetLock.lock();
         properties.put(name, value);
+        explicitKeys.add(name);
         propertySetLock.unlock();
     }
 
     public void setProperties(Map<String, String> properties) {
         propertySetLock.lock();
         this.properties.putAll(properties);
+        this.explicitKeys.addAll(properties.keySet());
         propertySetLock.unlock();
     }
 
@@ -297,6 +318,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public void clearProperty(String name) {
         propertySetLock.lock();
         properties.remove(name);
+        explicitKeys.remove(name);
         propertySetLock.unlock();
     }
 

@@ -195,6 +195,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 testOutcomes.getPendingTests().getTestCount(),
                 testOutcomes.getAbortedTests().getTestCount());
 
+            if (testOutcomes.getTestCount() == 0) {
+                LOGGER.warn("  - No test results were found, so the report is empty. If the tests were run, check that the test runner "
+                        + "class is picked up by the build (Maven's test plugin only runs classes named *Test, *Tests, Test* or *TestCase, "
+                        + "so a Cucumber runner called 'CucumberSuite' is skipped) and that this report is built from the directory the tests wrote to.");
+            }
+
             // Only show expanded details if something needs attention
             boolean hasIssues =
                     !testOutcomes.getFailingTests().isEmpty() ||

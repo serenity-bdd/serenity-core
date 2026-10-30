@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write prompts-v2.json: the fresh prompt set, written after the guidance was frozen (git tag ai-guidance-frozen-1).
+"""Write prompts-v2.json: the fresh prompt set, written after the guidance was frozen and before the first evaluation run on it.
 
 The tasks run against the local bookshop (testapp/server.py). Each prompt carries a description of the
 application, as a real user would give, so that a model can write the locators without seeing the pages.

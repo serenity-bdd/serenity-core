@@ -1,0 +1,14 @@
+# Method-level claims made in the guidance, checked against the released jars.
+# Format:  fully.qualified.Class | regular expression that must match a line of `javap` output for that class
+net.serenitybdd.core.pages.PageObject | public final void open\(\)
+net.serenitybdd.core.pages.PageObject | public final void openAt\(java.lang.String\)
+net.serenitybdd.screenplay.questions.Text | Question<java.util.Collection<java.lang.String>> ofEach\(net.serenitybdd.screenplay.targets.Target\)
+net.serenitybdd.screenplay.playwright.questions.Text | Question<java.util.List<java.lang.String>> ofEach\(net.serenitybdd.screenplay.playwright.Target\)
+net.serenitybdd.screenplay.targets.TargetBuilder | SearchableTarget locatedBy\(java.lang.String\)
+net.serenitybdd.screenplay.targets.TargetBuilder | SearchableTarget located\(org.openqa.selenium.By\)
+net.serenitybdd.core.Serenity | static .*EnvironmentVariables environmentVariables\(\)
+net.serenitybdd.model.environment.EnvironmentSpecificConfiguration | getOptionalProperty\(java.lang.String
+net.serenitybdd.core.steps.UIInteractionSteps | extends net.serenitybdd.core.pages.PageObject
+net.serenitybdd.core.pages.PageObject | public org.openqa.selenium.WebDriver getDriver\(\)
+net.serenitybdd.cucumber.CucumberWithSerenity | extends io.cucumber.junit.CucumberSerenityRunner
+net.thucydides.model.ThucydidesSystemProperty | getPropertyName\(\)

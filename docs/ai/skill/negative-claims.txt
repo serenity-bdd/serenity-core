@@ -1,0 +1,16 @@
+# Classes and packages the guidance says do NOT exist. verify-claims.py asserts they are absent.
+net.serenitybdd.screenplay.webdriver
+net.serenitybdd.screenplay.webdriver.BrowseTheWeb
+net.serenitybdd.screenplay.browser
+net.serenitybdd.rest.abilities
+net.serenitybdd.rest.questions
+io.cucumber.core.plugin.SerenityReporterParallel
+net.thucydides.core.annotations.DefaultUrl
+net.thucydides.core.annotations.Step
+net.thucydides.core.annotations.Steps
+net.thucydides.core.annotations.Managed
+# moved or removed since 3.x (see references/upgrading.md)
+net.thucydides.core.util.EnvironmentVariables
+net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
+InputField.called
+PageElement.called

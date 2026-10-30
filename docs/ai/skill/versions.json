@@ -1,0 +1,7 @@
+{
+  "_comment": "Single source for the versions the guidance describes. check-versions.py verifies them against Maven Central and the dependency tree.",
+  "serenity": "5.4.1",
+  "serenityPlaywrightModules": "5.3.11",
+  "junit": "6.1.3",
+  "cucumber": "8.0.4"
+}

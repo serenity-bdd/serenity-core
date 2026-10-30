@@ -33,6 +33,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.function.Function;
 
@@ -199,8 +200,28 @@ public class StepFactory {
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
 
         injectOtherDependenciesInto(steps);
+        warnAboutManagedFieldsIn(scenarioStepsClass);
 
         return steps;
+    }
+
+    private static final Set<String> STEP_LIBRARIES_WARNED_ABOUT_MANAGED_FIELDS = ConcurrentHashMap.newKeySet();
+
+    /**
+     * {@code @Managed} is only filled in on the test class. In a step library the field stays null and the first
+     * use fails with a NullPointerException that does not mention {@code @Managed}, so say so once per class.
+     */
+    private void warnAboutManagedFieldsIn(Class<?> stepLibraryClass) {
+        for (Class<?> type = stepLibraryClass; type != null && type != Object.class; type = type.getSuperclass()) {
+            for (java.lang.reflect.Field field : type.getDeclaredFields()) {
+                if (field.isAnnotationPresent(net.serenitybdd.annotations.Managed.class)
+                        && STEP_LIBRARIES_WARNED_ABOUT_MANAGED_FIELDS.add(type.getName() + "." + field.getName())) {
+                    LOGGER.warn("The @Managed field '{}' in {} will be null: @Managed is only filled in on the test class. "
+                            + "In a step library, extend UIInteractionSteps and call getDriver(), or use a page object.",
+                            field.getName(), type.getName());
+                }
+            }
+        }
     }
 
     private <T> void injectOtherDependenciesInto(T steps) {
@@ -228,6 +249,7 @@ public class StepFactory {
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
 
         injectOtherDependenciesInto(steps);
+        warnAboutManagedFieldsIn(scenarioStepsClass);
 
         return steps;
     }

@@ -73,7 +73,7 @@ def strip_generated_blocks(text):
 
 
 def texts():
-    files = glob.glob(os.path.join(HERE, "serenity-bdd", "references", "*.md")) + [os.path.join(HERE, "serenity-bdd", "SKILL.md")]
+    files = glob.glob(os.path.join(HERE, "serenity-bdd", "references", "*.md")) + [os.path.join(HERE, "serenity-bdd", "SKILL.md"), os.path.join(HERE, "guide-writing-tests.md")]
     files += glob.glob(os.path.join(HERE, "..", "agents-md", "variants", "*.md"))
     if os.path.exists(DOCS_HEADER):
         files.append(DOCS_HEADER)

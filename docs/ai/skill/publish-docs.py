@@ -42,12 +42,12 @@ DESCRIPTIONS = {
 
 INDEX = """---
 id: ai_idioms_overview
-title: Current Idioms and Imports
-sidebar_position: 1
+title: Idioms and Imports by Style
+sidebar_position: 1.8
 description: Exact packages, working examples and common mistakes for each way of writing tests with Serenity BDD.
 ---
 
-# Current Idioms and Imports
+# Idioms and Imports by Style
 
 These pages list the exact packages, dependencies and idioms for each supported way of writing tests with Serenity BDD, with compiling examples. They are written for people and for AI coding assistants, which most often go wrong by guessing a package name.
 
@@ -69,14 +69,14 @@ Pick the style the project already uses, and stay in it: one approach, one drive
 
 ## If you use an AI coding assistant
 
-See [Using Serenity BDD with AI Coding Assistants](ai_using_assistants) for the `AGENTS.md` files, the agent skill and `llms.txt`. In short: tell it which style, driver and runner you want, or point it at these pages (or at [llms.txt](https://serenity-bdd.github.io/llms.txt)). Ask it to compile its output (`mvn test-compile`) before running it. Many `net.thucydides` packages are current core packages, so that prefix on its own is not a sign of outdated code: judge each class against these pages.
+See [Using Serenity BDD with AI Coding Assistants](ai_using_assistants) and [Writing Serenity BDD Tests with an AI Assistant](ai_writing_tests) for the `AGENTS.md` files, the agent skill and `llms.txt`. In short: tell it which style, driver and runner you want, or point it at these pages (or at [llms.txt](https://serenity-bdd.github.io/llms.txt)). Ask it to compile its output (`mvn test-compile`) before running it. Many `net.thucydides` packages are current core packages, so that prefix on its own is not a sign of outdated code: judge each class against these pages.
 """
 
 
 USING = """---
 id: ai_using_assistants
 title: Using Serenity BDD with AI Coding Assistants
-sidebar_position: 1.5
+sidebar_position: 1
 description: What is available for AI coding assistants (documentation pages, llms.txt, an agent skill, AGENTS.md files), how to install each one, and what was measured.
 ---
 
@@ -90,7 +90,7 @@ Serenity supports several ways of writing tests, and all of them are current: Pa
 
 | Material | What it is | Where |
 |---|---|---|
-| Documentation pages | Exact packages, dependencies, idioms and compiling examples for each style, plus configuration, upgrading, living documentation and troubleshooting by symptom | [Current Idioms and Imports](ai_idioms_overview) |
+| Documentation pages | Exact packages, dependencies, idioms and compiling examples for each style, plus configuration, upgrading, living documentation and troubleshooting by symptom | [Idioms and Imports by Style](ai_idioms_overview) |
 | `llms.txt` and `llms-full.txt` | An index of the documentation for AI assistants, and the full text of the pages | [llms.txt](https://serenity-bdd.github.io/llms.txt), [llms-full.txt](https://serenity-bdd.github.io/llms-full.txt) |
 | `AGENTS.md` files | One per style. They record the style, driver and runner your project uses, so an assistant stays in it | [`docs/ai/agents-md/variants`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/agents-md/variants) in the serenity-core repository |
 | An agent skill (Claude Code) | The same material as the pages, loaded when you ask for Serenity tests: it chooses the style (or asks), writes the tests, compiles them, and reviews the report | [`docs/ai/skill/serenity-bdd`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/skill/serenity-bdd) |
@@ -201,9 +201,10 @@ def main(repo):
     outdir = os.path.join(repo, "docs", "ai")
     os.makedirs(outdir, exist_ok=True)
     open(os.path.join(outdir, "_category_.json"), "w").write(
-        '{\n  "label": "Current Idioms and Imports",\n  "position": 10.5,\n  "link": {"type": "doc", "id": "ai_idioms_overview"}\n}\n')
+        '{\n  "label": "Using AI with Serenity BDD",\n  "position": 10.5,\n  "link": {"type": "doc", "id": "ai_using_assistants"}\n}\n')
     open(os.path.join(outdir, "overview.md"), "w").write(INDEX)
     open(os.path.join(outdir, "using-ai-assistants.md"), "w").write(USING)
+    open(os.path.join(outdir, "writing-tests-with-ai.md"), "w").write(open(os.path.join(HERE, "guide-writing-tests.md")).read())
     for fname, id_, title, pos, sets in PAGES:
         body = transform(open(os.path.join(REF, fname)).read(), fname)
         slug = {"screenplay.md": "screenplay-idioms", "page-objects.md": "page-object-idioms", "rest-assured.md": "rest-step-library", "project-setup.md": "project-setup", "troubleshooting.md": "troubleshooting", "cucumber.md": "cucumber", "configuration.md": "configuration", "upgrading.md": "upgrading", "living-documentation.md": "living-documentation", "review-checklist.md": "review-checklist"}[fname]

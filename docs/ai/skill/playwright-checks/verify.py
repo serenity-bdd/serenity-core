@@ -9,6 +9,7 @@ Cases build the sp-playwright example (ListTest uses a data: page, so no site is
   url-ensure-compile    Ensure.thatTheCurrentUrl().contains(..) does not compile ('inaccessible class')
   title-ensure-compile  Ensure.thatThePageTitle().isEqualTo(..) does not compile
   page-url              the current URL read from BrowseTheWebWithPlaywright.as(actor).getCurrentPage().url() works
+  url-title-task        a Task built on getCurrentPage().url() and .title() checks the URL and the page title (the documented workaround)
 """
 import os, re, shutil, sys, tempfile
 
@@ -63,6 +64,35 @@ def case_page_url():
     def edit(f):
         repro.sub(f, "import java.util.List;", "import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;\nimport static org.assertj.core.api.Assertions.assertThat;")
         repro.sub(f, "        ana.should(seeThat(Text.ofEach", '        assertThat(BrowseTheWebWithPlaywright.as(ana).getCurrentPage().url()).startsWith("data:text/html");\n        ana.should(seeThat(Text.ofEach')
+    p = project(edit)
+    o = run(p)
+    return re.search(r"Tests run: 1, Failures: 0, Errors: 0", o) is not None, o
+
+
+def case_url_title_task():
+    def edit(f):
+        repro.sub(f, "import java.util.List;", "import net.serenitybdd.screenplay.Performable;\nimport net.serenitybdd.screenplay.Task;\nimport net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;")
+        repro.sub(f, "class ListTest {", """class ListTest {
+
+    static Performable currentUrlContains(String text) {
+        return Task.where("the current URL should contain '" + text + "'", actor -> {
+            String url = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().url();
+            if (!url.contains(text)) {
+                throw new AssertionError("Expected URL to contain '" + text + "' but was: " + url);
+            }
+        });
+    }
+
+    static Performable pageTitleIs(String title) {
+        return Task.where("the page title should be '" + title + "'", actor -> {
+            String actual = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().title();
+            if (!actual.equals(title)) {
+                throw new AssertionError("Expected page title '" + title + "' but was: " + actual);
+            }
+        });
+    }
+""")
+        repro.sub(f, "        ana.should(seeThat(Text.ofEach", '        ana.attemptsTo(currentUrlContains("data:text/html"), pageTitleIs(""));\n        ana.should(seeThat(Text.ofEach')
     p = project(edit)
     o = run(p)
     return re.search(r"Tests run: 1, Failures: 0, Errors: 0", o) is not None, o
@@ -149,7 +179,7 @@ def case_role_options_mismatch():
 
 
 CASES = {"role": case_role, "role-options-mismatch": case_role_options_mismatch, "regex-quote": case_regex_quote, "strict-violation": case_strict, "nth-works": case_nth, "url-ensure-compile": case_url,
-         "title-ensure-compile": case_title, "page-url": case_page_url}
+         "title-ensure-compile": case_title, "page-url": case_page_url, "url-title-task": case_url_title_task}
 
 if __name__ == "__main__":
     bad = 0

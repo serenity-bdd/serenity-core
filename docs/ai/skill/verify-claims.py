@@ -84,6 +84,17 @@ def expand(pkg):
     return pkg.replace("...playwright", "net.serenitybdd.screenplay.playwright", 1) if pkg.startswith("...") else pkg
 
 
+def on_maven_central(artifact):
+    """Old artifacts (serenity-cucumber4, serenity-jbehave, ...) are not in a fresh ~/.m2; Maven Central is the authority."""
+    import urllib.request
+    url = "https://repo1.maven.org/maven2/net/serenity-bdd/%s/maven-metadata.xml" % artifact
+    try:
+        with urllib.request.urlopen(url, timeout=30) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
 def main():
     classes, packages, prefixes, jars = class_index()
     by_simple = {}
@@ -191,8 +202,8 @@ def main():
         arts.update(a for a in re.findall(r"`(serenity-[a-z0-9-]+)`", t) if a not in NOT_ARTIFACTS)
     for a in sorted(arts):
         checked += 1
-        if not glob.glob(os.path.join(M2, "net", "serenity-bdd", a, "*", "*.jar")):
-            problems.append("artifact %s not found in ~/.m2 (net.serenity-bdd)" % a)
+        if not glob.glob(os.path.join(M2, "net", "serenity-bdd", a, "*", "*.jar")) and not on_maven_central(a):
+            problems.append("artifact %s not found in ~/.m2 or on Maven Central (net.serenity-bdd)" % a)
 
     print("checked %d claims in %d files against %d jars" % (checked, len(T), len(jars)))
     for p in problems:

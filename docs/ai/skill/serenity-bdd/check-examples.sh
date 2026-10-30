@@ -12,11 +12,16 @@ WORK="$(mktemp -d)"
 for s in "${SETS[@]}"; do
   [ -d "$HERE/examples/$s" ] || continue
   cp -R "$HERE/../../eval/harness/${HARNESS[$s]}" "$WORK/$s"
+  # git does not keep empty directories, so a fresh checkout of the harness has no src/test/java
+  mkdir -p "$WORK/$s/src/test/java" "$WORK/$s/src/test/resources"
   cp -R "$HERE/examples/$s/." "$WORK/$s/src/test/java/"
   # non-Java resources (feature files) belong on the test classpath
   if [ -d "$HERE/examples/$s/resources" ]; then rm -rf "$WORK/$s/src/test/java/resources"; cp -R "$HERE/examples/$s/resources/." "$WORK/$s/src/test/resources/"; fi
   if [ -d "$HERE/examples/$s/features" ]; then rm -rf "$WORK/$s/src/test/java/features"; cp -R "$HERE/examples/$s/features" "$WORK/$s/src/test/resources/"; fi
   if [ $RUN -eq 1 ]; then
-    if (cd "$WORK/$s" && mvn -q -B verify -Dheadless.mode=true >"$WORK/$s.log" 2>&1); then echo "RUN PASS $s ($(cat "$WORK"/$s/target/surefire-reports/*.xml 2>/dev/null | grep -o '<testsuite [^>]*' | grep -o 'tests="[0-9]*"' | cut -d\" -f2 | paste -sd+ - | bc) tests)"; else echo "RUN FAIL $s ($WORK/$s.log)"; grep -E "Tests run:|FAIL|ERROR\]" "$WORK/$s.log" | head -8; fi
+    if (cd "$WORK/$s" && mvn -q -B verify -Dheadless.mode=true >"$WORK/$s.log" 2>&1); then
+      n=$(cat "$WORK"/$s/target/surefire-reports/*.xml 2>/dev/null | grep -o '<testsuite [^>]*' | grep -o 'tests="[0-9]*"' | cut -d\" -f2 | paste -sd+ - | bc)
+      if [ -z "$n" ] || [ "$n" = "0" ]; then echo "RUN FAIL $s (no tests ran; $WORK/$s.log)"; else echo "RUN PASS $s ($n tests)"; fi
+    else echo "RUN FAIL $s ($WORK/$s.log)"; grep -E "Tests run:|FAIL|ERROR\]" "$WORK/$s.log" | head -8; fi
   elif (cd "$WORK/$s" && mvn -q -B ${MVN_OFFLINE--o} test-compile >"$WORK/$s.log" 2>&1); then echo "PASS $s"; else echo "FAIL $s"; grep -E "ERROR.*\.java|error:" "$WORK/$s.log" | head -15; fi
 done

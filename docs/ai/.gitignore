@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+eval/results/**/*.stream.jsonl
+eval/results/
+research/data/
+skill/troubleshooting/observed.json

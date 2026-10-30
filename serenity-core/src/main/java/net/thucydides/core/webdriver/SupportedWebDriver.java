@@ -146,7 +146,13 @@ public enum SupportedWebDriver {
         SupportedWebDriver closestDriver = null;
         int closestDriverDistance = Integer.MAX_VALUE;
         for (SupportedWebDriver supportedDriver : values()) {
-            int distance = StringUtils.getLevenshteinDistance(supportedDriver.toString(), value);
+            // Compare ignoring case: the enum names are upper case, so "chromee" would otherwise be
+            // "closest" to the shortest name instead of to CHROME.
+            String typed = value.trim().toLowerCase();
+            int distance = StringUtils.getLevenshteinDistance(supportedDriver.name().toLowerCase(), typed);
+            for (String synonym : supportedDriver.synonyms) {
+                distance = Math.min(distance, StringUtils.getLevenshteinDistance(synonym.toLowerCase(), typed));
+            }
             if (distance < closestDriverDistance) {
                 closestDriverDistance = distance;
                 closestDriver = supportedDriver;

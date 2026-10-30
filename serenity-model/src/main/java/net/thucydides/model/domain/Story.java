@@ -3,6 +3,7 @@ package net.thucydides.model.domain;
 import com.google.common.base.Splitter;
 import net.serenitybdd.annotations.AnnotatedDescription;
 import net.serenitybdd.annotations.Feature;
+import net.serenitybdd.annotations.Narrative;
 import net.serenitybdd.model.strings.FirstLine;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.serenitybdd.annotations.Epic;
@@ -49,12 +50,23 @@ public class Story {
         this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(userStoryClass.getSimpleName());
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
-        this.narrative = AnnotatedDescription.forClass(userStoryClass).orElse("");
+        this.narrative = narrativeFor(userStoryClass);
         // split path into a list of path elements
 //        this.pathElements = pathElementsFromPackagePath(completePathOf(userStoryClass));
         this.pathElements = pathElementsFromPackagePath(path);
 //        this.type = FeatureType.STORY.toString();
         this.type = FeatureType.FEATURE.toString();
+    }
+
+    /**
+     * The text that describes a story: the class's {@code @Description}, or else the text of its
+     * {@code @Narrative}, which JUnit 5 test classes use.
+     */
+    private static String narrativeFor(Class<?> storyClass) {
+        return AnnotatedDescription.forClass(storyClass).orElseGet(() -> {
+            Narrative narrative = storyClass.getAnnotation(Narrative.class);
+            return narrative == null ? "" : String.join("\n", narrative.text());
+        });
     }
 
     private PathElements pathElementsFromPackagePath(String path) {
@@ -431,7 +443,7 @@ public class Story {
                 ? new ApplicationFeature(featureName, featureName) : null;
 
         return new Story(effectiveStoryName, effectiveStoryName, null, effectiveStoryName,
-                path, pathElements, feature, null, FeatureType.STORY.toString());
+                path, pathElements, feature, narrativeFor(testClass), FeatureType.STORY.toString());
     }
 
     /**

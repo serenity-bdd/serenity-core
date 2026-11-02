@@ -3,8 +3,11 @@ package net.serenitybdd.screenplay.playwright.assertions.visual;
 /**
  * Exception thrown when a visual comparison fails because the screenshot
  * differs from the baseline by more than the allowed threshold.
+ *
+ * @deprecated Use {@link net.serenitybdd.screenplay.visual.VisualComparisonFailure} instead.
  */
-public class VisualComparisonFailure extends AssertionError {
+@Deprecated
+public class VisualComparisonFailure extends net.serenitybdd.screenplay.visual.VisualComparisonFailure {
 
     public VisualComparisonFailure(String message) {
         super(message);

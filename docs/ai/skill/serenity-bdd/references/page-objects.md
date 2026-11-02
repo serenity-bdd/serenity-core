@@ -1,6 +1,6 @@
 # Serenity Page Objects: imports and idioms cheat sheet
 
-Verified against Serenity **5.4.1** (Playwright module: **5.3.11**, the latest published). The examples under `../examples/po-selenium` and `../examples/po-playwright` compile and their tests pass (headless Chrome and Playwright against the live todo app); run `check-examples.sh --run` to re-check.
+Verified against Serenity **5.4.2** (Playwright module: **5.3.11**, the latest published). The examples under `../examples/po-selenium` and `../examples/po-playwright` compile and their tests pass (headless Chrome and Playwright against the live todo app); run `check-examples.sh --run` to re-check.
 
 Page Objects with step libraries work with Selenium and with Playwright, with JUnit 5. This is as valid as Screenplay. Use the style the user asked for or the project already uses, and don't mix Page Objects and Screenplay in one test.
 

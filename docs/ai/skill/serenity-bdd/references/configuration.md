@@ -1,6 +1,6 @@
 # Serenity configuration: `serenity.conf`, properties and environments
 
-Verified against Serenity **5.4.1**. The behaviour described here was run by `../../config-checks/verify.py` against the example in `../examples/config`: 21 checks, covering where the files are read from, which source wins, environments, command-line overrides, reading values in code, and what the screenshot settings do. Keys are checked against the `ThucydidesSystemProperty` enum in the jar. The meaning of a key comes from the Serenity documentation (the reference page of properties), unless the text says it was run.
+Verified against Serenity **5.4.2**. The behaviour described here was run by `../../config-checks/verify.py` against the example in `../examples/config`: 21 checks, covering where the files are read from, which source wins, environments, command-line overrides, reading values in code, and what the screenshot settings do. Keys are checked against the `ThucydidesSystemProperty` enum in the jar. The meaning of a key comes from the Serenity documentation (the reference page of properties), unless the text says it was run.
 
 ## 1. Where configuration comes from
 
@@ -55,9 +55,9 @@ Pick one with `-Denvironment=staging`.
 
 - With no `environment`, the `default` block applies. With `-Denvironment=staging`, `staging` applies and values it does not define fall back to `default` (`db.name` stayed `dev`).
 - `all` applies in every environment.
-- **Your own keys inside `environments { }`:** from **5.4.2**, `environmentVariables.getProperty("app.url")` returns the value for the chosen environment, then `all`, then `default`. In **5.4.1 and earlier** it returns **null**, in every environment, and the value can only be read through `EnvironmentSpecificConfiguration` (next section), which works in every version. This is the usual cause of "I get null when I read a value from serenity.conf" on an older release.
+- **Your own keys inside `environments { }`:** from **5.4.2**, `environmentVariables.getProperty("app.url")` returns the value for the chosen environment, then `all`, then `default`. In **earlier releases** it returns **null**, in every environment, and the value can only be read through `EnvironmentSpecificConfiguration` (next section), which works in every version. This is the usual cause of "I get null when I read a value from serenity.conf" on an older release.
 - **Serenity's own keys inside `environments { }` do work** and override the top-level value: `webdriver.base.url` and `serenity.project.name` inside `environments { staging { } }` took effect with `-Denvironment=staging`. Values in `default` override the top-level value too.
-- Command-line override of a value in `environments`: from **5.4.2**, `-Dapp.url=https://...` overrides it (the full name, `-Denvironments.staging.app.url=...`, still works). In **5.4.1 and earlier** a plain `-Dapp.url=...` did **not** override it and only the full name did.
+- Command-line override of a value in `environments`: from **5.4.2**, `-Dapp.url=https://...` overrides it (the full name, `-Denvironments.staging.app.url=...`, still works). In **earlier releases** a plain `-Dapp.url=...` did **not** override it and only the full name did.
 
 ## 4. Reading values in code
 
@@ -106,8 +106,8 @@ Do not invent keys. If a key is not in the Serenity documentation or `Thucydides
 | Wrong | Right |
 |---|---|
 | `serenity.conf` in the project root | `src/test/resources/serenity.conf` |
-| (5.4.1 and earlier) Reading `app.url` with `env.getProperty` when it is defined under `environments { }` | `EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")` (works in every version) |
-| (5.4.1 and earlier) `-Dapp.url=...` to override a value defined under `environments { staging { } }` | `-Denvironments.staging.app.url=...` (works in every version) |
+| (before 5.4.2) Reading `app.url` with `env.getProperty` when it is defined under `environments { }` | `EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")` (works in every version) |
+| (before 5.4.2) `-Dapp.url=...` to override a value defined under `environments { staging { } }` | `-Denvironments.staging.app.url=...` (works in every version) |
 | An old `serenity.properties` in the project root silently beating `serenity.conf` | Keep one file, or remember that the root properties file wins |
 | Setting a key through an OS environment variable | Use `-D`, the file, or the build tool's system property settings |
 | Hard-coding `webdriver.chrome.driver` to a path on one machine | Leave it unset (see Troubleshooting) |

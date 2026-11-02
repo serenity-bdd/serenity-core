@@ -19,10 +19,10 @@ Test (`@Steps` field) -> step library (`@Step` methods, extends `UIInteractionSt
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - Page objects extend `net.serenitybdd.core.pages.PageObject`, use `WebElementFacade` (same package), `@DefaultUrl("...")`, and `@FindBy(css = "...")` or `$("css")`.
 - `PageObject.open()` is final. Don't declare your own `open()`: use `@DefaultUrl` or `openAt(url)`.
 - Step libraries extend `net.serenitybdd.core.steps.UIInteractionSteps`; page objects are injected as fields. Tests get step libraries with `@Steps` and the browser with `@Managed(driver = "chrome") WebDriver driver;`.

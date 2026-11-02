@@ -1,6 +1,6 @@
 # Serenity with Cucumber (JUnit Platform)
 
-Verified against Serenity **5.4.1**: Cucumber **8.0.4**, JUnit **6.1.3**. Every command on this page was run: `../../cucumber-checks/verify.py` runs them against the example in `../examples/cuke-plain` (a browser-free example with 5 scenarios) and checks how many scenarios ran. Cucumber with Screenplay and a browser is on the Screenplay page; this page is about Cucumber itself and applies to both.
+Verified against Serenity **5.4.2**: Cucumber **8.0.4**, JUnit **6.1.3**. Every command on this page was run: `../../cucumber-checks/verify.py` runs them against the example in `../examples/cuke-plain` (a browser-free example with 5 scenarios) and checks how many scenarios ran. Cucumber with Screenplay and a browser is on the Screenplay page; this page is about Cucumber itself and applies to both.
 
 ## 1. Setup
 
@@ -49,7 +49,7 @@ When `cucumber.features` is given, Cucumber ignores the runner's `@SelectClasspa
 
 ## 4. Gradle
 
-`cucumber-checks/gradle/build.gradle` (Serenity Gradle plugin `net.serenity-bdd.serenity-gradle-plugin` 5.4.1, Gradle 9.8.1 tested, tasks `test` and `aggregate`) was run: `gradle clean test` ran the 5 scenarios and `aggregate` produced `target/site/serenity/index.html`.
+`cucumber-checks/gradle/build.gradle` (Serenity Gradle plugin `net.serenity-bdd.serenity-gradle-plugin` 5.4.2, Gradle 9.8.1 tested, tasks `test` and `aggregate`) was run: `gradle clean test` ran the 5 scenarios and `aggregate` produced `target/site/serenity/index.html`.
 
 **Gradle does not pass `-D` options to the test JVM.** `gradle test -Dcucumber.filter.tags=@smoke` runs every scenario unless the build forwards the option (verified: 4 outcomes without it, 1 with it):
 

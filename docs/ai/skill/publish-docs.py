@@ -84,7 +84,7 @@ description: What is available for AI coding assistants (documentation pages, ll
 
 # Using Serenity BDD with AI Coding Assistants
 
-AI coding assistants write Serenity tests quickly, and they most often go wrong by guessing: a package name from an old release, a method that does not exist, or a mix of two ways of working. Everything on this page is there to stop that. All of it describes the current release (Serenity 5.4.1; the Playwright modules are published up to 5.3.11), and every claim in it was checked against the released jars or by running it.
+AI coding assistants write Serenity tests quickly, and they most often go wrong by guessing: a package name from an old release, a method that does not exist, or a mix of two ways of working. Everything on this page is there to stop that. All of it describes the current release (Serenity 5.4.2; the Playwright modules are published up to 5.3.11), and every claim in it was checked against the released jars or by running it.
 
 Serenity supports several ways of writing tests, and all of them are current: Page Objects with step libraries, Screenplay, Cucumber (with Screenplay or with page objects), REST with a step library or with Screenplay, with Selenium or Playwright, with JUnit 5 or Cucumber. None is recommended over another. An assistant that has these materials asks which one you want when it cannot tell from the project, instead of choosing for you.
 
@@ -133,24 +133,24 @@ These are results from one evaluation, run by the authors of the materials, on C
 
 ## Known limits
 
-- The pages and the skill are verified against Serenity 5.4.1. Behaviour fixed in later releases is noted where it matters.
+- The pages and the skill are verified against Serenity 5.4.2. Behaviour fixed in later releases is noted where it matters.
 - The skill and reviewer agent are for Claude Code. The pages, `llms.txt` and the `AGENTS.md` files are plain text and work with any assistant, but they were only measured with Claude models.
 - Mobile testing, Spring and Guice object factories, and cloud grid configuration are not covered.
 - If a page here is wrong, or an error message you hit is missing from [troubleshooting](ai_troubleshooting), please open an issue.
 """
 
 VERIFIED = {
-    "test-results.md": "Verified against Serenity **5.4.1** by running a passing and a failing project: the files, the fields and the script were all checked.",
-    "screenplay.md": "Verified against Serenity **5.4.1** (Playwright modules: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
-    "page-objects.md": "Verified against Serenity **5.4.1** (Playwright module: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
-    "upgrading.md": "Verified against Serenity **5.4.1**. The class counts come from the released jars, and the recipe was applied to five real projects.",
-    "configuration.md": "Verified against Serenity **5.4.1**. The behaviour described here was run against the example at the end of the page.",
-    "cucumber.md": "Verified against Serenity **5.4.1** (Cucumber 8.0.4, JUnit 6.1.3). Every command on this page was run against the example at the end of the page.",
-    "troubleshooting.md": "Verified against Serenity **5.4.1** (Playwright modules: **5.3.11**). Each entry was reproduced in a test project and its fix was run.",
-    "living-documentation.md": "Verified against Serenity **5.4.1**. The behaviour described here was run against the example at the end of the page.",
-    "review-checklist.md": "Written for Serenity **5.4.1**.",
-    "rest-assured.md": "Verified against Serenity **5.4.1**. The example at the end of this page compiles and its tests pass; each claim was run.",
-    "project-setup.md": "Verified against Serenity **5.4.1**. The dependency sets, JUnit BOM and report plugin were run end to end (`mvn clean verify` ran the examples and produced the report). The `serenity.conf` snippet follows the project's own samples but was not run.",
+    "test-results.md": "Verified against Serenity **5.4.2** by running a passing and a failing project: the files, the fields and the script were all checked.",
+    "screenplay.md": "Verified against Serenity **5.4.2** (Playwright modules: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
+    "page-objects.md": "Verified against Serenity **5.4.2** (Playwright module: **5.3.11**, the latest published). The examples at the end of this page compile and their tests pass.",
+    "upgrading.md": "Verified against Serenity **5.4.2**. The class counts come from the released jars, and the recipe was applied to five real projects.",
+    "configuration.md": "Verified against Serenity **5.4.2**. The behaviour described here was run against the example at the end of the page.",
+    "cucumber.md": "Verified against Serenity **5.4.2** (Cucumber 8.0.4, JUnit 6.1.3). Every command on this page was run against the example at the end of the page.",
+    "troubleshooting.md": "Verified against Serenity **5.4.2** (Playwright modules: **5.3.11**). Each entry was reproduced in a test project and its fix was run.",
+    "living-documentation.md": "Verified against Serenity **5.4.2**. The behaviour described here was run against the example at the end of the page.",
+    "review-checklist.md": "Written for Serenity **5.4.2**.",
+    "rest-assured.md": "Verified against Serenity **5.4.2**. The example at the end of this page compiles and its tests pass; each claim was run.",
+    "project-setup.md": "Verified against Serenity **5.4.2**. The dependency sets, JUnit BOM and report plugin were run end to end (`mvn clean verify` ran the examples and produced the report). The `serenity.conf` snippet follows the project's own samples but was not run.",
 }
 
 def fence(path):
@@ -161,7 +161,7 @@ EXTRA_FILES = {"living-documentation.md": [("scripts/outline.py", os.path.join(H
 
 
 def examples(sets, fname=None):
-    out = "\n## Examples\n\nThese files compile against Serenity 5.4.1 (Playwright examples: 5.3.11).\n"
+    out = "\n## Examples\n\nThese files compile against Serenity 5.4.2 (Playwright examples: 5.3.11).\n"
     for title, path, lang in EXTRA_FILES.get(fname, []):
         out += "\n### `%s`\n\n```%s\n%s\n```\n" % (title, lang, open(path).read().rstrip())
     for name in sets:

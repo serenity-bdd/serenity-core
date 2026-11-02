@@ -19,10 +19,10 @@ Test (`@Steps` field) -> step library (`@Step` methods) -> page object (a plain 
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - Page objects are plain classes holding a `com.microsoft.playwright.Page`. They don't extend Serenity's `PageObject` and don't use `@FindBy` or `WebElementFacade`.
 - The test starts `Playwright` and the `Browser` in `@BeforeAll`; in `@BeforeEach` it creates a page and calls `PlaywrightSerenity.registerPage(page)` (`net.serenitybdd.playwright`); in `@AfterEach` it calls `PlaywrightSerenity.unregisterPage(page)` and closes the page.
 - Step libraries are plain classes with `@Step` methods. They get the page from `PlaywrightSerenity.getCurrentPage()`.

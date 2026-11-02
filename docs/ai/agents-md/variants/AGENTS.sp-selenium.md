@@ -19,10 +19,10 @@ Test -> actor (`OnStage.theActorCalled(..)`) performs tasks (`Task.where(..)`) b
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - Core: `Actor`, `Task`, `Question`, `Performable` and `GivenWhenThen.seeThat` are in `net.serenitybdd.screenplay`; `OnStage` and `OnlineCast` are in `net.serenitybdd.screenplay.actors`.
 - Selenium: `BrowseTheWeb` is in `net.serenitybdd.screenplay.abilities` (there is no `screenplay.webdriver` package). `Open`, `Click`, `Enter`, `Hit` are in `net.serenitybdd.screenplay.actions`; `Target` is in `net.serenitybdd.screenplay.targets`; `Text`, `Value`, `Visibility` are in `net.serenitybdd.screenplay.questions`.
 - `Target.the("name").locatedBy("..")` takes a String that Serenity reads as XPath if it compiles as XPath, otherwise CSS: `.new-todo`, `#id` and `[data-test=x]` are CSS, but tag-prefixed selectors like `input.new-todo` or `button` are read as XPath and match nothing. For those use `Target.the("name").located(By.cssSelector("input.new-todo"))`.

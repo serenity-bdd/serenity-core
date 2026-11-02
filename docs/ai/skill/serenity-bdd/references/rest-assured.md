@@ -1,6 +1,6 @@
 # REST testing with SerenityRest and a step library (no Screenplay)
 
-Verified against Serenity **5.4.1**. The example `../examples/rest-steps/api/*` compiles and its tests pass (it starts its own HTTP server, so it needs no network); `../../rest-checks/verify.py` runs every claim below.
+Verified against Serenity **5.4.2**. The example `../examples/rest-steps/api/*` compiles and its tests pass (it starts its own HTTP server, so it needs no network); `../../rest-checks/verify.py` runs every claim below.
 
 This is one of several valid ways to test a REST API with Serenity. The other is Screenplay with `CallAnApi` (see `screenplay.md` and `../examples/sp-rest/`). Use the one the user asked for or the project already uses; don't mix them.
 

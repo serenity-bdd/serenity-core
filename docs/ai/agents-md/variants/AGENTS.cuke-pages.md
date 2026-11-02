@@ -19,7 +19,7 @@ Feature files (`src/test/resources/features`) -> step definitions that call `@St
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
 - Runner: a `@Suite` class with `@IncludeEngines("cucumber")`, `@SelectClasspathResource("features")`, a `GLUE_PROPERTY_NAME` parameter for the step-definition package, and `PLUGIN_PROPERTY_NAME` = `net.serenitybdd.cucumber.core.plugin.SerenityReporterParallel,pretty`. No JUnit 4 `@RunWith(CucumberWithSerenity.class)`.

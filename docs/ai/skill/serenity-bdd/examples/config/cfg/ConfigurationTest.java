@@ -33,7 +33,7 @@ class ConfigurationTest {
         System.out.println("CFG my.setting=" + env.getProperty("my.setting"));
 
         // Keys under environments { }: EnvironmentSpecificConfiguration works in every version;
-        // getProperty finds them from 5.4.2 (it returns null in 5.4.1 and earlier)
+        // getProperty finds them from 5.4.2 (it returns null in earlier releases)
         System.out.println("CFG plain app.url=" + env.getProperty("app.url"));
         System.out.println("CFG specific app.url=" + environmentConfig.getOptionalProperty("app.url").orElse("<none>"));
         System.out.println("CFG specific db.name=" + environmentConfig.getOptionalProperty("db.name").orElse("<none>"));

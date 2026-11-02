@@ -19,10 +19,10 @@ Test -> actor with the `CallAnApi` ability performs tasks built from `Get`/`Post
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - REST: `CallAnApi` is in `net.serenitybdd.screenplay.rest.abilities`; `Get`, `Post`, `Delete`, `Ensure` are in `net.serenitybdd.screenplay.rest.interactions`; `LastResponse`, `TheResponse` are in `net.serenitybdd.screenplay.rest.questions`. There is no `net.serenitybdd.rest.abilities` package.
 - Create the actor with `Actor.named("Alice").whoCan(CallAnApi.at("https://..."))`.
 - Core: `Actor`, `Task`, `Question`, `GivenWhenThen.seeThat` are in `net.serenitybdd.screenplay`.

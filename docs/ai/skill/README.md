@@ -50,7 +50,7 @@ Details are in `../baseline-results.md`. The evaluation scores whether generated
 
 ## Keeping it correct
 
-The references describe Serenity **5.4.1** (Playwright modules **5.3.11**, the latest published). Class names and packages come from the released jars. When a new version ships:
+The references describe Serenity **5.4.2** (Playwright modules **5.3.11**, the latest published). Class names and packages come from the released jars. When a new version ships:
 
 1. Update the versions in `../eval/harness/gen.py` and run it to regenerate the harness projects.
 2. Run `serenity-bdd/check-examples.sh`. It compiles each example set against its harness. Any `FAIL` means the references or examples need updating. It needs bash 4+ (macOS ships 3.2; use Homebrew bash) and Maven. Run once online to download dependencies, then it works offline.

@@ -19,10 +19,10 @@ Test (JUnit 5) -> `@Steps` step library whose `@Step` methods make REST calls wi
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - Make calls with `net.serenitybdd.rest.SerenityRest` (`given()`, `then()`, `lastResponse()`), not `io.restassured.RestAssured`, so requests and responses appear in the report.
 - Declare the library with `@Steps` in the test (never `new`), and put the REST calls and the response checks in `@Step("business wording")` methods.
 - JSON numbers with a decimal point come back as `Float`: `equalTo(90.0f)`, or read `lastResponse().jsonPath().getDouble(..)`; `equalTo(90.0)` and `closeTo(..)` fail.

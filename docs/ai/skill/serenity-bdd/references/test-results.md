@@ -1,6 +1,6 @@
 # Reading Test Results Without the HTML Report
 
-Verified against Serenity **5.4.1** by running a passing and a failing project (`results-checks/verify.py`).
+Verified against Serenity **5.4.2** by running a passing and a failing project (`results-checks/verify.py`).
 
 An AI assistant, a script or a CI step can read the outcome of a run from files, not from the HTML report or the Maven console. Serenity writes them to `target/site/serenity/`.
 

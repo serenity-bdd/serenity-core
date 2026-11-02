@@ -19,10 +19,10 @@ Test -> actor (`OnStage.theActorCalled(..)`) performs tasks (`Task.where(..)`) b
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 - `@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` (never `net.thucydides.core.annotations`).
-- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
+- JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).
 - Everything Playwright-specific is under `net.serenitybdd.screenplay.playwright`: `abilities.BrowseTheWebWithPlaywright`, `actors.PlaywrightCast`, `interactions.*` (`Open`, `Click`, `Enter`, `Press`, `Check`, `SelectFromOptions`, `WaitFor`), `questions.*` (`Text`, `Value`, `SelectedOptionText`, `Checked`, `Count`), `assertions.Ensure`.
 - Set the stage with `OnStage.setTheStage(new PlaywrightCast())`. Core classes: `Actor`, `Task`, `Question`, `Performable` and `GivenWhenThen.seeThat` are in `net.serenitybdd.screenplay`; `OnStage` is in `net.serenitybdd.screenplay.actors`.
 - Locators are Playwright selector strings such as `".new-todo"` or `"text='Delete'"`. Don't import `net.serenitybdd.screenplay.targets.Target` or `net.serenitybdd.screenplay.ensure.Ensure`.

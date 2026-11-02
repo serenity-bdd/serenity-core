@@ -1,6 +1,6 @@
 # Tests as living documentation
 
-Verified against Serenity **5.4.1**: `../../living-checks/verify.py` builds the example in `../examples/living-docs` and `../examples/living-docs-annotated` (and the Cucumber example) and reads the report Serenity produces. This page applies to every style (Page Objects, Screenplay, Cucumber).
+Verified against Serenity **5.4.2**: `../../living-checks/verify.py` builds the example in `../examples/living-docs` and `../examples/living-docs-annotated` (and the Cucumber example) and reads the report Serenity produces. This page applies to every style (Page Objects, Screenplay, Cucumber).
 
 ## The idea
 
@@ -64,7 +64,7 @@ Rules that follow:
 
 - **Cucumber:** a `readme.md` in a features folder is the description of that capability. Its first line should be the name (`## Shopping`). Verified: it appears in the report.
 - **JUnit 5:** put `readme.md` files under `src/test/resources/stories/<package path>/` (for the example `src/test/resources/stories/shop/ordering/readme.md`); the text appears in the report. The same file in `src/test/resources/shop/ordering/` was **ignored** (verified).
-- **`@Narrative(text = {...})` did not appear in the JUnit 5 report** in 5.4.1 (verified, both on the class and in `package-info.java`). Don't rely on it; use the `readme.md` files.
+- **`@Narrative(text = {...})` did not appear in the JUnit 5 report** before 5.4.2 (verified on the previous release, both on the class and in `package-info.java`; 5.4.2 uses it as the story narrative for test classes, not re-run here). Don't rely on it; use the `readme.md` files.
 
 Keep a description to a few sentences: what the area is for, and the rules that matter.
 

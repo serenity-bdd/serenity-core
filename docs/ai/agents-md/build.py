@@ -2,7 +2,7 @@
 """Generate the AGENTS.md variants (one per Serenity style) into ./variants/.
 
 Each variant records the project's chosen style so that an AI coding assistant stays in it. The idiom
-facts come from ../skill/serenity-bdd/references/ and are verified against Serenity 5.4.1 (Playwright
+facts come from ../skill/serenity-bdd/references/ and are verified against Serenity 5.4.2 (Playwright
 modules 5.3.11). Edit the data below, then run: python3 build.py
 """
 import os
@@ -13,7 +13,7 @@ DOCS = "https://serenity-bdd.github.io/docs/ai"
 COMMON_ANNOTATIONS = ("`@Step`, `@Steps`, `@Managed`, `@DefaultUrl`, `@WithTag` come from `net.serenitybdd.annotations` "
                       "(never `net.thucydides.core.annotations`).")
 JUNIT5 = ("JUnit 5: `@ExtendWith(SerenityJUnit5Extension.class)` from `net.serenitybdd.junit5`. Don't use `@RunWith(SerenityRunner.class)`. "
-          "Serenity 5.4.1 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).")
+          "Serenity 5.4.2 brings JUnit 6.1.3 and Cucumber 8.0.4: don't pin older JUnit or Cucumber versions in the pom (mixed versions compile but fail at run time).")
 
 STYLES = {
   "po-selenium": dict(
@@ -143,7 +143,7 @@ Avoid: {avoid}
 
 Follow the existing package layout and naming. Look at an existing test before writing a new one, and reuse the tasks, questions, page objects or step libraries already there.
 
-## Imports and idioms (verified against Serenity 5.4.1)
+## Imports and idioms (verified against Serenity 5.4.2)
 
 {idioms}
 

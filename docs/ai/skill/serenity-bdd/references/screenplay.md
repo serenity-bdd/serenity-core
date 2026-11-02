@@ -1,6 +1,6 @@
 # Serenity Screenplay: imports and idioms cheat sheet
 
-Verified against Serenity **5.4.1** (Playwright modules: **5.3.11**, the latest published). Every example under `../examples/` compiles and its tests pass (headless Chrome, Playwright and the live sample sites); run `check-examples.sh --run` to re-check.
+Verified against Serenity **5.4.2** (Playwright modules: **5.3.11**, the latest published). Every example under `../examples/` compiles and its tests pass (headless Chrome, Playwright and the live sample sites); run `check-examples.sh --run` to re-check.
 
 Screenplay works with Selenium, Playwright and REST, with JUnit 5 or Cucumber. All of these are valid. Pick the one the user asked for or the project already uses, and don't mix them in one project.
 
@@ -115,5 +115,5 @@ The source files are under `../examples/` and are compile-checked. Names are the
 ## 4. Not yet verified
 - `Ensure` for web has several overloads. Only `that(Target).hasText(..)` is compile-tested.
 - Page Objects (Selenium and Playwright) are covered in `page-objects.md`, not here.
-- The examples were run once against the live sample sites with Serenity 5.4.1 (Playwright modules 5.3.11). Other sites and larger suites may behave differently.
+- The examples were run once against the live sample sites with Serenity 5.4.2 (Playwright modules 5.3.11). Other sites and larger suites may behave differently.
 - `serenity-screenplay-playwright` is documented at 5.3.11, not 5.4.x.

@@ -96,6 +96,7 @@ Serenity supports several ways of writing tests, and all of them are current: Pa
 | Machine-readable results | The JSON outcome files Serenity writes for every test (also after a failed build), a script that summarises a run, and the optional JSON summary report | [Reading Test Results Without the HTML Report](ai_test_results) |
 | `llms.txt` and `llms-full.txt` | An index of the documentation for AI assistants (this section first), and the full text of the pages. Every page is also plain markdown at its own address with `.md` appended, for example `https://serenity-bdd.github.io/docs/ai/ai_writing_tests.md` | [llms.txt](https://serenity-bdd.github.io/llms.txt), [llms-full.txt](https://serenity-bdd.github.io/llms-full.txt) |
 | `AGENTS.md` files | One per style. They record the style, driver and runner your project uses, so an assistant stays in it | [`docs/ai/agents-md/variants`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/agents-md/variants) in the serenity-core repository |
+| Claude Code plugin | The skill, the review agent and the `AGENTS.md` files in one install | [`serenity-bdd/serenity-ai`](https://github.com/serenity-bdd/serenity-ai) |
 | An agent skill (Claude Code) | The same material as the pages, loaded when you ask for Serenity tests: it chooses the style (or asks), writes the tests, compiles them, and reviews the report | [`docs/ai/skill/serenity-bdd`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/skill/serenity-bdd) |
 | A test-review agent (Claude Code) | A read-only agent that judges the new tests and the report they produce: intent, business wording, grouping | [`docs/ai/skill/agents`](https://github.com/serenity-bdd/serenity-core/tree/main/docs/ai/skill/agents) |
 
@@ -114,7 +115,23 @@ Serenity supports several ways of writing tests, and all of them are current: Pa
 
 Assistants that read `AGENTS.md` pick it up automatically. Claude Code reads `CLAUDE.md`, so copy the same file to `CLAUDE.md` as well.
 
-**Install the skill (Claude Code).** Copy the folder `docs/ai/skill/serenity-bdd` from the serenity-core repository to `.claude/skills/serenity-bdd` in your project, or to `~/.claude/skills/serenity-bdd` to have it in every project. To add the reviewer, copy `docs/ai/skill/agents/serenity-test-reviewer.md` to `.claude/agents/` (or `~/.claude/agents/`). The skill loads when you ask for Serenity tests. If your project does not show which style it uses and you did not say, it asks you before writing anything.
+**Install the plugin (Claude Code).** This is the quickest way to get the skill and the review agent, and to keep them up to date:
+
+```
+/plugin marketplace add serenity-bdd/serenity-ai
+/plugin install serenity-bdd@serenity
+```
+
+Then ask for Serenity work as usual. Some prompts to start with:
+
+- "Add a Serenity test for the login page." If your project does not show which style it uses, the skill asks you first: Page Objects, Screenplay or Cucumber, with Selenium, Playwright or REST.
+- "Write a Screenplay test with Playwright that checks a user can add an item to the cart."
+- "Review the tests I just wrote." This runs the review agent.
+- "Why did the last run fail?" The assistant reads the JSON outcome files instead of the HTML report.
+
+The plugin does not load `AGENTS.md` files. The repository has one per style in `templates/agents-md`; copy the one for your style to the root of your project, as described above. To update the plugin later, run `/plugin marketplace update serenity`.
+
+**Or install the skill by hand (Claude Code).** Copy the folder `docs/ai/skill/serenity-bdd` from the serenity-core repository to `.claude/skills/serenity-bdd` in your project, or to `~/.claude/skills/serenity-bdd` to have it in every project. To add the reviewer, copy `docs/ai/skill/agents/serenity-test-reviewer.md` to `.claude/agents/` (or `~/.claude/agents/`). The skill loads when you ask for Serenity tests. If your project does not show which style it uses and you did not say, it asks you before writing anything.
 
 ## What was measured
 

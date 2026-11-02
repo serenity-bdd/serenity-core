@@ -94,11 +94,19 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
     protected ResponseSpecification check(final ResponseSpecification specification) {
         if (specification instanceof ResponseSpecificationDecorated) {
             return specification;
+        } else if (specification instanceof ResponseSpecificationImpl) {
+            // RestAssured 6.2+ keeps the undecorated specification internally, so we wrap it on the way out
+            if (decoratedResponse == null || decoratedResponse.getCore() != specification) {
+                decoratedResponse = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) specification);
+            }
+            return decoratedResponse;
         } else {
             log.warn("returned not decorated response, SerenityRest can work incorrectly");
             return specification;
         }
     }
+
+    private ResponseSpecificationDecorated decoratedResponse;
 
     protected ResponseSpecification decorate(final ResponseSpecification specification) {
         if (specification instanceof ResponseSpecificationDecorated) {
@@ -121,6 +129,17 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
      */
     public RequestSpecificationImpl getCore() {
         return ((RequestSpecificationImpl) core);
+    }
+
+    /**
+     * Associates the response specification that will be used to validate the responses to this request.
+     */
+    public void linkResponseSpecification(final ResponseSpecification specification) {
+        // RestAssured 6.2+ casts this field to ResponseSpecificationImpl, so it must hold the undecorated specification
+        getCore().setResponseSpecification(
+                specification instanceof ResponseSpecificationDecorated
+                        ? ((ResponseSpecificationDecorated) specification).getCore()
+                        : specification);
     }
 
     /**

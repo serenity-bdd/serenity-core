@@ -11,7 +11,6 @@ import io.restassured.filter.Filter;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.internal.RequestSpecificationImpl;
 import io.restassured.internal.ResponseSpecificationImpl;
-import io.restassured.internal.TestSpecificationImpl;
 import io.restassured.internal.UriValidator;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.parsing.Parser;
@@ -19,6 +18,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.*;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
+import net.serenitybdd.rest.decorators.SerenityTestSpecification;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.RestDecorationHelper;
 import net.serenitybdd.rest.utils.RestRuntimeException;
@@ -225,7 +225,7 @@ public class SerenityRest {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
-        return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
+        return ((SerenityTestSpecification) given(request, response)).getRequestSpecification();
     }
 
     /**
@@ -262,9 +262,10 @@ public class SerenityRest {
     public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
         RequestSpecification requestDecorated = RestDecorationHelper.decorate(request);
         ResponseSpecification responseDecorated = RestDecorationHelper.decorate(response);
-        RequestSender created = RestAssured.given(requestDecorated, responseDecorated);
+        RequestSender created = SerenityTestSpecification.of(
+                (RequestSpecificationDecorated) requestDecorated, (ResponseSpecificationDecorated) responseDecorated);
         currentRequestSpecification.set(
-                (RequestSpecificationDecorated) ((TestSpecificationImpl) created).getRequestSpecification()
+                (RequestSpecificationDecorated) ((SerenityTestSpecification) created).getRequestSpecification()
         );
         return created;
     }
@@ -273,7 +274,7 @@ public class SerenityRest {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
-        return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
+        return ((SerenityTestSpecification) given(request, response)).getRequestSpecification();
     }
 
     public static SSLConfig useRelaxedHTTPSValidation() {

@@ -59,6 +59,25 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
         }
     }
 
+    /**
+     * Associates the request specification that this response specification belongs to.
+     */
+    public void linkRequestSpecification(final RequestSpecification specification) {
+        try {
+            // RestAssured 6.2+ casts this field to RequestSpecificationImpl, so it must hold the undecorated specification
+            this.helper.setValueTo("requestSpecification",
+                    specification instanceof RequestSpecificationDecorated
+                            ? ((RequestSpecificationDecorated) specification).getCore()
+                            : specification);
+        } catch (Exception e) {
+            throw new IllegalStateException("Can not set specification to response, SerenityRest can work incorrectly");
+        }
+    }
+
+    public ResponseSpecificationImpl getCore() {
+        return core;
+    }
+
     protected void setrequestSpecification(final RequestSpecification specification) {
         setRequestSpecification(specification);
     }

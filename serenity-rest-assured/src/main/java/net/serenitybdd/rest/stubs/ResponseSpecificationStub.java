@@ -85,6 +85,11 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
+    public ResponseSpecification header(String headerName, io.restassured.matcher.ResponseAwareMatcher<Response> responseAwareMatcher) {
+        return this;
+    }
+
+    @Override
     public ResponseSpecification header(final String headerName, final String expectedValue) {
         return this;
     }

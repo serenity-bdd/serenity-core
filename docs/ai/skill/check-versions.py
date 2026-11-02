@@ -26,6 +26,14 @@ def latest(artifact):
     return m.group(1)
 
 
+def latest_gradle_plugin():
+    # The Gradle plugin is released separately from Serenity, so its version can lag behind.
+    url = "https://plugins.gradle.org/m2/net/serenity-bdd/serenity-gradle-plugin/maven-metadata.xml"
+    with urllib.request.urlopen(url, timeout=30) as r:
+        xml = r.read().decode()
+    return re.search(r"<release>([^<]+)</release>", xml).group(1)
+
+
 def vkey(v):
     return tuple(int(x) for x in re.findall(r"\d+", v))
 
@@ -48,11 +56,21 @@ def main():
             else:
                 print("ok: %s %s is the latest release" % (artifact, cur))
 
+    if not offline:
+        try:
+            cur = latest_gradle_plugin()
+            if vkey(cur) != vkey(V["serenityGradlePlugin"]):
+                problems.append("the Serenity Gradle plugin's latest release is %s but versions.json says %s: use it in the Gradle build files and the Cucumber reference, run the Gradle checks, then bump versions.json" % (cur, V["serenityGradlePlugin"]))
+            else:
+                print("ok: serenity-gradle-plugin %s is the latest release" % cur)
+        except Exception as e:
+            problems.append("could not read the Gradle plugin portal metadata: %s" % e)
+
     files = glob.glob(os.path.join(HERE, "serenity-bdd", "references", "*.md")) + [os.path.join(HERE, "serenity-bdd", "SKILL.md")]
     files += glob.glob(os.path.join(HERE, "..", "agents-md", "variants", "*.md"))
     if os.path.exists(DOCS_HEADER):
         files.append(DOCS_HEADER)
-    allowed = {V["serenity"], V["serenityPlaywrightModules"]}
+    allowed = {V["serenity"], V["serenityPlaywrightModules"], V["serenityGradlePlugin"]}
     for f in files:
         for v in sorted(set(re.findall(r"(?<![\d.])5\.\d+\.\d+(?![\d])", open(f).read()))):
             if v not in allowed:

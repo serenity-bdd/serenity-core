@@ -4,7 +4,7 @@
 usage: verify.py
 
 1. The moved-classes table in the reference equals the one computed from the jars; the counts in the text match.
-2. 4.2.34 -> 5.4.1: every class keeps its name and package.
+2. 4.2.34 -> 5.4.2: every class keeps its name and package.
 3. Java baselines: class-file versions of the 3.9.8, 4.2.34 and current serenity-core jars.
 4. Artifacts on Maven Central: serenity-cucumber4/5/6 stopped in 2.x, serenity-jbehave in 1.x, serenity-junit is current.
 5. fix_imports.py: an old-style class is rewritten and then compiles against the current release.

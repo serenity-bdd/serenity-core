@@ -4,7 +4,7 @@
 usage: moves.py OLD_VERSION [--json]       # e.g. 3.9.8 or 4.2.34
 
 Downloads the old jars from Maven Central (cached in /tmp/oldjars), indexes the classes of the old and the
-current (5.4.1, from the harness classpaths) releases, and for every old class says: unchanged, moved
+current (5.4.2, from the harness classpaths) releases, and for every old class says: unchanged, moved
 (a single class with that simple name exists elsewhere in the current release), ambiguous, or gone.
 """
 import json, os, re, subprocess, sys, urllib.request, zipfile

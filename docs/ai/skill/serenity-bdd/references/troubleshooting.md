@@ -86,7 +86,7 @@ java.lang.NullPointerException: No BaseStepListener has been registered - are yo
 
 ### A value defined in `serenity.conf` reads as `null`
 
-- **Cause (two common ones):** (1) the value is under `environments { }`, and `environmentVariables.getProperty("app.url")` never returns those; (2) the file is not where Serenity looks: `serenity.conf` is read from `src/test/resources`, not the project root. Reproduced both (`../../config-checks/verify.py`).
+- **Cause (two common ones):** (1) on Serenity 5.4.1 or earlier, the value is under `environments { }`, and `environmentVariables.getProperty("app.url")` never returns those (5.4.2 does); (2) the file is not where Serenity looks: `serenity.conf` is read from `src/test/resources`, not the project root. Reproduced both (`../../config-checks/verify.py`).
 - **Fix:** (1) `EnvironmentSpecificConfiguration.from(env).getOptionalProperty("app.url")`; (2) move the file to `src/test/resources/serenity.conf` and run `mvn clean`.
 
 ### Filtering by tag does nothing under Gradle: all scenarios still run

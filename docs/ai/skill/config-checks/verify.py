@@ -76,12 +76,12 @@ def env_cases():
             vals, text = run(proj, flags)
             bad = {k: (vals.get(k), v) for k, v in expect.items() if vals.get(k) != v}
             out.append(dict(id=cid, ok=not bad, detail="mismatch %s" % bad if bad else "ok"))
-        case("default environment", [], {"specific app.url": "https://dev.example.com", "specific db.name": "dev", "specific company": "Acme", "plain app.url": "null"})
+        case("default environment", [], {"specific app.url": "https://dev.example.com", "specific db.name": "dev", "specific company": "Acme", "plain app.url": "https://dev.example.com"})
         case("-Denvironment=staging: staging value, default fallback, all", ["-Denvironment=staging"],
-             {"specific app.url": "https://staging.example.com", "specific db.name": "dev", "specific company": "Acme", "plain app.url": "null"})
+             {"specific app.url": "https://staging.example.com", "specific db.name": "dev", "specific company": "Acme", "plain app.url": "https://staging.example.com"})
         case("-Dwebdriver.base.url overrides the file", ["-Dwebdriver.base.url=https://cli.example.com"], {"base.url": "https://cli.example.com"})
-        case("-Dapp.url does NOT override an environments value", ["-Denvironment=staging", "-Dapp.url=https://cli-app.example.com"],
-             {"specific app.url": "https://staging.example.com"})
+        case("-Dapp.url overrides an environments value (5.4.2; not in 5.4.1)", ["-Denvironment=staging", "-Dapp.url=https://cli-app.example.com"],
+             {"specific app.url": "https://cli-app.example.com", "plain app.url": "https://cli-app.example.com"})
         case("-Denvironments.staging.app.url overrides it", ["-Denvironment=staging", "-Denvironments.staging.app.url=https://cli-staging.example.com"],
              {"specific app.url": "https://cli-staging.example.com"})
         case("own key outside environments { } is a plain property", [], {"my.setting": "plain value"})

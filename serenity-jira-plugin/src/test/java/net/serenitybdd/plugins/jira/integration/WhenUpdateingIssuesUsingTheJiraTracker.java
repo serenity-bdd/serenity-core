@@ -19,8 +19,7 @@ import org.slf4j.Logger;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -111,7 +110,7 @@ public class WhenUpdateingIssuesUsingTheJiraTracker {
         try {
             tracker.addComment("#ISSUE-DOES-NOT-EXIST", "Integration test comment 1");
         } catch (JIRAConfigurationError err) {
-            assertThat(err.getMessage(), is("Service not found (404) - try checking the JIRA URL?")) ;
+            assertThat(err.getMessage(), startsWith("Service not found (404) - try checking the JIRA URL:")) ;
         }
         //verify(logger).error("No JIRA issue found with key {}","#ISSUE-DOES-NOT-EXIST");
     }

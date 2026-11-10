@@ -156,6 +156,17 @@ public class JerseyJiraClient {
         return findByJQL(query, LoadingStrategy.LOAD_IN_SINGLE_QUERY);
     }
 
+    /**
+     * Search with read-after-write consistency for up to 50 numeric issue IDs.
+     * Bypasses the query cache so previously cached results cannot hide recent writes.
+     */
+    public List<IssueSummary> findByJQLWithReconciliation(String query, List<Long> issueIds) {
+        Preconditions.checkNotNull(query, "JQL query cannot be null");
+        Preconditions.checkNotNull(issueIds, "Issue IDs cannot be null");
+        Preconditions.checkArgument(issueIds.size() <= 50, "At most 50 issue IDs can be reconciled");
+        return loadByJQL(query, issueIds);
+    }
+
     protected List<IssueSummary> loadByJQLBatches(String query) {
         List<IssueSummary> issues = new ArrayList<>();
         String nextPageToken = null;
@@ -183,8 +194,12 @@ public class JerseyJiraClient {
     }
 
     protected List<IssueSummary> loadByJQL(String query) {
+        return loadByJQL(query, Collections.emptyList());
+    }
+
+    private List<IssueSummary> loadByJQL(String query, List<Long> issueIds) {
         List<IssueSummary> issues = new ArrayList<>();
-        String jsonResponse = getJSONResponse(query, null, WITH_NO_BATCHES);
+        String jsonResponse = getJSONResponse(query, null, WITH_NO_BATCHES, issueIds);
         JsonObject responseObject = new JsonParser().parse(jsonResponse).getAsJsonObject();
         JsonArray issueEntries = (JsonArray) responseObject.get("issues");
         if (issueEntries != null) {
@@ -217,6 +232,10 @@ public class JerseyJiraClient {
     }
 
     private String getJSONResponse(String query, String nextPageToken, int batchSize) {
+        return getJSONResponse(query, nextPageToken, batchSize, Collections.emptyList());
+    }
+
+    private String getJSONResponse(String query, String nextPageToken, int batchSize, List<Long> issueIds) {
 
         String fields = "key,status,summary,description,comment,issuetype,labels,fixVersions";
         fields = addCustomFieldsTo(fields);
@@ -225,6 +244,10 @@ public class JerseyJiraClient {
                 .queryParam("jql", query)
                 .queryParam("expand", "renderedFields")
                 .queryParam("fields", fields);
+
+        if (!issueIds.isEmpty()) {
+            target = target.queryParam("reconcileIssues", issueIds.toArray());
+        }
 
         if (nextPageToken != null) {
             target = target.queryParam("nextPageToken", nextPageToken);
@@ -740,7 +763,7 @@ public class JerseyJiraClient {
 
 
     public IssueSummary createIssue(IssueSummary issue) {
-        WebTarget target = restClient().target(url).path(ISSUE);
+        WebTarget target = restClient().target(url).path("rest/api/3/issue");
         JsonObject fields = new JsonObject();
 
         JsonObject project = new JsonObject();
@@ -752,14 +775,46 @@ public class JerseyJiraClient {
         fields.add(IssueSummary.TYPE_KEY, issueType);
 
         fields.add(IssueSummary.SUMMARY_KEY, new JsonPrimitive(issue.getSummary()));
-        fields.add(IssueSummary.DESCRIPTION_KEY, new JsonPrimitive("Lorem ipsum..."));
+        if (issue.getDescription() != null) {
+            fields.add(IssueSummary.DESCRIPTION_KEY, textDocument(issue.getDescription()));
+        }
 
         JsonObject jsonIssue = new JsonObject();
         jsonIssue.add(IssueSummary.FIELDS_KEY, fields);
 
-        Response response = target.request().post(Entity.json(jsonIssue.toString()));
-        checkValid(response, target.getUri().toString());
-        return IssueSummary.fromJsonString(response.readEntity(String.class));
+        try (Response response = target.request().post(Entity.json(jsonIssue.toString()))) {
+            if (response.getStatus() != CREATE_ISSUE_OK) {
+                // A bad request is tolerated by some query operations, but never by issue creation.
+                if (response.getStatus() != 400) {
+                    checkValid(response, target.getUri().toString());
+                }
+                throw new JQLException("JIRA issue creation failed: error " + response.getStatus()
+                        + " (URL: " + target.getUri() + "): " + response.readEntity(String.class));
+            }
+            return IssueSummary.fromJsonString(response.readEntity(String.class));
+        }
+    }
+
+    private JsonObject textDocument(String description) {
+        JsonObject document = new JsonObject();
+        document.addProperty("type", "doc");
+        document.addProperty("version", 1);
+        JsonArray paragraphs = new JsonArray();
+        for (String line : description.split("\\R", -1)) {
+            JsonObject paragraph = new JsonObject();
+            paragraph.addProperty("type", "paragraph");
+            JsonArray content = new JsonArray();
+            if (!line.isEmpty()) {
+                JsonObject text = new JsonObject();
+                text.addProperty("type", "text");
+                text.addProperty("text", line);
+                content.add(text);
+            }
+            paragraph.add("content", content);
+            paragraphs.add(paragraph);
+        }
+        document.add("content", paragraphs);
+        return document;
     }
 
     public void deleteIssue(IssueSummary issue) throws Exception {
@@ -786,22 +841,33 @@ public class JerseyJiraClient {
         String url = String.format(ADD_COMMENT, issueKey);
         WebTarget target = buildWebTargetFor(url);
         JsonObject jsonComment = new JsonObject();
-        jsonComment.add(IssueComment.BODY_KEY, new JsonPrimitive(newComment.getBody()));
-        Response response = target.request().post(Entity.json(jsonComment.toString()));
-        checkValid(response, target.getUri().toString());
+        jsonComment.add(IssueComment.BODY_KEY, textDocument(newComment.getBody()));
+        try (Response response = target.request().post(Entity.json(jsonComment.toString()))) {
+            checkCommentResponse(response, target, CREATE_ISSUE_OK);
+        }
         issueSummaryCache.invalidate(issueKey);
     }
 
     public void updateComment(String key, IssueComment updatedComment) {
         WebTarget target = restClient().target(updatedComment.getSelf());
 
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
-
-        JsonObject jsonComment = new JsonParser().parse(response.readEntity(String.class)).getAsJsonObject();
-        jsonComment.addProperty("body", updatedComment.getBody());
-
-        target.request(MediaType.APPLICATION_JSON_TYPE).put(Entity.entity(jsonComment.toString(), MediaType.APPLICATION_JSON));
+        JsonObject jsonComment = new JsonObject();
+        jsonComment.add(IssueComment.BODY_KEY, textDocument(updatedComment.getBody()));
+        try (Response response = target.request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.json(jsonComment.toString()))) {
+            checkCommentResponse(response, target, OK);
+        }
         issueSummaryCache.invalidate(key);
+    }
+
+    private void checkCommentResponse(Response response, WebTarget target, int expectedStatus) {
+        if (response.getStatus() != expectedStatus) {
+            if (response.getStatus() != 400) {
+                checkValid(response, target.getUri().toString());
+            }
+            throw new JQLException("JIRA comment request failed: error " + response.getStatus()
+                    + " (URL: " + target.getUri() + "): " + response.readEntity(String.class));
+        }
     }
 
     public List<IssueComment> getComments(String issueKey) throws ParseException {

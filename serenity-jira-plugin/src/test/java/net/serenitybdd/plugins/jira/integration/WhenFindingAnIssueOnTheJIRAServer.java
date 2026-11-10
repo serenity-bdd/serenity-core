@@ -52,7 +52,9 @@ public class WhenFindingAnIssueOnTheJIRAServer {
     @Test
     public void should_be_able_to_find_an_issue_by_jql() throws Exception {
 
-        List<IssueSummary> issues = jiraClient.findByJQL("key=" + issueKey);
+        Long issueId = jiraClient.getIssue(issueKey).getId();
+        List<IssueSummary> issues = jiraClient.findByJQLWithReconciliation("key=" + issueKey,
+                java.util.Collections.singletonList(issueId));
         assertThat(issues.size(), is(1));
     }
 

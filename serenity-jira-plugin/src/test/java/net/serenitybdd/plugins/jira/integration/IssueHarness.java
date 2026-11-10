@@ -25,7 +25,7 @@ class IssueHarness {
         issue.setReporter(USER_NAME);
         issue.setType("1");
         issue.setSummary("A test issue");
-        issue.setKey("DEMO-1");
+        issue.setKey("DEMO-99");
         IssueSummary createdIssue =  jiraClient.createIssue(issue);
         testIssues.add(createdIssue);
         return createdIssue.getKey();

@@ -13,6 +13,6 @@ public class AddIssuesToCurrentTestEvent extends StepEventBusEventBase {
 
 	@Override
 	public void play() {
-		getStepEventBus().addIssuesToCurrentStory(issues);
+		getStepEventBus().addIssuesToCurrentTest(issues);
 	}
 }

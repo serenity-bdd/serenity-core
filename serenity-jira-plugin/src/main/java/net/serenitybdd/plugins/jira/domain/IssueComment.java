@@ -3,6 +3,7 @@ package net.serenitybdd.plugins.jira.domain;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -213,7 +214,7 @@ public class IssueComment {
         JsonObject authorJsonObject = currentComment.getAsJsonObject(AUTHOR_KEY);
         Author author = Author.fromJsonString(authorJsonObject.toString());
         String self = currentComment.getAsJsonPrimitive(SELF_KEY).getAsString();
-        String body = currentComment.getAsJsonPrimitive(BODY_KEY).getAsString();
+        String body = commentText(currentComment.get(BODY_KEY));
         JsonObject updateAuthorJsonObject = currentComment.getAsJsonObject(UPDATE_AUTHOR_KEY);
         Author updateAuthor = Author.fromJsonString(updateAuthorJsonObject.toString());
         String createdDate = currentComment.getAsJsonPrimitive(CREATED_KEY).getAsString();
@@ -224,5 +225,34 @@ public class IssueComment {
         Calendar updatedCalendar =  GregorianCalendar.getInstance();
         updatedCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(updatedDate));
         return new IssueComment(self, author.getAccountId(),body,createdCalendar , "", 0L,"",updateAuthor.getAccountId(),updatedCalendar);
+    }
+
+    private static String commentText(JsonElement body) {
+        // Retain support for comments returned by older Jira APIs.
+        if (body.isJsonPrimitive()) {
+            return body.getAsString();
+        }
+        JsonObject node = body.getAsJsonObject();
+        String type = node.get("type").getAsString();
+        if ("text".equals(type)) {
+            return node.get("text").getAsString();
+        }
+        if ("hardBreak".equals(type)) {
+            return "\n";
+        }
+        StringBuilder text = new StringBuilder();
+        if (node.has("content")) {
+            boolean separateBlocks = "doc".equals(type) || "blockquote".equals(type)
+                    || "bulletList".equals(type) || "orderedList".equals(type) || "listItem".equals(type);
+            boolean first = true;
+            for (JsonElement child : node.getAsJsonArray("content")) {
+                if (separateBlocks && !first) {
+                    text.append('\n');
+                }
+                text.append(commentText(child));
+                first = false;
+            }
+        }
+        return text.toString();
     }
 }

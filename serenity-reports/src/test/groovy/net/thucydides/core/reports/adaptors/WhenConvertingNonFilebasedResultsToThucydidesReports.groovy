@@ -18,7 +18,7 @@ class WhenConvertingNonFilebasedResultsToThucydidesReports extends Specification
 
         @Override
         List<TestOutcome> loadOutcomesFrom(File source) throws IOException {
-            throw IllegalArgumentException("This method should not be called")
+            throw new IllegalArgumentException("This method should not be called")
         }
     }
 

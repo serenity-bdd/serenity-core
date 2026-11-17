@@ -25,7 +25,7 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
             outcomes.size() == 7
             outcome.testCount == 1
             outcomes.each {
-                outcome.title.startsWith "Should do something"
+                assert it.title.startsWith("Should do something")
             }
 
     }

@@ -286,8 +286,8 @@ Feature: A simple feature with tags
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
-        recordedTestOutcomes.each { outcome ->
-            outcome.tags.contains(TestTag.withName("ISSUE-123").andType("issue"))
+        recordedTestOutcomes.findAll { it.userStory.name == "Basic Arithmetic" }.each { outcome ->
+            assert outcome.tags.contains(TestTag.withName("ISSUE-123").andType("issue"))
         }
         and:
         recordedTestOutcomes[0].tags.contains(TestTag.withName("ISSUE-456").andType("issue"))
@@ -302,9 +302,9 @@ Feature: A simple feature with tags
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
-        recordedTestOutcomes.each { outcome ->
-            outcome.tags.contains(TestTag.withName("ISSUE-123").andType("issue"))
-            outcome.getIssueKeys().contains("ISSUE-123")
+        recordedTestOutcomes.findAll { it.userStory.name == "Basic Arithmetic" }.each { outcome ->
+            assert outcome.tags.contains(TestTag.withName("ISSUE-123").andType("issue"))
+            assert outcome.getIssueKeys().contains("ISSUE-123")
         }
         and:
         recordedTestOutcomes[0].tags.contains(TestTag.withName("ISSUE-456").andType("issue"))
@@ -322,9 +322,9 @@ Feature: A simple feature with tags
 
         then:
         recordedTestOutcomes.each { outcome ->
-            outcome.tags.contains(TestTag.withName("ISSUE-123,ISSUE-789").andType("issues"))
-            outcome.getIssueKeys().contains("ISSUE-123")
-            outcome.getIssueKeys().contains("ISSUE-789")
+            assert outcome.tags.contains(TestTag.withName("ISSUE-123,ISSUE-789").andType("issues"))
+            assert outcome.getIssueKeys().contains("ISSUE-123")
+            assert outcome.getIssueKeys().contains("ISSUE-789")
         }
         and:
         recordedTestOutcomes[0].tags.contains(TestTag.withName("ISSUE-456,ISSUE-001").andType("issues"))
